@@ -5,23 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>NTR GARAGE - Signalement panne</title>
     <meta name="theme-color" content="#667eea">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="NTR Garage">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: system-ui, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
-
         .container, .dashboard-container, .login-container {
             max-width: 600px;
             margin: 0 auto;
@@ -30,14 +21,6 @@
             padding: 24px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
-
-        .logo {
-            text-align: center;
-            margin-bottom: 32px;
-            padding-bottom: 16px;
-            border-bottom: 2px solid #eee;
-        }
-        
         .logo-ntr {
             display: inline-block;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -45,39 +28,11 @@
             border-radius: 60px;
             margin-bottom: 10px;
         }
-        
-        .logo-ntr span {
-            font-size: 32px;
-            font-weight: bold;
-            color: white;
-            letter-spacing: 4px;
-        }
-        
-        .slogan {
-            color: #666;
-            font-size: 12px;
-            margin-top: 8px;
-        }
-
-        .etape {
-            display: none;
-        }
-
-        .etape.active {
-            display: block;
-        }
-
-        h2 {
-            margin-bottom: 20px;
-            color: #333;
-            font-size: 22px;
-        }
-
-        h3 {
-            margin: 20px 0 10px 0;
-            color: #555;
-        }
-
+        .logo-ntr span { font-size: 32px; font-weight: bold; color: white; letter-spacing: 4px; }
+        .slogan { color: #666; font-size: 12px; margin-top: 8px; text-align: center; margin-bottom: 20px; }
+        .etape { display: none; }
+        .etape.active { display: block; }
+        h2 { margin-bottom: 20px; color: #333; }
         input, textarea {
             width: 100%;
             padding: 14px;
@@ -85,14 +40,8 @@
             border: 1px solid #ddd;
             border-radius: 16px;
             font-size: 16px;
-            font-family: inherit;
         }
-
-        textarea {
-            min-height: 80px;
-            resize: vertical;
-        }
-
+        textarea { min-height: 80px; resize: vertical; }
         .photo-zone {
             background: #f5f5f5;
             border-radius: 20px;
@@ -100,42 +49,20 @@
             margin: 16px 0;
             text-align: center;
         }
-
-        .btn-photo {
+        .btn-photo, .btn-mic {
             background: #4CAF50;
             color: white;
             border: none;
-            padding: 12px 24px;
+            padding: 12px;
             border-radius: 30px;
             font-size: 16px;
             cursor: pointer;
             width: 100%;
             margin-bottom: 10px;
         }
-
-        .btn-mic {
-            background: #FF9800;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 30px;
-            font-size: 16px;
-            cursor: pointer;
-            width: 100%;
-            margin: 10px 0;
-        }
-
-        .btn-mic.recording {
-            background: #f44336;
-            animation: pulse 1s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
-        }
-
+        .btn-mic { background: #FF9800; }
+        .btn-mic.recording { background: #f44336; animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
         .btn-envoyer, .btn-actualiser, .btn-login {
             background: #667eea;
             color: white;
@@ -148,7 +75,6 @@
             cursor: pointer;
             margin-top: 16px;
         }
-
         .btn-secondaire {
             background: #f0f0f0;
             color: #333;
@@ -159,7 +85,6 @@
             cursor: pointer;
             margin-top: 16px;
         }
-
         .btn-deconnexion {
             background: #f44336;
             color: white;
@@ -167,37 +92,16 @@
             padding: 10px 20px;
             border-radius: 20px;
             cursor: pointer;
-            font-size: 14px;
-            margin-bottom: 20px;
         }
-
-        #apercuPhoto {
-            margin-top: 12px;
-        }
-
-        #apercuPhoto img {
-            max-width: 100%;
-            border-radius: 12px;
-            margin-top: 8px;
-        }
-
+        #apercuPhoto img { max-width: 100%; border-radius: 12px; margin-top: 8px; }
         .message {
             margin-top: 16px;
             padding: 12px;
             border-radius: 16px;
             text-align: center;
         }
-
-        .message.succes {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .message.error {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
+        .message.succes { background: #d4edda; color: #155724; }
+        .message.error { background: #f8d7da; color: #721c24; }
         .qr-section {
             background: #f9f9f9;
             border-radius: 20px;
@@ -205,38 +109,8 @@
             text-align: center;
             margin-top: 20px;
         }
-
-        .qr-code {
-            display: inline-block;
-            padding: 15px;
-            background: white;
-            border-radius: 16px;
-            margin: 10px 0;
-        }
-
-        .qr-url {
-            font-size: 12px;
-            color: #666;
-            word-break: break-all;
-            background: #eee;
-            padding: 8px;
-            border-radius: 8px;
-            margin-top: 10px;
-        }
-        
-        .lien-partage {
-            background: #e3f2fd;
-            padding: 15px;
-            border-radius: 16px;
-            margin-top: 15px;
-        }
-        
-        .lien-partage a {
-            color: #1976d2;
-            word-break: break-all;
-            text-decoration: none;
-        }
-        
+        .qr-code { display: inline-block; padding: 15px; background: white; border-radius: 16px; margin: 10px 0; }
+        .qr-url { font-size: 12px; color: #666; word-break: break-all; background: #eee; padding: 8px; border-radius: 8px; margin-top: 10px; }
         .btn-copier {
             background: #1976d2;
             color: white;
@@ -245,9 +119,7 @@
             border-radius: 20px;
             cursor: pointer;
             margin-top: 10px;
-            font-size: 14px;
         }
-
         .dashboard-header {
             display: flex;
             justify-content: space-between;
@@ -255,7 +127,6 @@
             margin-bottom: 20px;
             flex-wrap: wrap;
         }
-
         .badge-garage {
             background: #f0f0f0;
             padding: 8px 16px;
@@ -263,7 +134,6 @@
             display: inline-block;
             margin-bottom: 24px;
         }
-
         .demande {
             background: white;
             border: 1px solid #e0e0e0;
@@ -272,36 +142,11 @@
             margin-bottom: 16px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-
-        .demande.non-lue {
-            border-left: 5px solid #ff6b6b;
-            background: #fff9f9;
-        }
-
-        .demande-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            font-weight: bold;
-            flex-wrap: wrap;
-        }
-
-        .immat {
-            color: #667eea;
-            font-size: 18px;
-        }
-
-        .date {
-            color: #999;
-            font-size: 12px;
-        }
-
-        .demande-photo img {
-            max-width: 100%;
-            border-radius: 12px;
-            margin: 12px 0;
-        }
-
+        .demande.non-lue { border-left: 5px solid #ff6b6b; background: #fff9f9; }
+        .demande-header { display: flex; justify-content: space-between; margin-bottom: 12px; font-weight: bold; flex-wrap: wrap; }
+        .immat { color: #667eea; font-size: 18px; }
+        .date { color: #999; font-size: 12px; }
+        .demande-photo img { max-width: 100%; border-radius: 12px; margin: 12px 0; }
         .btn-traite {
             background: #4CAF50;
             color: white;
@@ -309,26 +154,10 @@
             padding: 10px 16px;
             border-radius: 20px;
             cursor: pointer;
-            font-size: 14px;
-            margin-top: 12px;
         }
-
-        .chargement {
-            text-align: center;
-            padding: 40px;
-            color: #999;
-        }
-
-        .password-input {
-            margin: 20px 0;
-        }
-
-        .error-login {
-            color: #f44336;
-            text-align: center;
-            margin-top: 10px;
-        }
-        
+        .chargement { text-align: center; padding: 40px; color: #999; }
+        .password-input { margin: 20px 0; }
+        .error-login { color: #f44336; text-align: center; margin-top: 10px; }
         .info-remote {
             background: #fff3e0;
             border-left: 4px solid #FF9800;
@@ -336,12 +165,6 @@
             margin: 15px 0;
             border-radius: 12px;
         }
-        
-        .info-remote p {
-            margin: 5px 0;
-            font-size: 14px;
-        }
-
         .install-guide {
             background: #e8f5e9;
             border-radius: 16px;
@@ -349,47 +172,12 @@
             margin-top: 20px;
             font-size: 13px;
         }
-        
-        .install-guide h4 {
-            color: #2e7d32;
-            margin-bottom: 10px;
-        }
-        
-        .install-step {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 10px 0;
-            flex-wrap: wrap;
-        }
-        
-        .install-icon {
-            font-size: 24px;
-        }
-
+        .install-step { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
         @media (prefers-color-scheme: dark) {
-            .container, .dashboard-container, .login-container {
-                background: #1e1e2e;
-                color: #fff;
-            }
-            h2, h3 {
-                color: #fff;
-            }
-            input, textarea {
-                background: #2a2a3e;
-                color: #fff;
-                border-color: #444;
-            }
-            .qr-section, .lien-partage {
-                background: #2a2a3e;
-            }
-            .qr-url {
-                background: #1e1e2e;
-                color: #aaa;
-            }
-            .info-remote {
-                background: #2a2a2a;
-            }
+            .container, .dashboard-container, .login-container { background: #1e1e2e; color: #fff; }
+            h2, h3 { color: #fff; }
+            input, textarea { background: #2a2a3e; color: #fff; border-color: #444; }
+            .qr-section { background: #2a2a3e; }
         }
     </style>
 </head>
@@ -397,13 +185,9 @@
 
 <!-- ÉCRAN DE CONNEXION DASHBOARD -->
 <div id="loginScreen" style="display: none;">
-    <div class="login-container">
-        <div class="logo">
-            <div class="logo-ntr">
-                <span>NTR</span>
-            </div>
-            <div class="slogan">GARAGE · SAV · EXPERTISE</div>
-        </div>
+    <div class="login-container" style="text-align: center;">
+        <div class="logo-ntr"><span>NTR</span></div>
+        <div class="slogan">GARAGE · SAV · EXPERTISE</div>
         <input type="password" id="passwordInput" placeholder="Mot de passe réception">
         <button id="btnLogin" class="btn-login">🔓 Accès réception</button>
         <div id="loginError" class="error-login"></div>
@@ -414,17 +198,14 @@
 <!-- ÉCRAN CLIENT -->
 <div id="clientScreen">
     <div class="container">
-        <div class="logo">
-            <div class="logo-ntr">
-                <span>NTR</span>
-            </div>
+        <div style="text-align: center;">
+            <div class="logo-ntr"><span>NTR</span></div>
             <div class="slogan">CHANGAN · MG · JETOUR</div>
         </div>
 
         <div class="info-remote">
-            <p>📱 <strong>2 façons d'utiliser l'application :</strong></p>
-            <p>1️⃣ Scannez le QR code ci-dessous</p>
-            <p>2️⃣ Ou partagez le lien par SMS / WhatsApp</p>
+            <p>📱 <strong>Signalez une panne en quelques secondes</strong></p>
+            <p>📷 Photo · 🎤 Dictée vocale</p>
         </div>
 
         <div class="qr-section">
@@ -433,28 +214,19 @@
             <div class="qr-url" id="currentUrl"></div>
             <button id="btnCopierLien" class="btn-copier">📋 Copier le lien</button>
         </div>
-        
-        <div class="lien-partage">
-            <p>🔗 <strong>Lien à partager :</strong></p>
-            <a href="#" id="lienPartage" target="_blank">Chargement...</a>
-        </div>
 
         <hr style="margin: 20px 0;">
 
         <div id="etape1" class="etape active">
             <h2>📸 Signaler une panne</h2>
             <input type="text" id="immatriculation" placeholder="Immatriculation (ex: AA-123-BB)">
-            
             <textarea id="description" placeholder="Décrivez le problème..."></textarea>
-            
             <button id="btnMic" class="btn-mic">🎤 Dictée vocale</button>
-            
             <div class="photo-zone">
                 <button id="btnPhoto" class="btn-photo">📷 Prendre une photo</button>
                 <div id="apercuPhoto"></div>
                 <input type="file" id="fichierPhoto" accept="image/*" capture="environment" style="display:none">
             </div>
-
             <button id="btnEnvoyer" class="btn-envoyer">🚗 Envoyer la panne</button>
             <div id="message" class="message"></div>
         </div>
@@ -466,12 +238,12 @@
         </div>
 
         <div class="install-guide">
-            <h4>📲 Installer l'app sur votre téléphone</h4>
-            <div class="install-step"><span class="install-icon">🍎</span> iPhone : Partager → "Sur l'écran d'accueil"</div>
-            <div class="install-step"><span class="install-icon">🤖</span> Android : Menu (3 points) → "Installer l'application"</div>
+            <h4>📲 Installer l'app</h4>
+            <div class="install-step"><span>🍎</span> iPhone : Partager → "Sur l'écran d'accueil"</div>
+            <div class="install-step"><span>🤖</span> Android : Menu → "Installer l'application"</div>
         </div>
 
-        <button id="btnAllerDashboard" class="btn-secondaire">🔐 Accès réception (mot de passe)</button>
+        <button id="btnAllerDashboard" class="btn-secondaire">🔐 Accès réception</button>
     </div>
 </div>
 
@@ -479,25 +251,40 @@
 <div id="dashboardScreen" style="display: none;">
     <div class="dashboard-container">
         <div class="dashboard-header">
-            <div class="logo-ntr" style="padding: 8px 20px;">
-                <span style="font-size: 20px;">NTR</span>
-            </div>
+            <div class="logo-ntr" style="padding: 8px 20px;"><span style="font-size: 20px;">NTR</span></div>
             <button id="btnDeconnexion" class="btn-deconnexion">🚪 Déconnexion</button>
         </div>
         <h1>🚨 Demandes de panne</h1>
         <p class="badge-garage">SAV CHANGAN · MG · JETOUR</p>
-        
         <div id="listeDemandes" class="liste-demandes">
-            <div class="chargement">📭 Aucune demande</div>
+            <div class="chargement">⏳ Chargement...</div>
         </div>
-
         <button id="btnActualiser" class="btn-actualiser">🔄 Actualiser</button>
     </div>
 </div>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
 <script>
-    // ==================== CONFIGURATION ====================
+    // ==================== 🔥 REMPLACE PAR TES INFOS FIREBASE 🔥 ====================
+    const firebaseConfig = {
+        apiKey:  "AIzaSyAxfEpi-NERVExxVYD2EmH7JppiIQDwWOM",           // ← REMPLACE
+        authDomain:  "ntr-garage.firebaseapp.com",      // ← REMPLACE
+        projectId:  "ntr-garage",      // ← REMPLACE
+        storageBucket:  "ntr-garage.firebasestorage.app",   // ← REMPLACE
+        messagingSenderId:  "606167388967",// ← REMPLACE
+        appId: "1:606167388967:web:7ad669fd353cdeeb7a8f02"
+            // ← REMPLACE
+    };
+    // ============================================================================
+    
+    // Initialisation Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    
     const MOT_DE_PASSE = "ntr123";
     let photoData = null;
     
@@ -520,7 +307,6 @@
     const btnAllerDashboard = document.getElementById('btnAllerDashboard');
     const btnRetourAccueil = document.getElementById('btnRetourAccueil');
     const btnCopierLien = document.getElementById('btnCopierLien');
-    const lienPartage = document.getElementById('lienPartage');
     
     const listeDemandes = document.getElementById('listeDemandes');
     const btnActualiser = document.getElementById('btnActualiser');
@@ -533,9 +319,6 @@
     function genererQRCode() {
         const url = window.location.href;
         document.getElementById('currentUrl').innerHTML = `<a href="${url}" target="_blank">${url}</a>`;
-        lienPartage.textContent = url;
-        lienPartage.href = url;
-        
         const qrDiv = document.getElementById('qrcode');
         if (qrDiv) {
             qrDiv.innerHTML = '';
@@ -550,15 +333,14 @@
         }
     }
     
-    // Copier le lien
     btnCopierLien.addEventListener('click', async () => {
         const url = window.location.href;
         try {
             await navigator.clipboard.writeText(url);
-            btnCopierLien.textContent = "✅ Lien copié !";
+            btnCopierLien.textContent = "✅ Copié !";
             setTimeout(() => btnCopierLien.textContent = "📋 Copier le lien", 2000);
         } catch (err) {
-            alert("Copie manuelle : " + url);
+            alert("Copie : " + url);
         }
     });
     
@@ -568,38 +350,28 @@
             showMessage("❌ Dictée non supportée", false);
             return;
         }
-        
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         const recognition = new SpeechRecognition();
         recognition.lang = 'fr-FR';
-        recognition.continuous = false;
-        
         recognition.onstart = () => {
-            btnMic.textContent = "🎙️ Écoute... Parlez !";
+            btnMic.textContent = "🎙️ Parlez...";
             btnMic.classList.add('recording');
         };
-        
         recognition.onresult = (event) => {
             const texte = event.results[0][0].transcript;
-            const currentText = descriptionText.value;
-            descriptionText.value = currentText ? currentText + " " + texte : texte;
+            descriptionText.value = descriptionText.value ? descriptionText.value + " " + texte : texte;
             showMessage("✓ " + texte, true);
         };
-        
-        recognition.onerror = () => showMessage("❌ Réessayez", false);
         recognition.onend = () => {
             btnMic.textContent = "🎤 Dictée vocale";
             btnMic.classList.remove('recording');
         };
-        
         recognition.start();
     }
-    
     btnMic.addEventListener('click', demarrerReconnaissanceVocale);
     
     // ==================== PHOTO ====================
     btnPhoto.addEventListener('click', () => fichierPhoto.click());
-    
     fichierPhoto.addEventListener('change', (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -612,8 +384,8 @@
         }
     });
     
-    // ==================== ENVOI ====================
-    btnEnvoyer.addEventListener('click', () => {
+    // ==================== ENVOI VERS FIREBASE ====================
+    btnEnvoyer.addEventListener('click', async () => {
         const immat = immatInput.value.trim().toUpperCase();
         const description = descriptionText.value.trim();
         
@@ -621,37 +393,38 @@
             showMessage("❌ Immatriculation requise", false);
             return;
         }
-        
         if (!description && !photoData) {
             showMessage("❌ Description ou photo requise", false);
             return;
         }
         
         const demande = {
-            id: Date.now(),
             immatriculation: immat,
             description: description,
-            photo: photoData,
+            photo: photoData || null,
             date: new Date().toLocaleString('fr-FR'),
-            lu: false
+            dateTimestamp: new Date(),
+            lu: false,
+            traite: false
         };
         
-        let demandes = JSON.parse(localStorage.getItem('ntr_demandes')) || [];
-        demandes.unshift(demande);
-        localStorage.setItem('ntr_demandes', JSON.stringify(demandes));
-        
-        showMessage("✅ Demande envoyée !", true);
-        
-        immatInput.value = '';
-        descriptionText.value = '';
-        photoData = null;
-        apercuPhoto.innerHTML = '';
-        fichierPhoto.value = '';
-        
-        setTimeout(() => {
-            etape1.classList.remove('active');
-            etape2.classList.add('active');
-        }, 1000);
+        try {
+            await db.collection('demandes').add(demande);
+            showMessage("✅ Demande envoyée !", true);
+            
+            immatInput.value = '';
+            descriptionText.value = '';
+            photoData = null;
+            apercuPhoto.innerHTML = '';
+            fichierPhoto.value = '';
+            
+            setTimeout(() => {
+                etape1.classList.remove('active');
+                etape2.classList.add('active');
+            }, 1000);
+        } catch (error) {
+            showMessage("❌ Erreur : " + error.message, false);
+        }
     });
     
     nouvellePanne.addEventListener('click', () => {
@@ -666,63 +439,57 @@
         setTimeout(() => messageDiv.innerHTML = '', 3000);
     }
     
-    // ==================== DASHBOARD ====================
-    function chargerDemandes() {
-        const demandes = JSON.parse(localStorage.getItem('ntr_demandes')) || [];
+    // ==================== DASHBOARD FIREBASE (TEMPS RÉEL) ====================
+    let unsubscribe = null;
+    
+    function chargerDemandesRealtime() {
+        if (unsubscribe) unsubscribe();
         
-        if (!listeDemandes) return;
-        
-        if (demandes.length === 0) {
-            listeDemandes.innerHTML = '<div class="chargement">📭 Aucune demande</div>';
-            return;
-        }
-        
-        listeDemandes.innerHTML = '';
-        
-        demandes.forEach(demande => {
-            const div = document.createElement('div');
-            div.className = `demande ${!demande.lu ? 'non-lue' : ''}`;
-            
-            let photoHtml = '';
-            if (demande.photo) {
-                photoHtml = `<div class="demande-photo"><img src="${demande.photo}" alt="Photo"></div>`;
-            }
-            
-            div.innerHTML = `
-                <div class="demande-header">
-                    <span class="immat">🚗 ${demande.immatriculation}</span>
-                    <span class="date">📅 ${demande.date}</span>
-                </div>
-                <div class="demande-description">📝 ${demande.description || 'Pas de description'}</div>
-                ${photoHtml}
-                <button class="btn-traite" data-id="${demande.id}">✅ Traitée</button>
-            `;
-            
-            listeDemandes.appendChild(div);
-            
-            if (!demande.lu) {
-                demande.lu = true;
-                sauvegarderDemandes(demandes);
-            }
-        });
-        
-        document.querySelectorAll('.btn-traite').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const id = parseInt(btn.dataset.id);
-                supprimerDemande(id);
+        unsubscribe = db.collection('demandes')
+            .orderBy('dateTimestamp', 'desc')
+            .onSnapshot((snapshot) => {
+                if (snapshot.empty) {
+                    listeDemandes.innerHTML = '<div class="chargement">📭 Aucune demande</div>';
+                    return;
+                }
+                
+                listeDemandes.innerHTML = '';
+                snapshot.forEach(doc => {
+                    const demande = { id: doc.id, ...doc.data() };
+                    
+                    const div = document.createElement('div');
+                    div.className = `demande ${!demande.lu ? 'non-lue' : ''}`;
+                    
+                    let photoHtml = '';
+                    if (demande.photo) {
+                        photoHtml = `<div class="demande-photo"><img src="${demande.photo}" alt="Photo"></div>`;
+                    }
+                    
+                    div.innerHTML = `
+                        <div class="demande-header">
+                            <span class="immat">🚗 ${demande.immatriculation}</span>
+                            <span class="date">📅 ${demande.date}</span>
+                        </div>
+                        <div class="demande-description">📝 ${demande.description || 'Pas de description'}</div>
+                        ${photoHtml}
+                        <button class="btn-traite" data-id="${demande.id}">✅ Traitée</button>
+                    `;
+                    
+                    listeDemandes.appendChild(div);
+                    
+                    // Marquer comme lue si pas déjà fait
+                    if (!demande.lu) {
+                        db.collection('demandes').doc(demande.id).update({ lu: true });
+                    }
+                });
+                
+                document.querySelectorAll('.btn-traite').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const id = btn.dataset.id;
+                        await db.collection('demandes').doc(id).delete();
+                    });
+                });
             });
-        });
-    }
-    
-    function sauvegarderDemandes(demandes) {
-        localStorage.setItem('ntr_demandes', JSON.stringify(demandes));
-    }
-    
-    function supprimerDemande(id) {
-        let demandes = JSON.parse(localStorage.getItem('ntr_demandes')) || [];
-        demandes = demandes.filter(d => d.id !== id);
-        sauvegarderDemandes(demandes);
-        chargerDemandes();
     }
     
     // ==================== NAVIGATION ====================
@@ -731,6 +498,7 @@
         dashboardScreen.style.display = 'none';
         loginScreen.style.display = 'none';
         genererQRCode();
+        if (unsubscribe) unsubscribe();
     }
     
     function afficherLogin() {
@@ -745,7 +513,7 @@
         clientScreen.style.display = 'none';
         dashboardScreen.style.display = 'block';
         loginScreen.style.display = 'none';
-        chargerDemandes();
+        chargerDemandesRealtime();
     }
     
     btnLogin.addEventListener('click', () => {
@@ -763,18 +531,14 @@
     btnAllerDashboard.addEventListener('click', afficherLogin);
     btnRetourAccueil.addEventListener('click', afficherClient);
     btnDeconnexion.addEventListener('click', afficherClient);
-    btnActualiser.addEventListener('click', chargerDemandes);
+    btnActualiser.addEventListener('click', () => {
+        if (unsubscribe) chargerDemandesRealtime();
+    });
     
-    // Auto-refresh dashboard toutes les 30 secondes
-    setInterval(() => {
-        if (dashboardScreen.style.display === 'block') chargerDemandes();
-    }, 30000);
-    
-    // ==================== LANCEMENT ====================
+    // LANCEMENT
     afficherClient();
-    
-    console.log('✅ Application NTR Garage prête !');
-    console.log('🔐 Mot de passe réception : ntr123');
+    console.log('✅ Version Firebase - Toutes les demandes sont synchronisées !');
+    console.log('🔐 Mot de passe : ntr123');
 </script>
 </body>
 </html>
