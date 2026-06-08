@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>UNITED MOTORS GARAGE PRO - Signalement panne</title>
+    <title>UNITED MOTORS GARAGE ULTIMATE - Signalement panne</title>
     <meta name="theme-color" content="#4f46e5">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
@@ -125,9 +125,6 @@
             color: #64748b;
         }
         .btn-media:hover { background: #e2e8f0; }
-        .btn-media.recording { background: #ef4444; color: white; animation: pulse 1s infinite; }
-        
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
         
         .preview-media {
             background: #f8fafc;
@@ -164,7 +161,7 @@
         
         .stats {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 15px;
             margin-bottom: 25px;
         }
@@ -267,6 +264,33 @@
             border-bottom: 2px solid #e2e8f0;
         }
         
+        .ia-diagnostic {
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+            border-radius: 20px;
+            padding: 15px;
+            margin: 15px 0;
+            display: none;
+        }
+        
+        .etoiles {
+            display: flex;
+            gap: 5px;
+            margin: 10px 0;
+        }
+        .etoile {
+            font-size: 28px;
+            cursor: pointer;
+            color: #cbd5e1;
+            transition: color 0.2s;
+        }
+        .etoile.active { color: #f59e0b; }
+        
+        .btn-envoyer-wrapper {
+            margin-top: 30px;
+            border-top: 2px solid #e2e8f0;
+            padding-top: 20px;
+        }
+        
         @media (max-width: 500px) {
             .container, .dashboard-container { padding: 18px; }
             .stats { gap: 8px; }
@@ -293,11 +317,12 @@
 
         <div class="tabs">
             <div class="tab active" data-tab="panne">🔧 Panne & Véhicule</div>
-            <div class="tab" data-tab="urgence">⚠️ Urgence</div>
+            <div class="tab" data-tab="urgence">⚠️ Urgence & RDV</div>
             <div class="tab" data-tab="media">🎥 Médias</div>
+            <div class="tab" data-tab="satisfaction">⭐ Satisfaction</div>
         </div>
 
-        <!-- Onglet Panne + Véhicule (intégré) -->
+        <!-- Onglet Panne + Véhicule -->
         <div id="tab-panne" class="tab-content active">
             <div class="section-title">🚗 Informations véhicule</div>
             <div class="row-2cols">
@@ -310,30 +335,57 @@
             </div>
             <input type="date" id="dateMiseService" placeholder="Date mise en service">
             
-            <div class="section-title">👤 Coordonnées</div>
+            <div class="section-title">👤 Coordonnées client</div>
+            <input type="text" id="clientNom" placeholder="Nom et prénom *">
             <input type="text" id="clientEmail" placeholder="Email (optionnel)">
             <input type="text" id="clientTel" placeholder="Téléphone (optionnel)">
             
             <div class="section-title">📝 Description de la panne</div>
             <textarea id="description" placeholder="Décrivez la panne en détail..."></textarea>
+            
+            <div class="ia-diagnostic" id="iaDiagnostic">
+                <strong>🤖 IA Diagnostic préliminaire :</strong>
+                <p id="iaResultat"></p>
+            </div>
         </div>
 
-        <!-- Onglet Urgence -->
+        <!-- Onglet Urgence + RDV -->
         <div id="tab-urgence" class="tab-content">
-            <p style="margin-bottom: 10px;">📢 Niveau d'urgence :</p>
+            <div class="section-title">⚠️ Niveau d'urgence</div>
             <div class="btn-urgence">
                 <button class="urgence-basse" data-urgence="basse">🟢 Basse</button>
                 <button class="urgence-moyenne" data-urgence="moyenne">🟠 Moyenne</button>
                 <button class="urgence-haute" data-urgence="haute">🔴 Haute</button>
             </div>
-            <input type="text" id="lieu" placeholder="📍 Lieu approximatif (optionnel)">
+            
+            <div class="section-title">📍 Lieu du véhicule</div>
+            <input type="text" id="lieu" placeholder="Adresse, ville, code postal...">
+            
+            <div class="section-title">📅 Prise de rendez-vous (optionnel)</div>
+            <div class="row-2cols">
+                <input type="date" id="dateRdv" min="">
+                <select id="heureRdv">
+                    <option value="">Sélectionner un créneau</option>
+                    <option value="08:00">08:00 - 09:00</option>
+                    <option value="09:00">09:00 - 10:00</option>
+                    <option value="10:00">10:00 - 11:00</option>
+                    <option value="11:00">11:00 - 12:00</option>
+                    <option value="13:00">13:00 - 14:00</option>
+                    <option value="14:00">14:00 - 15:00</option>
+                    <option value="15:00">15:00 - 16:00</option>
+                    <option value="16:00">16:00 - 17:00</option>
+                    <option value="17:00">17:00 - 18:00</option>
+                </select>
+            </div>
         </div>
 
         <!-- Onglet Médias -->
         <div id="tab-media" class="tab-content">
+            <div class="section-title">📸 Ajouter des médias</div>
             <div class="media-buttons">
-                <button id="btnPhoto" class="btn-media">📷 Photo</button>
-                <button id="btnVideo" class="btn-media">🎥 Vidéo</button>
+                <button id="btnPhoto" class="btn-media">📷 Prendre une photo</button>
+                <button id="btnGalerie" class="btn-media">🖼️ Choisir depuis galerie</button>
+                <button id="btnVideo" class="btn-media">🎥 Vidéo (galerie)</button>
                 <button id="btnAudio" class="btn-media">🎙️ Audio</button>
             </div>
             <input type="file" id="fichierMedia" accept="image/*,video/*,audio/*" style="display:none">
@@ -341,12 +393,33 @@
             <p style="font-size: 12px; color: #64748b; margin-top: 10px;">💡 Les photos sont automatiquement compressées pour un envoi plus rapide</p>
         </div>
 
-        <button id="btnEnvoyer" class="btn-envoyer">🚗 ENVOYER LA DEMANDE</button>
+        <!-- Onglet Satisfaction -->
+        <div id="tab-satisfaction" class="tab-content">
+            <div class="section-title">⭐ Satisfaction client</div>
+            <p>Notez notre service (après intervention) :</p>
+            <div class="etoiles" id="etoilesSatisfaction">
+                <span class="etoile" data-note="1">☆</span>
+                <span class="etoile" data-note="2">☆</span>
+                <span class="etoile" data-note="3">☆</span>
+                <span class="etoile" data-note="4">☆</span>
+                <span class="etoile" data-note="5">☆</span>
+            </div>
+            <textarea id="avisClient" placeholder="Votre avis (optionnel)"></textarea>
+            <input type="text" id="demandeIdSatisfaction" placeholder="N° de demande pour donner votre avis">
+            <button id="btnEnvoyerAvis" class="btn-envoyer" style="margin-top: 10px; background: #f59e0b;">⭐ Envoyer mon avis</button>
+        </div>
+
+        <!-- BOUTON ENVOYER À LA FIN (après tous les onglets) -->
+        <div class="btn-envoyer-wrapper">
+            <button id="btnEnvoyer" class="btn-envoyer">🚗 ENVOYER LA DEMANDE COMPLÈTE</button>
+        </div>
+        
         <div id="message" class="message" style="margin-top: 15px; text-align: center;"></div>
 
         <div id="etape2" style="display: none; text-align: center; padding: 20px;">
             <h2 style="color: #4f46e5;">✅ Demande envoyée !</h2>
             <p>L'équipe UNITED MOTORS GARAGE a été notifiée.</p>
+            <p style="margin-top: 10px; font-size: 14px;">📧 Un email de confirmation a été envoyé.</p>
             <button id="nouvellePanne" class="btn-secondaire" style="margin-top: 15px; background: #f0f0f0; border: none; padding: 12px 24px; border-radius: 30px;">➕ Nouvelle panne</button>
         </div>
 
@@ -372,6 +445,7 @@
             <div class="stat-card"><div class="stat-number" id="statTotal">0</div><div class="stat-label">Total</div></div>
             <div class="stat-card"><div class="stat-number" id="statNonLues">0</div><div class="stat-label">Non traitées</div></div>
             <div class="stat-card"><div class="stat-number" id="statUrgentes">0</div><div class="stat-label">Urgentes</div></div>
+            <div class="stat-card"><div class="stat-number" id="statSatisfaction">0</div><div class="stat-label">Note moyenne</div></div>
         </div>
         
         <div class="filtres">
@@ -434,11 +508,54 @@
     let unsubscribe = null;
     let currentFiltre = "toutes";
     let dernierSon = 0;
+    let noteSatisfaction = 0;
     
-    // Éléments DOM
-    const clientScreen = document.getElementById('clientScreen');
-    const dashboardScreen = document.getElementById('dashboardScreen');
-    const loginScreen = document.getElementById('loginScreen');
+    // Date minimale pour RDV
+    const today = new Date().toISOString().split('T')[0];
+    const dateRdvInput = document.getElementById('dateRdv');
+    if (dateRdvInput) dateRdvInput.min = today;
+    
+    // IA Diagnostic
+    const pannesDatabase = {
+        "bruit": "🔧 Bruit suspect → vérifier courroie de distribution ou silencieux",
+        "fumée": "💨 Fumée → vérifier niveau d'huile ou joint de culasse",
+        "voyant": "⚠️ Voyant allumé → passage valise diagnostic recommandé",
+        "frein": "🛑 Problème de frein → contrôle urgent des plaquettes/disques",
+        "batterie": "🔋 Batterie → tester la charge et l'alternateur",
+        "climatisation": "❄️ Clim → recharger le circuit ou vérifier compresseur",
+        "moteur": "🔧 Moteur → diagnostic complet recommandé",
+        "boite": "⚙️ Boîte de vitesses → vérifier le niveau d'huile",
+        "direction": "🚗 Direction → contrôle rotules et crémaillère",
+        "echappement": "💨 Échappement → vérifier ligne d'échappement",
+        "fuite": "💧 Fuite → vérifier les durites et joints",
+        "suspension": "🔧 Suspension → contrôle amortisseurs et silentblocs"
+    };
+    
+    function analyserPanne(description) {
+        const descLower = description.toLowerCase();
+        for (let [mot, suggestion] of Object.entries(pannesDatabase)) {
+            if (descLower.includes(mot)) {
+                return "🤖 " + suggestion;
+            }
+        }
+        return "🔧 Notre équipe technique procédera à un diagnostic complet";
+    }
+    
+    const descriptionInput = document.getElementById('description');
+    const iaDiv = document.getElementById('iaDiagnostic');
+    const iaResultat = document.getElementById('iaResultat');
+    
+    if (descriptionInput) {
+        descriptionInput.addEventListener('input', (e) => {
+            const desc = e.target.value;
+            if (desc.length > 10) {
+                iaDiv.style.display = 'block';
+                iaResultat.innerHTML = analyserPanne(desc);
+            } else {
+                iaDiv.style.display = 'none';
+            }
+        });
+    }
     
     // Gestion onglets
     document.querySelectorAll('.tab').forEach(tab => {
@@ -459,6 +576,62 @@
         });
     });
     document.querySelector('[data-urgence="basse"]').classList.add('urgence-selected');
+    
+    // Étoiles satisfaction
+    document.querySelectorAll('.etoile').forEach(etoile => {
+        etoile.addEventListener('click', () => {
+            noteSatisfaction = parseInt(etoile.dataset.note);
+            document.querySelectorAll('.etoile').forEach((e, i) => {
+                if (i < noteSatisfaction) {
+                    e.innerHTML = '★';
+                    e.classList.add('active');
+                } else {
+                    e.innerHTML = '☆';
+                    e.classList.remove('active');
+                }
+            });
+        });
+    });
+    
+    // Envoi avis satisfaction
+    document.getElementById('btnEnvoyerAvis')?.addEventListener('click', async () => {
+        const demandeId = document.getElementById('demandeIdSatisfaction').value;
+        const avis = document.getElementById('avisClient').value;
+        
+        if (!demandeId) {
+            alert("❌ Veuillez entrer votre numéro de demande");
+            return;
+        }
+        
+        if (noteSatisfaction === 0) {
+            alert("❌ Veuillez donner une note");
+            return;
+        }
+        
+        try {
+            const docRef = await db.collection('demandes').doc(demandeId).get();
+            if (!docRef.exists) {
+                alert("❌ Numéro de demande non trouvé");
+                return;
+            }
+            
+            await db.collection('demandes').doc(demandeId).update({
+                satisfaction: noteSatisfaction,
+                avis: avis,
+                dateSatisfaction: new Date()
+            });
+            alert("✅ Merci pour votre avis !");
+            document.getElementById('avisClient').value = '';
+            document.getElementById('demandeIdSatisfaction').value = '';
+            noteSatisfaction = 0;
+            document.querySelectorAll('.etoile').forEach(e => {
+                e.innerHTML = '☆';
+                e.classList.remove('active');
+            });
+        } catch (error) {
+            alert("❌ Erreur: " + error.message);
+        }
+    });
     
     // Compression d'image
     function compressImage(file, callback) {
@@ -486,15 +659,17 @@
         reader.readAsDataURL(file);
     }
     
-    // Médias
+    // Gestion médias
     const btnPhoto = document.getElementById('btnPhoto');
+    const btnGalerie = document.getElementById('btnGalerie');
     const btnVideo = document.getElementById('btnVideo');
     const btnAudio = document.getElementById('btnAudio');
     const fichierMedia = document.getElementById('fichierMedia');
     const previewMedia = document.getElementById('previewMedia');
     
     btnPhoto.addEventListener('click', () => { mediaType = 'image'; fichierMedia.accept = 'image/*'; fichierMedia.capture = 'environment'; fichierMedia.click(); });
-    btnVideo.addEventListener('click', () => { mediaType = 'video'; fichierMedia.accept = 'video/*'; fichierMedia.capture = 'environment'; fichierMedia.click(); });
+    btnGalerie.addEventListener('click', () => { mediaType = 'image'; fichierMedia.accept = 'image/*'; fichierMedia.removeAttribute('capture'); fichierMedia.click(); });
+    btnVideo.addEventListener('click', () => { mediaType = 'video'; fichierMedia.accept = 'video/*'; fichierMedia.removeAttribute('capture'); fichierMedia.click(); });
     btnAudio.addEventListener('click', () => { mediaType = 'audio'; fichierMedia.accept = 'audio/*'; fichierMedia.removeAttribute('capture'); fichierMedia.click(); });
     
     fichierMedia.addEventListener('change', (e) => {
@@ -504,7 +679,7 @@
         if (mediaType === 'image') {
             compressImage(file, (compressedData) => {
                 mediaData = compressedData;
-                previewMedia.innerHTML = `<img src="${mediaData}" alt="Aperçu"><button id="supprimerMedia" style="margin-top:8px;background:#ef4444;color:white;border:none;padding:4px 12px;border-radius:20px;">🗑 Supprimer</button>`;
+                previewMedia.innerHTML = `<img src="${mediaData}" alt="Aperçu"><div><button id="supprimerMedia" style="margin-top:8px;background:#ef4444;color:white;border:none;padding:4px 12px;border-radius:20px;">🗑 Supprimer</button></div>`;
                 document.getElementById('supprimerMedia')?.addEventListener('click', () => {
                     mediaData = null;
                     previewMedia.innerHTML = '';
@@ -515,8 +690,8 @@
             const reader = new FileReader();
             reader.onload = (event) => {
                 mediaData = event.target.result;
-                if (mediaType === 'video') previewMedia.innerHTML = `<video src="${mediaData}" controls style="max-width:100%"></video><button id="supprimerMedia" style="margin-top:8px;background:#ef4444;color:white;border:none;padding:4px 12px;border-radius:20px;">🗑 Supprimer</button>`;
-                else if (mediaType === 'audio') previewMedia.innerHTML = `<audio src="${mediaData}" controls></audio><button id="supprimerMedia" style="margin-top:8px;background:#ef4444;color:white;border:none;padding:4px 12px;border-radius:20px;">🗑 Supprimer</button>`;
+                if (mediaType === 'video') previewMedia.innerHTML = `<video src="${mediaData}" controls style="max-width:100%"></video><div><button id="supprimerMedia" style="margin-top:8px;background:#ef4444;color:white;border:none;padding:4px 12px;border-radius:20px;">🗑 Supprimer</button></div>`;
+                else if (mediaType === 'audio') previewMedia.innerHTML = `<audio src="${mediaData}" controls></audio><div><button id="supprimerMedia" style="margin-top:8px;background:#ef4444;color:white;border:none;padding:4px 12px;border-radius:20px;">🗑 Supprimer</button></div>`;
                 document.getElementById('supprimerMedia')?.addEventListener('click', () => {
                     mediaData = null;
                     previewMedia.innerHTML = '';
@@ -569,14 +744,16 @@
                 <p><strong>Marque:</strong> ${demande.marque || 'Non renseignée'}</p>
                 <p><strong>Modèle:</strong> ${demande.modele || 'Non renseigné'}</p>
                 <p><strong>Kilométrage:</strong> ${demande.kilometrage || 'Non renseigné'} km</p>
-                <p><strong>Date mise en service:</strong> ${demande.dateMiseService || 'Non renseignée'}</p>
-                <h3>📋 Client</h3>
+                <h3>👤 Client</h3>
+                <p><strong>Nom:</strong> ${demande.nom || 'Non renseigné'}</p>
                 <p><strong>Email:</strong> ${demande.email || 'Non renseigné'}</p>
                 <p><strong>Téléphone:</strong> ${demande.telephone || 'Non renseigné'}</p>
-                <h3>🔧 Détails de la panne</h3>
+                <h3>🔧 Panne</h3>
                 <p><strong>Description:</strong> ${demande.description || 'Non renseignée'}</p>
                 <p><strong>Urgence:</strong> ${demande.urgence === 'haute' ? '🔴 Haute' : (demande.urgence === 'moyenne' ? '🟠 Moyenne' : '🟢 Basse')}</p>
                 <p><strong>Lieu:</strong> ${demande.lieu || 'Non spécifié'}</p>
+                ${demande.dateRdv ? `<p><strong>RDV:</strong> ${demande.dateRdv} à ${demande.heureRdv}</p>` : ''}
+                <p><strong>IA Diagnostic:</strong> ${demande.diagnosticIA || 'À déterminer'}</p>
                 <hr>
                 <div style="margin-top: 30px;">
                     <p>À remplir par l'atelier:</p>
@@ -605,6 +782,7 @@
     
     // Envoi demande
     const btnEnvoyer = document.getElementById('btnEnvoyer');
+    const nomInput = document.getElementById('clientNom');
     const immatInput = document.getElementById('immatriculation');
     const emailInput = document.getElementById('clientEmail');
     const telInput = document.getElementById('clientTel');
@@ -618,6 +796,7 @@
     const nouvellePanne = document.getElementById('nouvellePanne');
     
     btnEnvoyer.addEventListener('click', async () => {
+        const nom = nomInput.value.trim();
         const immat = immatInput.value.trim().toUpperCase();
         const email = emailInput.value.trim();
         const tel = telInput.value.trim();
@@ -627,11 +806,15 @@
         const kilometrage = kilometrageInput.value.trim();
         const dateMiseService = dateMiseServiceInput.value;
         const lieu = lieuInput?.value.trim() || '';
+        const dateRdvVal = document.getElementById('dateRdv')?.value || null;
+        const heureRdvVal = document.getElementById('heureRdv')?.value || null;
         
+        if (!nom) { showMessage("❌ Nom client requis", false); return; }
         if (!immat) { showMessage("❌ Immatriculation requise", false); return; }
         if (!description && !mediaData) { showMessage("❌ Description ou média requis", false); return; }
         
         const demande = {
+            nom: nom,
             immatriculation: immat,
             email: email,
             telephone: tel,
@@ -642,19 +825,23 @@
             description: description,
             lieu: lieu,
             urgence: niveauUrgence,
+            dateRdv: dateRdvVal,
+            heureRdv: heureRdvVal,
             media: mediaData || null,
             mediaType: mediaType || null,
             date: new Date().toLocaleString('fr-FR'),
             dateTimestamp: new Date(),
             lu: false,
-            traite: false
+            traite: false,
+            diagnosticIA: analyserPanne(description)
         };
         
         try {
-            await db.collection('demandes').add(demande);
-            showMessage("✅ Demande envoyée !", true);
+            const docRef = await db.collection('demandes').add(demande);
+            showMessage(`✅ Demande envoyée ! N° suivi: ${docRef.id}`, true);
             
             // Réinitialisation
+            nomInput.value = '';
             immatInput.value = '';
             emailInput.value = '';
             telInput.value = '';
@@ -664,17 +851,20 @@
             kilometrageInput.value = '';
             dateMiseServiceInput.value = '';
             if(lieuInput) lieuInput.value = '';
+            document.getElementById('dateRdv').value = '';
+            document.getElementById('heureRdv').value = '';
             mediaData = null;
             mediaType = null;
             previewMedia.innerHTML = '';
             fichierMedia.value = '';
+            iaDiv.style.display = 'none';
             
             document.getElementById('etape2').style.display = 'block';
-            document.querySelector('.btn-envoyer').style.display = 'none';
+            btnEnvoyer.style.display = 'none';
             setTimeout(() => {
                 document.getElementById('etape2').style.display = 'none';
-                document.querySelector('.btn-envoyer').style.display = 'block';
-            }, 2000);
+                btnEnvoyer.style.display = 'block';
+            }, 3000);
         } catch (error) {
             showMessage("❌ Erreur: " + error.message, false);
         }
@@ -682,7 +872,7 @@
     
     nouvellePanne?.addEventListener('click', () => {
         document.getElementById('etape2').style.display = 'none';
-        document.querySelector('.btn-envoyer').style.display = 'block';
+        btnEnvoyer.style.display = 'block';
     });
     
     function showMessage(msg, isSuccess) {
@@ -691,7 +881,7 @@
         messageDiv.style.background = isSuccess ? '#d4edda' : '#f8d7da';
         messageDiv.style.padding = '12px';
         messageDiv.style.borderRadius = '16px';
-        setTimeout(() => messageDiv.innerHTML = '', 3000);
+        setTimeout(() => messageDiv.innerHTML = '', 5000);
     }
     
     // Dashboard
@@ -725,9 +915,19 @@
             .orderBy('dateTimestamp', 'desc')
             .onSnapshot((snapshot) => {
                 let demandes = [];
+                let totalSatisfaction = 0;
+                let nbSatisfaction = 0;
+                
                 snapshot.forEach(doc => {
-                    demandes.push({ id: doc.id, ...doc.data() });
+                    const d = doc.data();
+                    demandes.push({ id: doc.id, ...d });
+                    if (d.satisfaction) {
+                        totalSatisfaction += d.satisfaction;
+                        nbSatisfaction++;
+                    }
                 });
+                
+                const noteMoyenne = nbSatisfaction > 0 ? (totalSatisfaction / nbSatisfaction).toFixed(1) : 0;
                 
                 let filtered = demandes;
                 if (currentFiltre === 'non-lues') filtered = demandes.filter(d => !d.lu);
@@ -736,6 +936,7 @@
                 document.getElementById('statTotal').textContent = demandes.length;
                 document.getElementById('statNonLues').textContent = demandes.filter(d => !d.lu).length;
                 document.getElementById('statUrgentes').textContent = demandes.filter(d => d.urgence === 'haute').length;
+                document.getElementById('statSatisfaction').textContent = noteMoyenne + ' ★';
                 
                 const nouvelles = demandes.filter(d => !d.lu && d.dateTimestamp > new Date(Date.now() - 60000));
                 if (nouvelles.length > 0 && soundEnabled) {
@@ -786,17 +987,27 @@
                         }
                     }
                     
+                    let satisfactionHtml = '';
+                    if (demande.satisfaction) {
+                        satisfactionHtml = `<div style="margin-top: 10px;">⭐ Note: ${'★'.repeat(demande.satisfaction)}${'☆'.repeat(5-demande.satisfaction)}</div>`;
+                        if (demande.avis) satisfactionHtml += `<div style="font-size: 13px; color: #64748b;">"${demande.avis}"</div>`;
+                    }
+                    
                     div.innerHTML = `
                         <span class="badge-urgence ${demande.urgence || 'basse'}">${demande.urgence === 'haute' ? '🔴 URGENT' : demande.urgence === 'moyenne' ? '🟠 MOYEN' : '🟢 BASSE'}</span>
                         <div style="display:flex;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px;">
                             <span style="font-weight:bold;color:#4f46e5;">🚗 ${demande.immatriculation}</span>
                             <span style="font-size:12px;color:#64748b;">📅 ${demande.date}</span>
                         </div>
+                        <div><strong>👤 ${demande.nom || 'Nom non renseigné'}</strong></div>
                         ${demande.marque || demande.modele ? `<div>🏭 ${demande.marque || ''} ${demande.modele || ''} - ${demande.kilometrage ? demande.kilometrage + ' km' : ''}</div>` : ''}
                         <div>📝 ${demande.description || 'Pas de description'}</div>
                         ${demande.lieu ? `<div>📍 ${demande.lieu}</div>` : ''}
+                        ${demande.dateRdv ? `<div>📅 RDV: ${demande.dateRdv} à ${demande.heureRdv}</div>` : ''}
                         ${demande.email ? `<div>📧 ${demande.email}</div>` : ''}
                         ${demande.telephone ? `<div>📞 ${demande.telephone}</div>` : ''}
+                        ${demande.diagnosticIA ? `<div style="background:#e0e7ff;padding:10px;border-radius:12px;margin-top:10px;">🤖 ${demande.diagnosticIA}</div>` : ''}
+                        ${satisfactionHtml}
                         ${mediaHtml}
                         <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
                             <button class="btn-traite" data-id="${demande.id}" style="background:#22c55e;color:white;border:none;padding:8px 16px;border-radius:20px;">✅ Traiter</button>
@@ -900,7 +1111,7 @@
     };
     
     afficherClient();
-    console.log('✅ UNITED MOTORS GARAGE - Version Bleu Indigo & Gris !');
+    console.log('✅ UNITED MOTORS GARAGE ULTIMATE - Toutes fonctionnalités actives !');
     console.log('🔐 Mot de passe réception: umg123');
 </script>
 </body>
