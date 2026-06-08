@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>NTR GARAGE PRO - Signalement panne</title>
-    <meta name="theme-color" content="#667eea">
+    <title>UNITED MOTORS GARAGE PRO - Signalement panne</title>
+    <meta name="theme-color" content="#4f46e5">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e1b4b 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -24,18 +25,17 @@
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
         }
         
-        .logo-ntr {
+        .logo-umg {
             display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
             padding: 12px 28px;
             border-radius: 60px;
             margin-bottom: 10px;
-            box-shadow: 0 10px 20px -5px rgba(102,126,234,0.4);
+            box-shadow: 0 10px 20px -5px rgba(79,70,229,0.4);
         }
-        .logo-ntr span { font-size: 28px; font-weight: bold; color: white; letter-spacing: 3px; }
-        .slogan { color: #666; font-size: 12px; text-align: center; margin-bottom: 20px; }
+        .logo-umg span { font-size: 28px; font-weight: bold; color: white; letter-spacing: 3px; }
+        .slogan { color: #64748b; font-size: 12px; text-align: center; margin-bottom: 20px; }
         
-        /* Onglets pour le client */
         .tabs {
             display: flex;
             gap: 10px;
@@ -43,6 +43,7 @@
             background: #f1f5f9;
             padding: 5px;
             border-radius: 60px;
+            flex-wrap: wrap;
         }
         .tab {
             flex: 1;
@@ -52,16 +53,23 @@
             cursor: pointer;
             transition: all 0.3s;
             font-weight: 500;
+            color: #64748b;
         }
         .tab.active {
             background: white;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            color: #667eea;
+            color: #4f46e5;
         }
         
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.3s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .row-2cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
         
         .btn-urgence {
             display: flex;
@@ -78,12 +86,12 @@
             transition: transform 0.2s;
         }
         .btn-urgence button:hover { transform: scale(1.02); }
-        .urgence-basse { background: #4CAF50; color: white; }
-        .urgence-moyenne { background: #FF9800; color: white; }
-        .urgence-haute { background: #f44336; color: white; }
-        .urgence-selected { outline: 3px solid #333; transform: scale(1.02); }
+        .urgence-basse { background: #22c55e; color: white; }
+        .urgence-moyenne { background: #f59e0b; color: white; }
+        .urgence-haute { background: #ef4444; color: white; }
+        .urgence-selected { outline: 3px solid #4f46e5; transform: scale(1.02); }
         
-        input, textarea {
+        input, textarea, select {
             width: 100%;
             padding: 14px;
             margin: 10px 0;
@@ -94,8 +102,8 @@
         }
         input:focus, textarea:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
         }
         
         .media-buttons {
@@ -114,9 +122,10 @@
             font-size: 14px;
             font-weight: 500;
             transition: all 0.2s;
+            color: #64748b;
         }
         .btn-media:hover { background: #e2e8f0; }
-        .btn-media.recording { background: #f44336; color: white; animation: pulse 1s infinite; }
+        .btn-media.recording { background: #ef4444; color: white; animation: pulse 1s infinite; }
         
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
         
@@ -126,11 +135,11 @@
             padding: 15px;
             margin: 15px 0;
         }
-        .preview-media video, .preview-media img { max-width: 100%; border-radius: 16px; }
+        .preview-media video, .preview-media img { max-width: 100%; border-radius: 16px; max-height: 200px; object-fit: contain; }
         audio { width: 100%; margin-top: 10px; }
         
-        .btn-envoyer, .btn-actualiser, .btn-login {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .btn-envoyer, .btn-actualiser, .btn-login, .btn-pdf {
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
             color: white;
             border: none;
             padding: 16px;
@@ -142,7 +151,7 @@
             margin-top: 16px;
             transition: transform 0.2s;
         }
-        .btn-envoyer:hover { transform: translateY(-2px); }
+        .btn-envoyer:hover, .btn-pdf:hover { transform: translateY(-2px); }
         
         .qr-section {
             background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
@@ -153,7 +162,6 @@
         }
         .qr-code { display: inline-block; padding: 10px; background: white; border-radius: 20px; }
         
-        /* Dashboard amélioré */
         .stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -161,7 +169,7 @@
             margin-bottom: 25px;
         }
         .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
             color: white;
             padding: 15px;
             border-radius: 20px;
@@ -182,8 +190,9 @@
             border-radius: 30px;
             background: #f1f5f9;
             cursor: pointer;
+            color: #64748b;
         }
-        .filtre-btn.active { background: #667eea; color: white; }
+        .filtre-btn.active { background: #4f46e5; color: white; }
         
         .demande {
             background: white;
@@ -195,9 +204,9 @@
             position: relative;
         }
         .demande:hover { box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); transform: translateY(-2px); }
-        .demande.haute { border-left: 5px solid #f44336; }
-        .demande.moyenne { border-left: 5px solid #FF9800; }
-        .demande.basse { border-left: 5px solid #4CAF50; }
+        .demande.haute { border-left: 5px solid #ef4444; }
+        .demande.moyenne { border-left: 5px solid #f59e0b; }
+        .demande.basse { border-left: 5px solid #22c55e; }
         .demande.non-lue { background: #fef9e6; }
         
         .badge-urgence {
@@ -210,23 +219,59 @@
             font-weight: bold;
             color: white;
         }
-        .badge-urgence.haute { background: #f44336; }
-        .badge-urgence.moyenne { background: #FF9800; }
-        .badge-urgence.basse { background: #4CAF50; }
+        .badge-urgence.haute { background: #ef4444; }
+        .badge-urgence.moyenne { background: #f59e0b; }
+        .badge-urgence.basse { background: #22c55e; }
         
-        .notification-badge {
-            background: #f44336;
+        .btn-download, .btn-delete-media {
+            background: #4f46e5;
             color: white;
-            border-radius: 50%;
-            padding: 2px 8px;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
             font-size: 12px;
-            margin-left: 10px;
+            margin-top: 8px;
+            margin-right: 8px;
+        }
+        .btn-delete-media { background: #ef4444; }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #4f46e5;
+            margin: 15px 0 5px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #e2e8f0;
         }
         
         @media (max-width: 500px) {
             .container, .dashboard-container { padding: 18px; }
             .stats { gap: 8px; }
             .stat-number { font-size: 20px; }
+            .row-2cols { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -236,28 +281,41 @@
 <div id="clientScreen">
     <div class="container">
         <div style="text-align: center;">
-            <div class="logo-ntr"><span>NTR</span></div>
-            <div class="slogan">CHANGAN · MG · JETOUR · SAV EXPERT</div>
+            <div class="logo-umg"><span>UMG</span></div>
+            <div class="slogan">UNITED MOTORS GARAGE · CHANGAN · MG · JETOUR · SAV EXPERT</div>
         </div>
 
-        <!-- QR Code Section -->
         <div class="qr-section">
             <div id="qrcode" class="qr-code" style="display: inline-block;"></div>
             <div class="qr-url" id="currentUrl" style="font-size: 11px; word-break: break-all; margin-top: 10px;"></div>
-            <button id="btnCopierLien" style="margin-top: 10px; padding: 6px 12px; border-radius: 20px; border: none; background: #667eea; color: white;">📋 Copier le lien</button>
+            <button id="btnCopierLien" style="margin-top: 10px; padding: 6px 12px; border-radius: 20px; border: none; background: #4f46e5; color: white;">📋 Copier le lien</button>
         </div>
 
-        <!-- Onglets -->
         <div class="tabs">
-            <div class="tab active" data-tab="panne">🔧 Signaler</div>
+            <div class="tab active" data-tab="panne">🔧 Panne & Véhicule</div>
             <div class="tab" data-tab="urgence">⚠️ Urgence</div>
             <div class="tab" data-tab="media">🎥 Médias</div>
         </div>
 
-        <!-- Onglet Panne -->
+        <!-- Onglet Panne + Véhicule (intégré) -->
         <div id="tab-panne" class="tab-content active">
-            <input type="text" id="immatriculation" placeholder="Immatriculation (ex: AA-123-BB)">
-            <textarea id="description" placeholder="Décrivez la panne..."></textarea>
+            <div class="section-title">🚗 Informations véhicule</div>
+            <div class="row-2cols">
+                <input type="text" id="marque" placeholder="Marque (CHANGAN, MG, JETOUR)">
+                <input type="text" id="modele" placeholder="Modèle">
+            </div>
+            <div class="row-2cols">
+                <input type="text" id="immatriculation" placeholder="Immatriculation (ex: AA-123-BB)">
+                <input type="number" id="kilometrage" placeholder="Kilométrage">
+            </div>
+            <input type="date" id="dateMiseService" placeholder="Date mise en service">
+            
+            <div class="section-title">👤 Coordonnées</div>
+            <input type="text" id="clientEmail" placeholder="Email (optionnel)">
+            <input type="text" id="clientTel" placeholder="Téléphone (optionnel)">
+            
+            <div class="section-title">📝 Description de la panne</div>
+            <textarea id="description" placeholder="Décrivez la panne en détail..."></textarea>
         </div>
 
         <!-- Onglet Urgence -->
@@ -280,18 +338,19 @@
             </div>
             <input type="file" id="fichierMedia" accept="image/*,video/*,audio/*" style="display:none">
             <div id="previewMedia" class="preview-media"></div>
+            <p style="font-size: 12px; color: #64748b; margin-top: 10px;">💡 Les photos sont automatiquement compressées pour un envoi plus rapide</p>
         </div>
 
-        <button id="btnEnvoyer" class="btn-envoyer">🚗 ENVOYER LA PANNE</button>
+        <button id="btnEnvoyer" class="btn-envoyer">🚗 ENVOYER LA DEMANDE</button>
         <div id="message" class="message" style="margin-top: 15px; text-align: center;"></div>
 
         <div id="etape2" style="display: none; text-align: center; padding: 20px;">
-            <h2>✅ Demande envoyée !</h2>
-            <p>L'atelier NTR a été notifié.</p>
+            <h2 style="color: #4f46e5;">✅ Demande envoyée !</h2>
+            <p>L'équipe UNITED MOTORS GARAGE a été notifiée.</p>
             <button id="nouvellePanne" class="btn-secondaire" style="margin-top: 15px; background: #f0f0f0; border: none; padding: 12px 24px; border-radius: 30px;">➕ Nouvelle panne</button>
         </div>
 
-        <button id="btnAllerDashboard" style="margin-top: 20px; width: 100%; padding: 12px; border: none; border-radius: 30px; background: #f1f5f9; cursor: pointer;">🔐 Accès réception</button>
+        <button id="btnAllerDashboard" style="margin-top: 20px; width: 100%; padding: 12px; border: none; border-radius: 30px; background: #f1f5f9; cursor: pointer; color: #4f46e5;">🔐 Accès réception</button>
     </div>
 </div>
 
@@ -299,23 +358,22 @@
 <div id="dashboardScreen" style="display: none;">
     <div class="dashboard-container">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap;">
-            <div class="logo-ntr" style="padding: 6px 18px;"><span style="font-size: 20px;">NTR PRO</span></div>
+            <div class="logo-umg" style="padding: 6px 18px;"><span style="font-size: 20px;">UMG</span></div>
             <div style="display: flex; gap: 10px;">
                 <span id="notifSound" style="cursor: pointer;">🔔</span>
-                <button id="btnDeconnexion" style="background: #f44336; border: none; padding: 6px 16px; border-radius: 30px; color: white;">Déconnexion</button>
+                <button id="btnDeconnexion" style="background: #ef4444; border: none; padding: 6px 16px; border-radius: 30px; color: white;">Déconnexion</button>
             </div>
         </div>
         
-        <h1>🚨 Tableau de bord</h1>
+        <h1 style="color: #1e293b;">🚨 UNITED MOTORS GARAGE</h1>
+        <p style="color: #64748b; margin-bottom: 20px;">Tableau de bord réception</p>
         
-        <!-- Statistiques -->
         <div class="stats" id="stats">
             <div class="stat-card"><div class="stat-number" id="statTotal">0</div><div class="stat-label">Total</div></div>
             <div class="stat-card"><div class="stat-number" id="statNonLues">0</div><div class="stat-label">Non traitées</div></div>
             <div class="stat-card"><div class="stat-number" id="statUrgentes">0</div><div class="stat-label">Urgentes</div></div>
         </div>
         
-        <!-- Filtres -->
         <div class="filtres">
             <button class="filtre-btn active" data-filtre="toutes">📋 Toutes</button>
             <button class="filtre-btn" data-filtre="non-lues">🟡 Non traitées</button>
@@ -323,19 +381,29 @@
         </div>
         
         <div id="listeDemandes" style="max-height: 500px; overflow-y: auto;"></div>
-        <div id="notificationToast" style="position: fixed; bottom: 20px; right: 20px; background: #333; color: white; padding: 12px 20px; border-radius: 30px; display: none; z-index: 1000;"></div>
+        <div id="notificationToast" style="position: fixed; bottom: 20px; right: 20px; background: #1e293b; color: white; padding: 12px 20px; border-radius: 30px; display: none; z-index: 1000;"></div>
     </div>
 </div>
 
 <!-- ÉCRAN LOGIN -->
 <div id="loginScreen" style="display: none;">
     <div class="login-container" style="text-align: center;">
-        <div class="logo-ntr"><span>NTR</span></div>
+        <div class="logo-umg"><span>UMG</span></div>
         <div class="slogan">ESPACE RÉCEPTION</div>
         <input type="password" id="passwordInput" placeholder="Mot de passe" style="margin: 20px 0;">
         <button id="btnLogin" class="btn-login">🔓 Accéder</button>
         <div id="loginError" style="color: red; margin-top: 10px;"></div>
-        <button id="btnRetourAccueil" style="margin-top: 20px; background: none; border: none; color: #667eea;">⬅️ Retour</button>
+        <button id="btnRetourAccueil" style="margin-top: 20px; background: none; border: none; color: #4f46e5;">⬅️ Retour</button>
+    </div>
+</div>
+
+<!-- Modal PDF -->
+<div id="pdfModal" class="modal">
+    <div class="modal-content">
+        <h3 style="color: #4f46e5;">📄 Aperçu PDF</h3>
+        <div id="pdfContent"></div>
+        <button id="btnGenererPDF" class="btn-pdf" style="margin-top: 15px;">📥 Télécharger PDF</button>
+        <button onclick="document.getElementById('pdfModal').style.display='none'" style="margin-top: 10px; background: #64748b; color: white; border: none; padding: 8px 16px; border-radius: 20px;">Fermer</button>
     </div>
 </div>
 
@@ -345,25 +413,21 @@
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
 <script>
-    // ==================== 🔥 CONFIGURATION FIREBASE (À REMPLACER) ====================
-     // ==================== 🔥 REMPLACE PAR TES INFOS FIREBASE 🔥 ====================
+    // ==================== CONFIGURATION FIREBASE ====================
     const firebaseConfig = {
-        apiKey:  "AIzaSyAxfEpi-NERVExxVYD2EmH7JppiIQDwWOM",           // ← REMPLACE
-        authDomain:  "ntr-garage.firebaseapp.com",      // ← REMPLACE
-        projectId:  "ntr-garage",      // ← REMPLACE
-        storageBucket:  "ntr-garage.firebasestorage.app",   // ← REMPLACE
-        messagingSenderId:  "606167388967",// ← REMPLACE
+        apiKey: "AIzaSyAxfEpi-NERVExxVYD2EmH7JppiIQDwWOM",
+        authDomain: "ntr-garage.firebaseapp.com",
+        projectId: "ntr-garage",
+        storageBucket: "ntr-garage.firebasestorage.app",
+        messagingSenderId: "606167388967",
         appId: "1:606167388967:web:7ad669fd353cdeeb7a8f02"
-            // ← REMPLACE
     };
-    // ============================================================================
-    
-    // ================================================================================
+    // ================================================================
     
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     
-    const MOT_DE_PASSE = "ntr123";
+    const MOT_DE_PASSE = "umg123";
     let mediaData = null;
     let mediaType = null;
     let niveauUrgence = "basse";
@@ -396,6 +460,32 @@
     });
     document.querySelector('[data-urgence="basse"]').classList.add('urgence-selected');
     
+    // Compression d'image
+    function compressImage(file, callback) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+                const maxWidth = 1024;
+                if (width > maxWidth) {
+                    height = (height * maxWidth) / width;
+                    width = maxWidth;
+                }
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                callback(compressedDataUrl);
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+    
     // Médias
     const btnPhoto = document.getElementById('btnPhoto');
     const btnVideo = document.getElementById('btnVideo');
@@ -411,14 +501,30 @@
         const file = e.target.files[0];
         if (!file) return;
         
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            mediaData = event.target.result;
-            if (mediaType === 'image') previewMedia.innerHTML = `<img src="${mediaData}" alt="Aperçu">`;
-            else if (mediaType === 'video') previewMedia.innerHTML = `<video src="${mediaData}" controls style="max-width:100%"></video>`;
-            else if (mediaType === 'audio') previewMedia.innerHTML = `<audio src="${mediaData}" controls></audio>`;
-        };
-        reader.readAsDataURL(file);
+        if (mediaType === 'image') {
+            compressImage(file, (compressedData) => {
+                mediaData = compressedData;
+                previewMedia.innerHTML = `<img src="${mediaData}" alt="Aperçu"><button id="supprimerMedia" style="margin-top:8px;background:#ef4444;color:white;border:none;padding:4px 12px;border-radius:20px;">🗑 Supprimer</button>`;
+                document.getElementById('supprimerMedia')?.addEventListener('click', () => {
+                    mediaData = null;
+                    previewMedia.innerHTML = '';
+                    fichierMedia.value = '';
+                });
+            });
+        } else {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                mediaData = event.target.result;
+                if (mediaType === 'video') previewMedia.innerHTML = `<video src="${mediaData}" controls style="max-width:100%"></video><button id="supprimerMedia" style="margin-top:8px;background:#ef4444;color:white;border:none;padding:4px 12px;border-radius:20px;">🗑 Supprimer</button>`;
+                else if (mediaType === 'audio') previewMedia.innerHTML = `<audio src="${mediaData}" controls></audio><button id="supprimerMedia" style="margin-top:8px;background:#ef4444;color:white;border:none;padding:4px 12px;border-radius:20px;">🗑 Supprimer</button>`;
+                document.getElementById('supprimerMedia')?.addEventListener('click', () => {
+                    mediaData = null;
+                    previewMedia.innerHTML = '';
+                    fichierMedia.value = '';
+                });
+            };
+            reader.readAsDataURL(file);
+        }
     });
     
     // QR Code
@@ -428,7 +534,7 @@
         const qrDiv = document.getElementById('qrcode');
         if (qrDiv) {
             qrDiv.innerHTML = '';
-            new QRCode(qrDiv, { text: url, width: 160, height: 160, colorDark: "#667eea", colorLight: "#ffffff" });
+            new QRCode(qrDiv, { text: url, width: 160, height: 160, colorDark: "#4f46e5", colorLight: "#ffffff" });
         }
     }
     
@@ -437,19 +543,89 @@
         alert('Lien copié !');
     });
     
-    // Envoi
+    // Téléchargement fichier
+    function telechargerFichier(dataUrl, nomFichier) {
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = nomFichier;
+        link.click();
+    }
+    
+    // Génération PDF
+    async function genererPDF(demande, id) {
+        const pdfContent = document.getElementById('pdfContent');
+        pdfContent.innerHTML = `
+            <div style="font-family: system-ui; padding: 20px;">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h1 style="color: #4f46e5;">UNITED MOTORS GARAGE</h1>
+                    <p style="color: #64748b;">CHANGAN · MG · JETOUR · SAV EXPERT</p>
+                    <hr>
+                </div>
+                <h2>📄 BON DE RÉPARATION</h2>
+                <p><strong>N° de demande:</strong> ${id}</p>
+                <p><strong>Date:</strong> ${demande.date || new Date().toLocaleString('fr-FR')}</p>
+                <h3>🚗 Informations véhicule</h3>
+                <p><strong>Immatriculation:</strong> ${demande.immatriculation}</p>
+                <p><strong>Marque:</strong> ${demande.marque || 'Non renseignée'}</p>
+                <p><strong>Modèle:</strong> ${demande.modele || 'Non renseigné'}</p>
+                <p><strong>Kilométrage:</strong> ${demande.kilometrage || 'Non renseigné'} km</p>
+                <p><strong>Date mise en service:</strong> ${demande.dateMiseService || 'Non renseignée'}</p>
+                <h3>📋 Client</h3>
+                <p><strong>Email:</strong> ${demande.email || 'Non renseigné'}</p>
+                <p><strong>Téléphone:</strong> ${demande.telephone || 'Non renseigné'}</p>
+                <h3>🔧 Détails de la panne</h3>
+                <p><strong>Description:</strong> ${demande.description || 'Non renseignée'}</p>
+                <p><strong>Urgence:</strong> ${demande.urgence === 'haute' ? '🔴 Haute' : (demande.urgence === 'moyenne' ? '🟠 Moyenne' : '🟢 Basse')}</p>
+                <p><strong>Lieu:</strong> ${demande.lieu || 'Non spécifié'}</p>
+                <hr>
+                <div style="margin-top: 30px;">
+                    <p>À remplir par l'atelier:</p>
+                    <p>_________________________________</p>
+                    <p>Diagnostic final: _________________</p>
+                    <p>Pièces à changer: _________________</p>
+                    <p>Montant estimé: _________________ €</p>
+                </div>
+                <div style="margin-top: 50px; text-align: center; font-size: 12px; color: #64748b;">
+                    UNITED MOTORS GARAGE - Votre expert automobile
+                </div>
+            </div>
+        `;
+        document.getElementById('pdfModal').style.display = 'flex';
+        
+        document.getElementById('btnGenererPDF').onclick = () => {
+            const element = document.getElementById('pdfContent');
+            html2pdf().from(element).set({
+                margin: [10, 10, 10, 10],
+                filename: `UMG_${id}.pdf`,
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            }).save();
+        };
+    }
+    
+    // Envoi demande
     const btnEnvoyer = document.getElementById('btnEnvoyer');
     const immatInput = document.getElementById('immatriculation');
+    const emailInput = document.getElementById('clientEmail');
+    const telInput = document.getElementById('clientTel');
     const descriptionText = document.getElementById('description');
+    const marqueInput = document.getElementById('marque');
+    const modeleInput = document.getElementById('modele');
+    const kilometrageInput = document.getElementById('kilometrage');
+    const dateMiseServiceInput = document.getElementById('dateMiseService');
     const lieuInput = document.getElementById('lieu');
     const messageDiv = document.getElementById('message');
-    const etape1 = document.getElementById('etape1');
-    const etape2 = document.getElementById('etape2');
     const nouvellePanne = document.getElementById('nouvellePanne');
     
     btnEnvoyer.addEventListener('click', async () => {
         const immat = immatInput.value.trim().toUpperCase();
+        const email = emailInput.value.trim();
+        const tel = telInput.value.trim();
         const description = descriptionText.value.trim();
+        const marque = marqueInput.value.trim();
+        const modele = modeleInput.value.trim();
+        const kilometrage = kilometrageInput.value.trim();
+        const dateMiseService = dateMiseServiceInput.value;
         const lieu = lieuInput?.value.trim() || '';
         
         if (!immat) { showMessage("❌ Immatriculation requise", false); return; }
@@ -457,6 +633,12 @@
         
         const demande = {
             immatriculation: immat,
+            email: email,
+            telephone: tel,
+            marque: marque,
+            modele: modele,
+            kilometrage: kilometrage,
+            dateMiseService: dateMiseService,
             description: description,
             lieu: lieu,
             urgence: niveauUrgence,
@@ -472,8 +654,15 @@
             await db.collection('demandes').add(demande);
             showMessage("✅ Demande envoyée !", true);
             
+            // Réinitialisation
             immatInput.value = '';
+            emailInput.value = '';
+            telInput.value = '';
             descriptionText.value = '';
+            marqueInput.value = '';
+            modeleInput.value = '';
+            kilometrageInput.value = '';
+            dateMiseServiceInput.value = '';
             if(lieuInput) lieuInput.value = '';
             mediaData = null;
             mediaType = null;
@@ -505,7 +694,7 @@
         setTimeout(() => messageDiv.innerHTML = '', 3000);
     }
     
-    // Dashboard avec notifications
+    // Dashboard
     function jouerSon() {
         const now = Date.now();
         if (now - dernierSon > 2000) {
@@ -540,17 +729,14 @@
                     demandes.push({ id: doc.id, ...doc.data() });
                 });
                 
-                // Filtrage
                 let filtered = demandes;
                 if (currentFiltre === 'non-lues') filtered = demandes.filter(d => !d.lu);
                 if (currentFiltre === 'urgentes') filtered = demandes.filter(d => d.urgence === 'haute');
                 
-                // Stats
                 document.getElementById('statTotal').textContent = demandes.length;
                 document.getElementById('statNonLues').textContent = demandes.filter(d => !d.lu).length;
                 document.getElementById('statUrgentes').textContent = demandes.filter(d => d.urgence === 'haute').length;
                 
-                // Vérifier nouvelles demandes pour notification
                 const nouvelles = demandes.filter(d => !d.lu && d.dateTimestamp > new Date(Date.now() - 60000));
                 if (nouvelles.length > 0 && soundEnabled) {
                     jouerSon();
@@ -559,7 +745,7 @@
                 
                 const listeDiv = document.getElementById('listeDemandes');
                 if (filtered.length === 0) {
-                    listeDiv.innerHTML = '<div style="text-align:center;padding:40px;color:#999;">📭 Aucune demande</div>';
+                    listeDiv.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;">📭 Aucune demande</div>';
                     return;
                 }
                 
@@ -570,22 +756,51 @@
                     
                     let mediaHtml = '';
                     if (demande.media) {
-                        if (demande.mediaType === 'image') mediaHtml = `<img src="${demande.media}" style="max-width:100%;border-radius:12px;margin-top:10px;">`;
-                        else if (demande.mediaType === 'video') mediaHtml = `<video src="${demande.media}" controls style="max-width:100%;border-radius:12px;margin-top:10px;"></video>`;
-                        else if (demande.mediaType === 'audio') mediaHtml = `<audio src="${demande.media}" controls style="width:100%;margin-top:10px;"></audio>`;
+                        if (demande.mediaType === 'image') {
+                            mediaHtml = `
+                                <div style="margin-top: 10px;">
+                                    <img src="${demande.media}" style="max-width:100%;border-radius:12px;max-height:150px;object-fit:contain;">
+                                    <div>
+                                        <button class="btn-download" data-media="${demande.media}" data-type="image">📥 Télécharger</button>
+                                        <button class="btn-delete-media" data-id="${demande.id}">🗑 Supprimer média</button>
+                                    </div>
+                                </div>`;
+                        } else if (demande.mediaType === 'video') {
+                            mediaHtml = `
+                                <div style="margin-top: 10px;">
+                                    <video src="${demande.media}" controls style="max-width:100%;border-radius:12px;max-height:150px;"></video>
+                                    <div>
+                                        <button class="btn-download" data-media="${demande.media}" data-type="video">📥 Télécharger</button>
+                                        <button class="btn-delete-media" data-id="${demande.id}">🗑 Supprimer média</button>
+                                    </div>
+                                </div>`;
+                        } else if (demande.mediaType === 'audio') {
+                            mediaHtml = `
+                                <div style="margin-top: 10px;">
+                                    <audio src="${demande.media}" controls style="width:100%;"></audio>
+                                    <div>
+                                        <button class="btn-download" data-media="${demande.media}" data-type="audio">📥 Télécharger</button>
+                                        <button class="btn-delete-media" data-id="${demande.id}">🗑 Supprimer média</button>
+                                    </div>
+                                </div>`;
+                        }
                     }
                     
                     div.innerHTML = `
                         <span class="badge-urgence ${demande.urgence || 'basse'}">${demande.urgence === 'haute' ? '🔴 URGENT' : demande.urgence === 'moyenne' ? '🟠 MOYEN' : '🟢 BASSE'}</span>
-                        <div class="demande-header" style="display:flex;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px;">
-                            <span style="font-weight:bold;color:#667eea;">🚗 ${demande.immatriculation}</span>
-                            <span style="font-size:12px;color:#999;">📅 ${demande.date}</span>
+                        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px;">
+                            <span style="font-weight:bold;color:#4f46e5;">🚗 ${demande.immatriculation}</span>
+                            <span style="font-size:12px;color:#64748b;">📅 ${demande.date}</span>
                         </div>
+                        ${demande.marque || demande.modele ? `<div>🏭 ${demande.marque || ''} ${demande.modele || ''} - ${demande.kilometrage ? demande.kilometrage + ' km' : ''}</div>` : ''}
                         <div>📝 ${demande.description || 'Pas de description'}</div>
                         ${demande.lieu ? `<div>📍 ${demande.lieu}</div>` : ''}
+                        ${demande.email ? `<div>📧 ${demande.email}</div>` : ''}
+                        ${demande.telephone ? `<div>📞 ${demande.telephone}</div>` : ''}
                         ${mediaHtml}
-                        <div style="display:flex;gap:10px;margin-top:12px;">
-                            <button class="btn-traite" data-id="${demande.id}" style="background:#4CAF50;color:white;border:none;padding:8px 16px;border-radius:20px;">✅ Traiter</button>
+                        <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
+                            <button class="btn-traite" data-id="${demande.id}" style="background:#22c55e;color:white;border:none;padding:8px 16px;border-radius:20px;">✅ Traiter</button>
+                            <button class="btn-pdf-demande" data-id="${demande.id}" data-json='${JSON.stringify(demande).replace(/'/g, "&#39;")}' style="background:#4f46e5;color:white;border:none;padding:8px 16px;border-radius:20px;">📄 PDF</button>
                         </div>
                     `;
                     listeDiv.appendChild(div);
@@ -595,11 +810,38 @@
                     }
                 });
                 
+                document.querySelectorAll('.btn-download').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const mediaUrl = btn.dataset.media;
+                        const type = btn.dataset.type;
+                        const extension = type === 'image' ? 'jpg' : (type === 'video' ? 'mp4' : 'mp3');
+                        telechargerFichier(mediaUrl, `media_${Date.now()}.${extension}`);
+                    });
+                });
+                
+                document.querySelectorAll('.btn-delete-media').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const id = btn.dataset.id;
+                        await db.collection('demandes').doc(id).update({
+                            media: null,
+                            mediaType: null
+                        });
+                        afficherToast("🗑 Média supprimé");
+                    });
+                });
+                
                 document.querySelectorAll('.btn-traite').forEach(btn => {
                     btn.addEventListener('click', async (e) => {
                         const id = btn.dataset.id;
                         await db.collection('demandes').doc(id).delete();
                         afficherToast("✅ Demande traitée et supprimée");
+                    });
+                });
+                
+                document.querySelectorAll('.btn-pdf-demande').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const demande = JSON.parse(btn.dataset.json);
+                        genererPDF(demande, btn.dataset.id);
                     });
                 });
             });
@@ -652,8 +894,14 @@
     btnRetourAccueil?.addEventListener('click', afficherClient);
     btnDeconnexion?.addEventListener('click', afficherClient);
     
+    window.onclick = function(event) {
+        const modal = document.getElementById('pdfModal');
+        if (event.target === modal) modal.style.display = 'none';
+    };
+    
     afficherClient();
-    console.log('✅ Version PRO - Vidéo + Audio + Urgence + Notifications !');
+    console.log('✅ UNITED MOTORS GARAGE - Version Bleu Indigo & Gris !');
+    console.log('🔐 Mot de passe réception: umg123');
 </script>
 </body>
 </html>
