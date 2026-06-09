@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Ronde Véhicules - Présence par site</title>
+    <title>Stock Véhicules - Présence par site</title>
     <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
@@ -71,19 +71,19 @@
 </head>
 <body>
 <header>
-    <h1>🚗 Ronde présence par site</h1>
+    <h1> STOCK VEHICULES </h1>
     <p>Import Odoo → cocher présence + assigner site → ajout manuel</p>
 </header>
 
 <div class="toolbar">
     <div class="btn-group">
         <input type="file" id="excelInput" accept=".xlsx, .xls" style="display:none" />
-        <button id="importBtn">📂 Importer non livrés</button>
-        <button id="exportPresentExcel">📊 Tous présents (Excel)</button>
-        <button id="exportPresentPDF">📑 Tous présents (PDF)</button>
-        <button id="exportAbsentExcel">⚠️ Absents (Excel)</button>
-        <button id="exportAbsentPDF">⚠️ Absents (PDF)</button>
-        <button id="resetAllBtn" class="btn-secondary">🔄 Réinitialiser</button>
+        <button id="importBtn">Importer non livrés</button>
+        <button id="exportPresentExcel"> Tous présents (Excel)</button>
+        <button id="exportPresentPDF"> Tous présents (PDF)</button>
+        <button id="exportAbsentExcel"> Absents (Excel)</button>
+        <button id="exportAbsentPDF"> Absents (PDF)</button>
+        <button id="resetAllBtn" class="btn-secondary"> Réinitialiser</button>
     </div>
     <button id="darkModeToggle" class="dark-toggle">🌙 Mode nuit</button>
 </div>
@@ -95,8 +95,8 @@
             <option value="all">Tous les véhicules</option>
             <option value="present_all">✅ Tous les présents</option>
         </select>
-        <button id="exportSiteExcelBtn" class="btn-secondary">📎 Exporter ce site (Excel)</button>
-        <button id="exportSitePdfBtn" class="btn-secondary">📑 Exporter ce site (PDF)</button>
+        <button id="exportSiteExcelBtn" class="btn-secondary"> Exporter ce site (Excel)</button>
+        <button id="exportSitePdfBtn" class="btn-secondary"> Exporter ce site (PDF)</button>
     </div>
     <div>
         <label>🔍 Recherche :</label>
