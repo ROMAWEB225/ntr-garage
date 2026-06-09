@@ -3,559 +3,1116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title> Stock Véhicules - Présence par site</title>
-    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <title>UNITED MOTORS GARAGE ULTIMATE - Signalement panne</title>
+    <meta name="theme-color" content="#4f46e5">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        * { box-sizing: border-box; font-family: system-ui, 'Segoe UI', Roboto, sans-serif; }
-        body { margin: 0; background: #f4f7fc; color: #1e293b; transition: all 0.2s; }
-        body.dark-mode { background: #0f172a; color: #e2e8f0; }
-        .dark-mode .card, .dark-mode .toolbar, .dark-mode .filter-bar, .dark-mode .vehicles-container, .dark-mode .add-section {
-            background: #1e293b; border-color: #334155;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 50%, #1e1b4b 100%);
+            min-height: 100vh;
+            padding: 20px;
         }
-        header { background: #0f172a; color: white; padding: 1rem; text-align: center; }
-        h1 { margin: 0; font-size: 1.6rem; }
-        .toolbar {
-            display: flex; flex-wrap: wrap; gap: 10px; padding: 1rem;
-            background: white; border-bottom: 1px solid #ddd;
-            align-items: center; justify-content: space-between;
+        
+        .container, .dashboard-container, .login-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 40px;
+            padding: 28px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
         }
-        .btn-group { display: flex; flex-wrap: wrap; gap: 8px; }
-        button {
-            background: #2563eb; border: none; color: white; padding: 8px 16px;
-            border-radius: 30px; cursor: pointer; font-weight: 600; font-size: 0.85rem;
+        
+        .logo-umg {
+            display: inline-block;
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+            padding: 12px 28px;
+            border-radius: 60px;
+            margin-bottom: 10px;
+            box-shadow: 0 10px 20px -5px rgba(79,70,229,0.4);
         }
-        button:hover { background: #1d4ed8; }
-        .btn-secondary { background: #475569; }
-        .filter-bar {
-            background: white; padding: 0.7rem 1rem; display: flex; flex-wrap: wrap;
-            gap: 15px; align-items: center; border-bottom: 1px solid #e2e8f0;
+        .logo-umg span { font-size: 28px; font-weight: bold; color: white; letter-spacing: 3px; }
+        .slogan { color: #64748b; font-size: 12px; text-align: center; margin-bottom: 20px; }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            background: #f1f5f9;
+            padding: 5px;
+            border-radius: 60px;
+            flex-wrap: wrap;
         }
-        select, input[type="text"] { padding: 6px 12px; border-radius: 30px; border: 1px solid #cbd5e1; }
-        .stats { display: flex; flex-wrap: wrap; gap: 12px; margin: 1rem; }
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            color: #64748b;
+        }
+        .tab.active {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            color: #4f46e5;
+        }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .row-2cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .btn-urgence {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .btn-urgence button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .btn-urgence button:hover { transform: scale(1.02); }
+        .urgence-basse { background: #22c55e; color: white; }
+        .urgence-moyenne { background: #f59e0b; color: white; }
+        .urgence-haute { background: #ef4444; color: white; }
+        .urgence-selected { outline: 3px solid #4f46e5; transform: scale(1.02); }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 14px;
+            margin: 10px 0;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+        }
+        
+        .media-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        .btn-media {
+            flex: 1;
+            background: #f1f5f9;
+            border: none;
+            padding: 12px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            color: #64748b;
+        }
+        .btn-media:hover { background: #e2e8f0; }
+        
+        .preview-media {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .preview-media video, .preview-media img { max-width: 100%; border-radius: 16px; max-height: 200px; object-fit: contain; }
+        audio { width: 100%; margin-top: 10px; }
+        
+        .btn-envoyer, .btn-actualiser, .btn-login, .btn-pdf {
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 40px;
+            font-size: 18px;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 16px;
+            transition: transform 0.2s;
+        }
+        .btn-envoyer:hover, .btn-pdf:hover { transform: translateY(-2px); }
+        
+        .qr-section {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border-radius: 24px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .qr-code { display: inline-block; padding: 10px; background: white; border-radius: 20px; }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
         .stat-card {
-            background: white; border-radius: 20px; padding: 10px 15px;
-            min-width: 120px; text-align: center; cursor: pointer;
-            transition: transform 0.1s;
+            background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 20px;
+            text-align: center;
         }
-        .stat-card:hover { transform: scale(1.02); background: #eef2ff; }
-        .vehicles-container, .add-section {
-            background: white; border-radius: 24px; margin: 1rem; padding: 1rem;
+        .stat-number { font-size: 28px; font-weight: bold; }
+        .stat-label { font-size: 12px; opacity: 0.9; }
+        
+        .filtres {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
         }
-        .vehicle-item {
-            display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
-            padding: 12px; border-bottom: 1px solid #e2e8f0;
+        .filtre-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 30px;
+            background: #f1f5f9;
+            cursor: pointer;
+            color: #64748b;
         }
-        .vehicle-info { flex: 2; }
-        .vehicle-info strong { font-size: 1rem; display: block; }
-        select.site-select { width: 140px; }
-        .present-check { width: 22px; height: 22px; cursor: pointer; }
-        .photo-preview { max-width: 50px; max-height: 50px; border-radius: 8px; cursor: pointer; }
-        .small-btn { background: #f1f5f9; border: none; padding: 4px 8px; border-radius: 20px; font-size: 0.7rem; cursor: pointer; }
-        .add-form { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 10px; }
-        .add-form input, .add-form select { padding: 8px; border-radius: 20px; border: 1px solid #ccc; }
-        footer { text-align: center; font-size: 0.75rem; padding: 1rem; color: #64748b; }
-        @media (max-width: 700px) {
-            .vehicle-item { flex-direction: column; align-items: stretch; }
-            .toolbar { flex-direction: column; align-items: stretch; }
-            .btn-group { justify-content: center; }
+        .filtre-btn.active { background: #4f46e5; color: white; }
+        
+        .demande {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 24px;
+            padding: 18px;
+            margin-bottom: 16px;
+            transition: all 0.2s;
+            position: relative;
         }
-        .dark-toggle { background: #334155; margin-left: auto; }
-        .filter-site-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-        .detail-line { font-size: 0.8rem; color: #475569; }
-        .dark-mode .detail-line { color: #cbd5e1; }
+        .demande:hover { box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .demande.haute { border-left: 5px solid #ef4444; }
+        .demande.moyenne { border-left: 5px solid #f59e0b; }
+        .demande.basse { border-left: 5px solid #22c55e; }
+        .demande.non-lue { background: #fef9e6; }
+        
+        .badge-urgence {
+            position: absolute;
+            top: -10px;
+            right: 20px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            color: white;
+        }
+        .badge-urgence.haute { background: #ef4444; }
+        .badge-urgence.moyenne { background: #f59e0b; }
+        .badge-urgence.basse { background: #22c55e; }
+        
+        .btn-download, .btn-delete-media {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 8px;
+            margin-right: 8px;
+        }
+        .btn-delete-media { background: #ef4444; }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #4f46e5;
+            margin: 15px 0 5px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .ia-diagnostic {
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+            border-radius: 20px;
+            padding: 15px;
+            margin: 15px 0;
+            display: none;
+        }
+        
+        .etoiles {
+            display: flex;
+            gap: 5px;
+            margin: 10px 0;
+        }
+        .etoile {
+            font-size: 28px;
+            cursor: pointer;
+            color: #cbd5e1;
+            transition: color 0.2s;
+        }
+        .etoile.active { color: #f59e0b; }
+        
+        .btn-envoyer-wrapper {
+            margin-top: 30px;
+            border-top: 2px solid #e2e8f0;
+            padding-top: 20px;
+        }
+        
+        @media (max-width: 500px) {
+            .container, .dashboard-container { padding: 18px; }
+            .stats { gap: 8px; }
+            .stat-number { font-size: 20px; }
+            .row-2cols { grid-template-columns: 1fr; }
+        }
     </style>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0f172a">
 </head>
 <body>
-<header>
-    <h1> STOCK VEHICULES </h1>
-    <p>Import Odoo → cocher présence + assigner site → ajout manuel</p>
-</header>
 
-<div class="toolbar">
-    <div class="btn-group">
-        <input type="file" id="excelInput" accept=".xlsx, .xls" style="display:none" />
-        <button id="importBtn"> Importer non livrés</button>
-        <button id="exportPresentExcel"> Tous présents (Excel)</button>
-        <button id="exportPresentPDF"> Tous présents (PDF)</button>
-        <button id="exportAbsentExcel"> Absents (Excel)</button>
-        <button id="exportAbsentPDF"> Absents (PDF)</button>
-        <button id="resetAllBtn" class="btn-secondary"> Réinitialiser</button>
+<!-- ÉCRAN CLIENT -->
+<div id="clientScreen">
+    <div class="container">
+        <div style="text-align: center;">
+            <div class="logo-umg"><span>UMG</span></div>
+            <div class="slogan">UNITED MOTORS GARAGE · CHANGAN · MG · JETOUR · SAV EXPERT</div>
+        </div>
+
+        <div class="qr-section">
+            <div id="qrcode" class="qr-code" style="display: inline-block;"></div>
+            <div class="qr-url" id="currentUrl" style="font-size: 11px; word-break: break-all; margin-top: 10px;"></div>
+            <button id="btnCopierLien" style="margin-top: 10px; padding: 6px 12px; border-radius: 20px; border: none; background: #4f46e5; color: white;">📋 Copier le lien</button>
+        </div>
+
+        <div class="tabs">
+            <div class="tab active" data-tab="panne">🔧 Panne & Véhicule</div>
+            <div class="tab" data-tab="urgence">⚠️ Urgence & RDV</div>
+            <div class="tab" data-tab="media">🎥 Médias</div>
+            <div class="tab" data-tab="satisfaction">⭐ Satisfaction</div>
+        </div>
+
+        <!-- Onglet Panne + Véhicule -->
+        <div id="tab-panne" class="tab-content active">
+            <div class="section-title">🚗 Informations véhicule</div>
+            <div class="row-2cols">
+                <input type="text" id="marque" placeholder="Marque (CHANGAN, MG, JETOUR)">
+                <input type="text" id="modele" placeholder="Modèle">
+            </div>
+            <div class="row-2cols">
+                <input type="text" id="immatriculation" placeholder="Immatriculation (ex: AA-123-BB)">
+                <input type="number" id="kilometrage" placeholder="Kilométrage">
+            </div>
+            <input type="date" id="dateMiseService" placeholder="Date mise en service">
+            
+            <div class="section-title">👤 Coordonnées client</div>
+            <input type="text" id="clientNom" placeholder="Nom et prénom *">
+            <input type="text" id="clientEmail" placeholder="Email (optionnel)">
+            <input type="text" id="clientTel" placeholder="Téléphone (optionnel)">
+            
+            <div class="section-title">📝 Description de la panne</div>
+            <textarea id="description" placeholder="Décrivez la panne en détail..."></textarea>
+            
+            <div class="ia-diagnostic" id="iaDiagnostic">
+                <strong>🤖 IA Diagnostic préliminaire :</strong>
+                <p id="iaResultat"></p>
+            </div>
+        </div>
+
+        <!-- Onglet Urgence + RDV -->
+        <div id="tab-urgence" class="tab-content">
+            <div class="section-title">⚠️ Niveau d'urgence</div>
+            <div class="btn-urgence">
+                <button class="urgence-basse" data-urgence="basse">🟢 Basse</button>
+                <button class="urgence-moyenne" data-urgence="moyenne">🟠 Moyenne</button>
+                <button class="urgence-haute" data-urgence="haute">🔴 Haute</button>
+            </div>
+            
+            <div class="section-title">📍 Lieu du véhicule</div>
+            <input type="text" id="lieu" placeholder="Adresse, ville, code postal...">
+            
+            <div class="section-title">📅 Prise de rendez-vous (optionnel)</div>
+            <div class="row-2cols">
+                <input type="date" id="dateRdv" min="">
+                <select id="heureRdv">
+                    <option value="">Sélectionner un créneau</option>
+                    <option value="08:00">08:00 - 09:00</option>
+                    <option value="09:00">09:00 - 10:00</option>
+                    <option value="10:00">10:00 - 11:00</option>
+                    <option value="11:00">11:00 - 12:00</option>
+                    <option value="13:00">13:00 - 14:00</option>
+                    <option value="14:00">14:00 - 15:00</option>
+                    <option value="15:00">15:00 - 16:00</option>
+                    <option value="16:00">16:00 - 17:00</option>
+                    <option value="17:00">17:00 - 18:00</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Onglet Médias -->
+        <div id="tab-media" class="tab-content">
+            <div class="section-title">📸 Ajouter des médias</div>
+            <div class="media-buttons">
+                <button id="btnPhoto" class="btn-media">📷 Prendre une photo</button>
+                <button id="btnGalerie" class="btn-media">🖼️ Choisir depuis galerie</button>
+                <button id="btnVideo" class="btn-media">🎥 Vidéo (galerie)</button>
+                <button id="btnAudio" class="btn-media">🎙️ Audio</button>
+            </div>
+            <input type="file" id="fichierMedia" accept="image/*,video/*,audio/*" style="display:none">
+            <div id="previewMedia" class="preview-media"></div>
+            <p style="font-size: 12px; color: #64748b; margin-top: 10px;">💡 Les photos sont automatiquement compressées pour un envoi plus rapide</p>
+        </div>
+
+        <!-- Onglet Satisfaction -->
+        <div id="tab-satisfaction" class="tab-content">
+            <div class="section-title">⭐ Satisfaction client</div>
+            <p>Notez notre service (après intervention) :</p>
+            <div class="etoiles" id="etoilesSatisfaction">
+                <span class="etoile" data-note="1">☆</span>
+                <span class="etoile" data-note="2">☆</span>
+                <span class="etoile" data-note="3">☆</span>
+                <span class="etoile" data-note="4">☆</span>
+                <span class="etoile" data-note="5">☆</span>
+            </div>
+            <textarea id="avisClient" placeholder="Votre avis (optionnel)"></textarea>
+            <input type="text" id="demandeIdSatisfaction" placeholder="N° de demande pour donner votre avis">
+            <button id="btnEnvoyerAvis" class="btn-envoyer" style="margin-top: 10px; background: #f59e0b;">⭐ Envoyer mon avis</button>
+        </div>
+
+        <!-- BOUTON ENVOYER À LA FIN (après tous les onglets) -->
+        <div class="btn-envoyer-wrapper">
+            <button id="btnEnvoyer" class="btn-envoyer">🚗 ENVOYER LA DEMANDE COMPLÈTE</button>
+        </div>
+        
+        <div id="message" class="message" style="margin-top: 15px; text-align: center;"></div>
+
+        <div id="etape2" style="display: none; text-align: center; padding: 20px;">
+            <h2 style="color: #4f46e5;">✅ Demande envoyée !</h2>
+            <p>L'équipe UNITED MOTORS GARAGE a été notifiée.</p>
+            <p style="margin-top: 10px; font-size: 14px;">📧 Un email de confirmation a été envoyé.</p>
+            <button id="nouvellePanne" class="btn-secondaire" style="margin-top: 15px; background: #f0f0f0; border: none; padding: 12px 24px; border-radius: 30px;">➕ Nouvelle panne</button>
+        </div>
+
+        <button id="btnAllerDashboard" style="margin-top: 20px; width: 100%; padding: 12px; border: none; border-radius: 30px; background: #f1f5f9; cursor: pointer; color: #4f46e5;">🔐 Accès réception</button>
     </div>
-    <button id="darkModeToggle" class="dark-toggle">🌙 Mode nuit</button>
 </div>
 
-<div class="filter-bar">
-    <div class="filter-site-row">
-        <label>📍 Filtrer par site :</label>
-        <select id="siteFilterSelect">
-            <option value="all">Tous les véhicules</option>
-            <option value="present_all">✅ Tous les présents</option>
-        </select>
-        <button id="exportSiteExcelBtn" class="btn-secondary"> Exporter ce site (Excel)</button>
-        <button id="exportSitePdfBtn" class="btn-secondary"> Exporter ce site (PDF)</button>
-    </div>
-    <div>
-        <label>🔍 Recherche :</label>
-        <input type="text" id="searchInput" placeholder="Immat, client, modèle...">
-        <span id="resultCount"></span>
-    </div>
-</div>
-
-<div id="statsContainer" class="stats"></div>
-
-<div class="vehicles-container">
-    <h2>📋 Liste des véhicules non livrés</h2>
-    <div id="listContainer">Chargement...</div>
-</div>
-
-<div class="add-section">
-    <h3>➕ Ajouter un véhicule trouvé sur site (hors liste Odoo)</h3>
-    <div class="add-form">
-        <input type="text" id="newImmat" placeholder="Immatriculation *" required>
-        <input type="text" id="newMarque" placeholder="Marque">
-        <input type="text" id="newModele" placeholder="Modèle">
-        <select id="newSite">
-            <option value="Garage 1">Garage 1</option>
-            <option value="Garage 2">Garage 2</option>
-            <option value="Garage 3">Garage 3</option>
-            <option value="Dépôt 1">Dépôt 1</option>
-            <option value="Dépôt Aéroport">Dépôt Aéroport</option>
-        </select>
-        <button id="addVehicleBtn">✅ Ajouter</button>
+<!-- ÉCRAN DASHBOARD -->
+<div id="dashboardScreen" style="display: none;">
+    <div class="dashboard-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap;">
+            <div class="logo-umg" style="padding: 6px 18px;"><span style="font-size: 20px;">UMG</span></div>
+            <div style="display: flex; gap: 10px;">
+                <span id="notifSound" style="cursor: pointer;">🔔</span>
+                <button id="btnDeconnexion" style="background: #ef4444; border: none; padding: 6px 16px; border-radius: 30px; color: white;">Déconnexion</button>
+            </div>
+        </div>
+        
+        <h1 style="color: #1e293b;">🚨 UNITED MOTORS GARAGE</h1>
+        <p style="color: #64748b; margin-bottom: 20px;">Tableau de bord réception</p>
+        
+        <div class="stats" id="stats">
+            <div class="stat-card"><div class="stat-number" id="statTotal">0</div><div class="stat-label">Total</div></div>
+            <div class="stat-card"><div class="stat-number" id="statNonLues">0</div><div class="stat-label">Non traitées</div></div>
+            <div class="stat-card"><div class="stat-number" id="statUrgentes">0</div><div class="stat-label">Urgentes</div></div>
+            <div class="stat-card"><div class="stat-number" id="statSatisfaction">0</div><div class="stat-label">Note moyenne</div></div>
+        </div>
+        
+        <div class="filtres">
+            <button class="filtre-btn active" data-filtre="toutes">📋 Toutes</button>
+            <button class="filtre-btn" data-filtre="non-lues">🟡 Non traitées</button>
+            <button class="filtre-btn" data-filtre="urgentes">🔴 Urgentes</button>
+        </div>
+        
+        <div id="listeDemandes" style="max-height: 500px; overflow-y: auto;"></div>
+        <div id="notificationToast" style="position: fixed; bottom: 20px; right: 20px; background: #1e293b; color: white; padding: 12px 20px; border-radius: 30px; display: none; z-index: 1000;"></div>
     </div>
 </div>
 
-<footer>✅ Mode hors ligne actif | Dernière synchro : <span id="lastSync">jamais</span></footer>
+<!-- ÉCRAN LOGIN -->
+<div id="loginScreen" style="display: none;">
+    <div class="login-container" style="text-align: center;">
+        <div class="logo-umg"><span>UMG</span></div>
+        <div class="slogan">ESPACE RÉCEPTION</div>
+        <input type="password" id="passwordInput" placeholder="Mot de passe" style="margin: 20px 0;">
+        <button id="btnLogin" class="btn-login">🔓 Accéder</button>
+        <div id="loginError" style="color: red; margin-top: 10px;"></div>
+        <button id="btnRetourAccueil" style="margin-top: 20px; background: none; border: none; color: #4f46e5;">⬅️ Retour</button>
+    </div>
+</div>
+
+<!-- Modal PDF -->
+<div id="pdfModal" class="modal">
+    <div class="modal-content">
+        <h3 style="color: #4f46e5;">📄 Aperçu PDF</h3>
+        <div id="pdfContent"></div>
+        <button id="btnGenererPDF" class="btn-pdf" style="margin-top: 15px;">📥 Télécharger PDF</button>
+        <button onclick="document.getElementById('pdfModal').style.display='none'" style="margin-top: 10px; background: #64748b; color: white; border: none; padding: 8px 16px; border-radius: 20px;">Fermer</button>
+    </div>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
 <script>
-    // ==================== CONFIGURATION ====================
-    const SITE_OPTIONS = ["Garage 1", "Garage 2", "Garage 3", "Dépôt 1", "Dépôt Aéroport"];
+    // ==================== CONFIGURATION FIREBASE ====================
+    const firebaseConfig = {
+        apiKey: "AIzaSyAxfEpi-NERVExxVYD2EmH7JppiIQDwWOM",
+        authDomain: "ntr-garage.firebaseapp.com",
+        projectId: "ntr-garage",
+        storageBucket: "ntr-garage.firebasestorage.app",
+        messagingSenderId: "606167388967",
+        appId: "1:606167388967:web:7ad669fd353cdeeb7a8f02"
+    };
+    // ================================================================
     
-    let db;
-    let allVehicles = [];
-    let currentSiteFilter = "all";
-    let currentSearch = "";
-    let updateTimeout = null;
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
     
-    // Éléments DOM
-    const statsContainer = document.getElementById("statsContainer");
-    const listContainer = document.getElementById("listContainer");
-    const siteFilterSelect = document.getElementById("siteFilterSelect");
-    const searchInput = document.getElementById("searchInput");
-    const resultCountSpan = document.getElementById("resultCount");
-    const lastSyncSpan = document.getElementById("lastSync");
+    const MOT_DE_PASSE = "umg123";
+    let mediaData = null;
+    let mediaType = null;
+    let niveauUrgence = "basse";
+    let unsubscribe = null;
+    let currentFiltre = "toutes";
+    let dernierSon = 0;
+    let noteSatisfaction = 0;
     
-    // ==================== INDEXEDDB ====================
-    function openDB() {
-        return new Promise((resolve, reject) => {
-            const req = indexedDB.open("RondePresenceDB", 5);
-            req.onerror = () => reject("DB error");
-            req.onsuccess = (e) => { db = e.target.result; resolve(); };
-            req.onupgradeneeded = (e) => {
-                const db = e.target.result;
-                if (!db.objectStoreNames.contains("vehicules")) {
-                    db.createObjectStore("vehicules", { keyPath: "id" });
-                }
-            };
-        });
-    }
+    // Date minimale pour RDV
+    const today = new Date().toISOString().split('T')[0];
+    const dateRdvInput = document.getElementById('dateRdv');
+    if (dateRdvInput) dateRdvInput.min = today;
     
-    async function saveVehicle(vehicle) {
-        const tx = db.transaction("vehicules", "readwrite");
-        tx.objectStore("vehicules").put(vehicle);
-        return tx.complete;
-    }
-    
-    async function saveMultipleVehicles(vehicles) {
-        const tx = db.transaction("vehicules", "readwrite");
-        const store = tx.objectStore("vehicules");
-        for (let v of vehicles) store.put(v);
-        return tx.complete;
-    }
-    
-    async function getAllVehicles() {
-        return new Promise((resolve) => {
-            const tx = db.transaction("vehicules", "readonly");
-            const req = tx.objectStore("vehicules").getAll();
-            req.onsuccess = () => resolve(req.result || []);
-        });
-    }
-    
-    async function clearVehicles() {
-        const tx = db.transaction("vehicules", "readwrite");
-        tx.objectStore("vehicules").clear();
-        return tx.complete;
-    }
-    
-    // ==================== IMPORT EXCEL ====================
-    document.getElementById("importBtn").onclick = () => {
-        document.getElementById("excelInput").click();
-        document.getElementById("excelInput").onchange = (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-                const data = new Uint8Array(ev.target.result);
-                const workbook = XLSX.read(data, { type: "array" });
-                const sheet = workbook.Sheets[workbook.SheetNames[0]];
-                const rows = XLSX.utils.sheet_to_json(sheet);
-                
-                const vehicles = rows.map(row => ({
-                    id: (row["Immatriculation"] || "inconnu_" + Date.now() + "_" + Math.random()),
-                    immat: row["Immatriculation"] || "",
-                    client: row["Client"] || "",
-                    marque: row["Marque"] || "",
-                    modele: row["Modele"] || "",
-                    refCommande: row["Référence de commande"] || "",
-                    typeMaintenance: row["Type de Maintenance"] || "",
-                    present: false,
-                    site: null,
-                    lastSeen: null,
-                    photo: null,
-                    isCustom: false
-                }));
-                
-                clearVehicles().then(async () => {
-                    await saveMultipleVehicles(vehicles);
-                    await loadAndDisplay();
-                    lastSyncSpan.innerText = new Date().toLocaleString();
-                    alert(`✅ Import terminé : ${vehicles.length} véhicules`);
-                }).catch(err => console.error(err));
-            };
-            reader.readAsArrayBuffer(file);
-        };
+    // IA Diagnostic
+    const pannesDatabase = {
+        "bruit": "🔧 Bruit suspect → vérifier courroie de distribution ou silencieux",
+        "fumée": "💨 Fumée → vérifier niveau d'huile ou joint de culasse",
+        "voyant": "⚠️ Voyant allumé → passage valise diagnostic recommandé",
+        "frein": "🛑 Problème de frein → contrôle urgent des plaquettes/disques",
+        "batterie": "🔋 Batterie → tester la charge et l'alternateur",
+        "climatisation": "❄️ Clim → recharger le circuit ou vérifier compresseur",
+        "moteur": "🔧 Moteur → diagnostic complet recommandé",
+        "boite": "⚙️ Boîte de vitesses → vérifier le niveau d'huile",
+        "direction": "🚗 Direction → contrôle rotules et crémaillère",
+        "echappement": "💨 Échappement → vérifier ligne d'échappement",
+        "fuite": "💧 Fuite → vérifier les durites et joints",
+        "suspension": "🔧 Suspension → contrôle amortisseurs et silentblocs"
     };
     
-    // ==================== AJOUT MANUEL ====================
-    document.getElementById("addVehicleBtn").onclick = async () => {
-        const immat = document.getElementById("newImmat").value.trim();
-        if (!immat) { alert("Immatriculation obligatoire"); return; }
-        const marque = document.getElementById("newMarque").value.trim();
-        const modele = document.getElementById("newModele").value.trim();
-        const site = document.getElementById("newSite").value;
+    function analyserPanne(description) {
+        const descLower = description.toLowerCase();
+        for (let [mot, suggestion] of Object.entries(pannesDatabase)) {
+            if (descLower.includes(mot)) {
+                return "🤖 " + suggestion;
+            }
+        }
+        return "🔧 Notre équipe technique procédera à un diagnostic complet";
+    }
+    
+    const descriptionInput = document.getElementById('description');
+    const iaDiv = document.getElementById('iaDiagnostic');
+    const iaResultat = document.getElementById('iaResultat');
+    
+    if (descriptionInput) {
+        descriptionInput.addEventListener('input', (e) => {
+            const desc = e.target.value;
+            if (desc.length > 10) {
+                iaDiv.style.display = 'block';
+                iaResultat.innerHTML = analyserPanne(desc);
+            } else {
+                iaDiv.style.display = 'none';
+            }
+        });
+    }
+    
+    // Gestion onglets
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+        });
+    });
+    
+    // Niveau d'urgence
+    document.querySelectorAll('[data-urgence]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('[data-urgence]').forEach(b => b.classList.remove('urgence-selected'));
+            btn.classList.add('urgence-selected');
+            niveauUrgence = btn.dataset.urgence;
+        });
+    });
+    document.querySelector('[data-urgence="basse"]').classList.add('urgence-selected');
+    
+    // Étoiles satisfaction
+    document.querySelectorAll('.etoile').forEach(etoile => {
+        etoile.addEventListener('click', () => {
+            noteSatisfaction = parseInt(etoile.dataset.note);
+            document.querySelectorAll('.etoile').forEach((e, i) => {
+                if (i < noteSatisfaction) {
+                    e.innerHTML = '★';
+                    e.classList.add('active');
+                } else {
+                    e.innerHTML = '☆';
+                    e.classList.remove('active');
+                }
+            });
+        });
+    });
+    
+    // Envoi avis satisfaction
+    document.getElementById('btnEnvoyerAvis')?.addEventListener('click', async () => {
+        const demandeId = document.getElementById('demandeIdSatisfaction').value;
+        const avis = document.getElementById('avisClient').value;
         
-        if (allVehicles.some(v => v.immat === immat)) {
-            alert("Ce véhicule existe déjà.");
+        if (!demandeId) {
+            alert("❌ Veuillez entrer votre numéro de demande");
             return;
         }
         
-        const newVehicle = {
-            id: immat + "_custom_" + Date.now(),
-            immat: immat,
-            client: "Ajout manuel",
+        if (noteSatisfaction === 0) {
+            alert("❌ Veuillez donner une note");
+            return;
+        }
+        
+        try {
+            const docRef = await db.collection('demandes').doc(demandeId).get();
+            if (!docRef.exists) {
+                alert("❌ Numéro de demande non trouvé");
+                return;
+            }
+            
+            await db.collection('demandes').doc(demandeId).update({
+                satisfaction: noteSatisfaction,
+                avis: avis,
+                dateSatisfaction: new Date()
+            });
+            alert("✅ Merci pour votre avis !");
+            document.getElementById('avisClient').value = '';
+            document.getElementById('demandeIdSatisfaction').value = '';
+            noteSatisfaction = 0;
+            document.querySelectorAll('.etoile').forEach(e => {
+                e.innerHTML = '☆';
+                e.classList.remove('active');
+            });
+        } catch (error) {
+            alert("❌ Erreur: " + error.message);
+        }
+    });
+    
+    // Compression d'image
+    function compressImage(file, callback) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+                const maxWidth = 1024;
+                if (width > maxWidth) {
+                    height = (height * maxWidth) / width;
+                    width = maxWidth;
+                }
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7);
+                callback(compressedDataUrl);
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+    
+    // Gestion médias
+    const btnPhoto = document.getElementById('btnPhoto');
+    const btnGalerie = document.getElementById('btnGalerie');
+    const btnVideo = document.getElementById('btnVideo');
+    const btnAudio = document.getElementById('btnAudio');
+    const fichierMedia = document.getElementById('fichierMedia');
+    const previewMedia = document.getElementById('previewMedia');
+    
+    btnPhoto.addEventListener('click', () => { mediaType = 'image'; fichierMedia.accept = 'image/*'; fichierMedia.capture = 'environment'; fichierMedia.click(); });
+    btnGalerie.addEventListener('click', () => { mediaType = 'image'; fichierMedia.accept = 'image/*'; fichierMedia.removeAttribute('capture'); fichierMedia.click(); });
+    btnVideo.addEventListener('click', () => { mediaType = 'video'; fichierMedia.accept = 'video/*'; fichierMedia.removeAttribute('capture'); fichierMedia.click(); });
+    btnAudio.addEventListener('click', () => { mediaType = 'audio'; fichierMedia.accept = 'audio/*'; fichierMedia.removeAttribute('capture'); fichierMedia.click(); });
+    
+    fichierMedia.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        if (mediaType === 'image') {
+            compressImage(file, (compressedData) => {
+                mediaData = compressedData;
+                previewMedia.innerHTML = `<img src="${mediaData}" alt="Aperçu"><div><button id="supprimerMedia" style="margin-top:8px;background:#ef4444;color:white;border:none;padding:4px 12px;border-radius:20px;">🗑 Supprimer</button></div>`;
+                document.getElementById('supprimerMedia')?.addEventListener('click', () => {
+                    mediaData = null;
+                    previewMedia.innerHTML = '';
+                    fichierMedia.value = '';
+                });
+            });
+        } else {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                mediaData = event.target.result;
+                if (mediaType === 'video') previewMedia.innerHTML = `<video src="${mediaData}" controls style="max-width:100%"></video><div><button id="supprimerMedia" style="margin-top:8px;background:#ef4444;color:white;border:none;padding:4px 12px;border-radius:20px;">🗑 Supprimer</button></div>`;
+                else if (mediaType === 'audio') previewMedia.innerHTML = `<audio src="${mediaData}" controls></audio><div><button id="supprimerMedia" style="margin-top:8px;background:#ef4444;color:white;border:none;padding:4px 12px;border-radius:20px;">🗑 Supprimer</button></div>`;
+                document.getElementById('supprimerMedia')?.addEventListener('click', () => {
+                    mediaData = null;
+                    previewMedia.innerHTML = '';
+                    fichierMedia.value = '';
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    
+    // QR Code
+    function genererQRCode() {
+        const url = window.location.href;
+        document.getElementById('currentUrl').innerHTML = url;
+        const qrDiv = document.getElementById('qrcode');
+        if (qrDiv) {
+            qrDiv.innerHTML = '';
+            new QRCode(qrDiv, { text: url, width: 160, height: 160, colorDark: "#4f46e5", colorLight: "#ffffff" });
+        }
+    }
+    
+    document.getElementById('btnCopierLien')?.addEventListener('click', async () => {
+        await navigator.clipboard.writeText(window.location.href);
+        alert('Lien copié !');
+    });
+    
+    // Téléchargement fichier
+    function telechargerFichier(dataUrl, nomFichier) {
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = nomFichier;
+        link.click();
+    }
+    
+    // Génération PDF
+    async function genererPDF(demande, id) {
+        const pdfContent = document.getElementById('pdfContent');
+        pdfContent.innerHTML = `
+            <div style="font-family: system-ui; padding: 20px;">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h1 style="color: #4f46e5;">UNITED MOTORS GARAGE</h1>
+                    <p style="color: #64748b;">CHANGAN · MG · JETOUR · SAV EXPERT</p>
+                    <hr>
+                </div>
+                <h2>📄 BON DE RÉPARATION</h2>
+                <p><strong>N° de demande:</strong> ${id}</p>
+                <p><strong>Date:</strong> ${demande.date || new Date().toLocaleString('fr-FR')}</p>
+                <h3>🚗 Informations véhicule</h3>
+                <p><strong>Immatriculation:</strong> ${demande.immatriculation}</p>
+                <p><strong>Marque:</strong> ${demande.marque || 'Non renseignée'}</p>
+                <p><strong>Modèle:</strong> ${demande.modele || 'Non renseigné'}</p>
+                <p><strong>Kilométrage:</strong> ${demande.kilometrage || 'Non renseigné'} km</p>
+                <h3>👤 Client</h3>
+                <p><strong>Nom:</strong> ${demande.nom || 'Non renseigné'}</p>
+                <p><strong>Email:</strong> ${demande.email || 'Non renseigné'}</p>
+                <p><strong>Téléphone:</strong> ${demande.telephone || 'Non renseigné'}</p>
+                <h3>🔧 Panne</h3>
+                <p><strong>Description:</strong> ${demande.description || 'Non renseignée'}</p>
+                <p><strong>Urgence:</strong> ${demande.urgence === 'haute' ? '🔴 Haute' : (demande.urgence === 'moyenne' ? '🟠 Moyenne' : '🟢 Basse')}</p>
+                <p><strong>Lieu:</strong> ${demande.lieu || 'Non spécifié'}</p>
+                ${demande.dateRdv ? `<p><strong>RDV:</strong> ${demande.dateRdv} à ${demande.heureRdv}</p>` : ''}
+                <p><strong>IA Diagnostic:</strong> ${demande.diagnosticIA || 'À déterminer'}</p>
+                <hr>
+                <div style="margin-top: 30px;">
+                    <p>À remplir par l'atelier:</p>
+                    <p>_________________________________</p>
+                    <p>Diagnostic final: _________________</p>
+                    <p>Pièces à changer: _________________</p>
+                    <p>Montant estimé: _________________ €</p>
+                </div>
+                <div style="margin-top: 50px; text-align: center; font-size: 12px; color: #64748b;">
+                    UNITED MOTORS GARAGE - Votre expert automobile
+                </div>
+            </div>
+        `;
+        document.getElementById('pdfModal').style.display = 'flex';
+        
+        document.getElementById('btnGenererPDF').onclick = () => {
+            const element = document.getElementById('pdfContent');
+            html2pdf().from(element).set({
+                margin: [10, 10, 10, 10],
+                filename: `UMG_${id}.pdf`,
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            }).save();
+        };
+    }
+    
+    // Envoi demande
+    const btnEnvoyer = document.getElementById('btnEnvoyer');
+    const nomInput = document.getElementById('clientNom');
+    const immatInput = document.getElementById('immatriculation');
+    const emailInput = document.getElementById('clientEmail');
+    const telInput = document.getElementById('clientTel');
+    const descriptionText = document.getElementById('description');
+    const marqueInput = document.getElementById('marque');
+    const modeleInput = document.getElementById('modele');
+    const kilometrageInput = document.getElementById('kilometrage');
+    const dateMiseServiceInput = document.getElementById('dateMiseService');
+    const lieuInput = document.getElementById('lieu');
+    const messageDiv = document.getElementById('message');
+    const nouvellePanne = document.getElementById('nouvellePanne');
+    
+    btnEnvoyer.addEventListener('click', async () => {
+        const nom = nomInput.value.trim();
+        const immat = immatInput.value.trim().toUpperCase();
+        const email = emailInput.value.trim();
+        const tel = telInput.value.trim();
+        const description = descriptionText.value.trim();
+        const marque = marqueInput.value.trim();
+        const modele = modeleInput.value.trim();
+        const kilometrage = kilometrageInput.value.trim();
+        const dateMiseService = dateMiseServiceInput.value;
+        const lieu = lieuInput?.value.trim() || '';
+        const dateRdvVal = document.getElementById('dateRdv')?.value || null;
+        const heureRdvVal = document.getElementById('heureRdv')?.value || null;
+        
+        if (!nom) { showMessage("❌ Nom client requis", false); return; }
+        if (!immat) { showMessage("❌ Immatriculation requise", false); return; }
+        if (!description && !mediaData) { showMessage("❌ Description ou média requis", false); return; }
+        
+        const demande = {
+            nom: nom,
+            immatriculation: immat,
+            email: email,
+            telephone: tel,
             marque: marque,
             modele: modele,
-            refCommande: "",
-            typeMaintenance: "",
-            present: true,
-            site: site,
-            lastSeen: new Date().toISOString(),
-            photo: null,
-            isCustom: true
+            kilometrage: kilometrage,
+            dateMiseService: dateMiseService,
+            description: description,
+            lieu: lieu,
+            urgence: niveauUrgence,
+            dateRdv: dateRdvVal,
+            heureRdv: heureRdvVal,
+            media: mediaData || null,
+            mediaType: mediaType || null,
+            date: new Date().toLocaleString('fr-FR'),
+            dateTimestamp: new Date(),
+            lu: false,
+            traite: false,
+            diagnosticIA: analyserPanne(description)
         };
         
-        await saveVehicle(newVehicle);
-        document.getElementById("newImmat").value = "";
-        document.getElementById("newMarque").value = "";
-        document.getElementById("newModele").value = "";
-        await loadAndDisplay();
-        alert(`✅ Véhicule ${immat} ajouté sur ${site}`);
-    };
+        try {
+            const docRef = await db.collection('demandes').add(demande);
+            showMessage(`✅ Demande envoyée ! N° suivi: ${docRef.id}`, true);
+            
+            // Réinitialisation
+            nomInput.value = '';
+            immatInput.value = '';
+            emailInput.value = '';
+            telInput.value = '';
+            descriptionText.value = '';
+            marqueInput.value = '';
+            modeleInput.value = '';
+            kilometrageInput.value = '';
+            dateMiseServiceInput.value = '';
+            if(lieuInput) lieuInput.value = '';
+            document.getElementById('dateRdv').value = '';
+            document.getElementById('heureRdv').value = '';
+            mediaData = null;
+            mediaType = null;
+            previewMedia.innerHTML = '';
+            fichierMedia.value = '';
+            iaDiv.style.display = 'none';
+            
+            document.getElementById('etape2').style.display = 'block';
+            btnEnvoyer.style.display = 'none';
+            setTimeout(() => {
+                document.getElementById('etape2').style.display = 'none';
+                btnEnvoyer.style.display = 'block';
+            }, 3000);
+        } catch (error) {
+            showMessage("❌ Erreur: " + error.message, false);
+        }
+    });
     
-    // ==================== RENDU OPTIMISÉ (sans rechargement complet) ====================
-    function getFilteredVehicles() {
-        let filtered = allVehicles;
-        
-        if (currentSearch.trim() !== "") {
-            const search = currentSearch.toLowerCase();
-            filtered = filtered.filter(v => 
-                v.immat.toLowerCase().includes(search) || 
-                v.client.toLowerCase().includes(search) ||
-                v.marque.toLowerCase().includes(search) || 
-                v.modele.toLowerCase().includes(search)
-            );
-        }
-        
-        if (currentSiteFilter === "present_all") {
-            filtered = filtered.filter(v => v.present === true);
-        } else if (currentSiteFilter !== "all") {
-            filtered = filtered.filter(v => v.present === true && v.site === currentSiteFilter);
-        }
-        
-        return filtered;
+    nouvellePanne?.addEventListener('click', () => {
+        document.getElementById('etape2').style.display = 'none';
+        btnEnvoyer.style.display = 'block';
+    });
+    
+    function showMessage(msg, isSuccess) {
+        messageDiv.textContent = msg;
+        messageDiv.style.color = isSuccess ? '#155724' : '#721c24';
+        messageDiv.style.background = isSuccess ? '#d4edda' : '#f8d7da';
+        messageDiv.style.padding = '12px';
+        messageDiv.style.borderRadius = '16px';
+        setTimeout(() => messageDiv.innerHTML = '', 5000);
     }
     
-    function renderStatsOnly() {
-        let html = "";
-        for (let site of SITE_OPTIONS) {
-            const count = allVehicles.filter(v => v.present === true && v.site === site).length;
-            html += `<div class="stat-card" data-site="${site}"><h3>${site}</h3><p class="number">${count}</p><small>véhicules présents</small></div>`;
+    // Dashboard
+    function jouerSon() {
+        const now = Date.now();
+        if (now - dernierSon > 2000) {
+            dernierSon = now;
+            const audio = new Audio("data:audio/wav;base64,U3RlYWx0aCBzb3VuZA==");
+            audio.play().catch(e => console.log);
         }
-        statsContainer.innerHTML = html;
-        
-        // Réattacher les événements de clic sur les stats
-        document.querySelectorAll(".stat-card").forEach(card => {
-            card.addEventListener("click", () => {
-                const site = card.getAttribute("data-site");
-                siteFilterSelect.value = site;
-                currentSiteFilter = site;
-                renderListOnly();
-            });
-        });
     }
     
-    function renderListOnly() {
-        const filtered = getFilteredVehicles();
-        resultCountSpan.innerText = `${filtered.length} véhicule(s)`;
-        
-        if (filtered.length === 0) {
-            listContainer.innerHTML = "<p>Aucun véhicule correspondant.</p>";
-            return;
-        }
-        
-        let html = "";
-        for (let v of filtered) {
-            html += `
-                <div class="vehicle-item" data-id="${v.id}">
-                    <input type="checkbox" class="present-check" data-id="${v.id}" ${v.present ? "checked" : ""}>
-                    <div class="vehicle-info">
-                        <strong>${v.immat || "?"}</strong>
-                        <div class="detail-line">${v.marque} ${v.modele} | ${v.client} ${v.refCommande ? ' | Cmd: '+v.refCommande : ''}${v.typeMaintenance ? ' | '+v.typeMaintenance : ''}</div>
-                        ${v.isCustom ? '<span style="background:#facc15; padding:2px 6px; border-radius:20px; font-size:0.7rem;">Ajout manuel</span>' : ''}
-                        ${v.lastSeen ? `<div><small>🕒 Vu le : ${new Date(v.lastSeen).toLocaleString()}</small></div>` : ''}
-                    </div>
-                    <select class="site-select" data-id="${v.id}" ${!v.present ? 'disabled' : ''}>
-                        <option value="">-- Choisir site --</option>
-                        ${SITE_OPTIONS.map(site => `<option value="${site}" ${v.site === site ? 'selected' : ''}>${site}</option>`).join('')}
-                    </select>
-                    <button class="photoBtn small-btn" data-id="${v.id}">📸 Photo</button>
-                    ${v.photo ? `<img src="${v.photo}" class="photo-preview" alt="photo">` : ""}
-                </div>
-            `;
-        }
-        listContainer.innerHTML = html;
-        
-        // Attacher événements sans rechargement lourd
-        attachEventsToCurrentList();
+    let soundEnabled = true;
+    document.getElementById('notifSound')?.addEventListener('click', () => {
+        soundEnabled = !soundEnabled;
+        document.getElementById('notifSound').textContent = soundEnabled ? "🔔 Son activé" : "🔕 Son désactivé";
+        setTimeout(() => document.getElementById('notifSound').textContent = "🔔", 2000);
+    });
+    
+    function afficherToast(message) {
+        const toast = document.getElementById('notificationToast');
+        toast.textContent = message;
+        toast.style.display = 'block';
+        setTimeout(() => toast.style.display = 'none', 4000);
     }
     
-    function attachEventsToCurrentList() {
-        // Checkboxes
-        document.querySelectorAll(".present-check").forEach(cb => {
-            cb.replaceWith(cb.cloneNode(true));
-        });
-        document.querySelectorAll(".present-check").forEach(cb => {
-            cb.addEventListener("change", async (e) => {
-                const id = cb.getAttribute("data-id");
-                const vehicle = allVehicles.find(v => v.id === id);
-                if (vehicle) {
-                    vehicle.present = cb.checked;
-                    if (!vehicle.present) vehicle.site = null;
-                    vehicle.lastSeen = new Date().toISOString();
-                    await saveVehicle(vehicle);
-                    renderStatsOnly();
-                    renderListOnly();
-                }
-            });
-        });
+    function chargerDemandesRealtime() {
+        if (unsubscribe) unsubscribe();
         
-        // Sélecteurs de site
-        document.querySelectorAll(".site-select").forEach(select => {
-            select.replaceWith(select.cloneNode(true));
-        });
-        document.querySelectorAll(".site-select").forEach(select => {
-            select.addEventListener("change", async (e) => {
-                const id = select.getAttribute("data-id");
-                const vehicle = allVehicles.find(v => v.id === id);
-                if (vehicle && vehicle.present) {
-                    vehicle.site = e.target.value || null;
-                    vehicle.lastSeen = new Date().toISOString();
-                    await saveVehicle(vehicle);
-                    renderStatsOnly();
-                    renderListOnly();
-                }
-            });
-        });
-        
-        // Boutons photo
-        document.querySelectorAll(".photoBtn").forEach(btn => {
-            btn.replaceWith(btn.cloneNode(true));
-        });
-        document.querySelectorAll(".photoBtn").forEach(btn => {
-            btn.addEventListener("click", (e) => {
-                const id = btn.getAttribute("data-id");
-                const input = document.createElement("input");
-                input.type = "file";
-                input.accept = "image/*";
-                input.capture = "environment";
-                input.onchange = async (ev) => {
-                    const file = ev.target.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = async (ev2) => {
-                            const vehicle = allVehicles.find(v => v.id === id);
-                            if (vehicle) {
-                                vehicle.photo = ev2.target.result;
-                                await saveVehicle(vehicle);
-                                renderListOnly();
-                            }
-                        };
-                        reader.readAsDataURL(file);
+        unsubscribe = db.collection('demandes')
+            .orderBy('dateTimestamp', 'desc')
+            .onSnapshot((snapshot) => {
+                let demandes = [];
+                let totalSatisfaction = 0;
+                let nbSatisfaction = 0;
+                
+                snapshot.forEach(doc => {
+                    const d = doc.data();
+                    demandes.push({ id: doc.id, ...d });
+                    if (d.satisfaction) {
+                        totalSatisfaction += d.satisfaction;
+                        nbSatisfaction++;
                     }
-                };
-                input.click();
+                });
+                
+                const noteMoyenne = nbSatisfaction > 0 ? (totalSatisfaction / nbSatisfaction).toFixed(1) : 0;
+                
+                let filtered = demandes;
+                if (currentFiltre === 'non-lues') filtered = demandes.filter(d => !d.lu);
+                if (currentFiltre === 'urgentes') filtered = demandes.filter(d => d.urgence === 'haute');
+                
+                document.getElementById('statTotal').textContent = demandes.length;
+                document.getElementById('statNonLues').textContent = demandes.filter(d => !d.lu).length;
+                document.getElementById('statUrgentes').textContent = demandes.filter(d => d.urgence === 'haute').length;
+                document.getElementById('statSatisfaction').textContent = noteMoyenne + ' ★';
+                
+                const nouvelles = demandes.filter(d => !d.lu && d.dateTimestamp > new Date(Date.now() - 60000));
+                if (nouvelles.length > 0 && soundEnabled) {
+                    jouerSon();
+                    afficherToast(`🔔 ${nouvelles.length} nouvelle(s) demande(s) !`);
+                }
+                
+                const listeDiv = document.getElementById('listeDemandes');
+                if (filtered.length === 0) {
+                    listeDiv.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;">📭 Aucune demande</div>';
+                    return;
+                }
+                
+                listeDiv.innerHTML = '';
+                filtered.forEach(demande => {
+                    const div = document.createElement('div');
+                    div.className = `demande ${demande.urgence || 'basse'} ${!demande.lu ? 'non-lue' : ''}`;
+                    
+                    let mediaHtml = '';
+                    if (demande.media) {
+                        if (demande.mediaType === 'image') {
+                            mediaHtml = `
+                                <div style="margin-top: 10px;">
+                                    <img src="${demande.media}" style="max-width:100%;border-radius:12px;max-height:150px;object-fit:contain;">
+                                    <div>
+                                        <button class="btn-download" data-media="${demande.media}" data-type="image">📥 Télécharger</button>
+                                        <button class="btn-delete-media" data-id="${demande.id}">🗑 Supprimer média</button>
+                                    </div>
+                                </div>`;
+                        } else if (demande.mediaType === 'video') {
+                            mediaHtml = `
+                                <div style="margin-top: 10px;">
+                                    <video src="${demande.media}" controls style="max-width:100%;border-radius:12px;max-height:150px;"></video>
+                                    <div>
+                                        <button class="btn-download" data-media="${demande.media}" data-type="video">📥 Télécharger</button>
+                                        <button class="btn-delete-media" data-id="${demande.id}">🗑 Supprimer média</button>
+                                    </div>
+                                </div>`;
+                        } else if (demande.mediaType === 'audio') {
+                            mediaHtml = `
+                                <div style="margin-top: 10px;">
+                                    <audio src="${demande.media}" controls style="width:100%;"></audio>
+                                    <div>
+                                        <button class="btn-download" data-media="${demande.media}" data-type="audio">📥 Télécharger</button>
+                                        <button class="btn-delete-media" data-id="${demande.id}">🗑 Supprimer média</button>
+                                    </div>
+                                </div>`;
+                        }
+                    }
+                    
+                    let satisfactionHtml = '';
+                    if (demande.satisfaction) {
+                        satisfactionHtml = `<div style="margin-top: 10px;">⭐ Note: ${'★'.repeat(demande.satisfaction)}${'☆'.repeat(5-demande.satisfaction)}</div>`;
+                        if (demande.avis) satisfactionHtml += `<div style="font-size: 13px; color: #64748b;">"${demande.avis}"</div>`;
+                    }
+                    
+                    div.innerHTML = `
+                        <span class="badge-urgence ${demande.urgence || 'basse'}">${demande.urgence === 'haute' ? '🔴 URGENT' : demande.urgence === 'moyenne' ? '🟠 MOYEN' : '🟢 BASSE'}</span>
+                        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px;">
+                            <span style="font-weight:bold;color:#4f46e5;">🚗 ${demande.immatriculation}</span>
+                            <span style="font-size:12px;color:#64748b;">📅 ${demande.date}</span>
+                        </div>
+                        <div><strong>👤 ${demande.nom || 'Nom non renseigné'}</strong></div>
+                        ${demande.marque || demande.modele ? `<div>🏭 ${demande.marque || ''} ${demande.modele || ''} - ${demande.kilometrage ? demande.kilometrage + ' km' : ''}</div>` : ''}
+                        <div>📝 ${demande.description || 'Pas de description'}</div>
+                        ${demande.lieu ? `<div>📍 ${demande.lieu}</div>` : ''}
+                        ${demande.dateRdv ? `<div>📅 RDV: ${demande.dateRdv} à ${demande.heureRdv}</div>` : ''}
+                        ${demande.email ? `<div>📧 ${demande.email}</div>` : ''}
+                        ${demande.telephone ? `<div>📞 ${demande.telephone}</div>` : ''}
+                        ${demande.diagnosticIA ? `<div style="background:#e0e7ff;padding:10px;border-radius:12px;margin-top:10px;">🤖 ${demande.diagnosticIA}</div>` : ''}
+                        ${satisfactionHtml}
+                        ${mediaHtml}
+                        <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;">
+                            <button class="btn-traite" data-id="${demande.id}" style="background:#22c55e;color:white;border:none;padding:8px 16px;border-radius:20px;">✅ Traiter</button>
+                            <button class="btn-pdf-demande" data-id="${demande.id}" data-json='${JSON.stringify(demande).replace(/'/g, "&#39;")}' style="background:#4f46e5;color:white;border:none;padding:8px 16px;border-radius:20px;">📄 PDF</button>
+                        </div>
+                    `;
+                    listeDiv.appendChild(div);
+                    
+                    if (!demande.lu) {
+                        db.collection('demandes').doc(demande.id).update({ lu: true });
+                    }
+                });
+                
+                document.querySelectorAll('.btn-download').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const mediaUrl = btn.dataset.media;
+                        const type = btn.dataset.type;
+                        const extension = type === 'image' ? 'jpg' : (type === 'video' ? 'mp4' : 'mp3');
+                        telechargerFichier(mediaUrl, `media_${Date.now()}.${extension}`);
+                    });
+                });
+                
+                document.querySelectorAll('.btn-delete-media').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const id = btn.dataset.id;
+                        await db.collection('demandes').doc(id).update({
+                            media: null,
+                            mediaType: null
+                        });
+                        afficherToast("🗑 Média supprimé");
+                    });
+                });
+                
+                document.querySelectorAll('.btn-traite').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const id = btn.dataset.id;
+                        await db.collection('demandes').doc(id).delete();
+                        afficherToast("✅ Demande traitée et supprimée");
+                    });
+                });
+                
+                document.querySelectorAll('.btn-pdf-demande').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        const demande = JSON.parse(btn.dataset.json);
+                        genererPDF(demande, btn.dataset.id);
+                    });
+                });
             });
+    }
+    
+    // Filtres
+    document.querySelectorAll('.filtre-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.filtre-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentFiltre = btn.dataset.filtre;
+            chargerDemandesRealtime();
         });
-    }
-    
-    function updateSiteFilterOptions() {
-        let options = `<option value="all" ${currentSiteFilter === 'all' ? 'selected' : ''}>🌍 Tous les véhicules</option>
-                       <option value="present_all" ${currentSiteFilter === 'present_all' ? 'selected' : ''}>✅ Tous les présents</option>`;
-        for (let site of SITE_OPTIONS) {
-            options += `<option value="${site}" ${currentSiteFilter === site ? 'selected' : ''}>📍 Présents sur ${site}</option>`;
-        }
-        siteFilterSelect.innerHTML = options;
-    }
-    
-    async function loadAndDisplay() {
-        allVehicles = await getAllVehicles();
-        updateSiteFilterOptions();
-        renderStatsOnly();
-        renderListOnly();
-    }
-    
-    // ==================== EXPORTS ====================
-    async function exportPresentToExcel() {
-        const vehicles = allVehicles.filter(v => v.present === true);
-        const data = vehicles.map(v => ({
-            "Immatriculation": v.immat, "Client": v.client, "Marque": v.marque,
-            "Modèle": v.modele, "Référence commande": v.refCommande,
-            "Type de Maintenance": v.typeMaintenance, "Site": v.site || "",
-            "Dernier constat": v.lastSeen ? new Date(v.lastSeen).toLocaleString() : ""
-        }));
-        const ws = XLSX.utils.json_to_sheet(data);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Présents");
-        XLSX.writeFile(wb, `tous_presents_${new Date().toISOString().slice(0,19)}.xlsx`);
-    }
-    
-    async function exportPresentToPDF() {
-        const vehicles = allVehicles.filter(v => v.present === true);
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({ orientation: 'landscape' });
-        doc.text("Véhicules présents (tous sites)", 14, 15);
-        doc.text(`Généré le ${new Date().toLocaleString()}`, 14, 22);
-        const tableData = vehicles.map(v => [v.immat, v.client, v.marque, v.modele, v.site || "", v.lastSeen ? new Date(v.lastSeen).toLocaleString() : ""]);
-        doc.autoTable({ head: [["Immat", "Client", "Marque", "Modèle", "Site", "Dernier constat"]], body: tableData, startY: 30 });
-        doc.save(`tous_presents_${new Date().toISOString().slice(0,19)}.pdf`);
-    }
-    
-    async function exportAbsentToExcel() {
-        const vehicles = allVehicles.filter(v => v.present === false);
-        const data = vehicles.map(v => ({
-            "Immatriculation": v.immat, "Client": v.client, "Marque": v.marque,
-            "Modèle": v.modele, "Référence commande": v.refCommande, "Type de Maintenance": v.typeMaintenance
-        }));
-        const ws = XLSX.utils.json_to_sheet(data);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Absents");
-        XLSX.writeFile(wb, `absents_${new Date().toISOString().slice(0,19)}.xlsx`);
-    }
-    
-    async function exportAbsentToPDF() {
-        const vehicles = allVehicles.filter(v => v.present === false);
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({ orientation: 'landscape' });
-        doc.text("Véhicules absents (non trouvés)", 14, 15);
-        doc.text(`Date : ${new Date().toLocaleString()}`, 14, 22);
-        const tableData = vehicles.map(v => [v.immat, v.client, v.marque, v.modele, v.refCommande, v.typeMaintenance]);
-        doc.autoTable({ head: [["Immat", "Client", "Marque", "Modèle", "Réf commande", "Type maintenance"]], body: tableData, startY: 30 });
-        doc.save(`absents_${new Date().toISOString().slice(0,19)}.pdf`);
-    }
-    
-    async function exportCurrentSiteToExcel() {
-        let vehicles = [];
-        if (currentSiteFilter === "all") { alert("Sélectionnez un site spécifique"); return; }
-        else if (currentSiteFilter === "present_all") vehicles = allVehicles.filter(v => v.present === true);
-        else vehicles = allVehicles.filter(v => v.present === true && v.site === currentSiteFilter);
-        if (vehicles.length === 0) { alert("Aucun véhicule"); return; }
-        const data = vehicles.map(v => ({
-            "Immatriculation": v.immat, "Client": v.client, "Marque": v.marque,
-            "Modèle": v.modele, "Site": v.site || "", "Dernier constat": v.lastSeen ? new Date(v.lastSeen).toLocaleString() : ""
-        }));
-        const ws = XLSX.utils.json_to_sheet(data);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Présents");
-        XLSX.writeFile(wb, `site_${currentSiteFilter}_${new Date().toISOString().slice(0,19)}.xlsx`);
-    }
-    
-    async function exportCurrentSiteToPDF() {
-        let vehicles = [];
-        if (currentSiteFilter === "all") { alert("Sélectionnez un site spécifique"); return; }
-        else if (currentSiteFilter === "present_all") vehicles = allVehicles.filter(v => v.present === true);
-        else vehicles = allVehicles.filter(v => v.present === true && v.site === currentSiteFilter);
-        if (vehicles.length === 0) { alert("Aucun véhicule"); return; }
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({ orientation: 'landscape' });
-        doc.text(`Véhicules présents - ${currentSiteFilter}`, 14, 15);
-        doc.text(`Généré le ${new Date().toLocaleString()}`, 14, 22);
-        const tableData = vehicles.map(v => [v.immat, v.client, v.marque, v.modele, v.lastSeen ? new Date(v.lastSeen).toLocaleString() : ""]);
-        doc.autoTable({ head: [["Immat", "Client", "Marque", "Modèle", "Dernier constat"]], body: tableData, startY: 30 });
-        doc.save(`site_${currentSiteFilter}_${new Date().toISOString().slice(0,19)}.pdf`);
-    }
-    
-    // ==================== ÉVÉNEMENTS FILTRES ====================
-    siteFilterSelect.addEventListener("change", (e) => {
-        currentSiteFilter = e.target.value;
-        renderListOnly();
     });
     
-    searchInput.addEventListener("input", (e) => {
-        currentSearch = e.target.value;
-        renderListOnly();
-    });
+    // Navigation
+    const btnAllerDashboard = document.getElementById('btnAllerDashboard');
+    const btnRetourAccueil = document.getElementById('btnRetourAccueil');
+    const btnDeconnexion = document.getElementById('btnDeconnexion');
+    const btnLogin = document.getElementById('btnLogin');
+    const passwordInput = document.getElementById('passwordInput');
+    const loginError = document.getElementById('loginError');
     
-    // ==================== RÉINITIALISATION ====================
-    document.getElementById("resetAllBtn").onclick = async () => {
-        if (confirm("⚠️ Réinitialiser tous les véhicules ?")) {
-            for (let v of allVehicles) {
-                v.present = false;
-                v.site = null;
-                v.lastSeen = null;
-                await saveVehicle(v);
-            }
-            await loadAndDisplay();
-            alert("Réinitialisation terminée.");
-        }
+    function afficherClient() {
+        clientScreen.style.display = 'block';
+        dashboardScreen.style.display = 'none';
+        loginScreen.style.display = 'none';
+        genererQRCode();
+        if (unsubscribe) unsubscribe();
+    }
+    
+    function afficherDashboard() {
+        clientScreen.style.display = 'none';
+        dashboardScreen.style.display = 'block';
+        loginScreen.style.display = 'none';
+        chargerDemandesRealtime();
+    }
+    
+    function afficherLogin() {
+        clientScreen.style.display = 'none';
+        dashboardScreen.style.display = 'none';
+        loginScreen.style.display = 'block';
+    }
+    
+    btnLogin?.addEventListener('click', () => {
+        if (passwordInput.value === MOT_DE_PASSE) afficherDashboard();
+        else loginError.innerHTML = '❌ Mot de passe incorrect';
+    });
+    btnAllerDashboard?.addEventListener('click', afficherLogin);
+    btnRetourAccueil?.addEventListener('click', afficherClient);
+    btnDeconnexion?.addEventListener('click', afficherClient);
+    
+    window.onclick = function(event) {
+        const modal = document.getElementById('pdfModal');
+        if (event.target === modal) modal.style.display = 'none';
     };
     
-    // ==================== MODE NUIT ====================
-    const darkToggle = document.getElementById("darkModeToggle");
-    darkToggle.onclick = () => {
-        document.body.classList.toggle("dark-mode");
-        darkToggle.innerHTML = document.body.classList.contains("dark-mode") ? "☀️ Mode jour" : "🌙 Mode nuit";
-    };
-    
-    // ==================== BOUTONS EXPORT ====================
-    document.getElementById("exportPresentExcel").onclick = exportPresentToExcel;
-    document.getElementById("exportPresentPDF").onclick = exportPresentToPDF;
-    document.getElementById("exportAbsentExcel").onclick = exportAbsentToExcel;
-    document.getElementById("exportAbsentPDF").onclick = exportAbsentToPDF;
-    document.getElementById("exportSiteExcelBtn").onclick = exportCurrentSiteToExcel;
-    document.getElementById("exportSitePdfBtn").onclick = exportCurrentSiteToPDF;
-    
-    // ==================== INITIALISATION ====================
-    window.addEventListener("load", async () => {
-        await openDB();
-        await loadAndDisplay();
-        if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("/sw.js").catch(console.error);
-        }
-    });
+    afficherClient();
+    console.log('✅ UNITED MOTORS GARAGE ULTIMATE - Toutes fonctionnalités actives !');
+    console.log('🔐 Mot de passe réception: umg123');
 </script>
 </body>
 </html>
