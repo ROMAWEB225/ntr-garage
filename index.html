@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>United Motors Garage - Solution Complete</title>
     <meta name="theme-color" content="#0f172a">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -183,6 +184,18 @@
         .btn-secondary:hover {
             background: #f8fafc;
         }
+        .btn-pdf {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            cursor: pointer;
+        }
+        .btn-pdf:hover {
+            background: #dc2626;
+        }
         .qr-section {
             background: #f8fafc;
             border-radius: 20px;
@@ -244,6 +257,7 @@
             border-radius: 20px;
             padding: 18px;
             margin-bottom: 14px;
+            position: relative;
         }
         .demande.haute {
             border-left: 3px solid #ef4444;
@@ -372,6 +386,27 @@
             display: none;
             font-size: 13px;
             color: #475569;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            padding: 24px;
+            border-radius: 24px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
         }
         @media (max-width: 560px) {
             body {
@@ -530,6 +565,18 @@
     </div>
 </div>
 
+<!-- Modal PDF -->
+<div id="pdfModal" class="modal">
+    <div class="modal-content">
+        <h3 style="margin-bottom: 16px;">Fiche de reception</h3>
+        <div id="pdfContent"></div>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button id="btnGenererPDF" class="btn-primary" style="margin-top: 0;">Telecharger PDF</button>
+            <button onclick="document.getElementById('pdfModal').style.display='none'" class="btn-secondary">Fermer</button>
+        </div>
+    </div>
+</div>
+
 <div id="toast" class="toast"></div>
 
 <!-- Firebase SDK -->
@@ -583,6 +630,87 @@
         if (desc.includes("moteur")) return "Moteur -> diagnostic complet";
         if (desc.includes("fuite")) return "Fuite -> verifier joints et durites";
         return "Notre equipe procedera a un diagnostic complet";
+    }
+    
+    // Generation PDF - FICHE DE RECEPTION
+    function genererPDF(demande, id) {
+        const pdfContent = document.getElementById('pdfContent');
+        const dateReception = new Date().toLocaleString('fr-FR');
+        
+        pdfContent.innerHTML = `
+            <div style="font-family: system-ui; padding: 20px;">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h1 style="color: #0f172a;">UNITED MOTORS GARAGE</h1>
+                    <p style="color: #64748b;">CHANGAN · MG · JETOUR · SAV EXPERT</p>
+                    <p style="font-size: 12px; color: #64748b;">FICHE DE RECEPTION</p>
+                    <hr>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <p><strong>Numero de demande :</strong> ${id}</p>
+                    <p><strong>Date de reception :</strong> ${dateReception}</p>
+                </div>
+                
+                <h3 style="margin: 20px 0 10px 0; color: #0f172a;">Informations vehicule</h3>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+                    <tr><td style="padding: 6px 0;"><strong>Immatriculation :</strong></td><td>${demande.immatriculation || '-'}</td></tr>
+                    <tr><td style="padding: 6px 0;"><strong>Marque :</strong></td><td>${demande.marque || '-'}</td></tr>
+                    <tr><td style="padding: 6px 0;"><strong>Modele :</strong></td><td>${demande.modele || '-'}</td></tr>
+                    <tr><td style="padding: 6px 0;"><strong>Kilometrage :</strong></td><td>${demande.kilometrage || '-'} km</td></tr>
+                    <tr><td style="padding: 6px 0;"><strong>Date mise en service :</strong></td><td>${demande.dateMiseService || '-'}</td></tr>
+                </table>
+                
+                <h3 style="margin: 20px 0 10px 0; color: #0f172a;">Informations client</h3>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+                    <tr><td style="padding: 6px 0;"><strong>Nom :</strong></td><td>${demande.nom || '-'}</td></tr>
+                    <tr><td style="padding: 6px 0;"><strong>Email :</strong></td><td>${demande.email || '-'}</td></tr>
+                    <tr><td style="padding: 6px 0;"><strong>Telephone :</strong></td><td>${demande.telephone || '-'}</td></tr>
+                </table>
+                
+                <h3 style="margin: 20px 0 10px 0; color: #0f172a;">Details de la panne</h3>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+                    <tr><td style="padding: 6px 0;"><strong>Description :</strong></td><td>${demande.description || '-'}</td></tr>
+                    <tr><td style="padding: 6px 0;"><strong>Niveau d'urgence :</strong></td><td>${demande.urgence === 'haute' ? 'Haute' : (demande.urgence === 'moyenne' ? 'Moyenne' : 'Basse')}</td></tr>
+                    <tr><td style="padding: 6px 0;"><strong>Lieu :</strong></td><td>${demande.lieu || '-'}</td></tr>
+                    ${demande.dateRdv ? `<tr><td style="padding: 6px 0;"><strong>RDV programmé :</strong></td><td>${demande.dateRdv} à ${demande.heureRdv || ''}</td></tr>` : ''}
+                    <tr><td style="padding: 6px 0;"><strong>Diagnostic IA :</strong></td><td>${demande.diagnosticIA || '-'}</td></tr>
+                </table>
+                
+                <hr style="margin: 20px 0;">
+                
+                <div style="margin-top: 30px;">
+                    <p style="font-weight: bold;">A remplir par l'atelier :</p>
+                    <p>_________________________________</p>
+                    <p>Diagnostic final : _________________</p>
+                    <p>Pieces a changer : _________________</p>
+                    <p>Montant estime : _________________ €</p>
+                    <p>Date de restitution : _________________</p>
+                </div>
+                
+                <div style="margin-top: 50px; text-align: center; font-size: 10px; color: #94a3b8;">
+                    UNITED MOTORS GARAGE - Votre expert automobile
+                </div>
+            </div>
+        `;
+        
+        const modal = document.getElementById('pdfModal');
+        if (modal) modal.style.display = 'flex';
+        
+        const btnGenPDF = document.getElementById('btnGenererPDF');
+        if (btnGenPDF) {
+            btnGenPDF.onclick = function() {
+                const element = document.getElementById('pdfContent');
+                if (typeof html2pdf !== 'undefined') {
+                    html2pdf().from(element).set({
+                        margin: [10, 10, 10, 10],
+                        filename: 'Fiche_UMG_' + id + '.pdf',
+                        html2canvas: { scale: 2 },
+                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                    }).save();
+                    afficherToast("PDF genere avec succes");
+                }
+            };
+        }
     }
     
     const descInput = document.getElementById('description');
@@ -848,31 +976,17 @@
                 const docRef = await db.collection('demandes').add(demande);
                 showMessage("Demande envoyee ! Votre numero : " + docRef.id, true);
                 
-                const nomInput = document.getElementById('clientNom');
-                const immatInput = document.getElementById('immatriculation');
-                const emailInput = document.getElementById('clientEmail');
-                const telInput = document.getElementById('clientTel');
-                const descInput2 = document.getElementById('description');
-                const marqueInput = document.getElementById('marque');
-                const modeleInput = document.getElementById('modele');
-                const kmInput = document.getElementById('kilometrage');
-                const dateMiseInput = document.getElementById('dateMiseService');
-                const lieuInput = document.getElementById('lieu');
-                const dateRdvInput = document.getElementById('dateRdv');
-                const heureRdvInput = document.getElementById('heureRdv');
-                
-                if (nomInput) nomInput.value = '';
-                if (immatInput) immatInput.value = '';
-                if (emailInput) emailInput.value = '';
-                if (telInput) telInput.value = '';
-                if (descInput2) descInput2.value = '';
-                if (marqueInput) marqueInput.value = '';
-                if (modeleInput) modeleInput.value = '';
-                if (kmInput) kmInput.value = '';
-                if (dateMiseInput) dateMiseInput.value = '';
-                if (lieuInput) lieuInput.value = '';
-                if (dateRdvInput) dateRdvInput.value = '';
-                if (heureRdvInput) heureRdvInput.value = '';
+                document.getElementById('clientNom').value = '';
+                document.getElementById('immatriculation').value = '';
+                document.getElementById('clientEmail').value = '';
+                document.getElementById('clientTel').value = '';
+                document.getElementById('description').value = '';
+                document.getElementById('marque').value = '';
+                document.getElementById('modele').value = '';
+                document.getElementById('kilometrage').value = '';
+                document.getElementById('lieu').value = '';
+                document.getElementById('dateRdv').value = '';
+                document.getElementById('heureRdv').value = '';
                 
                 mediaData = null;
                 mediaType = null;
@@ -1068,21 +1182,27 @@
                                 <option value="1" ${statutActuel === 1 ? 'selected' : ''}>En reparation</option>
                                 <option value="2" ${statutActuel === 2 ? 'selected' : ''}>Prete</option>
                             </select>
+                            <button class="btn-action btn-pdf" data-id="${demande.id}" data-json='${JSON.stringify(demande).replace(/'/g, "&#39;")}'>PDF</button>
                             <button class="btn-action btn-supprimer" data-id="${demande.id}">Supprimer</button>
                         </div>
                     `;
                     listeDiv.appendChild(div);
                 });
                 
-                const statusSelects = document.querySelectorAll('.status-select');
-                statusSelects.forEach(function(select) {
+                document.querySelectorAll('.status-select').forEach(function(select) {
                     select.addEventListener('change', function(e) {
                         updateStatus(select.dataset.id, parseInt(e.target.value));
                     });
                 });
                 
-                const supprBtns = document.querySelectorAll('.btn-supprimer');
-                supprBtns.forEach(function(btn) {
+                document.querySelectorAll('.btn-pdf').forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        const demande = JSON.parse(btn.dataset.json);
+                        genererPDF(demande, btn.dataset.id);
+                    });
+                });
+                
+                document.querySelectorAll('.btn-supprimer').forEach(function(btn) {
                     btn.addEventListener('click', function() {
                         deleteDemande(btn.dataset.id);
                     });
@@ -1144,6 +1264,12 @@
     if ('Notification' in window && Notification.permission !== 'granted' && Notification.permission !== 'denied') {
         Notification.requestPermission();
     }
+    
+    // Fermeture modal
+    window.onclick = function(event) {
+        const modal = document.getElementById('pdfModal');
+        if (event.target === modal && modal) modal.style.display = 'none';
+    };
     
     // Initialisation
     genererQRCode();
