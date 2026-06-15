@@ -184,18 +184,6 @@
         .btn-secondary:hover {
             background: #f8fafc;
         }
-        .btn-pdf {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            cursor: pointer;
-        }
-        .btn-pdf:hover {
-            background: #dc2626;
-        }
         .qr-section {
             background: #f8fafc;
             border-radius: 20px;
@@ -408,6 +396,25 @@
             max-height: 80vh;
             overflow-y: auto;
         }
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+            font-size: 20px;
+        }
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         @media (max-width: 560px) {
             body {
                 padding: 16px;
@@ -615,6 +622,54 @@
     let currentFiltre = "toutes";
     let trackingUnsubscribe = null;
     
+    // Gestion des notifications
+    let dernierSon = 0;
+    let soundEnabled = true;
+    let dernieresDemandesIds = new Set();
+    
+    // Son pour notification
+    function jouerSon() {
+        const now = Date.now();
+        if (now - dernierSon > 2000) {
+            dernierSon = now;
+            try {
+                const audio = new Audio("data:audio/wav;base64,U3RlYWx0aCBzb3VuZA==");
+                audio.volume = 0.5;
+                audio.play().catch(function(e) { console.log("Son bloque par navigateur"); });
+            } catch(e) { console.log("Erreur son"); }
+        }
+    }
+    
+    // Notification native du navigateur
+    function envoyerNotification(titre, message, id) {
+        if (!("Notification" in window)) return;
+        if (Notification.permission === "granted") {
+            new Notification(titre, { 
+                body: message,
+                icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230f172a'/%3E%3Ctext x='50' y='68' font-size='40' text-anchor='middle' fill='white' font-weight='bold'%3EUMG%3C/text%3E%3C/svg%3E"
+            });
+        } else if (Notification.permission !== "denied") {
+            Notification.requestPermission();
+        }
+    }
+    
+    // Toast visuel
+    function afficherToast(message) {
+        const toast = document.getElementById('toast');
+        if (toast) {
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(function() { toast.style.display = 'none'; }, 4000);
+        }
+    }
+    
+    // Demander permission au chargement
+    function demanderPermissionNotification() {
+        if ("Notification" in window && Notification.permission === "default") {
+            Notification.requestPermission();
+        }
+    }
+    
     const clientScreen = document.getElementById('clientScreen');
     const dashboardScreen = document.getElementById('dashboardScreen');
     
@@ -632,7 +687,7 @@
         return "Notre equipe procedera a un diagnostic complet";
     }
     
-    // Generation PDF - FICHE DE RECEPTION
+    // Generation PDF
     function genererPDF(demande, id) {
         const pdfContent = document.getElementById('pdfContent');
         const dateReception = new Date().toLocaleString('fr-FR');
@@ -645,48 +700,38 @@
                     <p style="font-size: 12px; color: #64748b;">FICHE DE RECEPTION</p>
                     <hr>
                 </div>
-                
                 <div style="margin-bottom: 20px;">
                     <p><strong>Numero de demande :</strong> ${id}</p>
                     <p><strong>Date de reception :</strong> ${dateReception}</p>
                 </div>
-                
                 <h3 style="margin: 20px 0 10px 0; color: #0f172a;">Informations vehicule</h3>
                 <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
                     <tr><td style="padding: 6px 0;"><strong>Immatriculation :</strong></td><td>${demande.immatriculation || '-'}</td></tr>
                     <tr><td style="padding: 6px 0;"><strong>Marque :</strong></td><td>${demande.marque || '-'}</td></tr>
                     <tr><td style="padding: 6px 0;"><strong>Modele :</strong></td><td>${demande.modele || '-'}</td></tr>
                     <tr><td style="padding: 6px 0;"><strong>Kilometrage :</strong></td><td>${demande.kilometrage || '-'} km</td></tr>
-                    <tr><td style="padding: 6px 0;"><strong>Date mise en service :</strong></td><td>${demande.dateMiseService || '-'}</td></tr>
                 </table>
-                
                 <h3 style="margin: 20px 0 10px 0; color: #0f172a;">Informations client</h3>
                 <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
                     <tr><td style="padding: 6px 0;"><strong>Nom :</strong></td><td>${demande.nom || '-'}</td></tr>
                     <tr><td style="padding: 6px 0;"><strong>Email :</strong></td><td>${demande.email || '-'}</td></tr>
                     <tr><td style="padding: 6px 0;"><strong>Telephone :</strong></td><td>${demande.telephone || '-'}</td></tr>
                 </table>
-                
                 <h3 style="margin: 20px 0 10px 0; color: #0f172a;">Details de la panne</h3>
                 <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
                     <tr><td style="padding: 6px 0;"><strong>Description :</strong></td><td>${demande.description || '-'}</td></tr>
                     <tr><td style="padding: 6px 0;"><strong>Niveau d'urgence :</strong></td><td>${demande.urgence === 'haute' ? 'Haute' : (demande.urgence === 'moyenne' ? 'Moyenne' : 'Basse')}</td></tr>
                     <tr><td style="padding: 6px 0;"><strong>Lieu :</strong></td><td>${demande.lieu || '-'}</td></tr>
-                    ${demande.dateRdv ? `<tr><td style="padding: 6px 0;"><strong>RDV programmé :</strong></td><td>${demande.dateRdv} à ${demande.heureRdv || ''}</td></tr>` : ''}
-                    <tr><td style="padding: 6px 0;"><strong>Diagnostic IA :</strong></td><td>${demande.diagnosticIA || '-'}</td></tr>
+                    ${demande.dateRdv ? `<tr><td style="padding: 6px 0;"><strong>RDV programme :</strong></td><td>${demande.dateRdv} ${demande.heureRdv || ''}</td></tr>` : ''}
                 </table>
-                
                 <hr style="margin: 20px 0;">
-                
                 <div style="margin-top: 30px;">
                     <p style="font-weight: bold;">A remplir par l'atelier :</p>
                     <p>_________________________________</p>
                     <p>Diagnostic final : _________________</p>
                     <p>Pieces a changer : _________________</p>
-                    <p>Montant estime : _________________ Frcfa</p>
-                    <p>Date de restitution : _________________</p>
+                    <p>Montant estime : _________________ €</p>
                 </div>
-                
                 <div style="margin-top: 50px; text-align: center; font-size: 10px; color: #94a3b8;">
                     UNITED MOTORS GARAGE - Votre expert automobile
                 </div>
@@ -1081,16 +1126,7 @@
         });
     }
     
-    // Dashboard admin
-    function afficherToast(message) {
-        const toast = document.getElementById('toast');
-        if (toast) {
-            toast.textContent = message;
-            toast.style.display = 'block';
-            setTimeout(function() { toast.style.display = 'none'; }, 3000);
-        }
-    }
-    
+    // Dashboard admin avec notifications
     async function updateStatus(demandeId, nouveauStatut) {
         const statusLabels = ['En attente', 'En reparation', 'Prete'];
         try {
@@ -1120,6 +1156,14 @@
                 let demandes = [];
                 let totalSat = 0;
                 let nbSat = 0;
+                let nouvellesDemandes = [];
+                
+                snapshot.docChanges().forEach(function(change) {
+                    if (change.type === 'added') {
+                        const d = change.doc.data();
+                        nouvellesDemandes.push(d);
+                    }
+                });
                 
                 snapshot.forEach(function(doc) {
                     const d = doc.data();
@@ -1129,6 +1173,16 @@
                         nbSat++;
                     }
                 });
+                
+                // NOTIFICATIONS POUR NOUVELLES DEMANDES
+                if (nouvellesDemandes.length > 0 && dashboardScreen.style.display === 'block') {
+                    nouvellesDemandes.forEach(function(d) {
+                        const msg = "Nouvelle demande de " + (d.nom || 'client') + " - " + d.immatriculation;
+                        afficherToast("🔔 " + msg);
+                        jouerSon();
+                        envoyerNotification("Nouvelle demande UMG", msg, d.id);
+                    });
+                }
                 
                 const noteMoyenne = nbSat > 0 ? (totalSat / nbSat).toFixed(1) : 0;
                 let filtered = demandes;
@@ -1260,10 +1314,8 @@
     const dateRdvElem = document.getElementById('dateRdv');
     if (dateRdvElem) dateRdvElem.min = today;
     
-    // Permission notifications
-    if ('Notification' in window && Notification.permission !== 'granted' && Notification.permission !== 'denied') {
-        Notification.requestPermission();
-    }
+    // Demander permission notification au chargement
+    demanderPermissionNotification();
     
     // Fermeture modal
     window.onclick = function(event) {
@@ -1275,7 +1327,7 @@
     genererQRCode();
     afficherClient();
     
-    console.log('Application unifiee prete');
+    console.log('Application unifiee prete - Notifications actives');
     console.log('Mot de passe reception : umg123');
 })();
 </script>
