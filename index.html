@@ -415,6 +415,16 @@
             align-items: center;
             justify-content: center;
         }
+        .btn-permission {
+            background: #e2e8f0;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+        }
         @media (max-width: 560px) {
             body {
                 padding: 16px;
@@ -447,6 +457,7 @@
             <div style="display: flex; gap: 10px; justify-content: center; margin-top: 12px;">
                 <button id="btnCopierLien" class="btn-secondary">Copier le lien</button>
                 <button id="btnImprimerQR" class="btn-secondary">Imprimer QR Code</button>
+                <button id="btnActiverNotif" class="btn-permission">🔔 Activer les notifications</button>
             </div>
         </div>
 
@@ -621,11 +632,12 @@
     let unsubscribeDashboard = null;
     let currentFiltre = "toutes";
     let trackingUnsubscribe = null;
+    let currentClientDemandeId = null;
     
     // Gestion des notifications
     let dernierSon = 0;
     let soundEnabled = true;
-    let dernieresDemandesIds = new Set();
+    let notificationPermissionGranted = false;
     
     // Son pour notification
     function jouerSon() {
@@ -640,16 +652,17 @@
         }
     }
     
-    // Notification native du navigateur
-    function envoyerNotification(titre, message, id) {
+    // Notification native du navigateur (côté client)
+    function envoyerNotificationClient(titre, message, id) {
         if (!("Notification" in window)) return;
         if (Notification.permission === "granted") {
             new Notification(titre, { 
                 body: message,
                 icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230f172a'/%3E%3Ctext x='50' y='68' font-size='40' text-anchor='middle' fill='white' font-weight='bold'%3EUMG%3C/text%3E%3C/svg%3E"
             });
-        } else if (Notification.permission !== "denied") {
-            Notification.requestPermission();
+            console.log("Notification envoyee: " + titre);
+        } else {
+            console.log("Permission notification non accordee");
         }
     }
     
@@ -663,15 +676,37 @@
         }
     }
     
-    // Demander permission au chargement
+    // Demander permission au client
     function demanderPermissionNotification() {
-        if ("Notification" in window && Notification.permission === "default") {
-            Notification.requestPermission();
+        if ("Notification" in window) {
+            if (Notification.permission === "default") {
+                Notification.requestPermission().then(function(permission) {
+                    notificationPermissionGranted = (permission === "granted");
+                    if (notificationPermissionGranted) {
+                        afficherToast("🔔 Notifications activees !");
+                    } else {
+                        afficherToast("❌ Notifications refusees");
+                    }
+                });
+            } else if (Notification.permission === "granted") {
+                notificationPermissionGranted = true;
+                afficherToast("🔔 Notifications deja actives");
+            } else {
+                afficherToast("❌ Notifications bloquees par le navigateur");
+            }
+        } else {
+            afficherToast("❌ Votre navigateur ne supporte pas les notifications");
         }
     }
     
     const clientScreen = document.getElementById('clientScreen');
     const dashboardScreen = document.getElementById('dashboardScreen');
+    
+    // Bouton activer notifications
+    const btnActiverNotif = document.getElementById('btnActiverNotif');
+    if (btnActiverNotif) {
+        btnActiverNotif.addEventListener('click', demanderPermissionNotification);
+    }
     
     // IA Diagnostic
     function analyserPanne(description) {
@@ -714,14 +749,14 @@
                 <h3 style="margin: 20px 0 10px 0; color: #0f172a;">Informations client</h3>
                 <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
                     <tr><td style="padding: 6px 0;"><strong>Nom :</strong></td><td>${demande.nom || '-'}</td></tr>
-                    <tr><td style="padding: 6px 0;"><strong>Email :</strong></td><td>${demande.email || '-'}</td></tr>
-                    <tr><td style="padding: 6px 0;"><strong>Telephone :</strong></td><td>${demande.telephone || '-'}</td></tr>
+                    <tr><td style="padding: 6px 0;"><strong>Email :</strong>NonNull<td>${demande.email || '-'}</td></tr>
+                    <tr><td style="padding: 6px 0;"><strong>Telephone :</strong>NonNull<td>${demande.telephone || '-'}</td></tr>
                 </table>
                 <h3 style="margin: 20px 0 10px 0; color: #0f172a;">Details de la panne</h3>
                 <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
-                    <tr><td style="padding: 6px 0;"><strong>Description :</strong></td><td>${demande.description || '-'}</td></tr>
-                    <tr><td style="padding: 6px 0;"><strong>Niveau d'urgence :</strong></td><td>${demande.urgence === 'haute' ? 'Haute' : (demande.urgence === 'moyenne' ? 'Moyenne' : 'Basse')}</td></tr>
-                    <tr><td style="padding: 6px 0;"><strong>Lieu :</strong></td><td>${demande.lieu || '-'}</td></tr>
+                    <tr><td style="padding: 6px 0;"><strong>Description :</strong>NonNull<td>${demande.description || '-'}</td></tr>
+                    <tr><td style="padding: 6px 0;"><strong>Niveau d'urgence :</strong>NonNull<td>${demande.urgence === 'haute' ? 'Haute' : (demande.urgence === 'moyenne' ? 'Moyenne' : 'Basse')}</td></tr>
+                    <tr><td style="padding: 6px 0;"><strong>Lieu :</strong>NonNull<td>${demande.lieu || '-'}</td></tr>
                     ${demande.dateRdv ? `<tr><td style="padding: 6px 0;"><strong>RDV programme :</strong></td><td>${demande.dateRdv} ${demande.heureRdv || ''}</td></tr>` : ''}
                 </table>
                 <hr style="margin: 20px 0;">
@@ -962,7 +997,7 @@
         });
     }
     
-    // Envoi demande
+    // Envoi demande avec notification client
     function showMessage(msg, isSuccess) {
         const msgDiv = document.getElementById('message');
         if (msgDiv) {
@@ -971,7 +1006,7 @@
             msgDiv.style.background = isSuccess ? '#f0fdf4' : '#fef2f2';
             msgDiv.style.padding = '10px';
             msgDiv.style.borderRadius = '12px';
-            setTimeout(function() { msgDiv.innerHTML = ''; }, 4000);
+            setTimeout(function() { msgDiv.innerHTML = ''; }, 6000);
         }
     }
     
@@ -1019,8 +1054,16 @@
             
             try {
                 const docRef = await db.collection('demandes').add(demande);
-                showMessage("Demande envoyee ! Votre numero : " + docRef.id, true);
+                showMessage("✅ Demande envoyee ! Votre numero : " + docRef.id, true);
                 
+                // NOTIFICATION CLIENT : confirmation d'envoi
+                envoyerNotificationClient(
+                    "United Motors Garage - Confirmation",
+                    "Votre demande a bien ete enregistree. Numero: " + docRef.id,
+                    docRef.id
+                );
+                
+                // Réinitialisation formulaire
                 document.getElementById('clientNom').value = '';
                 document.getElementById('immatriculation').value = '';
                 document.getElementById('clientEmail').value = '';
@@ -1029,6 +1072,7 @@
                 document.getElementById('marque').value = '';
                 document.getElementById('modele').value = '';
                 document.getElementById('kilometrage').value = '';
+                document.getElementById('dateMiseService').value = '';
                 document.getElementById('lieu').value = '';
                 document.getElementById('dateRdv').value = '';
                 document.getElementById('heureRdv').value = '';
@@ -1042,12 +1086,12 @@
                 if (fichierMedia) fichierMedia.value = '';
                 if (iaDiv2) iaDiv2.style.display = 'none';
             } catch(error) {
-                showMessage("Erreur: " + error.message, false);
+                showMessage("❌ Erreur: " + error.message, false);
             }
         });
     }
     
-    // Suivi client
+    // Suivi client avec notifications de changement de statut
     function afficherSuiviClient(demandeId) {
         if (trackingUnsubscribe) trackingUnsubscribe();
         
@@ -1063,6 +1107,32 @@
             
             const data = doc.data();
             const statut = data.statut !== undefined ? data.statut : 0;
+            const statutLabels = ['En attente', 'En reparation', 'Prete'];
+            const statutMessages = [
+                "Votre demande est en attente de passage en atelier.",
+                "Votre vehicule est actuellement en cours de réparation.",
+                "Votre vehicule est prêt à être récupéré !"
+            ];
+            
+            // Stocker l'ancien statut pour comparer
+            if (currentClientDemandeId !== demandeId) {
+                currentClientDemandeId = demandeId;
+                window.dernierStatutClient = statut;
+            }
+            
+            // Si le statut a changé, envoyer une notification
+            if (window.dernierStatutClient !== undefined && window.dernierStatutClient !== statut) {
+                const nouveauLabel = statutLabels[statut];
+                const message = statutMessages[statut];
+                envoyerNotificationClient(
+                    "United Motors Garage - Mise à jour",
+                    message + " Statut: " + nouveauLabel,
+                    demandeId
+                );
+                jouerSon();
+                afficherToast("🔔 Statut mis à jour: " + nouveauLabel);
+            }
+            window.dernierStatutClient = statut;
             
             if (trackingError) trackingError.innerHTML = '';
             if (trackingInfo) trackingInfo.style.display = 'block';
@@ -1122,11 +1192,15 @@
                 if (trackingError) trackingError.innerHTML = 'Veuillez entrer un numero';
                 return;
             }
+            // Demander permission notifications au moment du suivi
+            if (Notification.permission === "default") {
+                demanderPermissionNotification();
+            }
             afficherSuiviClient(code);
         });
     }
     
-    // Dashboard admin avec notifications
+    // Dashboard admin (avec notifications admin)
     async function updateStatus(demandeId, nouveauStatut) {
         const statusLabels = ['En attente', 'En reparation', 'Prete'];
         try {
@@ -1174,13 +1248,15 @@
                     }
                 });
                 
-                // NOTIFICATIONS POUR NOUVELLES DEMANDES
+                // NOTIFICATIONS ADMIN pour nouvelles demandes
                 if (nouvellesDemandes.length > 0 && dashboardScreen.style.display === 'block') {
                     nouvellesDemandes.forEach(function(d) {
-                        const msg = "Nouvelle demande de " + (d.nom || 'client') + " - " + d.immatriculation;
-                        afficherToast("🔔 " + msg);
+                        const msg = "🔔 Nouvelle demande de " + (d.nom || 'client') + " - " + d.immatriculation;
+                        afficherToast(msg);
                         jouerSon();
-                        envoyerNotification("Nouvelle demande UMG", msg, d.id);
+                        if (Notification.permission === "granted") {
+                            new Notification("Nouvelle demande UMG", { body: msg });
+                        }
                     });
                 }
                 
@@ -1289,6 +1365,10 @@
             unsubscribeDashboard();
             unsubscribeDashboard = null;
         }
+        if (trackingUnsubscribe) {
+            trackingUnsubscribe();
+            trackingUnsubscribe = null;
+        }
         genererQRCode();
     }
     
@@ -1314,9 +1394,6 @@
     const dateRdvElem = document.getElementById('dateRdv');
     if (dateRdvElem) dateRdvElem.min = today;
     
-    // Demander permission notification au chargement
-    demanderPermissionNotification();
-    
     // Fermeture modal
     window.onclick = function(event) {
         const modal = document.getElementById('pdfModal');
@@ -1327,8 +1404,9 @@
     genererQRCode();
     afficherClient();
     
-    console.log('Application unifiee prete - Notifications actives');
+    console.log('Application unifiee prete - Notifications client actives');
     console.log('Mot de passe reception : umg123');
+    console.log('Pour activer les notifications client, cliquer sur "🔔 Activer les notifications"');
 })();
 </script>
 </body>
