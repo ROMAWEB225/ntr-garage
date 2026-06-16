@@ -75,11 +75,11 @@
         .ia-diagnostic { background: #f8fafc; border-radius: 16px; padding: 14px; margin: 16px 0; display: none; font-size: 13px; }
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 1000; }
         .modal-content { background: white; padding: 24px; border-radius: 24px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; }
-        .notification-center { position: relative; cursor: pointer; }
-        .notification-badge { position: absolute; top: -8px; right: -12px; background: #ef4444; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; display: flex; align-items: center; justify-content: center; }
-        .notif-list { position: absolute; top: 30px; right: 0; background: white; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 280px; max-height: 300px; overflow-y: auto; z-index: 100; display: none; }
-        .notif-item { padding: 12px; border-bottom: 1px solid #e2e8f0; font-size: 12px; }
-        .notif-item:last-child { border-bottom: none; }
+        .notif-center { position: relative; cursor: pointer; display: inline-block; margin-right: 15px; }
+        .notif-badge { position: absolute; top: -8px; right: -10px; background: #ef4444; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; display: flex; align-items: center; justify-content: center; }
+        .notif-list { position: absolute; top: 30px; right: 0; background: white; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 260px; max-height: 300px; overflow-y: auto; z-index: 100; display: none; }
+        .notif-item { padding: 12px; border-bottom: 1px solid #e2e8f0; font-size: 12px; cursor: pointer; }
+        .notif-item:hover { background: #f8fafc; }
         @media (max-width: 560px) { body { padding: 16px; } .container, .dashboard-container { padding: 20px; } .row-2cols { grid-template-columns: 1fr; } .stats { grid-template-columns: repeat(2, 1fr); } }
     </style>
 </head>
@@ -95,7 +95,7 @@
             <div style="display:flex; gap:10px; justify-content:center; margin-top:12px;">
                 <button id="btnCopierLien" class="btn-secondary">Copier le lien</button>
                 <button id="btnImprimerQR" class="btn-secondary">Imprimer QR</button>
-                <button id="btnActiverNotif" class="btn-secondary">🔔 Activer notifications</button>
+                <button id="btnActiverNotif" class="btn-secondary">🔔 Activer notifs</button>
             </div>
         </div>
         <div class="tabs">
@@ -106,10 +106,10 @@
         <div id="tab-panne" class="tab-content active">
             <div class="section-title">Véhicule</div>
             <div class="row-2cols"><input id="marque" placeholder="Marque"><input id="modele" placeholder="Modèle"></div>
-            <div class="row-2cols"><input id="immatriculation" placeholder="Immatriculation"><input id="kilometrage" placeholder="Km"></div>
+            <div class="row-2cols"><input id="immatriculation" placeholder="Immatriculation *"><input id="kilometrage" placeholder="Km"></div>
             <input id="dateMiseService" type="date">
             <div class="section-title">Client</div>
-            <input id="clientNom" placeholder="Nom et prénom">
+            <input id="clientNom" placeholder="Nom et prénom *">
             <div class="row-2cols"><input id="clientEmail" placeholder="Email"><input id="clientTel" placeholder="Téléphone"></div>
             <div class="section-title">Panne</div>
             <textarea id="description" rows="3" placeholder="Décrivez le problème..."></textarea>
@@ -149,17 +149,19 @@
     <div class="dashboard-container">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
             <div class="logo" style="margin-bottom:0; padding-bottom:0;"><h1>UMG</h1><p>Réception</p></div>
-            <div class="notification-center" id="notifCenter">
-                🔔 <span id="notifCount" class="notification-badge" style="display:none;">0</span>
-                <div id="notifList" class="notif-list"></div>
+            <div style="display:flex; align-items:center; gap:12px;">
+                <div class="notif-center" id="notifCenter">
+                    🔔 <span id="notifCount" class="notif-badge" style="display:none;">0</span>
+                    <div id="notifList" class="notif-list"></div>
+                </div>
+                <button id="btnQuitterDashboard" class="btn-secondary">Déconnexion</button>
             </div>
-            <button id="btnQuitterDashboard" class="btn-secondary">Déconnexion</button>
         </div>
         <div class="stats" id="stats">
             <div class="stat-card"><div class="stat-number" id="statTotal">0</div><div class="stat-label">Total</div></div>
             <div class="stat-card"><div class="stat-number" id="statNonLues">0</div><div class="stat-label">Non traitées</div></div>
             <div class="stat-card"><div class="stat-number" id="statUrgentes">0</div><div class="stat-label">Urgentes</div></div>
-            <div class="stat-card"><div class="stat-number" id="statSatisfaction">0</div><div class="stat-label">Note</div></div>
+            <div class="stat-card"><div class="stat-number" id="statSatisfaction">0</div><div class="stat-label">Note moyenne</div></div>
         </div>
         <div class="filtres"><button class="filtre-btn active" data-filtre="toutes">Toutes</button><button class="filtre-btn" data-filtre="non-lues">Non traitées</button><button class="filtre-btn" data-filtre="urgentes">Urgentes</button></div>
         <div id="listeDemandes" style="max-height:500px; overflow-y:auto;"></div>
@@ -175,7 +177,7 @@
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
 <script>
-// ==================== CONFIG ====================
+// ==================== CONFIGURATION ====================
 const firebaseConfig = {
     apiKey: "AIzaSyAxfEpi-NERVExxVYD2EmH7JppiIQDwWOM",
     authDomain: "ntr-garage.firebaseapp.com",
@@ -190,38 +192,47 @@ const MOT_DE_PASSE = "umg123";
 
 // État global
 let mediaData = null, mediaType = null, niveauUrgence = "basse";
-let unsubscribeDashboard = null, currentFiltre = "toutes", trackingUnsubscribe = null, currentClientDemandeId = null;
-let notifications = []; // stockage in-app
+let unsubscribeDashboard = null, currentFiltre = "toutes", trackingUnsubscribe = null;
+let notifications = [];      // stockage des notifs in-app
 let notifId = 0;
 
-// ==================== UTILITAIRES ====================
-function afficherToast(msg) {
-    const toast = document.getElementById('toast');
-    if(!toast) return;
-    toast.textContent = msg;
-    toast.style.display = 'block';
-    setTimeout(() => toast.style.display = 'none', 3000);
+// Helper : afficher un toast
+function toast(msg) {
+    const el = document.getElementById('toast');
+    if(!el) return;
+    el.textContent = msg;
+    el.style.display = 'block';
+    setTimeout(() => el.style.display = 'none', 3000);
 }
 
-function jouerSon() { try { new Audio("data:audio/wav;base64,U3RlYWx0aCBzb3VuZA==").play(); } catch(e) {} }
+// Helper : jouer un son (optionnel)
+function jouerSon() {
+    try { new Audio("data:audio/wav;base64,U3RlYWx0aCBzb3VuZA==").play(); } catch(e) {}
+}
 
-function envoyerNotificationSysteme(titre, message) {
+// Notification système (popup navigateur)
+function notifSysteme(titre, message) {
     if (!("Notification" in window)) return;
-    if (Notification.permission === "granted") new Notification(titre, { body: message });
-    else if (Notification.permission !== "denied") Notification.requestPermission();
+    if (Notification.permission === "granted") {
+        new Notification(titre, { body: message, icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230f172a'/%3E%3Ctext x='50' y='68' font-size='40' text-anchor='middle' fill='white' font-weight='bold'%3EUMG%3C/text%3E%3C/svg%3E" });
+    } else if (Notification.permission !== "denied") {
+        Notification.requestPermission();
+    }
 }
 
-function ajouterNotificationInApp(titre, message, type) {
+// Ajouter une notification in-app + système
+function ajouterNotif(titre, message, type = "info") {
     const id = ++notifId;
-    notifications.unshift({ id, titre, message, type, date: new Date() });
+    notifications.unshift({ id, titre, message, date: new Date(), lu: false });
     if(notifications.length > 30) notifications.pop();
-    mettreAJourCentreNotifications();
-    if (type === 'nouvelle') jouerSon();
-    afficherToast(message);
-    envoyerNotificationSysteme(titre, message);
+    mettreAJourCentreNotifs();
+    if(type === "nouvelle") jouerSon();
+    toast(message);
+    notifSysteme(titre, message);
 }
 
-function mettreAJourCentreNotifications() {
+// Mise à jour de la cloche et de la liste
+function mettreAJourCentreNotifs() {
     const badge = document.getElementById('notifCount');
     const listDiv = document.getElementById('notifList');
     if(!badge) return;
@@ -229,24 +240,33 @@ function mettreAJourCentreNotifications() {
     if(nonLues > 0) { badge.style.display = 'flex'; badge.textContent = nonLues; } else badge.style.display = 'none';
     if(listDiv) {
         listDiv.innerHTML = notifications.map(n => `<div class="notif-item" data-id="${n.id}"><strong>${n.titre}</strong><br>${n.message}<br><small>${n.date.toLocaleTimeString()}</small></div>`).join('');
-        document.querySelectorAll('.notif-item').forEach(el => el.addEventListener('click', () => {
-            const id = parseInt(el.dataset.id);
-            const notif = notifications.find(n => n.id === id);
-            if(notif) notif.lu = true;
-            mettreAJourCentreNotifications();
-        }));
+        document.querySelectorAll('.notif-item').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = parseInt(el.dataset.id);
+                const notif = notifications.find(n => n.id === id);
+                if(notif) notif.lu = true;
+                mettreAJourCentreNotifs();
+            });
+        });
     }
 }
 
-// Centre de notifications (toggle)
-document.getElementById('notifCenter')?.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const list = document.getElementById('notifList');
-    list.style.display = list.style.display === 'block' ? 'none' : 'block';
-});
-document.addEventListener('click', () => { document.getElementById('notifList') && (document.getElementById('notifList').style.display = 'none'); });
+// Toggle centre de notifs
+const notifCenter = document.getElementById('notifCenter');
+if(notifCenter) {
+    notifCenter.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const list = document.getElementById('notifList');
+        if(list) list.style.display = list.style.display === 'block' ? 'none' : 'block';
+    });
+    document.addEventListener('click', () => { const l = document.getElementById('notifList'); if(l) l.style.display = 'none'; });
+}
 
-// ==================== IA Diagnostic ====================
+// Demander permission notifications
+document.getElementById('btnActiverNotif')?.addEventListener('click', () => { Notification.requestPermission(); });
+
+// IA Diagnostic
 function analyserPanne(desc) {
     const d = desc.toLowerCase();
     if(d.includes("bruit")) return "🔧 Bruit suspect → vérifier courroie";
@@ -255,7 +275,7 @@ function analyserPanne(desc) {
     if(d.includes("frein")) return "🛑 Frein → contrôle plaquettes";
     return "🔍 Diagnostic complet par notre équipe";
 }
-document.getElementById('description')?.addEventListener('input', e => {
+document.getElementById('description')?.addEventListener('input', (e) => {
     const val = e.target.value;
     const div = document.getElementById('iaDiagnostic');
     const span = document.getElementById('iaResultat');
@@ -263,7 +283,7 @@ document.getElementById('description')?.addEventListener('input', e => {
     else div.style.display = 'none';
 });
 
-// ==================== Onglets ====================
+// Onglets
 document.querySelectorAll('.tab').forEach(tab => {
     tab.addEventListener('click', () => {
         document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -273,7 +293,7 @@ document.querySelectorAll('.tab').forEach(tab => {
     });
 });
 
-// ==================== Urgence ====================
+// Niveau urgence
 document.querySelectorAll('[data-urgence]').forEach(btn => {
     btn.addEventListener('click', function() {
         document.querySelectorAll('[data-urgence]').forEach(b => b.classList.remove('urgence-selected'));
@@ -283,23 +303,22 @@ document.querySelectorAll('[data-urgence]').forEach(btn => {
 });
 document.querySelector('[data-urgence="basse"]')?.classList.add('urgence-selected');
 
-// ==================== Médias ====================
-const mediaBtns = { photo: 'image', galerie: 'image', video: 'video', audio: 'audio' };
-Object.keys(mediaBtns).forEach(k => {
-    const btn = document.getElementById(`btn${k.charAt(0).toUpperCase()+k.slice(1)}`);
-    if(btn) btn.addEventListener('click', () => {
-        mediaType = mediaBtns[k];
-        const input = document.getElementById('fichierMedia');
-        input.accept = mediaType === 'image' ? 'image/*' : (mediaType === 'video' ? 'video/*' : 'audio/*');
-        if(k === 'photo') input.capture = 'environment'; else input.removeAttribute('capture');
-        input.click();
-    });
-});
-document.getElementById('fichierMedia')?.addEventListener('change', e => {
+// Gestion médias
+const mediaHandlers = {
+    btnPhoto: () => { mediaType = 'image'; const inp = document.getElementById('fichierMedia'); inp.accept = 'image/*'; inp.capture = 'environment'; inp.click(); },
+    btnGalerie: () => { mediaType = 'image'; const inp = document.getElementById('fichierMedia'); inp.accept = 'image/*'; inp.removeAttribute('capture'); inp.click(); },
+    btnVideo: () => { mediaType = 'video'; const inp = document.getElementById('fichierMedia'); inp.accept = 'video/*'; inp.removeAttribute('capture'); inp.click(); },
+    btnAudio: () => { mediaType = 'audio'; const inp = document.getElementById('fichierMedia'); inp.accept = 'audio/*'; inp.removeAttribute('capture'); inp.click(); }
+};
+for(const [id, handler] of Object.entries(mediaHandlers)) {
+    const btn = document.getElementById(id);
+    if(btn) btn.addEventListener('click', handler);
+}
+document.getElementById('fichierMedia')?.addEventListener('change', (e) => {
     const file = e.target.files[0];
     if(!file) return;
     const reader = new FileReader();
-    reader.onload = ev => {
+    reader.onload = (ev) => {
         mediaData = ev.target.result;
         const preview = document.getElementById('previewMedia');
         preview.style.display = 'block';
@@ -311,58 +330,94 @@ document.getElementById('fichierMedia')?.addEventListener('change', e => {
     reader.readAsDataURL(file);
 });
 
-// ==================== QR Code ====================
+// QR Code
 function genererQRCode() {
     const url = window.location.href;
     document.getElementById('currentUrl').innerText = url;
-    const qr = document.getElementById('qrcode');
-    if(qr && typeof QRCode !== 'undefined') { qr.innerHTML = ''; new QRCode(qr, { text: url, width: 140, height: 140, colorDark: "#0f172a" }); }
+    const qrDiv = document.getElementById('qrcode');
+    if(qrDiv && typeof QRCode !== 'undefined') { qrDiv.innerHTML = ''; new QRCode(qrDiv, { text: url, width: 140, height: 140, colorDark: "#0f172a" }); }
 }
 document.getElementById('btnCopierLien')?.addEventListener('click', () => { navigator.clipboard.writeText(window.location.href); alert('Lien copié'); });
-document.getElementById('btnImprimerQR')?.addEventListener('click', () => { const w = window.open(); w.document.write(`<html><body style="text-align:center"><h2>UNITED MOTORS GARAGE</h2><div>${document.getElementById('qrcode').innerHTML}</div><p>${window.location.href}</p><script>window.print();<\/script></body></html>`); w.document.close(); });
-document.getElementById('btnActiverNotif')?.addEventListener('click', () => { Notification.requestPermission(); });
+document.getElementById('btnImprimerQR')?.addEventListener('click', () => {
+    const w = window.open();
+    w.document.write(`<html><body style="text-align:center"><h2>UNITED MOTORS GARAGE</h2><div>${document.getElementById('qrcode').innerHTML}</div><p>${window.location.href}</p><script>window.print();<\/script></body></html>`);
+    w.document.close();
+});
 
-// ==================== Envoi demande ====================
+// Envoi de la demande
 document.getElementById('btnEnvoyer')?.addEventListener('click', async () => {
     const nom = document.getElementById('clientNom').value.trim();
     const immat = document.getElementById('immatriculation').value.trim().toUpperCase();
-    if(!nom || !immat) { alert("Nom et immatriculation requis"); return; }
+    if(!nom || !immat) {
+        toast("❌ Nom et immatriculation requis");
+        return;
+    }
     const demande = {
-        nom, immatriculation: immat, email: document.getElementById('clientEmail').value.trim(),
-        telephone: document.getElementById('clientTel').value.trim(), marque: document.getElementById('marque').value.trim(),
-        modele: document.getElementById('modele').value.trim(), kilometrage: document.getElementById('kilometrage').value.trim(),
+        nom, immatriculation: immat,
+        email: document.getElementById('clientEmail').value.trim(),
+        telephone: document.getElementById('clientTel').value.trim(),
+        marque: document.getElementById('marque').value.trim(),
+        modele: document.getElementById('modele').value.trim(),
+        kilometrage: document.getElementById('kilometrage').value.trim(),
         dateMiseService: document.getElementById('dateMiseService').value,
         description: document.getElementById('description').value.trim(),
-        lieu: document.getElementById('lieu').value.trim(), urgence: niveauUrgence,
-        dateRdv: document.getElementById('dateRdv').value, heureRdv: document.getElementById('heureRdv').value,
-        media: mediaData, mediaType, date: new Date().toLocaleString('fr-FR'), dateTimestamp: new Date(),
-        lu: false, statut: 0, diagnosticIA: analyserPanne(document.getElementById('description').value)
+        lieu: document.getElementById('lieu').value.trim(),
+        urgence: niveauUrgence,
+        dateRdv: document.getElementById('dateRdv').value,
+        heureRdv: document.getElementById('heureRdv').value,
+        media: mediaData,
+        mediaType: mediaType,
+        date: new Date().toLocaleString('fr-FR'),
+        dateTimestamp: new Date(),
+        lu: false,
+        statut: 0,
+        diagnosticIA: analyserPanne(document.getElementById('description').value)
     };
     try {
-        const ref = await db.collection('demandes').add(demande);
-        afficherToast(`✅ Demande envoyée ! N° ${ref.id}`);
-        envoyerNotificationSysteme("United Motors Garage", `Demande enregistrée. N° ${ref.id}`);
-        // Réinitialiser formulaire
-        document.querySelectorAll('#clientNom, #immatriculation, #clientEmail, #clientTel, #marque, #modele, #kilometrage, #description, #lieu').forEach(i => i.value = '');
-        document.getElementById('dateMiseService').value = ''; document.getElementById('dateRdv').value = ''; document.getElementById('heureRdv').value = '';
-        mediaData = null; mediaType = null; document.getElementById('previewMedia').style.display = 'none'; document.getElementById('previewMedia').innerHTML = '';
+        const docRef = await db.collection('demandes').add(demande);
+        toast(`✅ Demande envoyée ! N° ${docRef.id}`);
+        notifSysteme("United Motors Garage", `Votre demande N° ${docRef.id} a été enregistrée.`);
+        // Réinitialiser le formulaire
+        document.getElementById('clientNom').value = '';
+        document.getElementById('immatriculation').value = '';
+        document.getElementById('clientEmail').value = '';
+        document.getElementById('clientTel').value = '';
+        document.getElementById('marque').value = '';
+        document.getElementById('modele').value = '';
+        document.getElementById('kilometrage').value = '';
+        document.getElementById('description').value = '';
+        document.getElementById('lieu').value = '';
+        document.getElementById('dateRdv').value = '';
+        document.getElementById('heureRdv').value = '';
+        document.getElementById('dateMiseService').value = '';
+        mediaData = null; mediaType = null;
+        document.getElementById('previewMedia').style.display = 'none';
+        document.getElementById('previewMedia').innerHTML = '';
+        document.getElementById('fichierMedia').value = '';
         document.getElementById('iaDiagnostic').style.display = 'none';
-    } catch(e) { afficherToast("❌ Erreur: "+e.message); }
+    } catch(e) {
+        toast("❌ Erreur: " + e.message);
+    }
 });
 
-// ==================== Suivi client ====================
+// Suivi client
 function afficherSuiviClient(id) {
     if(trackingUnsubscribe) trackingUnsubscribe();
     trackingUnsubscribe = db.collection('demandes').doc(id).onSnapshot(doc => {
-        if(!doc.exists) { document.getElementById('trackingError').innerText = "Numéro invalide"; document.getElementById('trackingInfo').style.display = 'none'; return; }
-        const data = doc.data();
-        const statut = data.statut ?? 0;
-        if(window.dernierStatutClient !== undefined && window.dernierStatutClient !== statut) {
-            const msg = statut === 0 ? "Votre demande est en attente" : (statut === 1 ? "Votre véhicule est en réparation" : "Votre véhicule est prêt");
-            envoyerNotificationSysteme("Mise à jour UMG", msg);
-            afficherToast("🔔 Statut mis à jour : " + (statut===1?"En réparation":"Prêt"));
+        if(!doc.exists) {
+            document.getElementById('trackingError').innerText = "Numéro invalide";
+            document.getElementById('trackingInfo').style.display = 'none';
+            return;
         }
-        window.dernierStatutClient = statut;
+        const data = doc.data();
+        const statut = data.statut !== undefined ? data.statut : 0;
+        // Détecter changement de statut pour notifier
+        if(window.lastStatut !== undefined && window.lastStatut !== statut) {
+            const msg = statut === 0 ? "En attente" : (statut === 1 ? "En réparation" : "Prêt");
+            notifSysteme("Mise à jour UMG", `Votre véhicule est maintenant : ${msg}`);
+            toast(`🔔 Statut : ${msg}`);
+        }
+        window.lastStatut = statut;
         document.getElementById('trackingError').innerHTML = '';
         document.getElementById('trackingInfo').style.display = 'block';
         document.getElementById('trackingVehicleInfo').innerHTML = `<p><strong>Véhicule:</strong> ${data.immatriculation || '-'}</p><p><strong>Client:</strong> ${data.nom || '-'}</p><p><strong>Panne:</strong> ${data.description || '-'}</p>`;
@@ -372,7 +427,7 @@ function afficherSuiviClient(id) {
         else if(statut===1) steps = '<div class="status-step completed"><div class="status-icon">🟡</div><div><strong>En attente</strong></div></div><div class="status-step active"><div class="status-icon">🔧</div><div><strong>En réparation</strong></div></div><div class="status-step"><div class="status-icon">✅</div><div><strong>Prête</strong></div></div>';
         else steps = '<div class="status-step completed"><div class="status-icon">🟡</div><div><strong>En attente</strong></div></div><div class="status-step completed"><div class="status-icon">🔧</div><div><strong>En réparation</strong></div></div><div class="status-step active"><div class="status-icon">✅</div><div><strong>Prête</strong></div></div>';
         document.getElementById('trackingSteps').innerHTML = steps;
-        document.getElementById('trackingLastUpdate').innerHTML = `Dernière mise à jour: ${data.dateStatut ? new Date(data.dateStatut.toDate()).toLocaleString() : data.date || ''}`;
+        document.getElementById('trackingLastUpdate').innerHTML = `Dernière mise à jour : ${data.dateStatut ? new Date(data.dateStatut.toDate()).toLocaleString() : data.date || ''}`;
     });
 }
 document.getElementById('btnTracker')?.addEventListener('click', () => {
@@ -381,36 +436,39 @@ document.getElementById('btnTracker')?.addEventListener('click', () => {
     afficherSuiviClient(code);
 });
 
-// ==================== Dashboard ====================
+// Dashboard Admin
 async function updateStatus(docId, statut) {
     await db.collection('demandes').doc(docId).update({ statut, dateStatut: new Date() });
-    afficherToast(`Statut mis à jour`);
+    toast(`Statut mis à jour`);
 }
-
-async function deleteDemande(docId) { if(confirm("Supprimer ?")) { await db.collection('demandes').doc(docId).delete(); afficherToast("Supprimée"); } }
-
+async function deleteDemande(docId) {
+    if(confirm("Supprimer cette demande ?")) {
+        await db.collection('demandes').doc(docId).delete();
+        toast("Demande supprimée");
+    }
+}
 function genererPDF(demande, id) {
     const pdfDiv = document.getElementById('pdfContent');
     pdfDiv.innerHTML = `
         <div style="font-family:system-ui; padding:16px;">
             <h2>UNITED MOTORS GARAGE</h2>
-            <p>N° de demande: ${id}</p>
-            <p>Date: ${demande.date || new Date().toLocaleString()}</p>
+            <p><strong>N° demande :</strong> ${id}</p>
+            <p><strong>Date :</strong> ${demande.date || new Date().toLocaleString()}</p>
             <hr>
             <h3>Véhicule</h3>
-            <p>Immatriculation: ${demande.immatriculation || ''}</p>
-            <p>Marque: ${demande.marque || ''} - Modèle: ${demande.modele || ''} - Km: ${demande.kilometrage || ''}</p>
+            <p>Immatriculation : ${demande.immatriculation || ''}</p>
+            <p>Marque : ${demande.marque || ''}  Modèle : ${demande.modele || ''}  Km : ${demande.kilometrage || ''}</p>
             <h3>Client</h3>
-            <p>Nom: ${demande.nom || ''} - Email: ${demande.email || ''} - Tél: ${demande.telephone || ''}</p>
+            <p>Nom : ${demande.nom || ''}  Email : ${demande.email || ''}  Tél : ${demande.telephone || ''}</p>
             <h3>Panne</h3>
             <p>${demande.description || ''}</p>
-            <p>Urgence: ${demande.urgence || ''} - Lieu: ${demande.lieu || ''}</p>
-            ${demande.dateRdv ? `<p>RDV: ${demande.dateRdv} ${demande.heureRdv || ''}</p>` : ''}
-            <p>Diagnostic IA: ${demande.diagnosticIA || ''}</p>
+            <p>Urgence : ${demande.urgence || ''}  Lieu : ${demande.lieu || ''}</p>
+            ${demande.dateRdv ? `<p>RDV : ${demande.dateRdv} ${demande.heureRdv || ''}</p>` : ''}
+            <p>Diagnostic IA : ${demande.diagnosticIA || ''}</p>
             <hr>
-            <p style="margin-top:40px;">À remplir par l'atelier:</p>
-            <p>Diagnostic final: ___________</p>
-            <p>Montant: ___________ Frcfa</p>
+            <p style="margin-top:40px;">À remplir par l'atelier :</p>
+            <p>Diagnostic final : ___________</p>
+            <p>Montant estimé : ___________Frcfa </p>
         </div>`;
     document.getElementById('pdfModal').style.display = 'flex';
     document.getElementById('btnGenererPDF').onclick = () => {
@@ -418,7 +476,6 @@ function genererPDF(demande, id) {
         document.getElementById('pdfModal').style.display = 'none';
     };
 }
-
 function chargerDemandes() {
     if(unsubscribeDashboard) unsubscribeDashboard();
     unsubscribeDashboard = db.collection('demandes').orderBy('dateTimestamp', 'desc').onSnapshot(snap => {
@@ -426,7 +483,8 @@ function chargerDemandes() {
         let totalSat = 0, nbSat = 0;
         snap.docChanges().forEach(change => {
             if(change.type === 'added') {
-                ajouterNotificationInApp("Nouvelle demande", `De ${change.doc.data().nom || 'client'} - ${change.doc.data().immatriculation || ''}`, "nouvelle");
+                const data = change.doc.data();
+                ajouterNotif("Nouvelle demande", `${data.nom || 'Client'} - ${data.immatriculation || ''}`, "nouvelle");
             }
         });
         snap.forEach(doc => {
@@ -463,14 +521,16 @@ function chargerDemandes() {
                 </div>
             </div>
         `).join('');
+        // Attacher événements
         document.querySelectorAll('.status-select').forEach(sel => sel.addEventListener('change', e => updateStatus(sel.dataset.id, parseInt(e.target.value))));
         document.querySelectorAll('.btn-pdf').forEach(btn => btn.addEventListener('click', () => genererPDF(JSON.parse(btn.dataset.json), btn.dataset.id)));
         document.querySelectorAll('.btn-supprimer').forEach(btn => btn.addEventListener('click', () => deleteDemande(btn.dataset.id)));
-        demandes.forEach(d => { if(!d.lu) db.collection('demandes').doc(d.id).update({ lu: true }); });
+        // Marquer comme lues
+        filtered.forEach(d => { if(!d.lu) db.collection('demandes').doc(d.id).update({ lu: true }); });
     });
 }
 
-// ==================== Navigation ====================
+// Navigation
 function afficherClient() {
     document.getElementById('clientScreen').style.display = 'block';
     document.getElementById('dashboardScreen').style.display = 'none';
@@ -478,7 +538,8 @@ function afficherClient() {
     genererQRCode();
 }
 function afficherDashboard() {
-    if(prompt("Mot de passe réception:") !== MOT_DE_PASSE) return alert("Mot de passe incorrect");
+    const pwd = prompt("Mot de passe réception :");
+    if(pwd !== MOT_DE_PASSE) { alert("Mot de passe incorrect"); return; }
     document.getElementById('clientScreen').style.display = 'none';
     document.getElementById('dashboardScreen').style.display = 'block';
     chargerDemandes();
@@ -487,10 +548,14 @@ document.getElementById('btnAllerDashboard')?.addEventListener('click', afficher
 document.getElementById('btnQuitterDashboard')?.addEventListener('click', afficherClient);
 window.onclick = e => { if(e.target === document.getElementById('pdfModal')) document.getElementById('pdfModal').style.display = 'none'; };
 
+// Date min pour RDV
+const today = new Date().toISOString().split('T')[0];
+if(document.getElementById('dateRdv')) document.getElementById('dateRdv').min = today;
+
 // Initialisation
 genererQRCode();
 afficherClient();
-console.log("✅ Application optimisée prête");
+console.log("✅ Application prête - Notifications fonctionnelles (système + in-app)");
 </script>
 </body>
 </html>
