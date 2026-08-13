@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>UMG Tech Wiki Pro - Flash mémoire</title>
+    <meta name="theme-color" content="#0f172a">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: #f1f5f9;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .logo { text-align: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid #e2e8f0; }
+        .logo h1 { font-size: 22px; font-weight: 600; color: #0f172a; }
+        .logo p { font-size: 12px; color: #64748b; margin-top: 4px; }
+        
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin: 16px 0;
+        }
+        .search-bar input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 40px;
+            font-size: 14px;
+        }
+        .search-bar input:focus { outline: none; border-color: #0f172a; }
+        .btn-primary {
+            background: #0f172a;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 40px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .btn-primary:hover { background: #1e293b; }
+        .btn-secondary {
+            background: white;
+            border: 1px solid #e2e8f0;
+            padding: 8px 16px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #475569;
+        }
+        .btn-secondary:hover { background: #f8fafc; }
+        .btn-danger { color: #ef4444; border-color: #ef4444; }
+        .btn-danger:hover { background: #fef2f2; }
+        
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .filters {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 12px 0 20px 0;
+        }
+        .filter-btn {
+            padding: 6px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 40px;
+            background: white;
+            cursor: pointer;
+            font-size: 12px;
+            color: #475569;
+        }
+        .filter-btn.active {
+            background: #0f172a;
+            color: white;
+            border-color: #0f172a;
+        }
+        
+        .fiche {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 18px;
+            margin-bottom: 16px;
+            border: 1px solid #e2e8f0;
+        }
+        .fiche h3 { color: #0f172a; margin-bottom: 4px; font-size: 16px; }
+        .fiche .modele { font-size: 13px; color: #64748b; margin-bottom: 6px; }
+        .fiche .panne { font-weight: 500; color: #0f172a; }
+        .fiche .astuce { font-size: 13px; color: #475569; margin-top: 6px; background: #e2e8f0; padding: 8px 12px; border-radius: 12px; }
+        .fiche .temps { font-size: 12px; color: #64748b; margin-top: 6px; }
+        .fiche .media-preview { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; }
+        .fiche .media-preview img, .fiche .media-preview video { max-width: 80px; max-height: 80px; border-radius: 12px; object-fit: cover; border: 1px solid #e2e8f0; }
+        .fiche .tag { display: inline-block; padding: 2px 10px; border-radius: 30px; font-size: 10px; font-weight: 500; margin-right: 6px; margin-top: 6px; }
+        .tag-moteur { background: #dbeafe; color: #1e40af; }
+        .tag-electrique { background: #fef3c7; color: #92400e; }
+        .tag-carrosserie { background: #fce4ec; color: #b71c1c; }
+        .tag-frein { background: #e0f2fe; color: #0369a1; }
+        .tag-clim { background: #d1fae5; color: #065f46; }
+        
+        .historique {
+            margin-top: 8px;
+            font-size: 11px;
+            color: #94a3b8;
+            cursor: pointer;
+        }
+        .historique-detail {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 8px 12px;
+            margin-top: 6px;
+            font-size: 12px;
+            color: #475569;
+            display: none;
+        }
+        .historique-detail.show { display: block; }
+        
+        .empty-state { text-align: center; padding: 40px; color: #94a3b8; }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            padding: 24px;
+            border-radius: 24px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .modal-content input, .modal-content textarea, .modal-content select {
+            width: 100%;
+            padding: 12px;
+            margin: 6px 0;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+        .modal-content textarea { min-height: 80px; }
+        .modal-content .media-upload {
+            border: 2px dashed #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            margin: 10px 0;
+            cursor: pointer;
+            color: #64748b;
+        }
+        .modal-content .media-upload:hover { border-color: #0f172a; }
+        .modal-content .media-preview-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .modal-content .media-preview-grid img, .modal-content .media-preview-grid video {
+            max-width: 80px;
+            max-height: 80px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 1px solid #e2e8f0;
+        }
+        .modal-content .media-preview-grid .remove-media {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .modal-content .media-item { position: relative; }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #0f172a;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 40px;
+            font-size: 13px;
+            display: none;
+            z-index: 1000;
+        }
+        
+        @media (max-width: 560px) {
+            body { padding: 16px; }
+            .container { padding: 20px; }
+            .search-bar { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="logo">
+        <h1>🔧 UMG TECH WIKI PRO</h1>
+        <p>Flash mémoire · CHANGAN · MG · JETOUR</p>
+    </div>
+
+    <div class="header-actions">
+        <div class="search-bar" style="flex:1; margin:0;">
+            <input type="text" id="searchInput" placeholder="Rechercher une panne, modèle, mot-clé...">
+            <button id="btnSearch" class="btn-primary">🔍</button>
+        </div>
+        <button id="btnAjouter" class="btn-secondary">➕ Ajouter</button>
+        <button id="btnQRCode" class="btn-secondary">📱 QR Code</button>
+    </div>
+
+    <div class="filters" id="filterContainer">
+        <button class="filter-btn active" data-filter="toutes">📋 Toutes</button>
+        <button class="filter-btn" data-filter="moteur">🔧 Moteur</button>
+        <button class="filter-btn" data-filter="electrique">⚡ Électrique</button>
+        <button class="filter-btn" data-filter="frein">🛑 Frein</button>
+        <button class="filter-btn" data-filter="clim">❄️ Clim</button>
+        <button class="filter-btn" data-filter="carrosserie">🚗 Carrosserie</button>
+    </div>
+
+    <div id="fichesContainer">
+        <!-- Les fiches s'affichent ici -->
+    </div>
+
+    <div style="margin-top: 24px; text-align: center; font-size: 11px; color: #94a3b8;">
+        💡 Données stockées localement · Consultation hors ligne possible
+    </div>
+</div>
+
+<!-- MODAL AJOUT / MODIFICATION -->
+<div id="ficheModal" class="modal">
+    <div class="modal-content">
+        <h3 id="modalTitle">Ajouter une fiche</h3>
+        <input type="text" id="editModele" placeholder="Modèle (ex: CHANGAN CS35, MG ZS, JETOUR X70)">
+        <input type="text" id="editPanne" placeholder="Type de panne (ex: Bruit moteur, Voyant ABS)">
+        <input type="text" id="editTemps" placeholder="Temps indicatif (ex: 2h30)">
+        <textarea id="editAstuce" placeholder="Astuce / procédure..."></textarea>
+        <select id="editCategorie">
+            <option value="moteur">🔧 Moteur</option>
+            <option value="electrique">⚡ Électrique</option>
+            <option value="frein">🛑 Frein</option>
+            <option value="clim">❄️ Clim</option>
+            <option value="carrosserie">🚗 Carrosserie</option>
+        </select>
+        <input type="text" id="editMotsCles" placeholder="Mots-clés (séparés par des virgules)">
+        
+        <div class="section-title" style="margin-top:16px;">📸 Photos / Vidéos</div>
+        <div class="media-upload" id="mediaUploadZone">📤 Cliquez pour ajouter des photos ou vidéos</div>
+        <input type="file" id="mediaFileInput" accept="image/*,video/*" multiple style="display:none">
+        <div class="media-preview-grid" id="mediaPreviewGrid"></div>
+        
+        <div style="display: flex; gap: 10px; margin-top: 16px;">
+            <button id="btnSaveFiche" class="btn-primary" style="flex:1;">💾 Enregistrer</button>
+            <button id="btnCancelFiche" class="btn-secondary">Annuler</button>
+        </div>
+        <button id="btnDeleteFiche" class="btn-secondary btn-danger" style="margin-top: 10px; width:100%;">🗑 Supprimer cette fiche</button>
+    </div>
+</div>
+
+<!-- MODAL QR CODE -->
+<div id="qrModal" class="modal">
+    <div class="modal-content" style="text-align:center;">
+        <h3>📱 QR Code par pièce</h3>
+        <p style="color:#64748b; font-size:13px; margin:8px 0;">Scannez ce code pour accéder à la fiche</p>
+        <div id="qrCodeDisplay" style="margin:20px auto; display:inline-block; padding:16px; background:white; border-radius:16px; border:1px solid #e2e8f0;"></div>
+        <div style="margin-top:12px;">
+            <select id="qrFicheSelect" style="padding:10px; border-radius:12px; border:1px solid #e2e8f0; width:100%;">
+                <option value="">-- Sélectionner une fiche --</option>
+            </select>
+        </div>
+        <button id="btnCopierLienQR" class="btn-secondary" style="margin-top:10px;">📋 Copier le lien</button>
+        <button id="btnImprimerQR" class="btn-secondary" style="margin-top:10px;">🖨️ Imprimer QR Code</button>
+        <button onclick="document.getElementById('qrModal').style.display='none'" class="btn-secondary" style="margin-top:10px;">Fermer</button>
+        <div style="margin-top:16px; font-size:12px; color:#94a3b8; text-align:left;">
+            <p>📌 <strong>Comment utiliser le QR Code :</strong></p>
+            <p>1. Imprimez le QR Code</p>
+            <p>2. Collez-le sur la pièce ou à côté du véhicule</p>
+            <p>3. Scannez avec un téléphone → la fiche s'ouvre directement</p>
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+    // ==================== GESTION DES DONNÉES ====================
+    const STORAGE_KEY = 'umg_tech_wiki_pro';
+    let fiches = [];
+    let currentEditId = null;
+    let currentFilter = 'toutes';
+    let searchQuery = '';
+    let mediaFiles = []; // pour stocker les fichiers temporaires
+
+    // Données de démonstration
+    const DEMO_FICHES = [
+        {
+            id: 'demo1',
+            modele: 'CHANGAN CS35',
+            panne: 'Bruit de courroie au démarrage',
+            temps: '1h30',
+            astuce: 'Vérifier la courroie d\'accessoire. Si usée, remplacer. Contrôler également le galet tendeur.',
+            categorie: 'moteur',
+            motsCles: 'bruit courroie demarrage accessoire',
+            media: [],
+            historique: [{ date: new Date().toISOString(), action: 'Création' }]
+        },
+        {
+            id: 'demo2',
+            modele: 'MG ZS EV',
+            panne: 'Voyant batterie allumé',
+            temps: '0h45',
+            astuce: 'Vérifier la charge de la batterie 12V. Si OK, contrôler le convertisseur DC/DC.',
+            categorie: 'electrique',
+            motsCles: 'voyant batterie electrique charge',
+            media: [],
+            historique: [{ date: new Date().toISOString(), action: 'Création' }]
+        },
+        {
+            id: 'demo3',
+            modele: 'JETOUR X70',
+            panne: 'Climatisation faible',
+            temps: '1h00',
+            astuce: 'Contrôler le niveau de gaz. Vérifier également le compresseur et les durites.',
+            categorie: 'clim',
+            motsCles: 'climatisation faible gaz compresseur',
+            media: [],
+            historique: [{ date: new Date().toISOString(), action: 'Création' }]
+        }
+    ];
+
+    function chargerFiches() {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+            try {
+                fiches = JSON.parse(stored);
+                if (fiches.length === 0) { fiches = DEMO_FICHES; sauvegarderFiches(); }
+            } catch(e) { fiches = DEMO_FICHES; sauvegarderFiches(); }
+        } else { fiches = DEMO_FICHES; sauvegarderFiches(); }
+        afficherFiches();
+        remplirSelectQR();
+    }
+
+    function sauvegarderFiches() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(fiches));
+        remplirSelectQR();
+    }
+
+    // ==================== AFFICHAGE ====================
+    function afficherFiches() {
+        const container = document.getElementById('fichesContainer');
+        let filtered = [...fiches];
+
+        if (currentFilter !== 'toutes') {
+            filtered = filtered.filter(f => f.categorie === currentFilter);
+        }
+
+        if (searchQuery.trim()) {
+            const q = searchQuery.toLowerCase().trim();
+            filtered = filtered.filter(f => {
+                const searchable = (f.modele + ' ' + f.panne + ' ' + f.astuce + ' ' + f.motsCles + ' ' + f.categorie).toLowerCase();
+                return searchable.includes(q);
+            });
+        }
+
+        if (filtered.length === 0) {
+            container.innerHTML = `<div class="empty-state"><p style="font-size:40px;">🔍</p><p>Aucune fiche trouvée</p></div>`;
+            return;
+        }
+
+        container.innerHTML = filtered.map(f => `
+            <div class="fiche" data-id="${f.id}">
+                <h3>${f.modele}</h3>
+                <div class="panne">📌 ${f.panne}</div>
+                ${f.astuce ? `<div class="astuce">💡 ${f.astuce}</div>` : ''}
+                ${f.temps ? `<div class="temps">⏱️ Temps indicatif : ${f.temps}</div>` : ''}
+                ${f.media && f.media.length > 0 ? `<div class="media-preview">${f.media.slice(0,4).map(m => 
+                    m.type.startsWith('image/') ? `<img src="${m.data}" alt="photo">` : `<video src="${m.data}" muted></video>`
+                ).join('')}${f.media.length > 4 ? `<span style="font-size:12px;color:#64748b;">+${f.media.length-4}</span>` : ''}</div>` : ''}
+                <div style="margin-top:8px;">
+                    <span class="tag tag-${f.categorie}">${f.categorie}</span>
+                    <span class="historique" onclick="toggleHistorique('${f.id}')">📜 Historique (${f.historique?.length || 0})</span>
+                </div>
+                <div id="historique-${f.id}" class="historique-detail">
+                    ${f.historique?.map(h => `<div>${new Date(h.date).toLocaleString()} : ${h.action}</div>`).join('') || 'Aucun historique'}
+                </div>
+                <button class="btn-secondary" style="margin-top:10px; font-size:11px; padding:4px 12px;" onclick="ouvrirEdition('${f.id}')">✏️ Modifier</button>
+                <button class="btn-secondary" style="margin-top:10px; font-size:11px; padding:4px 12px; color:#4f46e5;" onclick="genererQRCodeFiche('${f.id}')">📱 QR Code</button>
+            </div>
+        `).join('');
+    }
+
+    function toggleHistorique(id) {
+        const el = document.getElementById('historique-' + id);
+        if (el) el.classList.toggle('show');
+    }
+
+    // ==================== RECHERCHE ET FILTRES ====================
+    document.getElementById('btnSearch').addEventListener('click', () => {
+        searchQuery = document.getElementById('searchInput').value;
+        afficherFiches();
+    });
+    document.getElementById('searchInput').addEventListener('keyup', (e) => {
+        if (e.key === 'Enter') { searchQuery = e.target.value; afficherFiches(); }
+    });
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentFilter = this.dataset.filter;
+            afficherFiches();
+        });
+    });
+
+    // ==================== GESTION DES MÉDIAS ====================
+    const mediaUploadZone = document.getElementById('mediaUploadZone');
+    const mediaFileInput = document.getElementById('mediaFileInput');
+    const mediaPreviewGrid = document.getElementById('mediaPreviewGrid');
+
+    mediaUploadZone.addEventListener('click', () => mediaFileInput.click());
+    mediaFileInput.addEventListener('change', (e) => {
+        const files = e.target.files;
+        for (let file of files) {
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                mediaFiles.push({ data: ev.target.result, type: file.type, name: file.name });
+                afficherMediaPreview();
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    function afficherMediaPreview() {
+        mediaPreviewGrid.innerHTML = mediaFiles.map((m, i) => `
+            <div class="media-item">
+                ${m.type.startsWith('image/') ? `<img src="${m.data}">` : `<video src="${m.data}" muted></video>`}
+                <button class="remove-media" onclick="supprimerMedia(${i})">×</button>
+            </div>
+        `).join('');
+    }
+
+    function supprimerMedia(index) {
+        mediaFiles.splice(index, 1);
+        afficherMediaPreview();
+    }
+
+    // ==================== MODAL ====================
+    const modal = document.getElementById('ficheModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const editModele = document.getElementById('editModele');
+    const editPanne = document.getElementById('editPanne');
+    const editTemps = document.getElementById('editTemps');
+    const editAstuce = document.getElementById('editAstuce');
+    const editCategorie = document.getElementById('editCategorie');
+    const editMotsCles = document.getElementById('editMotsCles');
+    const btnSave = document.getElementById('btnSaveFiche');
+    const btnCancel = document.getElementById('btnCancelFiche');
+    const btnDelete = document.getElementById('btnDeleteFiche');
+
+    function ouvrirEdition(id) {
+        mediaFiles = [];
+        mediaPreviewGrid.innerHTML = '';
+        
+        if (id === 'nouvelle') {
+            currentEditId = null;
+            modalTitle.textContent = 'Ajouter une fiche';
+            editModele.value = '';
+            editPanne.value = '';
+            editTemps.value = '';
+            editAstuce.value = '';
+            editCategorie.value = 'moteur';
+            editMotsCles.value = '';
+            btnDelete.style.display = 'none';
+        } else {
+            const fiche = fiches.find(f => f.id === id);
+            if (!fiche) return;
+            currentEditId = id;
+            modalTitle.textContent = 'Modifier la fiche';
+            editModele.value = fiche.modele || '';
+            editPanne.value = fiche.panne || '';
+            editTemps.value = fiche.temps || '';
+            editAstuce.value = fiche.astuce || '';
+            editCategorie.value = fiche.categorie || 'moteur';
+            editMotsCles.value = fiche.motsCles || '';
+            if (fiche.media) {
+                mediaFiles = [...fiche.media];
+                afficherMediaPreview();
+            }
+            btnDelete.style.display = 'block';
+        }
+        modal.style.display = 'flex';
+    }
+
+    function fermerModal() {
+        modal.style.display = 'none';
+        currentEditId = null;
+        mediaFiles = [];
+        mediaPreviewGrid.innerHTML = '';
+    }
+
+    btnCancel.addEventListener('click', fermerModal);
+    window.addEventListener('click', (e) => { if (e.target === modal) fermerModal(); });
+
+    btnSave.addEventListener('click', () => {
+        const modele = editModele.value.trim();
+        const panne = editPanne.value.trim();
+        if (!modele || !panne) { toast('⚠️ Modèle et panne sont requis'); return; }
+
+        const fiche = {
+            id: currentEditId || 'fiche_' + Date.now(),
+            modele, panne,
+            temps: editTemps.value.trim(),
+            astuce: editAstuce.value.trim(),
+            categorie: editCategorie.value,
+            motsCles: editMotsCles.value.trim(),
+            media: mediaFiles,
+            historique: []
+        };
+
+        if (currentEditId) {
+            const index = fiches.findIndex(f => f.id === currentEditId);
+            if (index !== -1) {
+                fiche.historique = [...(fiches[index].historique || [])];
+                fiche.historique.push({ date: new Date().toISOString(), action: 'Modification' });
+                fiches[index] = fiche;
+            }
+        } else {
+            fiche.historique = [{ date: new Date().toISOString(), action: 'Création' }];
+            fiches.push(fiche);
+        }
+
+        sauvegarderFiches();
+        afficherFiches();
+        fermerModal();
+        toast(currentEditId ? '✅ Fiche mise à jour' : '✅ Fiche ajoutée');
+    });
+
+    btnDelete.addEventListener('click', () => {
+        if (!currentEditId) return;
+        if (confirm('Supprimer cette fiche définitivement ?')) {
+            fiches = fiches.filter(f => f.id !== currentEditId);
+            sauvegarderFiches();
+            afficherFiches();
+            fermerModal();
+            toast('🗑 Fiche supprimée');
+        }
+    });
+
+    document.getElementById('btnAjouter').addEventListener('click', () => ouvrirEdition('nouvelle'));
+
+    // ==================== QR CODE PAR PIÈCE ====================
+    function genererQRCodeFiche(ficheId) {
+        const fiche = fiches.find(f => f.id === ficheId);
+        if (!fiche) return;
+        const url = window.location.href + '?fiche=' + ficheId;
+        const qrDiv = document.getElementById('qrCodeDisplay');
+        qrDiv.innerHTML = '';
+        if (typeof QRCode !== 'undefined') {
+            new QRCode(qrDiv, { text: url, width: 200, height: 200, colorDark: "#0f172a" });
+        } else {
+            qrDiv.innerHTML = '<p style="color:#64748b;">QR Code non disponible</p>';
+        }
+        document.getElementById('qrModal').style.display = 'flex';
+        // Pré-sélectionner la fiche dans le select
+        const select = document.getElementById('qrFicheSelect');
+        select.value = ficheId;
+    }
+
+    function remplirSelectQR() {
+        const select = document.getElementById('qrFicheSelect');
+        select.innerHTML = '<option value="">-- Sélectionner une fiche --</option>';
+        fiches.forEach(f => {
+            const opt = document.createElement('option');
+            opt.value = f.id;
+            opt.textContent = f.modele + ' - ' + f.panne;
+            select.appendChild(opt);
+        });
+    }
+
+    document.getElementById('qrFicheSelect').addEventListener('change', function() {
+        if (this.value) genererQRCodeFiche(this.value);
+    });
+
+    document.getElementById('btnQRCode').addEventListener('click', () => {
+        document.getElementById('qrModal').style.display = 'flex';
+        const select = document.getElementById('qrFicheSelect');
+        if (select.options.length > 1) select.selectedIndex = 1;
+        select.dispatchEvent(new Event('change'));
+    });
+
+    document.getElementById('btnCopierLienQR').addEventListener('click', () => {
+        const ficheId = document.getElementById('qrFicheSelect').value;
+        if (!ficheId) { toast('Sélectionnez une fiche'); return; }
+        const url = window.location.href + '?fiche=' + ficheId;
+        navigator.clipboard.writeText(url);
+        toast('📋 Lien copié');
+    });
+
+    document.getElementById('btnImprimerQR').addEventListener('click', () => {
+        const qrDiv = document.getElementById('qrCodeDisplay');
+        const win = window.open('');
+        win.document.write(`
+            <html><head><title>QR Code UMG</title></head>
+            <body style="display:flex;justify-content:center;align-items:center;height:100vh;flex-direction:column;font-family:sans-serif;text-align:center;">
+                <h2>UNITED MOTORS GARAGE</h2>
+                <h3>${document.getElementById('qrFicheSelect').selectedOptions[0]?.text || ''}</h3>
+                <div style="margin:20px;">${qrDiv.innerHTML}</div>
+                <p>${window.location.href + '?fiche=' + document.getElementById('qrFicheSelect').value}</p>
+                <script>window.print();<\/script>
+            </body></html>
+        `);
+        win.document.close();
+    });
+
+    // Vérifier si une fiche est demandée dans l'URL
+    function checkFicheInUrl() {
+        const params = new URLSearchParams(window.location.search);
+        const ficheId = params.get('fiche');
+        if (ficheId) {
+            const fiche = fiches.find(f => f.id === ficheId);
+            if (fiche) {
+                // Afficher un toast ou ouvrir directement la fiche
+                setTimeout(() => {
+                    toast('🔍 Fiche : ' + fiche.modele + ' - ' + fiche.panne);
+                    // Scroll vers la fiche
+                    const ficheEl = document.querySelector(`.fiche[data-id="${ficheId}"]`);
+                    if (ficheEl) ficheEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 500);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // ==================== TOAST ====================
+    function toast(msg) {
+        const el = document.getElementById('toast');
+        el.textContent = msg;
+        el.style.display = 'block';
+        setTimeout(() => el.style.display = 'none', 3000);
+    }
+
+    // ==================== EXPORT / IMPORT ====================
+    function exporterDonnees() {
+        const data = JSON.stringify(fiches, null, 2);
+        const blob = new Blob([data], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'umg_tech_wiki_backup.json';
+        a.click();
+        URL.revokeObjectURL(url);
+        toast('📦 Export terminé');
+    }
+
+    function importerDonnees() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                try {
+                    const data = JSON.parse(ev.target.result);
+                    if (Array.isArray(data)) {
+                        fiches = data;
+                        sauvegarderFiches();
+                        afficherFiches();
+                        toast('✅ Import réussi');
+                    } else {
+                        toast('❌ Fichier invalide');
+                    }
+                } catch(err) {
+                    toast('❌ Erreur de lecture');
+                }
+            };
+            reader.readAsText(file);
+        };
+        input.click();
+    }
+
+    // Ajout des boutons d'export/import
+    document.addEventListener('DOMContentLoaded', () => {
+        const actionsDiv = document.querySelector('.header-actions');
+        const exportBtn = document.createElement('button');
+        exportBtn.className = 'btn-secondary';
+        exportBtn.textContent = '📤 Exporter';
+        exportBtn.onclick = exporterDonnees;
+
+        const importBtn = document.createElement('button');
+        importBtn.className = 'btn-secondary';
+        importBtn.textContent = '📥 Importer';
+        importBtn.onclick = importerDonnees;
+
+        actionsDiv.appendChild(exportBtn);
+        actionsDiv.appendChild(importBtn);
+
+        chargerFiches();
+        setTimeout(checkFicheInUrl, 1000);
+    });
+
+    console.log('✅ UMG Tech Wiki Pro - Application prête');
+    console.log('📦 Données stockées localement dans le navigateur');
+</script>
+</body>
+</html>
