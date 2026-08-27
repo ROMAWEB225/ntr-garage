@@ -549,7 +549,7 @@
         <div class="logo">
             <h1>🚗 ASSIST-GARAGE</h1>
             <div class="subtitle">RÉPARATION · ENTRETIEN · DÉPANNAGE</div>
-            <span class="badge-free">📱 VERSION PRO</span>
+            <span class="badge-free">📱 Version Publique</span>
         </div>
 
         <!-- ============================================================
@@ -778,7 +778,7 @@
 <script>
 (function() {
     // ============================================================
-    // SMARTLINK CONFIGURATION - ✅ LIEN INTÉGRÉ
+    // SMARTLINK CONFIGURATION
     // ============================================================
     const SMARTLINK_URL = "https://www.profitableratecpmnetwork.com/qhantf3pr7?key=c2d00db54c4c00e25dc147164ecb4737";
 
@@ -1213,7 +1213,7 @@
     }
 
     // ============================================================
-    // ENVOI DEMANDE
+    // ENVOI DEMANDE - Version avec champ "supprime"
     // ============================================================
     function showMessage(msg, isSuccess) {
         const msgDiv = document.getElementById('message');
@@ -1269,7 +1269,8 @@
                 lu: false,
                 statut: 0,
                 diagnosticIA: analyserPanne(description),
-                numeroDemande: numeroDemande
+                numeroDemande: numeroDemande,
+                supprime: false  // ✅ AJOUT : champ pour gérer la suppression
             };
 
             try {
@@ -1303,6 +1304,32 @@
     }
 
     // ============================================================
+    // SUPPRESSION DÉFINITIVE - Version corrigée ✅
+    // ============================================================
+    async function deleteDemande(demandeId) {
+        if (!confirm('🗑️ Supprimer définitivement cette demande ?')) return;
+        
+        try {
+            // 1. Supprimer le document de Firebase
+            await db.collection('demandes').doc(demandeId).delete();
+            afficherToast('✅ Demande supprimée définitivement');
+            
+            // 2. Forcer un rafraîchissement de l'affichage
+            setTimeout(function() {
+                if (unsubscribeDashboard) {
+                    unsubscribeDashboard();
+                    unsubscribeDashboard = null;
+                }
+                chargerDemandesRealtime();
+            }, 500);
+            
+        } catch(error) {
+            afficherToast('❌ Erreur: ' + error.message);
+            console.error("Erreur suppression:", error);
+        }
+    }
+
+    // ============================================================
     // SUIVI CLIENT
     // ============================================================
     function afficherSuiviClient(demandeId) {
@@ -1310,7 +1337,10 @@
 
         const numeroRecherche = demandeId.trim().toUpperCase();
 
-        const query = db.collection('demandes').where('numeroDemande', '==', numeroRecherche);
+        const query = db.collection('demandes')
+            .where('numeroDemande', '==', numeroRecherche)
+            .where('supprime', '==', false);  // ✅ Filtrer les demandes non supprimées
+
         trackingUnsubscribe = query.onSnapshot(function(snapshot) {
             const trackingError = document.getElementById('trackingError');
             const trackingInfo = document.getElementById('trackingInfo');
@@ -1320,7 +1350,12 @@
                 docRef.get().then(function(doc) {
                     if (doc.exists) {
                         const data = doc.data();
-                        afficherDetailsSuivi(data, doc.id);
+                        if (data.supprime) {
+                            if (trackingError) trackingError.innerHTML = '❌ Cette demande a été supprimée';
+                            if (trackingInfo) trackingInfo.style.display = 'none';
+                        } else {
+                            afficherDetailsSuivi(data, doc.id);
+                        }
                     } else {
                         if (trackingError) trackingError.innerHTML = '❌ Numéro de demande invalide';
                         if (trackingInfo) trackingInfo.style.display = 'none';
@@ -1403,7 +1438,7 @@
     }
 
     // ============================================================
-    // DASHBOARD ADMIN
+    // DASHBOARD ADMIN - Version avec filtrage des supprimées ✅
     // ============================================================
     async function updateStatus(demandeId, nouveauStatut) {
         const statusLabels = ['En attente', 'En réparation', 'Prête'];
@@ -1418,17 +1453,14 @@
         }
     }
 
-    async function deleteDemande(demandeId) {
-        if (confirm('🗑️ Supprimer cette demande ?')) {
-            await db.collection('demandes').doc(demandeId).delete();
-            afficherToast('🗑️ Demande supprimée');
-        }
-    }
-
     function chargerDemandesRealtime() {
-        if (unsubscribeDashboard) unsubscribeDashboard();
+        if (unsubscribeDashboard) {
+            unsubscribeDashboard();
+            unsubscribeDashboard = null;
+        }
 
         unsubscribeDashboard = db.collection('demandes')
+            .where('supprime', '==', false)  // ✅ Filtrer les demandes non supprimées
             .orderBy('dateTimestamp', 'desc')
             .onSnapshot(function(snapshot) {
                 let demandes = [];
@@ -1439,16 +1471,20 @@
                 snapshot.docChanges().forEach(function(change) {
                     if (change.type === 'added') {
                         const d = change.doc.data();
-                        nouvellesDemandes.push(d);
+                        if (!d.supprime) {
+                            nouvellesDemandes.push(d);
+                        }
                     }
                 });
 
                 snapshot.forEach(function(doc) {
                     const d = doc.data();
-                    demandes.push({ id: doc.id, ...d });
-                    if (d.satisfaction) {
-                        totalSat += d.satisfaction;
-                        nbSat++;
+                    if (!d.supprime) {
+                        demandes.push({ id: doc.id, ...d });
+                        if (d.satisfaction) {
+                            totalSat += d.satisfaction;
+                            nbSat++;
+                        }
                     }
                 });
 
@@ -1545,7 +1581,9 @@
 
                 filtered.forEach(function(d) {
                     if (!d.lu) {
-                        db.collection('demandes').doc(d.id).update({ lu: true });
+                        db.collection('demandes').doc(d.id).update({ lu: true }).catch(function(err) {
+                            console.log("Document déjà supprimé ou inaccessible :", d.id);
+                        });
                     }
                 });
             });
@@ -1613,6 +1651,7 @@
     console.log('🔐 Mot de passe réception : Ly@m101288');
     console.log('📋 Numéros de demande : format AG-2025-XXX');
     console.log('🔗 Smartlink configuré : ✅');
+    console.log('🗑️ Suppression définitive : activée');
     console.log('📱 Application prête à être utilisée !');
 })();
 </script>
