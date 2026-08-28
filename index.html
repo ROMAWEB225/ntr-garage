@@ -7,11 +7,7 @@
     <meta name="theme-color" content="#0f172a">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
             background: #f1f5f9;
@@ -26,22 +22,9 @@
             padding: 28px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
-        .logo {
-            text-align: center;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        .logo h1 {
-            font-size: 22px;
-            font-weight: 600;
-            color: #0f172a;
-        }
-        .logo .subtitle {
-            font-size: 12px;
-            color: #64748b;
-            margin-top: 4px;
-        }
+        .logo { text-align: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #e2e8f0; }
+        .logo h1 { font-size: 22px; font-weight: 600; color: #0f172a; }
+        .logo .subtitle { font-size: 12px; color: #64748b; margin-top: 4px; }
         .logo .badge-free {
             display: inline-block;
             background: #22c55e;
@@ -74,31 +57,12 @@
             border: none;
             transition: all 0.2s ease;
         }
-        .tab.active {
-            background: white;
-            color: #0f172a;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        .section-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: #0f172a;
-            margin: 20px 0 12px 0;
-        }
-        .section-title:first-of-type {
-            margin-top: 0;
-        }
-        .row-2cols {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
+        .tab.active { background: white; color: #0f172a; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .section-title { font-size: 14px; font-weight: 600; color: #0f172a; margin: 20px 0 12px 0; }
+        .section-title:first-of-type { margin-top: 0; }
+        .row-2cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         input, textarea, select {
             width: 100%;
             padding: 12px 14px;
@@ -115,11 +79,7 @@
             border-color: #0f172a;
             box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
         }
-        .btn-urgence {
-            display: flex;
-            gap: 10px;
-            margin: 12px 0;
-        }
+        .btn-urgence { display: flex; gap: 10px; margin: 12px 0; }
         .btn-urgence button {
             flex: 1;
             padding: 10px;
@@ -132,21 +92,9 @@
             font-size: 13px;
             transition: all 0.2s ease;
         }
-        .btn-urgence button:hover {
-            border-color: #0f172a;
-            background: #f8fafc;
-        }
-        .urgence-selected {
-            background: #0f172a !important;
-            color: white !important;
-            border-color: #0f172a !important;
-        }
-        .media-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin: 12px 0;
-        }
+        .btn-urgence button:hover { border-color: #0f172a; background: #f8fafc; }
+        .urgence-selected { background: #0f172a !important; color: white !important; border-color: #0f172a !important; }
+        .media-buttons { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
         .btn-media {
             flex: 1;
             background: white;
@@ -159,10 +107,7 @@
             color: #475569;
             transition: all 0.2s ease;
         }
-        .btn-media:hover {
-            border-color: #0f172a;
-            background: #f8fafc;
-        }
+        .btn-media:hover { border-color: #0f172a; background: #f8fafc; }
         .preview-media {
             background: #f8fafc;
             border-radius: 16px;
@@ -170,11 +115,7 @@
             margin: 12px 0;
             display: none;
         }
-        .preview-media img, .preview-media video {
-            max-width: 100%;
-            border-radius: 12px;
-            max-height: 160px;
-        }
+        .preview-media img, .preview-media video { max-width: 100%; border-radius: 12px; max-height: 160px; }
         .btn-primary {
             background: #0f172a;
             color: white;
@@ -188,9 +129,7 @@
             margin-top: 16px;
             transition: background 0.2s ease;
         }
-        .btn-primary:hover {
-            background: #1e293b;
-        }
+        .btn-primary:hover { background: #1e293b; }
         .btn-secondary {
             background: white;
             border: 1px solid #e2e8f0;
@@ -201,10 +140,7 @@
             color: #475569;
             transition: all 0.2s ease;
         }
-        .btn-secondary:hover {
-            background: #f8fafc;
-            border-color: #0f172a;
-        }
+        .btn-secondary:hover { background: #f8fafc; border-color: #0f172a; }
         .qr-section {
             background: #f8fafc;
             border-radius: 20px;
@@ -212,40 +148,17 @@
             text-align: center;
             margin: 20px 0;
         }
-        .qr-code {
-            display: inline-block;
-            padding: 12px;
-            background: white;
-            border-radius: 16px;
-        }
+        .qr-code { display: inline-block; padding: 12px; background: white; border-radius: 16px; }
         .stats {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 12px;
             margin-bottom: 24px;
         }
-        .stat-card {
-            background: #f8fafc;
-            padding: 16px;
-            border-radius: 20px;
-            text-align: center;
-        }
-        .stat-number {
-            font-size: 28px;
-            font-weight: 700;
-            color: #0f172a;
-        }
-        .stat-label {
-            font-size: 12px;
-            color: #64748b;
-            margin-top: 4px;
-        }
-        .filtres {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
+        .stat-card { background: #f8fafc; padding: 16px; border-radius: 20px; text-align: center; }
+        .stat-number { font-size: 28px; font-weight: 700; color: #0f172a; }
+        .stat-label { font-size: 12px; color: #64748b; margin-top: 4px; }
+        .filtres { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
         .filtre-btn {
             padding: 6px 14px;
             border: 1px solid #e2e8f0;
@@ -256,11 +169,7 @@
             color: #475569;
             transition: all 0.2s ease;
         }
-        .filtre-btn.active {
-            background: #0f172a;
-            color: white;
-            border-color: #0f172a;
-        }
+        .filtre-btn.active { background: #0f172a; color: white; border-color: #0f172a; }
         .demande {
             background: white;
             border: 1px solid #e2e8f0;
@@ -269,15 +178,9 @@
             margin-bottom: 14px;
             position: relative;
         }
-        .demande.haute {
-            border-left: 3px solid #ef4444;
-        }
-        .demande.moyenne {
-            border-left: 3px solid #f59e0b;
-        }
-        .demande.basse {
-            border-left: 3px solid #22c55e;
-        }
+        .demande.haute { border-left: 3px solid #ef4444; }
+        .demande.moyenne { border-left: 3px solid #f59e0b; }
+        .demande.basse { border-left: 3px solid #22c55e; }
         .badge-urgence {
             display: inline-block;
             padding: 2px 10px;
@@ -286,58 +189,16 @@
             font-weight: 600;
             margin-bottom: 10px;
         }
-        .badge-urgence.haute {
-            background: #fef2f2;
-            color: #ef4444;
-        }
-        .badge-urgence.moyenne {
-            background: #fffbeb;
-            color: #f59e0b;
-        }
-        .badge-urgence.basse {
-            background: #f0fdf4;
-            color: #22c55e;
-        }
-        .status-select {
-            padding: 6px 12px;
-            border-radius: 40px;
-            border: 1px solid #e2e8f0;
-            font-size: 12px;
-            background: white;
-            cursor: pointer;
-        }
-        .btn-action {
-            background: #f1f5f9;
-            border: none;
-            padding: 6px 14px;
-            border-radius: 30px;
-            font-size: 12px;
-            cursor: pointer;
-            color: #475569;
-            transition: background 0.2s ease;
-        }
-        .btn-action:hover {
-            background: #e2e8f0;
-        }
-        .actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 12px;
-            align-items: center;
-        }
-        .status-step {
-            display: flex;
-            align-items: center;
-            margin: 20px 0;
-            opacity: 0.4;
-        }
-        .status-step.active {
-            opacity: 1;
-        }
-        .status-step.completed {
-            opacity: 1;
-        }
+        .badge-urgence.haute { background: #fef2f2; color: #ef4444; }
+        .badge-urgence.moyenne { background: #fffbeb; color: #f59e0b; }
+        .badge-urgence.basse { background: #f0fdf4; color: #22c55e; }
+        .status-select { padding: 6px 12px; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 12px; background: white; cursor: pointer; }
+        .btn-action { background: #f1f5f9; border: none; padding: 6px 14px; border-radius: 30px; font-size: 12px; cursor: pointer; color: #475569; transition: background 0.2s ease; }
+        .btn-action:hover { background: #e2e8f0; }
+        .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center; }
+        .status-step { display: flex; align-items: center; margin: 20px 0; opacity: 0.4; }
+        .status-step.active { opacity: 1; }
+        .status-step.completed { opacity: 1; }
         .status-icon {
             width: 48px;
             height: 48px;
@@ -350,34 +211,11 @@
             margin-right: 16px;
             flex-shrink: 0;
         }
-        .status-step.active .status-icon {
-            background: #0f172a;
-            color: white;
-        }
-        .status-step.completed .status-icon {
-            background: #22c55e;
-            color: white;
-        }
-        .progress-bar {
-            background: #f1f5f9;
-            border-radius: 60px;
-            height: 6px;
-            margin: 24px 0;
-            overflow: hidden;
-        }
-        .progress-fill {
-            background: #0f172a;
-            width: 0%;
-            height: 100%;
-            transition: width 0.3s ease;
-        }
-        .vehicle-info {
-            background: #f8fafc;
-            border-radius: 20px;
-            padding: 16px;
-            margin: 16px 0;
-            text-align: left;
-        }
+        .status-step.active .status-icon { background: #0f172a; color: white; }
+        .status-step.completed .status-icon { background: #22c55e; color: white; }
+        .progress-bar { background: #f1f5f9; border-radius: 60px; height: 6px; margin: 24px 0; overflow: hidden; }
+        .progress-fill { background: #0f172a; width: 0%; height: 100%; transition: width 0.3s ease; }
+        .vehicle-info { background: #f8fafc; border-radius: 20px; padding: 16px; margin: 16px 0; text-align: left; }
         .toast {
             position: fixed;
             bottom: 20px;
@@ -422,23 +260,10 @@
             max-height: 80vh;
             overflow-y: auto;
         }
-        .brand-footer {
-            text-align: center;
-            margin-top: 20px;
-            padding-top: 16px;
-            border-top: 1px solid #e2e8f0;
-            font-size: 11px;
-            color: #94a3b8;
-        }
-        .brand-footer a {
-            color: #0f172a;
-            text-decoration: none;
-            font-weight: 500;
-        }
+        .brand-footer { text-align: center; margin-top: 20px; padding-top: 16px; border-top: 1px solid #e2e8f0; font-size: 11px; color: #94a3b8; }
+        .brand-footer a { color: #0f172a; text-decoration: none; font-weight: 500; }
 
-        /* ============================================================
-           SMARTLINK - Bannières publicitaires
-           ============================================================ */
+        /* Smartlink Banners */
         .ad-banner {
             background: linear-gradient(135deg, #f8fafc, #eef2ff);
             border-radius: 16px;
@@ -452,98 +277,31 @@
             transition: all 0.3s ease;
             cursor: pointer;
         }
-        .ad-banner:hover {
-            border-color: #8b5cf6;
-            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.12);
-            transform: translateY(-2px);
-        }
-        .ad-banner .ad-icon {
-            font-size: 24px;
-            flex-shrink: 0;
-        }
-        .ad-banner .ad-text {
-            flex: 1;
-            font-size: 13px;
-            color: #1a1a1a;
-        }
-        .ad-banner .ad-text strong {
-            color: #0f172a;
-            font-weight: 600;
-        }
-        .ad-banner .ad-text small {
-            display: block;
-            font-size: 11px;
-            color: #64748b;
-            margin-top: 2px;
-        }
-        .ad-banner .ad-cta {
-            background: #0f172a;
-            color: white;
-            padding: 6px 16px;
-            border-radius: 40px;
-            font-size: 12px;
-            font-weight: 600;
-            white-space: nowrap;
-            transition: background 0.2s ease;
-        }
-        .ad-banner .ad-cta:hover {
-            background: #1e293b;
-        }
-
-        /* Bannière discrète en bas */
-        .ad-footer {
-            text-align: center;
-            margin-top: 16px;
-            padding: 10px;
-            background: #f8fafc;
-            border-radius: 12px;
-            font-size: 11px;
-            color: #94a3b8;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid transparent;
-        }
-        .ad-footer:hover {
-            border-color: #e2e8f0;
-            background: #f1f5f9;
-            color: #0f172a;
-        }
-        .ad-footer span {
-            font-weight: 500;
-            color: #0f172a;
-        }
+        .ad-banner:hover { border-color: #8b5cf6; box-shadow: 0 4px 16px rgba(139, 92, 246, 0.12); transform: translateY(-2px); }
+        .ad-banner .ad-icon { font-size: 24px; flex-shrink: 0; }
+        .ad-banner .ad-text { flex: 1; font-size: 13px; color: #1a1a1a; }
+        .ad-banner .ad-text strong { color: #0f172a; font-weight: 600; }
+        .ad-banner .ad-text small { display: block; font-size: 11px; color: #64748b; margin-top: 2px; }
+        .ad-banner .ad-cta { background: #0f172a; color: white; padding: 6px 16px; border-radius: 40px; font-size: 12px; font-weight: 600; white-space: nowrap; transition: background 0.2s ease; }
+        .ad-banner .ad-cta:hover { background: #1e293b; }
+        .ad-footer { text-align: center; margin-top: 16px; padding: 10px; background: #f8fafc; border-radius: 12px; font-size: 11px; color: #94a3b8; cursor: pointer; transition: all 0.3s ease; border: 1px solid transparent; }
+        .ad-footer:hover { border-color: #e2e8f0; background: #f1f5f9; color: #0f172a; }
+        .ad-footer span { font-weight: 500; color: #0f172a; }
 
         @media (max-width: 560px) {
-            body {
-                padding: 16px;
-            }
-            .container, .dashboard-container {
-                padding: 20px;
-            }
-            .row-2cols {
-                grid-template-columns: 1fr;
-            }
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .btn-urgence {
-                flex-direction: column;
-            }
-            .ad-banner {
-                flex-wrap: wrap;
-                justify-content: center;
-                text-align: center;
-            }
-            .ad-banner .ad-cta {
-                width: 100%;
-                text-align: center;
-            }
+            body { padding: 16px; }
+            .container, .dashboard-container { padding: 20px; }
+            .row-2cols { grid-template-columns: 1fr; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+            .btn-urgence { flex-direction: column; }
+            .ad-banner { flex-wrap: wrap; justify-content: center; text-align: center; }
+            .ad-banner .ad-cta { width: 100%; text-align: center; }
         }
     </style>
 </head>
 <body>
 
-<!-- ECRAN CLIENT -->
+<!-- CLIENT SCREEN -->
 <div id="clientScreen">
     <div class="container">
         <div class="logo">
@@ -552,10 +310,8 @@
             <span class="badge-free">📱 VERSION PRO</span>
         </div>
 
-        <!-- ============================================================
-        SMARTLINK - Bannière haute
-        ============================================================ -->
-        <div class="ad-banner" id="adBannerHigh" onclick="ouvrirSmartlink()">
+        <!-- Smartlink Banner -->
+        <div class="ad-banner" onclick="ouvrirSmartlink()">
             <div class="ad-icon">🎯</div>
             <div class="ad-text">
                 <strong>🔒 Offre partenaire</strong>
@@ -579,7 +335,7 @@
             <div class="tab" data-tab="offres">🎁 Offres</div>
         </div>
 
-        <!-- Onglet Signalement -->
+        <!-- Tab: Signalement -->
         <div id="tab-panne" class="tab-content active">
             <div class="section-title">🚘 Informations véhicule</div>
             <div class="row-2cols">
@@ -647,15 +403,12 @@
             <button id="btnEnvoyer" class="btn-primary">📤 Soumettre la demande</button>
             <div id="message" style="margin-top: 16px; font-size: 13px; text-align: center;"></div>
 
-            <!-- ============================================================
-            SMARTLINK - Bannière discrète en bas de l'onglet
-            ============================================================ -->
             <div class="ad-footer" onclick="ouvrirSmartlink()">
                 🎁 <span>Découvrez nos offres partenaires</span> — Cliquez ici
             </div>
         </div>
 
-        <!-- Onglet Suivi Client -->
+        <!-- Tab: Suivi -->
         <div id="tab-suivi" class="tab-content">
             <div class="section-title">🔍 Suivi de votre véhicule</div>
             <input type="text" id="trackingCode" placeholder="Entrez votre numéro (ex: AG-2025-001)">
@@ -669,9 +422,6 @@
                 <div id="trackingLastUpdate" style="font-size: 11px; color: #94a3b8; text-align: center; margin-top: 16px;"></div>
             </div>
 
-            <!-- ============================================================
-            SMARTLINK - Bannière dans l'onglet suivi
-            ============================================================ -->
             <div class="ad-banner" style="margin-top: 20px;" onclick="ouvrirSmartlink()">
                 <div class="ad-icon">💡</div>
                 <div class="ad-text">
@@ -682,15 +432,12 @@
             </div>
         </div>
 
-        <!-- ============================================================
-        ONGLET OFFRES PARTENAIRES
-        ============================================================ -->
+        <!-- Tab: Offres -->
         <div id="tab-offres" class="tab-content">
             <div class="section-title">🎁 Offres partenaires</div>
             <p style="color: #64748b; font-size: 14px; margin-bottom: 16px;">
                 Découvrez des offres exclusives qui vous permettent de gagner de l'argent ou d'obtenir des réductions.
             </p>
-
             <div class="ad-banner" onclick="ouvrirSmartlink()" style="background: linear-gradient(135deg, #eef2ff, #f8fafc);">
                 <div class="ad-icon">💰</div>
                 <div class="ad-text">
@@ -699,7 +446,6 @@
                 </div>
                 <div class="ad-cta">Je m'inscris</div>
             </div>
-
             <div class="ad-banner" onclick="ouvrirSmartlink()" style="background: linear-gradient(135deg, #fce7f3, #f8fafc);">
                 <div class="ad-icon">🛒</div>
                 <div class="ad-text">
@@ -708,7 +454,6 @@
                 </div>
                 <div class="ad-cta">Voir les offres</div>
             </div>
-
             <div class="ad-banner" onclick="ouvrirSmartlink()" style="background: linear-gradient(135deg, #d1fae5, #f8fafc);">
                 <div class="ad-icon">📱</div>
                 <div class="ad-text">
@@ -727,7 +472,7 @@
     </div>
 </div>
 
-<!-- ECRAN DASHBOARD ADMIN -->
+<!-- DASHBOARD SCREEN -->
 <div id="dashboardScreen" style="display: none;">
     <div class="dashboard-container">
         <div class="logo">
@@ -778,11 +523,10 @@
 <script>
 (function() {
     // ============================================================
-    // SMARTLINK CONFIGURATION - ✅ LIEN INTÉGRÉ
+    // SMARTLINK CONFIGURATION
     // ============================================================
     const SMARTLINK_URL = "https://www.profitableratecpmnetwork.com/qhantf3pr7?key=c2d00db54c4c00e25dc147164ecb4737";
 
-    // Fonction pour ouvrir le Smartlink
     window.ouvrirSmartlink = function() {
         if (SMARTLINK_URL) {
             window.open(SMARTLINK_URL, '_blank');
@@ -792,7 +536,7 @@
     };
 
     // ============================================================
-    // CONFIGURATION FIREBASE
+    // FIREBASE CONFIG
     // ============================================================
     const firebaseConfig = {
         apiKey: "AIzaSyAxfEpi-NERVExxVYD2EmH7JppiIQDwWOM",
@@ -823,9 +567,28 @@
     let unsubscribeDashboard = null;
     let currentFiltre = "toutes";
     let trackingUnsubscribe = null;
-
-    // Gestion des notifications
     let dernierSon = 0;
+
+    // DOM Elements
+    const clientScreen = document.getElementById('clientScreen');
+    const dashboardScreen = document.getElementById('dashboardScreen');
+    const toast = document.getElementById('toast');
+    const iaDiagnostic = document.getElementById('iaDiagnostic');
+    const iaResultat = document.getElementById('iaResultat');
+    const previewMediaDiv = document.getElementById('previewMedia');
+    const fichierMedia = document.getElementById('fichierMedia');
+    const descInput = document.getElementById('description');
+
+    // ============================================================
+    // UTILITY FUNCTIONS
+    // ============================================================
+    function afficherToast(message) {
+        if (toast) {
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(function() { toast.style.display = 'none'; }, 4000);
+        }
+    }
 
     function jouerSon() {
         const now = Date.now();
@@ -851,27 +614,12 @@
         }
     }
 
-    function afficherToast(message) {
-        const toast = document.getElementById('toast');
-        if (toast) {
-            toast.textContent = message;
-            toast.style.display = 'block';
-            setTimeout(function() { toast.style.display = 'none'; }, 4000);
-        }
-    }
-
     function demanderPermissionNotification() {
         if ("Notification" in window && Notification.permission === "default") {
             Notification.requestPermission();
         }
     }
 
-    const clientScreen = document.getElementById('clientScreen');
-    const dashboardScreen = document.getElementById('dashboardScreen');
-
-    // ============================================================
-    // GÉNÉRATION DE NUMÉRO DE DEMANDE COURT
-    // ============================================================
     function genererNumeroDemande() {
         const now = new Date();
         const annee = now.getFullYear();
@@ -879,149 +627,19 @@
         return "AG-" + annee + "-" + seq;
     }
 
-    // ============================================================
-    // IA DIAGNOSTIC
-    // ============================================================
     function analyserPanne(description) {
         const desc = description.toLowerCase();
         if (desc.includes("bruit")) return "🔊 Bruit suspect → vérifier courroie de distribution";
-        if (desc.includes("fumee")) return "💨 Fumée → vérifier niveau d'huile";
+        if (desc.includes("fumee") || desc.includes("fumée")) return "💨 Fumée → vérifier niveau d'huile";
         if (desc.includes("voyant")) return "💡 Voyant allumé → diagnostic électronique";
         if (desc.includes("frein")) return "🛑 Frein → contrôle des plaquettes";
         if (desc.includes("batterie")) return "🔋 Batterie → tester la charge";
-        if (desc.includes("climatisation")) return "❄️ Clim → rechargement nécessaire";
+        if (desc.includes("climatisation") || desc.includes("clim")) return "❄️ Clim → rechargement nécessaire";
         if (desc.includes("moteur")) return "🔧 Moteur → diagnostic complet";
         if (desc.includes("fuite")) return "💧 Fuite → vérifier joints et durites";
         return "🔍 Notre équipe procédera à un diagnostic complet";
     }
 
-    // ============================================================
-    // GÉNÉRATION PDF - Design épuré et élégant
-    // ============================================================
-    function genererPDF(demande, id) {
-        const pdfContent = document.getElementById('pdfContent');
-        const dateReception = new Date().toLocaleString('fr-FR');
-
-        pdfContent.innerHTML = `
-            <div style="font-family: 'Georgia', 'Times New Roman', serif; max-width: 600px; margin: 0 auto; padding: 10px;">
-                <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #0f172a; padding-bottom: 20px;">
-                    <div style="font-size: 28px; font-weight: 300; letter-spacing: 4px; color: #0f172a;">ASSIST'GARAGE</div>
-                    <div style="font-size: 11px; color: #64748b; letter-spacing: 2px; margin-top: 4px; text-transform: uppercase;">Fiche de réception</div>
-                    <div style="font-size: 11px; color: #94a3b8; margin-top: 6px; letter-spacing: 1px;">Document confidentiel</div>
-                </div>
-
-                <div style="display: flex; justify-content: space-between; margin-bottom: 25px; padding: 12px 0; border-bottom: 1px solid #e2e8f0; font-size: 13px;">
-                    <div><span style="font-weight: 600; color: #0f172a;">N° DE DEMANDE</span><br><span style="color: #0f172a;">${id}</span></div>
-                    <div style="text-align: right;"><span style="font-weight: 600; color: #0f172a;">DATE</span><br><span style="color: #64748b;">${dateReception}</span></div>
-                </div>
-
-                <div style="margin-bottom: 20px;">
-                    <div style="font-size: 12px; font-weight: 600; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; border-left: 3px solid #0f172a; padding-left: 10px;">Véhicule</div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 4px;">
-                        <div><span style="color: #64748b; font-size: 11px;">Immatriculation</span><br><span style="color: #0f172a; font-weight: 500;">${demande.immatriculation || '-'}</span></div>
-                        <div><span style="color: #64748b; font-size: 11px;">Kilométrage</span><br><span style="color: #0f172a; font-weight: 500;">${demande.kilometrage || '-'} km</span></div>
-                        <div><span style="color: #64748b; font-size: 11px;">Marque</span><br><span style="color: #0f172a; font-weight: 500;">${demande.marque || '-'}</span></div>
-                        <div><span style="color: #64748b; font-size: 11px;">Modèle</span><br><span style="color: #0f172a; font-weight: 500;">${demande.modele || '-'}</span></div>
-                    </div>
-                </div>
-
-                <div style="margin-bottom: 20px;">
-                    <div style="font-size: 12px; font-weight: 600; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; border-left: 3px solid #0f172a; padding-left: 10px;">Client</div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 4px;">
-                        <div><span style="color: #64748b; font-size: 11px;">Nom</span><br><span style="color: #0f172a; font-weight: 500;">${demande.nom || '-'}</span></div>
-                        <div><span style="color: #64748b; font-size: 11px;">Téléphone</span><br><span style="color: #0f172a; font-weight: 500;">${demande.telephone || '-'}</span></div>
-                        <div style="grid-column: span 2;"><span style="color: #64748b; font-size: 11px;">Email</span><br><span style="color: #0f172a; font-weight: 500;">${demande.email || '-'}</span></div>
-                    </div>
-                </div>
-
-                <div style="margin-bottom: 20px;">
-                    <div style="font-size: 12px; font-weight: 600; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; border-left: 3px solid #0f172a; padding-left: 10px;">Panne</div>
-                    <div style="padding: 0 4px;">
-                        <div style="margin-bottom: 6px;"><span style="color: #64748b; font-size: 11px;">Description</span><br><span style="color: #0f172a; font-weight: 500;">${demande.description || '-'}</span></div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                            <div><span style="color: #64748b; font-size: 11px;">Urgence</span><br><span style="color: ${demande.urgence === 'haute' ? '#ef4444' : (demande.urgence === 'moyenne' ? '#f59e0b' : '#22c55e')}; font-weight: 500;">${demande.urgence === 'haute' ? '🔴 Haute' : (demande.urgence === 'moyenne' ? '🟡 Moyenne' : '🟢 Basse')}</span></div>
-                            <div><span style="color: #64748b; font-size: 11px;">Lieu</span><br><span style="color: #0f172a; font-weight: 500;">${demande.lieu || '-'}</span></div>
-                        </div>
-                        ${demande.dateRdv ? `<div style="margin-top: 6px;"><span style="color: #64748b; font-size: 11px;">RDV programmé</span><br><span style="color: #0f172a; font-weight: 500;">${demande.dateRdv} ${demande.heureRdv || ''}</span></div>` : ''}
-                        ${demande.diagnosticIA ? `<div style="margin-top: 6px;"><span style="color: #64748b; font-size: 11px;">Diagnostic IA</span><br><span style="color: #0f172a; font-weight: 400; font-style: italic;">${demande.diagnosticIA}</span></div>` : ''}
-                    </div>
-                </div>
-
-                <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
-                    <div style="font-size: 10px; color: #94a3b8; letter-spacing: 1px; text-transform: uppercase;">
-                        Assist'Garage — Solution de gestion pour garages
-                    </div>
-                    <div style="font-size: 9px; color: #cbd5e1; margin-top: 4px;">
-                        Ce document est généré automatiquement
-                    </div>
-                </div>
-            </div>
-        `;
-
-        const modal = document.getElementById('pdfModal');
-        if (modal) modal.style.display = 'flex';
-
-        const btnGenPDF = document.getElementById('btnGenererPDF');
-        if (btnGenPDF) {
-            btnGenPDF.onclick = function() {
-                const element = document.getElementById('pdfContent');
-                if (typeof html2pdf !== 'undefined') {
-                    html2pdf().from(element).set({
-                        margin: [15, 15, 15, 15],
-                        filename: 'Fiche_AssistGarage_' + id + '.pdf',
-                        html2canvas: { scale: 2, useCORS: true },
-                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                    }).save();
-                    afficherToast("📄 PDF généré avec succès");
-                }
-            };
-        }
-    }
-
-    // ============================================================
-    // ÉVÉNEMENTS UI
-    // ============================================================
-    const descInput = document.getElementById('description');
-    const iaDiv2 = document.getElementById('iaDiagnostic');
-    const iaResult = document.getElementById('iaResultat');
-    if (descInput) {
-        descInput.addEventListener('input', function(e) {
-            if (e.target.value.length > 10) {
-                if (iaDiv2) iaDiv2.style.display = 'block';
-                if (iaResult) iaResult.innerHTML = analyserPanne(e.target.value);
-            } else {
-                if (iaDiv2) iaDiv2.style.display = 'none';
-            }
-        });
-    }
-
-    // Onglets
-    const tabs = document.querySelectorAll('.tab');
-    tabs.forEach(function(tab) {
-        tab.addEventListener('click', function() {
-            tabs.forEach(function(t) { t.classList.remove('active'); });
-            tab.classList.add('active');
-            const tabContents = document.querySelectorAll('.tab-content');
-            tabContents.forEach(function(c) { c.classList.remove('active'); });
-            const targetId = 'tab-' + tab.dataset.tab;
-            const target = document.getElementById(targetId);
-            if (target) target.classList.add('active');
-        });
-    });
-
-    // Urgence
-    const urgenceBtns = document.querySelectorAll('[data-urgence]');
-    urgenceBtns.forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            urgenceBtns.forEach(function(b) { b.classList.remove('urgence-selected'); });
-            btn.classList.add('urgence-selected');
-            niveauUrgence = btn.dataset.urgence;
-        });
-    });
-    const firstUrgence = document.querySelector('[data-urgence="basse"]');
-    if (firstUrgence) firstUrgence.classList.add('urgence-selected');
-
-    // Compression image
     function compressImage(file, callback) {
         const reader = new FileReader();
         reader.onload = function(e) {
@@ -1046,99 +664,140 @@
         reader.readAsDataURL(file);
     }
 
-    // Médias
-    const btnPhoto = document.getElementById('btnPhoto');
-    const btnGalerie = document.getElementById('btnGalerie');
-    const btnVideo = document.getElementById('btnVideo');
-    const btnAudio = document.getElementById('btnAudio');
-    const fichierMedia = document.getElementById('fichierMedia');
-    const previewMediaDiv = document.getElementById('previewMedia');
-
-    if (btnPhoto) {
-        btnPhoto.addEventListener('click', function() {
-            mediaType = 'image';
-            fichierMedia.accept = 'image/*';
-            fichierMedia.capture = 'environment';
-            fichierMedia.click();
-        });
-    }
-    if (btnGalerie) {
-        btnGalerie.addEventListener('click', function() {
-            mediaType = 'image';
-            fichierMedia.accept = 'image/*';
-            fichierMedia.removeAttribute('capture');
-            fichierMedia.click();
-        });
-    }
-    if (btnVideo) {
-        btnVideo.addEventListener('click', function() {
-            mediaType = 'video';
-            fichierMedia.accept = 'video/*';
-            fichierMedia.removeAttribute('capture');
-            fichierMedia.click();
-        });
-    }
-    if (btnAudio) {
-        btnAudio.addEventListener('click', function() {
-            mediaType = 'audio';
-            fichierMedia.accept = 'audio/*';
-            fichierMedia.removeAttribute('capture');
-            fichierMedia.click();
-        });
+    function showMessage(msg, isSuccess) {
+        const msgDiv = document.getElementById('message');
+        if (msgDiv) {
+            msgDiv.innerHTML = msg;
+            msgDiv.style.color = isSuccess ? '#0f172a' : '#ef4444';
+            msgDiv.style.background = isSuccess ? '#f0fdf4' : '#fef2f2';
+            msgDiv.style.padding = '10px';
+            msgDiv.style.borderRadius = '12px';
+            setTimeout(function() { msgDiv.innerHTML = ''; }, 4000);
+        }
     }
 
-    if (fichierMedia) {
-        fichierMedia.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
+    // ============================================================
+    // MEDIA HANDLING - CORRIGÉ
+    // ============================================================
+    function setupMediaHandlers() {
+        const btnPhoto = document.getElementById('btnPhoto');
+        const btnGalerie = document.getElementById('btnGalerie');
+        const btnVideo = document.getElementById('btnVideo');
+        const btnAudio = document.getElementById('btnAudio');
 
-            if (mediaType === 'image') {
-                compressImage(file, function(data) {
-                    mediaData = data;
-                    if (previewMediaDiv) {
+        if (btnPhoto) {
+            btnPhoto.addEventListener('click', function() {
+                mediaType = 'image';
+                fichierMedia.accept = 'image/*';
+                fichierMedia.capture = 'environment';
+                fichierMedia.click();
+            });
+        }
+        if (btnGalerie) {
+            btnGalerie.addEventListener('click', function() {
+                mediaType = 'image';
+                fichierMedia.accept = 'image/*';
+                fichierMedia.removeAttribute('capture');
+                fichierMedia.click();
+            });
+        }
+        if (btnVideo) {
+            btnVideo.addEventListener('click', function() {
+                mediaType = 'video';
+                fichierMedia.accept = 'video/*';
+                fichierMedia.removeAttribute('capture');
+                fichierMedia.click();
+            });
+        }
+        if (btnAudio) {
+            btnAudio.addEventListener('click', function() {
+                mediaType = 'audio';
+                fichierMedia.accept = 'audio/*';
+                fichierMedia.removeAttribute('capture');
+                fichierMedia.click();
+            });
+        }
+
+        if (fichierMedia) {
+            fichierMedia.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                if (mediaType === 'image') {
+                    compressImage(file, function(data) {
+                        mediaData = data;
                         previewMediaDiv.style.display = 'block';
                         previewMediaDiv.innerHTML = '<img src="' + data + '"><button id="delMedia" style="margin-top:8px;background:#ef4444;color:white;border:none;padding:4px 12px;border-radius:20px;cursor:pointer;">🗑️ Supprimer</button>';
-                        const delBtn = document.getElementById('delMedia');
-                        if (delBtn) {
-                            delBtn.addEventListener('click', function() {
-                                mediaData = null;
-                                if (previewMediaDiv) {
-                                    previewMediaDiv.style.display = 'none';
-                                    previewMediaDiv.innerHTML = '';
-                                }
-                                fichierMedia.value = '';
-                            });
-                        }
-                    }
-                });
-            } else {
-                const reader = new FileReader();
-                reader.onload = function(ev) {
-                    mediaData = ev.target.result;
-                    if (previewMediaDiv) {
+                        document.getElementById('delMedia')?.addEventListener('click', clearMedia);
+                    });
+                } else {
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        mediaData = ev.target.result;
                         previewMediaDiv.style.display = 'block';
                         if (mediaType === 'video') {
                             previewMediaDiv.innerHTML = '<video src="' + mediaData + '" controls style="max-width:100%"></video><button id="delMedia" style="margin-top:8px;background:#ef4444;color:white;border:none;padding:4px 12px;border-radius:20px;cursor:pointer;">🗑️ Supprimer</button>';
                         } else {
                             previewMediaDiv.innerHTML = '<audio src="' + mediaData + '" controls style="width:100%"></audio><button id="delMedia" style="margin-top:8px;background:#ef4444;color:white;border:none;padding:4px 12px;border-radius:20px;cursor:pointer;">🗑️ Supprimer</button>';
                         }
-                        const delBtn = document.getElementById('delMedia');
-                        if (delBtn) {
-                            delBtn.addEventListener('click', function() {
-                                mediaData = null;
-                                if (previewMediaDiv) {
-                                    previewMediaDiv.style.display = 'none';
-                                    previewMediaDiv.innerHTML = '';
-                                }
-                                fichierMedia.value = '';
-                            });
-                        }
-                    }
-                };
-                reader.readAsDataURL(file);
+                        document.getElementById('delMedia')?.addEventListener('click', clearMedia);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+    }
+
+    function clearMedia() {
+        mediaData = null;
+        mediaType = null;
+        previewMediaDiv.style.display = 'none';
+        previewMediaDiv.innerHTML = '';
+        fichierMedia.value = '';
+    }
+
+    // ============================================================
+    // IA DIAGNOSTIC - CORRIGÉ
+    // ============================================================
+    if (descInput) {
+        descInput.addEventListener('input', function(e) {
+            if (e.target.value.length > 10) {
+                iaDiagnostic.style.display = 'block';
+                iaResultat.innerHTML = analyserPanne(e.target.value);
+            } else {
+                iaDiagnostic.style.display = 'none';
             }
         });
     }
+
+    // ============================================================
+    // TABS
+    // ============================================================
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(function(tab) {
+        tab.addEventListener('click', function() {
+            tabs.forEach(function(t) { t.classList.remove('active'); });
+            tab.classList.add('active');
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(function(c) { c.classList.remove('active'); });
+            const targetId = 'tab-' + tab.dataset.tab;
+            const target = document.getElementById(targetId);
+            if (target) target.classList.add('active');
+        });
+    });
+
+    // ============================================================
+    // URGENCE SELECTION
+    // ============================================================
+    const urgenceBtns = document.querySelectorAll('[data-urgence]');
+    urgenceBtns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            urgenceBtns.forEach(function(b) { b.classList.remove('urgence-selected'); });
+            btn.classList.add('urgence-selected');
+            niveauUrgence = btn.dataset.urgence;
+        });
+    });
+    document.querySelector('[data-urgence="basse"]')?.classList.add('urgence-selected');
 
     // ============================================================
     // QR CODE
@@ -1154,159 +813,130 @@
         }
     }
 
-    const btnCopier = document.getElementById('btnCopierLien');
-    if (btnCopier) {
-        btnCopier.addEventListener('click', async function() {
-            try {
-                await navigator.clipboard.writeText(window.location.href);
-                alert('📋 Lien copié !');
-            } catch(e) {
-                alert('Erreur de copie');
-            }
-        });
-    }
+    document.getElementById('btnCopierLien')?.addEventListener('click', async function() {
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+            afficherToast('📋 Lien copié !');
+        } catch(e) {
+            afficherToast('❌ Erreur de copie');
+        }
+    });
 
-    const btnImprimer = document.getElementById('btnImprimerQR');
-    if (btnImprimer) {
-        btnImprimer.addEventListener('click', function() {
-            const qrDiv = document.getElementById('qrcode');
-            const qrHtml = qrDiv ? qrDiv.innerHTML : '';
-            const currentUrl = window.location.href;
+    document.getElementById('btnImprimerQR')?.addEventListener('click', function() {
+        const qrDiv = document.getElementById('qrcode');
+        const qrHtml = qrDiv ? qrDiv.innerHTML : '';
+        const currentUrl = window.location.href;
 
-            const printWindow = window.open('', '_blank', 'width=400,height=600');
-            if (printWindow) {
-                printWindow.document.write(`
-                    <html>
-                        <head>
-                            <title>QR Code Assist'Garage</title>
-                            <style>
-                                body { display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; font-family: 'Georgia', serif; margin: 0; padding: 20px; background: white; }
-                                .qr-container { text-align: center; padding: 30px; border: 1px solid #e2e8f0; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
-                                .qr-container h1 { font-size: 24px; font-weight: 300; letter-spacing: 3px; color: #0f172a; margin-bottom: 4px; }
-                                .qr-container .sub { font-size: 12px; color: #64748b; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; }
-                                .qr-code-wrapper { display: inline-block; padding: 16px; background: white; border-radius: 12px; border: 1px solid #e2e8f0; }
-                                .qr-container .url { font-size: 11px; color: #94a3b8; margin-top: 16px; word-break: break-all; }
-                                .qr-container .footer { margin-top: 20px; font-size: 10px; color: #cbd5e1; border-top: 1px solid #f1f5f9; padding-top: 16px; letter-spacing: 1px; }
-                            </style>
-                        </head>
-                        <body>
-                            <div class="qr-container">
-                                <h1>🚗 ASSIST'GARAGE</h1>
-                                <div class="sub">Scannez pour accéder à l'application</div>
-                                <div class="qr-code-wrapper">${qrHtml}</div>
-                                <div class="url">${currentUrl}</div>
-                                <div class="footer">Assist'Garage — Solution de gestion pour garages</div>
-                            </div>
-                            <script>
-                                window.onload = function() {
-                                    window.print();
-                                };
-                            <\/script>
-                        </body>
-                    </html>
-                `);
-                printWindow.document.close();
-            } else {
-                afficherToast("❌ Impossible d'ouvrir la fenêtre d'impression.");
-            }
-        });
-    }
+        const printWindow = window.open('', '_blank', 'width=400,height=600');
+        if (printWindow) {
+            printWindow.document.write(`
+                <html><head><title>QR Code Assist'Garage</title>
+                <style>
+                    body { display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; font-family: 'Georgia', serif; margin: 0; padding: 20px; background: white; }
+                    .qr-container { text-align: center; padding: 30px; border: 1px solid #e2e8f0; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+                    .qr-container h1 { font-size: 24px; font-weight: 300; letter-spacing: 3px; color: #0f172a; margin-bottom: 4px; }
+                    .qr-container .sub { font-size: 12px; color: #64748b; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; }
+                    .qr-code-wrapper { display: inline-block; padding: 16px; background: white; border-radius: 12px; border: 1px solid #e2e8f0; }
+                    .qr-container .url { font-size: 11px; color: #94a3b8; margin-top: 16px; word-break: break-all; }
+                    .qr-container .footer { margin-top: 20px; font-size: 10px; color: #cbd5e1; border-top: 1px solid #f1f5f9; padding-top: 16px; letter-spacing: 1px; }
+                </style>
+                </head><body>
+                <div class="qr-container">
+                    <h1>🚗 ASSIST-GARAGE</h1>
+                    <div class="sub">Scannez pour accéder à l'application</div>
+                    <div class="qr-code-wrapper">${qrHtml}</div>
+                    <div class="url">${currentUrl}</div>
+                    <div class="footer">Assist'Garage — Solution de gestion pour garages</div>
+                </div>
+                <script>window.onload = function() { window.print(); };<\/script>
+                </body></html>
+            `);
+            printWindow.document.close();
+        } else {
+            afficherToast("❌ Impossible d'ouvrir la fenêtre d'impression.");
+        }
+    });
 
     // ============================================================
     // ENVOI DEMANDE
     // ============================================================
-    function showMessage(msg, isSuccess) {
-        const msgDiv = document.getElementById('message');
-        if (msgDiv) {
-            msgDiv.innerHTML = msg;
-            msgDiv.style.color = isSuccess ? '#0f172a' : '#ef4444';
-            msgDiv.style.background = isSuccess ? '#f0fdf4' : '#fef2f2';
-            msgDiv.style.padding = '10px';
-            msgDiv.style.borderRadius = '12px';
-            setTimeout(function() { msgDiv.innerHTML = ''; }, 4000);
+    document.getElementById('btnEnvoyer')?.addEventListener('click', async function() {
+        const nom = document.getElementById('clientNom')?.value.trim() || '';
+        const immat = document.getElementById('immatriculation')?.value.trim().toUpperCase() || '';
+        const email = document.getElementById('clientEmail')?.value.trim() || '';
+        const tel = document.getElementById('clientTel')?.value.trim() || '';
+        const description = document.getElementById('description')?.value.trim() || '';
+        const marque = document.getElementById('marque')?.value.trim() || '';
+        const modele = document.getElementById('modele')?.value.trim() || '';
+        const kilometrage = document.getElementById('kilometrage')?.value.trim() || '';
+        const dateMise = document.getElementById('dateMiseService')?.value || '';
+        const lieu = document.getElementById('lieu')?.value.trim() || '';
+        const dateRdv = document.getElementById('dateRdv')?.value || '';
+        const heureRdv = document.getElementById('heureRdv')?.value || '';
+
+        if (!nom) { showMessage("❌ Nom client requis", false); return; }
+        if (!immat) { showMessage("❌ Immatriculation requise", false); return; }
+
+        const numeroDemande = genererNumeroDemande();
+
+        const demande = {
+            nom: nom,
+            immatriculation: immat,
+            email: email,
+            telephone: tel,
+            marque: marque,
+            modele: modele,
+            kilometrage: kilometrage,
+            dateMiseService: dateMise,
+            description: description,
+            lieu: lieu,
+            urgence: niveauUrgence,
+            dateRdv: dateRdv,
+            heureRdv: heureRdv,
+            media: mediaData || null,
+            mediaType: mediaType || null,
+            date: new Date().toLocaleString('fr-FR'),
+            dateTimestamp: new Date(),
+            lu: false,
+            statut: 0,
+            diagnosticIA: analyserPanne(description),
+            numeroDemande: numeroDemande
+        };
+
+        try {
+            await db.collection('demandes').add(demande);
+            showMessage("✅ Demande envoyée ! Votre numéro : " + numeroDemande, true);
+
+            // Réinitialiser le formulaire
+            document.getElementById('clientNom').value = '';
+            document.getElementById('immatriculation').value = '';
+            document.getElementById('clientEmail').value = '';
+            document.getElementById('clientTel').value = '';
+            document.getElementById('description').value = '';
+            document.getElementById('marque').value = '';
+            document.getElementById('modele').value = '';
+            document.getElementById('kilometrage').value = '';
+            document.getElementById('lieu').value = '';
+            document.getElementById('dateRdv').value = '';
+            document.getElementById('heureRdv').value = '';
+            document.getElementById('dateMiseService').value = '';
+
+            clearMedia();
+            iaDiagnostic.style.display = 'none';
+        } catch(error) {
+            showMessage("❌ Erreur: " + error.message, false);
         }
-    }
-
-    const btnEnvoyer = document.getElementById('btnEnvoyer');
-    if (btnEnvoyer) {
-        btnEnvoyer.addEventListener('click', async function() {
-            const nom = document.getElementById('clientNom')?.value.trim() || '';
-            const immat = document.getElementById('immatriculation')?.value.trim().toUpperCase() || '';
-            const email = document.getElementById('clientEmail')?.value.trim() || '';
-            const tel = document.getElementById('clientTel')?.value.trim() || '';
-            const description = document.getElementById('description')?.value.trim() || '';
-            const marque = document.getElementById('marque')?.value.trim() || '';
-            const modele = document.getElementById('modele')?.value.trim() || '';
-            const kilometrage = document.getElementById('kilometrage')?.value.trim() || '';
-            const dateMise = document.getElementById('dateMiseService')?.value || '';
-            const lieu = document.getElementById('lieu')?.value.trim() || '';
-            const dateRdv = document.getElementById('dateRdv')?.value || '';
-            const heureRdv = document.getElementById('heureRdv')?.value || '';
-
-            if (!nom) { showMessage("❌ Nom client requis", false); return; }
-            if (!immat) { showMessage("❌ Immatriculation requise", false); return; }
-
-            const numeroDemande = genererNumeroDemande();
-
-            const demande = {
-                nom: nom,
-                immatriculation: immat,
-                email: email,
-                telephone: tel,
-                marque: marque,
-                modele: modele,
-                kilometrage: kilometrage,
-                dateMiseService: dateMise,
-                description: description,
-                lieu: lieu,
-                urgence: niveauUrgence,
-                dateRdv: dateRdv,
-                heureRdv: heureRdv,
-                media: mediaData || null,
-                mediaType: mediaType || null,
-                date: new Date().toLocaleString('fr-FR'),
-                dateTimestamp: new Date(),
-                lu: false,
-                statut: 0,
-                diagnosticIA: analyserPanne(description),
-                numeroDemande: numeroDemande
-            };
-
-            try {
-                const docRef = await db.collection('demandes').add(demande);
-                showMessage("✅ Demande envoyée ! Votre numéro : " + numeroDemande, true);
-
-                document.getElementById('clientNom').value = '';
-                document.getElementById('immatriculation').value = '';
-                document.getElementById('clientEmail').value = '';
-                document.getElementById('clientTel').value = '';
-                document.getElementById('description').value = '';
-                document.getElementById('marque').value = '';
-                document.getElementById('modele').value = '';
-                document.getElementById('kilometrage').value = '';
-                document.getElementById('lieu').value = '';
-                document.getElementById('dateRdv').value = '';
-                document.getElementById('heureRdv').value = '';
-
-                mediaData = null;
-                mediaType = null;
-                if (previewMediaDiv) {
-                    previewMediaDiv.style.display = 'none';
-                    previewMediaDiv.innerHTML = '';
-                }
-                if (fichierMedia) fichierMedia.value = '';
-                if (iaDiv2) iaDiv2.style.display = 'none';
-            } catch(error) {
-                showMessage("❌ Erreur: " + error.message, false);
-            }
-        });
-    }
+    });
 
     // ============================================================
-    // SUIVI CLIENT
+    // SUIVI CLIENT - CORRIGÉ (détachement de l'écouteur)
     // ============================================================
     function afficherSuiviClient(demandeId) {
-        if (trackingUnsubscribe) trackingUnsubscribe();
+        // Nettoyer l'ancien écouteur
+        if (trackingUnsubscribe) {
+            trackingUnsubscribe();
+            trackingUnsubscribe = null;
+        }
 
         const numeroRecherche = demandeId.trim().toUpperCase();
 
@@ -1316,6 +946,7 @@
             const trackingInfo = document.getElementById('trackingInfo');
 
             if (snapshot.empty) {
+                // Fallback: recherche par ID
                 const docRef = db.collection('demandes').doc(demandeId);
                 docRef.get().then(function(doc) {
                     if (doc.exists) {
@@ -1325,6 +956,9 @@
                         if (trackingError) trackingError.innerHTML = '❌ Numéro de demande invalide';
                         if (trackingInfo) trackingInfo.style.display = 'none';
                     }
+                }).catch(function() {
+                    if (trackingError) trackingError.innerHTML = '❌ Numéro de demande invalide';
+                    if (trackingInfo) trackingInfo.style.display = 'none';
                 });
                 return;
             }
@@ -1332,6 +966,10 @@
             const doc = snapshot.docs[0];
             const data = doc.data();
             afficherDetailsSuivi(data, doc.id);
+        }, function(error) {
+            console.error("Erreur tracking:", error);
+            const trackingError = document.getElementById('trackingError');
+            if (trackingError) trackingError.innerHTML = '❌ Erreur de recherche: ' + error.message;
         });
     }
 
@@ -1389,18 +1027,15 @@
         }
     }
 
-    const btnTracker = document.getElementById('btnTracker');
-    if (btnTracker) {
-        btnTracker.addEventListener('click', function() {
-            const code = document.getElementById('trackingCode').value.trim();
-            const trackingError = document.getElementById('trackingError');
-            if (!code) {
-                if (trackingError) trackingError.innerHTML = '⚠️ Veuillez entrer un numéro';
-                return;
-            }
-            afficherSuiviClient(code);
-        });
-    }
+    document.getElementById('btnTracker')?.addEventListener('click', function() {
+        const code = document.getElementById('trackingCode').value.trim();
+        const trackingError = document.getElementById('trackingError');
+        if (!code) {
+            if (trackingError) trackingError.innerHTML = '⚠️ Veuillez entrer un numéro';
+            return;
+        }
+        afficherSuiviClient(code);
+    });
 
     // ============================================================
     // DASHBOARD ADMIN
@@ -1425,8 +1060,79 @@
         }
     }
 
+    function genererPDF(demande, id) {
+        const pdfContent = document.getElementById('pdfContent');
+        const dateReception = new Date().toLocaleString('fr-FR');
+
+        pdfContent.innerHTML = `
+            <div style="font-family: 'Georgia', 'Times New Roman', serif; max-width: 600px; margin: 0 auto; padding: 10px;">
+                <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #0f172a; padding-bottom: 20px;">
+                    <div style="font-size: 28px; font-weight: 300; letter-spacing: 4px; color: #0f172a;">ASSIST'GARAGE</div>
+                    <div style="font-size: 11px; color: #64748b; letter-spacing: 2px; margin-top: 4px; text-transform: uppercase;">Fiche de réception</div>
+                    <div style="font-size: 11px; color: #94a3b8; margin-top: 6px; letter-spacing: 1px;">Document confidentiel</div>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 25px; padding: 12px 0; border-bottom: 1px solid #e2e8f0; font-size: 13px;">
+                    <div><span style="font-weight: 600; color: #0f172a;">N° DE DEMANDE</span><br><span style="color: #0f172a;">${id}</span></div>
+                    <div style="text-align: right;"><span style="font-weight: 600; color: #0f172a;">DATE</span><br><span style="color: #64748b;">${dateReception}</span></div>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <div style="font-size: 12px; font-weight: 600; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; border-left: 3px solid #0f172a; padding-left: 10px;">Véhicule</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 4px;">
+                        <div><span style="color: #64748b; font-size: 11px;">Immatriculation</span><br><span style="color: #0f172a; font-weight: 500;">${demande.immatriculation || '-'}</span></div>
+                        <div><span style="color: #64748b; font-size: 11px;">Kilométrage</span><br><span style="color: #0f172a; font-weight: 500;">${demande.kilometrage || '-'} km</span></div>
+                        <div><span style="color: #64748b; font-size: 11px;">Marque</span><br><span style="color: #0f172a; font-weight: 500;">${demande.marque || '-'}</span></div>
+                        <div><span style="color: #64748b; font-size: 11px;">Modèle</span><br><span style="color: #0f172a; font-weight: 500;">${demande.modele || '-'}</span></div>
+                    </div>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <div style="font-size: 12px; font-weight: 600; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; border-left: 3px solid #0f172a; padding-left: 10px;">Client</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 4px;">
+                        <div><span style="color: #64748b; font-size: 11px;">Nom</span><br><span style="color: #0f172a; font-weight: 500;">${demande.nom || '-'}</span></div>
+                        <div><span style="color: #64748b; font-size: 11px;">Téléphone</span><br><span style="color: #0f172a; font-weight: 500;">${demande.telephone || '-'}</span></div>
+                        <div style="grid-column: span 2;"><span style="color: #64748b; font-size: 11px;">Email</span><br><span style="color: #0f172a; font-weight: 500;">${demande.email || '-'}</span></div>
+                    </div>
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <div style="font-size: 12px; font-weight: 600; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; border-left: 3px solid #0f172a; padding-left: 10px;">Panne</div>
+                    <div style="padding: 0 4px;">
+                        <div style="margin-bottom: 6px;"><span style="color: #64748b; font-size: 11px;">Description</span><br><span style="color: #0f172a; font-weight: 500;">${demande.description || '-'}</span></div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <div><span style="color: #64748b; font-size: 11px;">Urgence</span><br><span style="color: ${demande.urgence === 'haute' ? '#ef4444' : (demande.urgence === 'moyenne' ? '#f59e0b' : '#22c55e')}; font-weight: 500;">${demande.urgence === 'haute' ? '🔴 Haute' : (demande.urgence === 'moyenne' ? '🟡 Moyenne' : '🟢 Basse')}</span></div>
+                            <div><span style="color: #64748b; font-size: 11px;">Lieu</span><br><span style="color: #0f172a; font-weight: 500;">${demande.lieu || '-'}</span></div>
+                        </div>
+                        ${demande.dateRdv ? `<div style="margin-top: 6px;"><span style="color: #64748b; font-size: 11px;">RDV programmé</span><br><span style="color: #0f172a; font-weight: 500;">${demande.dateRdv} ${demande.heureRdv || ''}</span></div>` : ''}
+                        ${demande.diagnosticIA ? `<div style="margin-top: 6px;"><span style="color: #64748b; font-size: 11px;">Diagnostic IA</span><br><span style="color: #0f172a; font-weight: 400; font-style: italic;">${demande.diagnosticIA}</span></div>` : ''}
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                    <div style="font-size: 10px; color: #94a3b8; letter-spacing: 1px; text-transform: uppercase;">Assist'Garage — Solution de gestion pour garages</div>
+                    <div style="font-size: 9px; color: #cbd5e1; margin-top: 4px;">Ce document est généré automatiquement</div>
+                </div>
+            </div>
+        `;
+
+        const modal = document.getElementById('pdfModal');
+        if (modal) modal.style.display = 'flex';
+
+        document.getElementById('btnGenererPDF').onclick = function() {
+            const element = document.getElementById('pdfContent');
+            if (typeof html2pdf !== 'undefined') {
+                html2pdf().from(element).set({
+                    margin: [15, 15, 15, 15],
+                    filename: 'Fiche_AssistGarage_' + id + '.pdf',
+                    html2canvas: { scale: 2, useCORS: true },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                }).save();
+                afficherToast("📄 PDF généré avec succès");
+            }
+        };
+    }
+
     function chargerDemandesRealtime() {
-        if (unsubscribeDashboard) unsubscribeDashboard();
+        if (unsubscribeDashboard) {
+            unsubscribeDashboard();
+            unsubscribeDashboard = null;
+        }
 
         unsubscribeDashboard = db.collection('demandes')
             .orderBy('dateTimestamp', 'desc')
@@ -1467,15 +1173,10 @@
                 if (currentFiltre === 'non-lues') filtered = demandes.filter(function(d) { return !d.lu; });
                 if (currentFiltre === 'urgentes') filtered = demandes.filter(function(d) { return d.urgence === 'haute'; });
 
-                const statTotal = document.getElementById('statTotal');
-                const statNonLues = document.getElementById('statNonLues');
-                const statUrgentes = document.getElementById('statUrgentes');
-                const statSatisfaction = document.getElementById('statSatisfaction');
-
-                if (statTotal) statTotal.textContent = demandes.length;
-                if (statNonLues) statNonLues.textContent = demandes.filter(function(d) { return !d.lu; }).length;
-                if (statUrgentes) statUrgentes.textContent = demandes.filter(function(d) { return d.urgence === 'haute'; }).length;
-                if (statSatisfaction) statSatisfaction.textContent = noteMoyenne + ' ★';
+                document.getElementById('statTotal').textContent = demandes.length;
+                document.getElementById('statNonLues').textContent = demandes.filter(function(d) { return !d.lu; }).length;
+                document.getElementById('statUrgentes').textContent = demandes.filter(function(d) { return d.urgence === 'haute'; }).length;
+                document.getElementById('statSatisfaction').textContent = noteMoyenne + ' ★';
 
                 const listeDiv = document.getElementById('listeDemandes');
                 if (!listeDiv) return;
@@ -1543,32 +1244,32 @@
                     });
                 });
 
+                // Marquer comme lues
                 filtered.forEach(function(d) {
                     if (!d.lu) {
-                        db.collection('demandes').doc(d.id).update({ lu: true });
+                        db.collection('demandes').doc(d.id).update({ lu: true }).catch(function(e) {});
                     }
                 });
+            }, function(error) {
+                console.error("Erreur Firestore:", error);
+                afficherToast("❌ Erreur de chargement des données");
             });
     }
 
-    // Filtres
-    const filtreBtns = document.querySelectorAll('.filtre-btn');
-    filtreBtns.forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            filtreBtns.forEach(function(b) { b.classList.remove('active'); });
-            btn.classList.add('active');
-            currentFiltre = btn.dataset.filtre;
-            chargerDemandesRealtime();
-        });
-    });
-
-    // Navigation
+    // ============================================================
+    // NAVIGATION
+    // ============================================================
     function afficherClient() {
-        if (clientScreen) clientScreen.style.display = 'block';
-        if (dashboardScreen) dashboardScreen.style.display = 'none';
+        clientScreen.style.display = 'block';
+        dashboardScreen.style.display = 'none';
         if (unsubscribeDashboard) {
             unsubscribeDashboard();
             unsubscribeDashboard = null;
+        }
+        // Nettoyer le tracking
+        if (trackingUnsubscribe) {
+            trackingUnsubscribe();
+            trackingUnsubscribe = null;
         }
         genererQRCode();
     }
@@ -1579,23 +1280,38 @@
             alert("❌ Mot de passe incorrect");
             return;
         }
-        if (clientScreen) clientScreen.style.display = 'none';
-        if (dashboardScreen) dashboardScreen.style.display = 'block';
+        clientScreen.style.display = 'none';
+        dashboardScreen.style.display = 'block';
         chargerDemandesRealtime();
     }
 
-    const btnDashboard = document.getElementById('btnAllerDashboard');
-    if (btnDashboard) btnDashboard.addEventListener('click', afficherDashboard);
+    document.getElementById('btnAllerDashboard')?.addEventListener('click', afficherDashboard);
+    document.getElementById('btnQuitterDashboard')?.addEventListener('click', afficherClient);
 
-    const btnQuitter = document.getElementById('btnQuitterDashboard');
-    if (btnQuitter) btnQuitter.addEventListener('click', afficherClient);
+    // ============================================================
+    // FILTRES
+    // ============================================================
+    document.querySelectorAll('.filtre-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.filtre-btn').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            currentFiltre = btn.dataset.filtre;
+            chargerDemandesRealtime();
+        });
+    });
 
+    // ============================================================
+    // INITIALISATION
+    // ============================================================
     // Date min RDV
     const today = new Date().toISOString().split('T')[0];
     const dateRdvElem = document.getElementById('dateRdv');
     if (dateRdvElem) dateRdvElem.min = today;
 
-    // Demander permission notification au chargement
+    // Setup media handlers
+    setupMediaHandlers();
+
+    // Demander permission notification
     demanderPermissionNotification();
 
     // Fermeture modal
