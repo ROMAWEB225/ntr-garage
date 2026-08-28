@@ -257,10 +257,11 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0,0,0,0.6);
             justify-content: center;
             align-items: center;
             z-index: 1000;
+            backdrop-filter: blur(4px);
         }
         .modal-content {
             background: white;
@@ -273,13 +274,16 @@
         }
         .media-preview-mini {
             margin-top: 8px;
-            padding: 8px;
-            background: #f8fafc;
-            border-radius: 12px;
+            padding: 8px 14px;
+            background: #f1f5f9;
+            border-radius: 30px;
             cursor: pointer;
             transition: all 0.2s ease;
+            display: inline-block;
+            border: 1px solid #e2e8f0;
+            font-size: 13px;
         }
-        .media-preview-mini:hover { background: #f1f5f9; }
+        .media-preview-mini:hover { background: #e2e8f0; transform: scale(1.02); }
         .media-preview-mini img { max-width: 80px; max-height: 80px; border-radius: 8px; }
         .media-preview-mini video { max-width: 80px; max-height: 80px; border-radius: 8px; }
         .brand-footer { text-align: center; margin-top: 20px; padding-top: 16px; border-top: 1px solid #e2e8f0; font-size: 11px; color: #94a3b8; }
@@ -332,7 +336,6 @@
             <span class="badge-free">📱 VERSION PRO</span>
         </div>
 
-        <!-- Smartlink Banner -->
         <div class="ad-banner" onclick="ouvrirSmartlink()">
             <div class="ad-icon">🎯</div>
             <div class="ad-text">
@@ -529,7 +532,7 @@
         <h3 style="margin-bottom: 16px;">📷 Média joint</h3>
         <div id="mediaModalContent" style="text-align: center;"></div>
         <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: center;">
-            <button onclick="document.getElementById('mediaModal').style.display='none'" class="btn-secondary">Fermer</button>
+            <button onclick="fermerMediaModal()" class="btn-secondary">Fermer</button>
         </div>
     </div>
 </div>
@@ -554,20 +557,57 @@
 <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
 <script>
+// ============================================================
+// FONCTIONS GLOBALES (accessibles depuis le HTML)
+// ============================================================
+
+// Fonction pour ouvrir la modal média (appelée depuis onclick)
+function afficherMediaModal(mediaData, mediaType) {
+    console.log("📷 Ouverture média:", mediaType, mediaData ? "Données présentes" : "Aucune donnée");
+    
+    const modal = document.getElementById('mediaModal');
+    const content = document.getElementById('mediaModalContent');
+    
+    if (!modal || !content) {
+        console.error("❌ Modal non trouvée");
+        return;
+    }
+    
+    if (!mediaData) {
+        content.innerHTML = '<p style="color:#64748b;">❌ Aucun média disponible</p>';
+    } else if (mediaType === 'image') {
+        content.innerHTML = '<img src="' + mediaData + '" style="max-width:100%;max-height:400px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.1);">';
+    } else if (mediaType === 'video') {
+        content.innerHTML = '<video src="' + mediaData + '" controls style="max-width:100%;max-height:400px;border-radius:12px;"></video>';
+    } else if (mediaType === 'audio') {
+        content.innerHTML = '<audio src="' + mediaData + '" controls style="width:100%;"></audio>';
+    } else {
+        content.innerHTML = '<p style="color:#64748b;">❌ Type de média non reconnu</p>';
+    }
+    
+    modal.style.display = 'flex';
+}
+
+// Fonction pour fermer la modal média (appelée depuis onclick)
+function fermerMediaModal() {
+    const modal = document.getElementById('mediaModal');
+    if (modal) modal.style.display = 'none';
+}
+
+// Fonction Smartlink (appelée depuis onclick)
+function ouvrirSmartlink() {
+    const url = "https://www.profitableratecpmnetwork.com/qhantf3pr7?key=c2d00db54c4c00e25dc147164ecb4737";
+    if (url) {
+        window.open(url, '_blank');
+    } else {
+        afficherToast("🔗 Smartlink non configuré.");
+    }
+}
+
+// ============================================================
+// SCRIPT PRINCIPAL
+// ============================================================
 (function() {
-    // ============================================================
-    // SMARTLINK CONFIGURATION
-    // ============================================================
-    const SMARTLINK_URL = "https://www.profitableratecpmnetwork.com/qhantf3pr7?key=c2d00db54c4c00e25dc147164ecb4737";
-
-    window.ouvrirSmartlink = function() {
-        if (SMARTLINK_URL) {
-            window.open(SMARTLINK_URL, '_blank');
-        } else {
-            afficherToast("🔗 Smartlink non configuré.");
-        }
-    };
-
     // ============================================================
     // FIREBASE CONFIG
     // ============================================================
@@ -731,7 +771,7 @@
     }
 
     // ============================================================
-    // MEDIA HANDLING - CORRIGÉ
+    // MEDIA HANDLING
     // ============================================================
     function setupMediaHandlers() {
         const btnPhoto = document.getElementById('btnPhoto');
@@ -777,7 +817,6 @@
                 const file = e.target.files[0];
                 if (!file) return;
 
-                // Limite de taille : 5MB max
                 if (file.size > 5 * 1024 * 1024) {
                     afficherToast("❌ Fichier trop lourd (max 5MB)");
                     fichierMedia.value = '';
@@ -816,28 +855,6 @@
         previewMediaDiv.style.display = 'none';
         previewMediaDiv.innerHTML = '';
         fichierMedia.value = '';
-    }
-
-    // ============================================================
-    // AFFICHER MÉDIA DANS MODAL
-    // ============================================================
-    function afficherMediaModal(mediaData, mediaType) {
-        const modal = document.getElementById('mediaModal');
-        const content = document.getElementById('mediaModalContent');
-        
-        if (!mediaData) {
-            content.innerHTML = '<p style="color:#64748b;">Aucun média disponible</p>';
-        } else if (mediaType === 'image') {
-            content.innerHTML = '<img src="' + mediaData + '" style="max-width:100%;max-height:400px;border-radius:12px;">';
-        } else if (mediaType === 'video') {
-            content.innerHTML = '<video src="' + mediaData + '" controls style="max-width:100%;max-height:400px;border-radius:12px;"></video>';
-        } else if (mediaType === 'audio') {
-            content.innerHTML = '<audio src="' + mediaData + '" controls style="width:100%;"></audio>';
-        } else {
-            content.innerHTML = '<p style="color:#64748b;">Type de média non reconnu</p>';
-        }
-        
-        modal.style.display = 'flex';
     }
 
     // ============================================================
@@ -914,7 +931,7 @@
         const printWindow = window.open('', '_blank', 'width=400,height=600');
         if (printWindow) {
             printWindow.document.write(`
-                <html><head><title>QR Code Assist'Garage</title>
+                <html><head><title>QR Code Assist-Garage</title>
                 <style>
                     body { display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; font-family: 'Georgia', serif; margin: 0; padding: 20px; background: white; }
                     .qr-container { text-align: center; padding: 30px; border: 1px solid #e2e8f0; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
@@ -930,7 +947,7 @@
                     <div class="sub">Scannez pour accéder à l'application</div>
                     <div class="qr-code-wrapper">${qrHtml}</div>
                     <div class="url">${currentUrl}</div>
-                    <div class="footer">Assist'Garage — Solution de gestion pour garages</div>
+                    <div class="footer">Assist-Garage — Solution de gestion pour garages</div>
                 </div>
                 <script>window.onload = function() { window.print(); };<\/script>
                 </body></html>
@@ -991,7 +1008,6 @@
             await db.collection('demandes').add(demande);
             showMessage("✅ Demande envoyée ! Votre numéro : " + numeroDemande, true);
 
-            // Réinitialiser le formulaire
             document.getElementById('clientNom').value = '';
             document.getElementById('immatriculation').value = '';
             document.getElementById('clientEmail').value = '';
@@ -1120,7 +1136,7 @@
     });
 
     // ============================================================
-    // DASHBOARD ADMIN - CORRIGÉ AVEC MÉDIAS
+    // DASHBOARD ADMIN
     // ============================================================
     async function updateStatus(demandeId, nouveauStatut) {
         const statusLabels = ['En attente', 'En réparation', 'Prête'];
@@ -1160,7 +1176,7 @@
         pdfContent.innerHTML = `
             <div style="font-family: 'Georgia', 'Times New Roman', serif; max-width: 600px; margin: 0 auto; padding: 10px;">
                 <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #0f172a; padding-bottom: 20px;">
-                    <div style="font-size: 28px; font-weight: 300; letter-spacing: 4px; color: #0f172a;">ASSIST'GARAGE</div>
+                    <div style="font-size: 28px; font-weight: 300; letter-spacing: 4px; color: #0f172a;">ASSIST-GARAGE</div>
                     <div style="font-size: 11px; color: #64748b; letter-spacing: 2px; margin-top: 4px; text-transform: uppercase;">Fiche de réception</div>
                     <div style="font-size: 11px; color: #94a3b8; margin-top: 6px; letter-spacing: 1px;">Document confidentiel</div>
                 </div>
@@ -1199,7 +1215,7 @@
                     </div>
                 </div>
                 <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
-                    <div style="font-size: 10px; color: #94a3b8; letter-spacing: 1px; text-transform: uppercase;">Assist'Garage — Solution de gestion pour garages</div>
+                    <div style="font-size: 10px; color: #94a3b8; letter-spacing: 1px; text-transform: uppercase;">Assist-Garage — Solution de gestion pour garages</div>
                     <div style="font-size: 9px; color: #cbd5e1; margin-top: 4px;">Ce document est généré automatiquement</div>
                 </div>
             </div>
@@ -1299,12 +1315,14 @@
                         satisfactionHtml = '<div style="margin-top:8px;">⭐ ' + stars + '</div>';
                     }
 
-                    // Gestion des médias dans le dashboard
+                    // Gestion des médias dans le dashboard - avec onclick direct
                     let mediaHtml = '';
                     if (demande.media && demande.mediaType) {
                         const mediaIcon = demande.mediaType === 'image' ? '📷' : (demande.mediaType === 'video' ? '🎥' : '🎙️');
+                        // Utiliser des guillemets simples pour éviter les problèmes d'échappement
+                        const mediaDataEscaped = demande.media.replace(/'/g, "\\'");
                         mediaHtml = `
-                            <div class="media-preview-mini" onclick='afficherMediaModal("${demande.media}", "${demande.mediaType}")'>
+                            <div class="media-preview-mini" onclick="afficherMediaModal('${mediaDataEscaped}', '${demande.mediaType}')">
                                 ${mediaIcon} Voir le média joint
                             </div>
                         `;
@@ -1342,7 +1360,7 @@
                 listeDiv.innerHTML = html;
                 console.log("✅ HTML injecté, nombre d'éléments:", filtered.length);
 
-                // Attacher les événements APRÈS l'injection
+                // Attacher les événements
                 setTimeout(function() {
                     document.querySelectorAll('.status-select').forEach(function(select) {
                         select.addEventListener('change', function(e) {
