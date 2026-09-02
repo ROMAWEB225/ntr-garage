@@ -353,6 +353,15 @@
                 <button id="btnImprimerQR" class="btn-secondary">🖨️ Imprimer QR</button>
             </div>
         </div>
+        <!-- ============================================================
+     BOUTON D'INSTALLATION DE LA PWA
+     ============================================================ -->
+       <div style="text-align: center; margin: 16px 0;">
+             <button id="btnInstaller" style="display:none; background: #0f172a; color: white; border: none; padding: 14px 24px; border-radius: 40px; font-size: 15px; font-weight: 600; cursor: pointer; width: 100%; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.15); transition: all 0.3s ease;">
+             📱 Installer l'application sur mon téléphone
+       </button>
+         <p style="font-size: 11px; color: #94a3b8; margin-top: 6px;">Gratuit • Sans inscription • Fonctionne hors-ligne</p>
+       </div>
 
         <div class="tabs">
             <div class="tab active" data-tab="panne">📝 Signalement</div>
@@ -1486,6 +1495,76 @@ CODE SOCIAL BAR ADSTERRA (réintégré)
             .then(() => console.log('✅ Service Worker enregistré !'))
             .catch(err => console.log('❌ Erreur Service Worker :', err));
     }
+</script>
+    <!-- ============================================================
+     SCRIPT POUR L'INSTALLATION EN 1 CLIC
+     ============================================================ -->
+<script>
+    (function() {
+        // Variables pour l'installation
+        let deferredPrompt;
+        const btnInstall = document.getElementById('btnInstaller');
+
+        // Détecter si l'installation est possible
+        window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('🔔 Installation détectée comme possible');
+            e.preventDefault();
+            deferredPrompt = e;
+            if (btnInstall) {
+                btnInstall.style.display = 'block';
+            }
+        });
+
+        // Gérer le clic sur le bouton
+        if (btnInstall) {
+            btnInstall.addEventListener('click', () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    deferredPrompt.userChoice.then((choiceResult) => {
+                        if (choiceResult.outcome === 'accepted') {
+                            console.log('✅ L\'utilisateur a installé l\'application !');
+                            afficherToast('🎉 Application installée avec succès !');
+                        } else {
+                            console.log('❌ L\'utilisateur a refusé l\'installation.');
+                        }
+                        deferredPrompt = null;
+                        btnInstall.style.display = 'none';
+                    });
+                } else {
+                    // Solution de secours : ouvrir une page d'instruction
+                    alert('📱 Pour installer l\'application :\n\n' +
+                          '1. Cliquez sur le menu ⋮ (Chrome) ou sur le partage (Safari)\n' +
+                          '2. Sélectionnez "Ajouter à l\'écran d\'accueil"');
+                }
+            });
+        }
+
+        // Quand l'application est installée
+        window.addEventListener('appinstalled', () => {
+            console.log('🎉 Application installée avec succès !');
+            if (btnInstall) {
+                btnInstall.style.display = 'none';
+            }
+        });
+
+        // Pour Safari sur iOS (détection spécifique)
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+        if (isSafari && window.navigator.standalone === false) {
+            // Sur Safari, on affiche un message d'aide
+            if (btnInstall) {
+                btnInstall.textContent = '📱 Ajouter à l\'écran d\'accueil (Safari)';
+                btnInstall.style.display = 'block';
+                btnInstall.addEventListener('click', () => {
+                    alert('📱 Pour ajouter Assist-Garage à votre écran d\'accueil :\n\n' +
+                          '1. Tapez sur l\'icône de partage (carré avec une flèche)\n' +
+                          '2. Faites défiler vers le bas et tapez "Sur l\'écran d\'accueil"\n' +
+                          '3. Tapez sur "Ajouter"');
+                });
+            }
+        }
+
+        console.log('🚀 Script d\'installation PWA chargé');
+    })();
 </script>
 </body>
 </html>
