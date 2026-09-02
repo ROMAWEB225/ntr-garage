@@ -1,19 +1,26 @@
 {
-  "name": "My Website",
-  "short_name": "Website",
+  "name": "Assist-Garage",
+  "short_name": "Assist-Garage",
+  "description": "Application de gestion pour garages et gares",
+  "start_url": "/ntr-garage/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
   "icons": [
     {
-      "src": "/android-chrome-192x192.png",
+      "src": "/ntr-garage/assets/android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/android-chrome-512x512.png",
+      "src": "/ntr-garage/assets/android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
+    },
+    {
+      "src": "/ntr-garage/assets/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
     }
-  ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
-  "display": "standalone"
+  ]
 }
