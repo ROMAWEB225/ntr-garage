@@ -1480,5 +1480,12 @@ function ouvrirSmartlink() {
 CODE SOCIAL BAR ADSTERRA (réintégré)
 ============================================================ -->
 <script type='text/javascript' src='//pl31125299.profitableratecpmnetwork.com/7d/47/2d/7d472d1e372e98bc61d61a51d74661d4.js'></script>
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/ntr-garage/sw.js')
+            .then(() => console.log('✅ Service Worker enregistré !'))
+            .catch(err => console.log('❌ Erreur Service Worker :', err));
+    }
+</script>
 </body>
 </html>
