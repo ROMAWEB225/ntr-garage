@@ -315,6 +315,67 @@
         .ad-footer:hover { border-color: #e2e8f0; background: #f1f5f9; color: #0f172a; }
         .ad-footer span { font-weight: 500; color: #0f172a; }
 
+        /* ===== STYLE POUR LE SELECTEUR DE GARAGE ===== */
+        .garage-selector {
+            margin-bottom: 20px;
+            padding: 16px 20px;
+            background: #f8fafc;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .garage-selector label {
+            font-weight: 600;
+            font-size: 14px;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .garage-selector select {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            background: white;
+            min-width: 180px;
+            cursor: pointer;
+        }
+        .garage-selector select:focus {
+            outline: none;
+            border-color: #0f172a;
+            box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
+        }
+        .garage-tag {
+            display: inline-block;
+            background: #eef2ff;
+            color: #0f172a;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 12px;
+            border-radius: 50px;
+            margin-left: 8px;
+        }
+
+        /* ===== INDICATEUR DE GARAGE POUR LE CLIENT ===== */
+        .garage-indicator {
+            text-align: center;
+            font-size: 13px;
+            color: #64748b;
+            margin: 4px 0 12px 0;
+            padding: 6px 12px;
+            background: #f8fafc;
+            border-radius: 30px;
+            display: inline-block;
+        }
+        .garage-indicator strong {
+            color: #0f172a;
+        }
+
         @media (max-width: 560px) {
             body { padding: 16px; }
             .container, .dashboard-container { padding: 20px; }
@@ -323,6 +384,8 @@
             .btn-urgence { flex-direction: column; }
             .ad-banner { flex-wrap: wrap; justify-content: center; text-align: center; }
             .ad-banner .ad-cta { width: 100%; text-align: center; }
+            .garage-selector { flex-direction: column; align-items: stretch; }
+            .garage-selector select { width: 100%; }
         }
     </style>
 </head>
@@ -354,15 +417,22 @@
                 <button id="btnImprimerQR" class="btn-secondary">🖨️ Imprimer QR</button>
             </div>
         </div>
+
         <!-- ============================================================
-     BOUTON D'INSTALLATION DE LA PWA
-     ============================================================ -->
-       <div style="text-align: center; margin: 16px 0;">
-             <button id="btnInstaller" style="display:none; background: #0f172a; color: white; border: none; padding: 14px 24px; border-radius: 40px; font-size: 15px; font-weight: 600; cursor: pointer; width: 100%; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.15); transition: all 0.3s ease;">
-             📱 Installer l'application sur mon téléphone
-       </button>
-         <p style="font-size: 11px; color: #94a3b8; margin-top: 6px;">Gratuit • Sans inscription • Fonctionne hors-ligne</p>
-       </div>
+        INDICATEUR DU GARAGE POUR LE CLIENT
+        ============================================================ -->
+        <div style="text-align: center; margin: 4px 0 12px 0;">
+            <span class="garage-indicator" id="clientGarageIndicator">
+                📍 Garage : <strong id="clientGarageName">Standard</strong>
+            </span>
+        </div>
+
+        <div style="text-align: center; margin: 16px 0;">
+            <button id="btnInstaller" style="display:none; background: #0f172a; color: white; border: none; padding: 14px 24px; border-radius: 40px; font-size: 15px; font-weight: 600; cursor: pointer; width: 100%; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.15); transition: all 0.3s ease;">
+                📱 Installer l'application sur mon téléphone
+            </button>
+            <p style="font-size: 11px; color: #94a3b8; margin-top: 6px;">Gratuit • Sans inscription • Fonctionne hors-ligne</p>
+        </div>
 
         <div class="tabs">
             <div class="tab active" data-tab="panne">📝 Signalement</div>
@@ -461,7 +531,7 @@
                 <div class="ad-icon">💡</div>
                 <div class="ad-text">
                     <strong>💰 Gagnez de l'argent</strong>
-                    <small>Des offres exclusives pour les utilisateurs d'Assist'Garage</small>
+                    <small>Des offres exclusives pour les utilisateurs d'Assist-Garage</small>
                 </div>
                 <div class="ad-cta">En savoir plus</div>
             </div>
@@ -513,6 +583,25 @@
         <div class="logo">
             <h1>🚗 ASSIST-GARAGE</h1>
             <div class="subtitle">ESPACE RÉCEPTION</div>
+        </div>
+
+        <!-- ============================================================
+        SELECTEUR DE GARAGE POUR LE DASHBOARD
+        ============================================================ -->
+        <div class="garage-selector">
+            <label for="selectGarage">🔧 Garage :</label>
+            <select id="selectGarage">
+                <option value="tous">📋 Tous les garages</option>
+                <!-- ⚠️ AJOUTE TES GARAGES PARTENAIRES ICI ⚠️ -->
+                <option value="Toure">Garage Toure</option>
+                <option value="Momo">Garage Momo</option>
+                <option value="ClimAuto">Clim Auto</option>
+                <option value="PrestigeAuto">Prestige Auto</option>
+                <option value="CIAuto">Côte d'Ivoire Auto</option>
+                <option value="Ivoiremotor">Ivoiremotor</option>
+                <option value="SamMotors">Sam Motors</option>
+            </select>
+            <span style="font-size: 12px; color: #94a3b8; margin-left: auto;">👆 Sélectionnez un garage</span>
         </div>
 
         <div class="stats" id="stats">
@@ -605,7 +694,7 @@ function fermerMediaModal() {
 }
 
 // ============================================================
-// SMARTLINK - NOUVEAU LIEN MAINSTREAM ✅
+// SMARTLINK - LIEN MAINSTREAM
 // ============================================================
 function ouvrirSmartlink() {
     const url = "https://www.profitableratecpmnetwork.com/k9vfm5y88?key=f28dab4e4533beafd809528362e68455";
@@ -614,6 +703,14 @@ function ouvrirSmartlink() {
     } else {
         afficherToast("🔗 Smartlink non configuré.");
     }
+}
+
+// ============================================================
+// FONCTION POUR RÉCUPÉRER LE GARAGE DEPUIS L'URL
+// ============================================================
+function getGarageFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('garage') || 'Standard';
 }
 
 // ============================================================
@@ -663,6 +760,18 @@ function ouvrirSmartlink() {
     const previewMediaDiv = document.getElementById('previewMedia');
     const fichierMedia = document.getElementById('fichierMedia');
     const descInput = document.getElementById('description');
+
+    // Récupérer le garage depuis l'URL
+    const garageActuel = getGarageFromURL();
+    console.log("🏷️ Garage actuel :", garageActuel);
+
+    // ============================================================
+    // AFFICHER LE NOM DU GARAGE POUR LE CLIENT
+    // ============================================================
+    const clientGarageName = document.getElementById('clientGarageName');
+    if (clientGarageName) {
+        clientGarageName.textContent = garageActuel;
+    }
 
     // ============================================================
     // UTILITY FUNCTIONS
@@ -971,7 +1080,7 @@ function ouvrirSmartlink() {
     });
 
     // ============================================================
-    // ENVOI DEMANDE
+    // ENVOI DEMANDE - AVEC AJOUT DU CHAMP GARAGE
     // ============================================================
     document.getElementById('btnEnvoyer')?.addEventListener('click', async function() {
         const nom = document.getElementById('clientNom')?.value.trim() || '';
@@ -991,6 +1100,7 @@ function ouvrirSmartlink() {
         if (!immat) { showMessage("❌ Immatriculation requise", false); return; }
 
         const numeroDemande = genererNumeroDemande();
+        const garage = getGarageFromURL();
 
         const demande = {
             nom: nom,
@@ -1013,7 +1123,8 @@ function ouvrirSmartlink() {
             lu: false,
             statut: 0,
             diagnosticIA: analyserPanne(description),
-            numeroDemande: numeroDemande
+            numeroDemande: numeroDemande,
+            garage: garage  // ✅ AJOUT DU CHAMP GARAGE
         };
 
         try {
@@ -1098,6 +1209,7 @@ function ouvrirSmartlink() {
                 <p><strong>👤 Client :</strong> ${data.nom || '-'}</p>
                 <p><strong>🔧 Panne :</strong> ${data.description || 'Non renseignée'}</p>
                 ${data.numeroDemande ? `<p><strong>📋 N° de demande :</strong> ${data.numeroDemande}</p>` : ''}
+                ${data.garage ? `<p><strong>🏷️ Garage :</strong> ${data.garage}</p>` : ''}
             `;
         }
 
@@ -1148,7 +1260,7 @@ function ouvrirSmartlink() {
     });
 
     // ============================================================
-    // DASHBOARD ADMIN
+    // DASHBOARD ADMIN - AVEC FILTRAGE PAR GARAGE
     // ============================================================
     async function updateStatus(demandeId, nouveauStatut) {
         const statusLabels = ['En attente', 'En réparation', 'Prête'];
@@ -1224,6 +1336,7 @@ function ouvrirSmartlink() {
                         ${demande.dateRdv ? `<div style="margin-top: 6px;"><span style="color: #64748b; font-size: 11px;">RDV programmé</span><br><span style="color: #0f172a; font-weight: 500;">${demande.dateRdv} ${demande.heureRdv || ''}</span></div>` : ''}
                         ${demande.diagnosticIA ? `<div style="margin-top: 6px;"><span style="color: #64748b; font-size: 11px;">Diagnostic IA</span><br><span style="color: #0f172a; font-weight: 400; font-style: italic;">${demande.diagnosticIA}</span></div>` : ''}
                         ${mediaHtml}
+                        ${demande.garage ? `<div style="margin-top: 6px;"><span style="color: #64748b; font-size: 11px;">Garage</span><br><span style="color: #0f172a; font-weight: 500;">${demande.garage}</span></div>` : ''}
                     </div>
                 </div>
                 <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
@@ -1258,158 +1371,169 @@ function ouvrirSmartlink() {
 
         console.log("🔄 Chargement des demandes...");
 
-        unsubscribeDashboard = db.collection('demandes')
-            .orderBy('dateTimestamp', 'desc')
-            .onSnapshot(function(snapshot) {
-                console.log("📦 Snapshot reçu, taille:", snapshot.size);
-                
-                let demandes = [];
-                let totalSat = 0;
-                let nbSat = 0;
+        const selectGarage = document.getElementById('selectGarage');
+        const garageFiltre = selectGarage ? selectGarage.value : 'tous';
+        console.log("🏷️ Filtre garage :", garageFiltre);
 
-                snapshot.forEach(function(doc) {
-                    const d = doc.data();
-                    demandes.push({ id: doc.id, ...d });
-                    if (d.satisfaction) {
-                        totalSat += d.satisfaction;
-                        nbSat++;
-                    }
-                });
+        let query = db.collection('demandes');
+        if (garageFiltre !== 'tous') {
+            query = query.where('garage', '==', garageFiltre);
+        }
+        query = query.orderBy('dateTimestamp', 'desc');
 
-                console.log("📊 Demandes chargées:", demandes.length);
+        unsubscribeDashboard = query.onSnapshot(function(snapshot) {
+            console.log("📦 Snapshot reçu, taille:", snapshot.size);
+            
+            let demandes = [];
+            let totalSat = 0;
+            let nbSat = 0;
 
-                // Mise à jour des stats
-                const statTotal = document.getElementById('statTotal');
-                const statNonLues = document.getElementById('statNonLues');
-                const statUrgentes = document.getElementById('statUrgentes');
-                const statSatisfaction = document.getElementById('statSatisfaction');
-
-                if (statTotal) statTotal.textContent = demandes.length;
-                if (statNonLues) statNonLues.textContent = demandes.filter(function(d) { return !d.lu; }).length;
-                if (statUrgentes) statUrgentes.textContent = demandes.filter(function(d) { return d.urgence === 'haute'; }).length;
-                if (statSatisfaction) statSatisfaction.textContent = nbSat > 0 ? (totalSat / nbSat).toFixed(1) + ' ★' : '0 ★';
-
-                // FILTRAGE
-                let filtered = demandes;
-                if (currentFiltre === 'non-lues') {
-                    filtered = demandes.filter(function(d) { return !d.lu; });
-                }
-                if (currentFiltre === 'urgentes') {
-                    filtered = demandes.filter(function(d) { return d.urgence === 'haute'; });
-                }
-
-                console.log("🔍 Demandes filtrées:", filtered.length, "Filtre:", currentFiltre);
-
-                const listeDiv = document.getElementById('listeDemandes');
-                if (!listeDiv) {
-                    console.error("❌ Element #listeDemandes introuvable !");
-                    return;
-                }
-
-                listeDiv.innerHTML = '';
-
-                if (filtered.length === 0) {
-                    listeDiv.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;">📭 Aucune demande</div>';
-                    console.log("📭 Aucune demande à afficher");
-                    return;
-                }
-
-                let html = '';
-                filtered.forEach(function(demande) {
-                    const statutActuel = demande.statut !== undefined ? demande.statut : 0;
-                    const numDemande = demande.numeroDemande || demande.id.substring(0, 8);
-
-                    let satisfactionHtml = '';
-                    if (demande.satisfaction) {
-                        let stars = '';
-                        for (let i = 0; i < demande.satisfaction; i++) stars += '★';
-                        for (let i = demande.satisfaction; i < 5; i++) stars += '☆';
-                        satisfactionHtml = '<div style="margin-top:8px;">⭐ ' + stars + '</div>';
-                    }
-
-                    // Gestion des médias dans le dashboard - avec onclick direct
-                    let mediaHtml = '';
-                    if (demande.media && demande.mediaType) {
-                        const mediaIcon = demande.mediaType === 'image' ? '📷' : (demande.mediaType === 'video' ? '🎥' : '🎙️');
-                        // Utiliser des guillemets simples pour éviter les problèmes d'échappement
-                        const mediaDataEscaped = demande.media.replace(/'/g, "\\'");
-                        mediaHtml = `
-                            <div class="media-preview-mini" onclick="afficherMediaModal('${mediaDataEscaped}', '${demande.mediaType}')">
-                                ${mediaIcon} Voir le média joint
-                            </div>
-                        `;
-                    }
-
-                    const urgenceClasse = demande.urgence || 'basse';
-                    const urgenceLabel = demande.urgence === 'haute' ? '🔴 URGENT' : 
-                                        (demande.urgence === 'moyenne' ? '🟡 MOYEN' : '🟢 BAS');
-
-                    html += `
-                        <div class="demande ${urgenceClasse}" data-id="${demande.id}">
-                            <span class="badge-urgence ${urgenceClasse}">${urgenceLabel}</span>
-                            <div><strong>📋 N° :</strong> ${numDemande}</div>
-                            <div><strong>🚘 Vehicule :</strong> ${demande.immatriculation || '-'} - ${demande.date || ''}</div>
-                            <div><strong>👤 Client :</strong> ${demande.nom || 'Client'}</div>
-                            ${demande.marque ? '<div style="font-size:13px;color:#64748b;">' + demande.marque + ' ' + (demande.modele || '') + ' - ' + (demande.kilometrage || '') + ' km</div>' : ''}
-                            <div style="margin:8px 0;">${demande.description || ''}</div>
-                            ${demande.lieu ? '<div style="font-size:12px;color:#64748b;">📍 Lieu : ' + demande.lieu + '</div>' : ''}
-                            ${demande.dateRdv ? '<div style="font-size:12px;">📅 RDV : ' + demande.dateRdv + ' ' + (demande.heureRdv || '') + '</div>' : ''}
-                            ${satisfactionHtml}
-                            ${mediaHtml}
-                            <div class="actions">
-                                <select class="status-select" data-id="${demande.id}">
-                                    <option value="0" ${statutActuel === 0 ? 'selected' : ''}>🟡 En attente</option>
-                                    <option value="1" ${statutActuel === 1 ? 'selected' : ''}>🔧 En réparation</option>
-                                    <option value="2" ${statutActuel === 2 ? 'selected' : ''}>✅ Prête</option>
-                                </select>
-                                <button class="btn-action btn-pdf" data-id="${demande.id}" data-json='${JSON.stringify(demande).replace(/'/g, "&#39;")}'>📄 PDF</button>
-                                <button class="btn-action btn-supprimer" data-id="${demande.id}">🗑️</button>
-                            </div>
-                        </div>
-                    `;
-                });
-
-                listeDiv.innerHTML = html;
-                console.log("✅ HTML injecté, nombre d'éléments:", filtered.length);
-
-                // Attacher les événements
-                setTimeout(function() {
-                    document.querySelectorAll('.status-select').forEach(function(select) {
-                        select.addEventListener('change', function(e) {
-                            updateStatus(select.dataset.id, parseInt(e.target.value));
-                        });
-                    });
-
-                    document.querySelectorAll('.btn-pdf').forEach(function(btn) {
-                        btn.addEventListener('click', function() {
-                            const demande = JSON.parse(btn.dataset.json);
-                            genererPDF(demande, demande.numeroDemande || btn.dataset.id);
-                        });
-                    });
-
-                    document.querySelectorAll('.btn-supprimer').forEach(function(btn) {
-                        btn.addEventListener('click', function() {
-                            deleteDemande(btn.dataset.id);
-                        });
-                    });
-                }, 100);
-
-                // Marquer comme lues
-                filtered.forEach(function(d) {
-                    if (!d.lu) {
-                        db.collection('demandes').doc(d.id).update({ lu: true }).catch(function(e) {});
-                    }
-                });
-
-            }, function(error) {
-                console.error("❌ Erreur Firestore:", error);
-                afficherToast("❌ Erreur de chargement: " + error.message);
-                
-                const listeDiv = document.getElementById('listeDemandes');
-                if (listeDiv) {
-                    listeDiv.innerHTML = '<div style="text-align:center;padding:40px;color:#ef4444;">❌ Erreur: ' + error.message + '</div>';
+            snapshot.forEach(function(doc) {
+                const d = doc.data();
+                demandes.push({ id: doc.id, ...d });
+                if (d.satisfaction) {
+                    totalSat += d.satisfaction;
+                    nbSat++;
                 }
             });
+
+            console.log("📊 Demandes chargées:", demandes.length);
+
+            const statTotal = document.getElementById('statTotal');
+            const statNonLues = document.getElementById('statNonLues');
+            const statUrgentes = document.getElementById('statUrgentes');
+            const statSatisfaction = document.getElementById('statSatisfaction');
+
+            if (statTotal) statTotal.textContent = demandes.length;
+            if (statNonLues) statNonLues.textContent = demandes.filter(function(d) { return !d.lu; }).length;
+            if (statUrgentes) statUrgentes.textContent = demandes.filter(function(d) { return d.urgence === 'haute'; }).length;
+            if (statSatisfaction) statSatisfaction.textContent = nbSat > 0 ? (totalSat / nbSat).toFixed(1) + ' ★' : '0 ★';
+
+            let filtered = demandes;
+            if (currentFiltre === 'non-lues') {
+                filtered = demandes.filter(function(d) { return !d.lu; });
+            }
+            if (currentFiltre === 'urgentes') {
+                filtered = demandes.filter(function(d) { return d.urgence === 'haute'; });
+            }
+
+            const listeDiv = document.getElementById('listeDemandes');
+            if (!listeDiv) {
+                console.error("❌ Element #listeDemandes introuvable !");
+                return;
+            }
+
+            listeDiv.innerHTML = '';
+
+            if (filtered.length === 0) {
+                listeDiv.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;">📭 Aucune demande</div>';
+                console.log("📭 Aucune demande à afficher");
+                return;
+            }
+
+            let html = '';
+            filtered.forEach(function(demande) {
+                const statutActuel = demande.statut !== undefined ? demande.statut : 0;
+                const numDemande = demande.numeroDemande || demande.id.substring(0, 8);
+
+                let satisfactionHtml = '';
+                if (demande.satisfaction) {
+                    let stars = '';
+                    for (let i = 0; i < demande.satisfaction; i++) stars += '★';
+                    for (let i = demande.satisfaction; i < 5; i++) stars += '☆';
+                    satisfactionHtml = '<div style="margin-top:8px;">⭐ ' + stars + '</div>';
+                }
+
+                let mediaHtml = '';
+                if (demande.media && demande.mediaType) {
+                    const mediaIcon = demande.mediaType === 'image' ? '📷' : (demande.mediaType === 'video' ? '🎥' : '🎙️');
+                    const mediaDataEscaped = demande.media.replace(/'/g, "\\'");
+                    mediaHtml = `
+                        <div class="media-preview-mini" onclick="afficherMediaModal('${mediaDataEscaped}', '${demande.mediaType}')">
+                            ${mediaIcon} Voir le média joint
+                        </div>
+                    `;
+                }
+
+                const urgenceClasse = demande.urgence || 'basse';
+                const urgenceLabel = demande.urgence === 'haute' ? '🔴 URGENT' : 
+                                    (demande.urgence === 'moyenne' ? '🟡 MOYEN' : '🟢 BAS');
+
+                html += `
+                    <div class="demande ${urgenceClasse}" data-id="${demande.id}">
+                        <span class="badge-urgence ${urgenceClasse}">${urgenceLabel}</span>
+                        <div><strong>📋 N° :</strong> ${numDemande}</div>
+                        <div><strong>🚘 Vehicule :</strong> ${demande.immatriculation || '-'} - ${demande.date || ''}</div>
+                        <div><strong>👤 Client :</strong> ${demande.nom || 'Client'}</div>
+                        ${demande.marque ? '<div style="font-size:13px;color:#64748b;">' + demande.marque + ' ' + (demande.modele || '') + ' - ' + (demande.kilometrage || '') + ' km</div>' : ''}
+                        <div style="margin:8px 0;">${demande.description || ''}</div>
+                        ${demande.lieu ? '<div style="font-size:12px;color:#64748b;">📍 Lieu : ' + demande.lieu + '</div>' : ''}
+                        ${demande.dateRdv ? '<div style="font-size:12px;">📅 RDV : ' + demande.dateRdv + ' ' + (demande.heureRdv || '') + '</div>' : ''}
+                        ${demande.garage ? '<div style="font-size:12px;color:#64748b;">🏷️ Garage : ' + demande.garage + '</div>' : ''}
+                        ${satisfactionHtml}
+                        ${mediaHtml}
+                        <div class="actions">
+                            <select class="status-select" data-id="${demande.id}">
+                                <option value="0" ${statutActuel === 0 ? 'selected' : ''}>🟡 En attente</option>
+                                <option value="1" ${statutActuel === 1 ? 'selected' : ''}>🔧 En réparation</option>
+                                <option value="2" ${statutActuel === 2 ? 'selected' : ''}>✅ Prête</option>
+                            </select>
+                            <button class="btn-action btn-pdf" data-id="${demande.id}" data-json='${JSON.stringify(demande).replace(/'/g, "&#39;")}'>📄 PDF</button>
+                            <button class="btn-action btn-supprimer" data-id="${demande.id}">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            listeDiv.innerHTML = html;
+
+            setTimeout(function() {
+                document.querySelectorAll('.status-select').forEach(function(select) {
+                    select.addEventListener('change', function(e) {
+                        updateStatus(select.dataset.id, parseInt(e.target.value));
+                    });
+                });
+
+                document.querySelectorAll('.btn-pdf').forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        const demande = JSON.parse(btn.dataset.json);
+                        genererPDF(demande, demande.numeroDemande || btn.dataset.id);
+                    });
+                });
+
+                document.querySelectorAll('.btn-supprimer').forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        deleteDemande(btn.dataset.id);
+                    });
+                });
+            }, 100);
+
+            filtered.forEach(function(d) {
+                if (!d.lu) {
+                    db.collection('demandes').doc(d.id).update({ lu: true }).catch(function(e) {});
+                }
+            });
+
+        }, function(error) {
+            console.error("❌ Erreur Firestore:", error);
+            afficherToast("❌ Erreur de chargement: " + error.message);
+            
+            const listeDiv = document.getElementById('listeDemandes');
+            if (listeDiv) {
+                listeDiv.innerHTML = '<div style="text-align:center;padding:40px;color:#ef4444;">❌ Erreur: ' + error.message + '</div>';
+            }
+        });
+    }
+
+    // ============================================================
+    // GESTION DU FILTRE GARAGE
+    // ============================================================
+    const selectGarage = document.getElementById('selectGarage');
+    if (selectGarage) {
+        selectGarage.addEventListener('change', function() {
+            console.log("🏷️ Changement de filtre garage:", this.value);
+            chargerDemandesRealtime();
+        });
     }
 
     // ============================================================
@@ -1444,7 +1568,7 @@ function ouvrirSmartlink() {
     document.getElementById('btnQuitterDashboard')?.addEventListener('click', afficherClient);
 
     // ============================================================
-    // FILTRES
+    // FILTRES (statut)
     // ============================================================
     document.querySelectorAll('.filtre-btn').forEach(function(btn) {
         btn.addEventListener('click', function() {
@@ -1465,7 +1589,6 @@ function ouvrirSmartlink() {
     setupMediaHandlers();
     demanderPermissionNotification();
 
-    // Fermeture modals
     window.onclick = function(event) {
         const pdfModal = document.getElementById('pdfModal');
         const mediaModal = document.getElementById('mediaModal');
@@ -1473,11 +1596,11 @@ function ouvrirSmartlink() {
         if (event.target === mediaModal && mediaModal) mediaModal.style.display = 'none';
     };
 
-    // Initialisation
     genererQRCode();
     afficherClient();
 
-    console.log('🚗 Assist\'Garage - Version Publique');
+    console.log('🚗 Assist-Garage - Version Multi-Garages');
+    console.log('🏷️ Garage par défaut :', garageActuel);
     console.log('📂 Données stockées sur Firebase : ntr-garage');
     console.log('🔐 Mot de passe réception : Ly@m101288');
     console.log('📋 Numéros de demande : format AG-2025-XXX');
@@ -1487,9 +1610,10 @@ function ouvrirSmartlink() {
 </script>
 
 <!-- ============================================================
-CODE SOCIAL BAR ADSTERRA (réintégré)
+CODE SOCIAL BAR ADSTERRA
 ============================================================ -->
 <script type='text/javascript' src='//pl31125299.profitableratecpmnetwork.com/7d/47/2d/7d472d1e372e98bc61d61a51d74661d4.js'></script>
+
 <script>
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/ntr-garage/sw.js')
@@ -1497,16 +1621,15 @@ CODE SOCIAL BAR ADSTERRA (réintégré)
             .catch(err => console.log('❌ Erreur Service Worker :', err));
     }
 </script>
-    <!-- ============================================================
-     SCRIPT POUR L'INSTALLATION EN 1 CLIC
-     ============================================================ -->
+
+<!-- ============================================================
+SCRIPT POUR L'INSTALLATION EN 1 CLIC
+============================================================ -->
 <script>
     (function() {
-        // Variables pour l'installation
         let deferredPrompt;
         const btnInstall = document.getElementById('btnInstaller');
 
-        // Détecter si l'installation est possible
         window.addEventListener('beforeinstallprompt', (e) => {
             console.log('🔔 Installation détectée comme possible');
             e.preventDefault();
@@ -1516,7 +1639,6 @@ CODE SOCIAL BAR ADSTERRA (réintégré)
             }
         });
 
-        // Gérer le clic sur le bouton
         if (btnInstall) {
             btnInstall.addEventListener('click', () => {
                 if (deferredPrompt) {
@@ -1532,7 +1654,6 @@ CODE SOCIAL BAR ADSTERRA (réintégré)
                         btnInstall.style.display = 'none';
                     });
                 } else {
-                    // Solution de secours : ouvrir une page d'instruction
                     alert('📱 Pour installer l\'application :\n\n' +
                           '1. Cliquez sur le menu ⋮ (Chrome) ou sur le partage (Safari)\n' +
                           '2. Sélectionnez "Ajouter à l\'écran d\'accueil"');
@@ -1540,7 +1661,6 @@ CODE SOCIAL BAR ADSTERRA (réintégré)
             });
         }
 
-        // Quand l'application est installée
         window.addEventListener('appinstalled', () => {
             console.log('🎉 Application installée avec succès !');
             if (btnInstall) {
@@ -1548,10 +1668,8 @@ CODE SOCIAL BAR ADSTERRA (réintégré)
             }
         });
 
-        // Pour Safari sur iOS (détection spécifique)
         const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
         if (isSafari && window.navigator.standalone === false) {
-            // Sur Safari, on affiche un message d'aide
             if (btnInstall) {
                 btnInstall.textContent = '📱 Ajouter à l\'écran d\'accueil (Safari)';
                 btnInstall.style.display = 'block';
