@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assist-Garage - Connexion</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: #f1f5f9;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .login-container {
+            max-width: 400px;
+            width: 100%;
+            background: white;
+            border-radius: 24px;
+            padding: 40px 32px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            border: 1px solid #e2e8f0;
+        }
+        .login-container .logo {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .login-container .logo h1 {
+            font-size: 28px;
+            color: #0f172a;
+            letter-spacing: -0.5px;
+        }
+        .login-container .logo .subtitle {
+            font-size: 14px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+        .login-container label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0f172a;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .login-container input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            margin-bottom: 16px;
+            background: white;
+            transition: border-color 0.2s ease;
+        }
+        .login-container input:focus {
+            outline: none;
+            border-color: #0f172a;
+            box-shadow: 0 0 0 3px rgba(15,23,42,0.08);
+        }
+        .login-container .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: #0f172a;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        .login-container .btn-primary:hover { background: #1e293b; }
+        .login-container .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+        .login-container .error {
+            color: #ef4444;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 12px;
+            display: none;
+        }
+        .login-container .footer {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+        .login-container .footer a {
+            color: #0f172a;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .login-container .toggle-password {
+            cursor: pointer;
+            font-size: 14px;
+            color: #64748b;
+            margin-top: -8px;
+            margin-bottom: 16px;
+            text-align: right;
+        }
+        .login-container .toggle-password:hover { color: #0f172a; }
+        .badge-role {
+            display: inline-block;
+            background: #eef2ff;
+            color: #0f172a;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 12px;
+            border-radius: 50px;
+            margin-left: 8px;
+        }
+        @media (max-width: 480px) {
+            .login-container { padding: 24px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-container" id="loginContainer">
+    <div class="logo">
+        <h1>🚗 ASSIST-GARAGE</h1>
+        <div class="subtitle">🔐 ESPACE DE CONNEXION</div>
+    </div>
+
+    <label for="emailConnexion">📧 Email</label>
+    <input type="email" id="emailConnexion" placeholder="exemple@garage.com" autocomplete="email">
+
+    <label for="passwordConnexion">🔑 Mot de passe</label>
+    <input type="password" id="passwordConnexion" placeholder="Votre mot de passe" autocomplete="current-password">
+
+    <div class="toggle-password" id="togglePassword">👁️ Afficher le mot de passe</div>
+
+    <button id="btnConnexion" class="btn-primary">🚀 Se connecter</button>
+
+    <div id="errorMessage" class="error"></div>
+
+    <div class="footer">
+        Besoin d'un compte ? <a href="#" onclick="afficherMessageContact()">Contactez l'administrateur</a>
+    </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" style="position:fixed;bottom:20px;right:20px;background:#0f172a;color:white;padding:10px 18px;border-radius:40px;font-size:13px;display:none;z-index:1000;box-shadow:0 4px 20px rgba(0,0,0,0.15);"></div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+<script>
+// ============================================================
+// CONFIGURATION FIREBASE
+// ============================================================
+const firebaseConfig = {
+    apiKey: "AIzaSyAxfEpi-NERVExxVYD2EmH7JppiIQDwWOM",
+    authDomain: "ntr-garage.firebaseapp.com",
+    projectId: "ntr-garage",
+    storageBucket: "ntr-garage.firebasestorage.app",
+    messagingSenderId: "606167388967",
+    appId: "1:606167388967:web:7ad669fd353cdeeb7a8f02"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+// ============================================================
+// RÉFÉRENCES DOM
+// ============================================================
+const emailInput = document.getElementById('emailConnexion');
+const passwordInput = document.getElementById('passwordConnexion');
+const btnConnexion = document.getElementById('btnConnexion');
+const errorMessage = document.getElementById('errorMessage');
+const togglePassword = document.getElementById('togglePassword');
+const toast = document.getElementById('toast');
+
+// ============================================================
+// AFFICHER TOAST
+// ============================================================
+function afficherToast(message) {
+    if (toast) {
+        toast.textContent = message;
+        toast.style.display = 'block';
+        setTimeout(() => { toast.style.display = 'none'; }, 4000);
+    }
+}
+
+// ============================================================
+// TOGGLE MOT DE PASSE
+// ============================================================
+let passwordVisible = false;
+togglePassword.addEventListener('click', function() {
+    passwordVisible = !passwordVisible;
+    passwordInput.type = passwordVisible ? 'text' : 'password';
+    togglePassword.textContent = passwordVisible ? '🙈 Cacher' : '👁️ Afficher';
+});
+
+// ============================================================
+// REDIRECTION VERS MESSAGE DE CONTACT
+// ============================================================
+function afficherMessageContact() {
+    alert('📩 Pour obtenir un compte :\n\n' +
+          'Contactez l\'administrateur au 07 57 22 07 24\n' +
+          'ou par email : ngorantanohromaric@gmail.com');
+}
+
+// ============================================================
+// GESTION DE LA CONNEXION
+// ============================================================
+btnConnexion.addEventListener('click', async function(e) {
+    e.preventDefault();
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    if (!email || !password) {
+        errorMessage.textContent = '⚠️ Veuillez remplir tous les champs.';
+        errorMessage.style.display = 'block';
+        return;
+    }
+
+    // Désactiver le bouton
+    btnConnexion.disabled = true;
+    btnConnexion.textContent = '⏳ Connexion...';
+    errorMessage.style.display = 'none';
+
+    try {
+        // Connexion avec Firebase Authentication
+        const userCredential = await auth.signInWithEmailAndPassword(email, password);
+        const user = userCredential.user;
+
+        // Récupérer le token pour vérifier le rôle
+        const idTokenResult = await user.getIdTokenResult();
+        const role = idTokenResult.claims.role || 'garage';
+        const garageId = idTokenResult.claims.garageId || null;
+
+        console.log('✅ Connexion réussie !');
+        console.log('👤 Rôle:', role);
+        console.log('🏷️ Garage:', garageId);
+
+        // Redirection en fonction du rôle
+        if (role === 'admin') {
+            window.location.href = 'admin.html';
+        } else {
+            // Rediriger vers l'application avec le paramètre garage
+            window.location.href = `index.html?garage=${garageId}`;
+        }
+
+    } catch (error) {
+        console.error('❌ Erreur de connexion:', error);
+        let message = '❌ Erreur de connexion. Vérifiez vos identifiants.';
+        
+        if (error.code === 'auth/user-not-found') {
+            message = '❌ Aucun compte trouvé avec cet email.';
+        } else if (error.code === 'auth/wrong-password') {
+            message = '❌ Mot de passe incorrect.';
+        } else if (error.code === 'auth/too-many-requests') {
+            message = '⚠️ Trop de tentatives. Réessayez plus tard.';
+        }
+        
+        errorMessage.textContent = message;
+        errorMessage.style.display = 'block';
+    }
+
+    // Réactiver le bouton
+    btnConnexion.disabled = false;
+    btnConnexion.textContent = '🚀 Se connecter';
+});
+
+// ============================================================
+// CONNEXION AVEC LA TOUCHE "ENTRÉE"
+// ============================================================
+passwordInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        btnConnexion.click();
+    }
+});
+emailInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        btnConnexion.click();
+    }
+});
+
+// ============================================================
+// VÉRIFIER SI L'UTILISATEUR EST DÉJÀ CONNECTÉ
+// ============================================================
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        // Si déjà connecté, rediriger
+        user.getIdTokenResult().then((idTokenResult) => {
+            const role = idTokenResult.claims.role || 'garage';
+            const garageId = idTokenResult.claims.garageId || null;
+            
+            if (role === 'admin') {
+                window.location.href = 'admin.html';
+            } else {
+                window.location.href = `index.html?garage=${garageId}`;
+            }
+        });
+    }
+});
+
+console.log('🚗 Assist-Garage - Page de connexion');
+console.log('🔐 Firebase Authentication activée');
+</script>
+
+</body>
+</html>
