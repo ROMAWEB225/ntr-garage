@@ -836,7 +836,7 @@
             </div>
         </div>
 
-        <!-- Filtres modifiés -->
+        <!-- Filtres -->
         <div class="filtres">
             <button class="filtre-btn active" data-filtre="toutes">📋 TOUTES</button>
             <button class="filtre-btn" data-filtre="urgentes">🔴 URGENTES</button>
@@ -874,11 +874,13 @@
 </div>
 
 <div id="pdfModal" class="modal">
-    <div class="modal-content">
-        <h3>📄 Fiche de réception</h3>
+    <div class="modal-content" style="max-width: 700px;">
+        <h3 style="text-align: center; margin-bottom: 20px;">📄 Fiche de réception</h3>
         <div id="pdfContent"></div>
-        <button id="btnGenererPDF" class="btn-primary" style="margin-top: 20px;">⬇️ Télécharger PDF</button>
-        <button onclick="document.getElementById('pdfModal').style.display='none'" class="btn-secondary">Fermer</button>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button id="btnGenererPDF" class="btn-primary" style="margin-top: 0;">⬇️ Télécharger PDF</button>
+            <button onclick="document.getElementById('pdfModal').style.display='none'" class="btn-secondary">Fermer</button>
+        </div>
     </div>
 </div>
 
@@ -1288,7 +1290,6 @@ async function chargerDemandesRealtime() {
 function afficherDemandesFiltrees() {
     let filtered = [...allDemandes];
     
-    // Filtres modifiés
     if (currentFiltre === 'urgentes') filtered = filtered.filter(d => d.urgence === 'haute');
     if (currentFiltre === 'en-attente') filtered = filtered.filter(d => d.statut === 0);
     if (currentFiltre === 'en-reparation') filtered = filtered.filter(d => d.statut === 1);
@@ -1355,61 +1356,145 @@ function afficherDemandesFiltrees() {
 }
 
 // ============================================================
-// GÉNÉRATION PDF (RÉINTÉGRÉE)
+// FICHE DE RÉCEPTION PROFESSIONNELLE (PDF)
 // ============================================================
 async function genererPDFPourDemande(id) {
     const demande = allDemandes.find(d => d.id === id);
     if (!demande) return;
     
     const pdfContent = document.getElementById('pdfContent');
+    
+    // Création d'une fiche élégante et professionnelle
     pdfContent.innerHTML = `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-            <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #0f172a; padding-bottom: 20px;">
-                <h2 style="color: #0f172a; margin-bottom: 5px;">ASSIST-GARAGE PRO</h2>
-                <p style="color: #64748b; font-size: 14px;">Fiche de réception</p>
-            </div>
-            
-            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-                <div>
-                    <strong>N° de demande :</strong> ${demande.numeroDemande || id}
+        <div style="font-family: 'Georgia', 'Times New Roman', serif; max-width: 650px; margin: 0 auto; padding: 30px; background: #ffffff;">
+            <!-- En-tête avec logo -->
+            <div style="text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 3px double #0f172a;">
+                <div style="font-size: 32px; font-weight: bold; color: #0f172a; letter-spacing: 3px; margin-bottom: 5px;">
+                    🚗 ASSIST-GARAGE
                 </div>
-                <div>
-                    <strong>Date :</strong> ${demande.date || ''}
+                <div style="font-size: 13px; color: #64748b; letter-spacing: 2px; text-transform: uppercase;">
+                    Fiche de Réception Véhicule
+                </div>
+                <div style="font-size: 11px; color: #94a3b8; margin-top: 5px;">
+                    Document officiel - À conserver
                 </div>
             </div>
             
-            <div style="margin-bottom: 20px;">
-                <h3 style="color: #0f172a; border-left: 3px solid #0f172a; padding-left: 10px;">Véhicule</h3>
-                <p><strong>Immatriculation :</strong> ${demande.immatriculation || 'N/A'}</p>
-                <p><strong>Marque :</strong> ${demande.marque || 'N/A'}</p>
-                <p><strong>Modèle :</strong> ${demande.modele || 'N/A'}</p>
-                <p><strong>Kilométrage :</strong> ${demande.kilometrage || 'N/A'} km</p>
+            <!-- Numéro et date -->
+            <div style="display: flex; justify-content: space-between; margin-bottom: 25px; padding: 15px; background: #f8fafc; border-radius: 10px;">
+                <div>
+                    <div style="font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 1px;">N° de dossier</div>
+                    <div style="font-size: 16px; font-weight: bold; color: #0f172a;">${demande.numeroDemande || id}</div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 1px;">Date de réception</div>
+                    <div style="font-size: 14px; color: #0f172a;">${demande.date || new Date().toLocaleString('fr-FR')}</div>
+                </div>
             </div>
             
-            <div style="margin-bottom: 20px;">
-                <h3 style="color: #0f172a; border-left: 3px solid #0f172a; padding-left: 10px;">Client</h3>
-                <p><strong>Nom :</strong> ${demande.nom || 'N/A'}</p>
-                <p><strong>Téléphone :</strong> ${demande.telephone || 'N/A'}</p>
-                <p><strong>Email :</strong> ${demande.email || 'N/A'}</p>
+            <!-- Section Véhicule -->
+            <div style="margin-bottom: 25px;">
+                <div style="font-size: 14px; font-weight: bold; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; border-left: 4px solid #0f172a; padding-left: 12px;">
+                    Informations Véhicule
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; background: #f8fafc; border-radius: 10px;">
+                    <div>
+                        <div style="font-size: 11px; color: #64748b;">Immatriculation</div>
+                        <div style="font-size: 16px; font-weight: bold; color: #0f172a;">${demande.immatriculation || 'N/A'}</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 11px; color: #64748b;">Kilométrage</div>
+                        <div style="font-size: 16px; font-weight: bold; color: #0f172a;">${demande.kilometrage || 'N/A'} km</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 11px; color: #64748b;">Marque</div>
+                        <div style="font-size: 14px; color: #0f172a;">${demande.marque || 'N/A'}</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 11px; color: #64748b;">Modèle</div>
+                        <div style="font-size: 14px; color: #0f172a;">${demande.modele || 'N/A'}</div>
+                    </div>
+                </div>
             </div>
             
-            <div style="margin-bottom: 20px;">
-                <h3 style="color: #0f172a; border-left: 3px solid #0f172a; padding-left: 10px;">Panne</h3>
-                <p><strong>Description :</strong> ${demande.description || 'N/A'}</p>
-                <p><strong>Urgence :</strong> ${demande.urgence === 'haute' ? '🔴 Haute' : demande.urgence === 'moyenne' ? '🟡 Moyenne' : '🟢 Basse'}</p>
-                <p><strong>Diagnostic IA :</strong> ${demande.diagnosticIA || 'N/A'}</p>
-                ${demande.garage ? `<p><strong>Garage :</strong> ${demande.garage}</p>` : ''}
+            <!-- Section Client -->
+            <div style="margin-bottom: 25px;">
+                <div style="font-size: 14px; font-weight: bold; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; border-left: 4px solid #0f172a; padding-left: 12px;">
+                    Informations Client
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; background: #f8fafc; border-radius: 10px;">
+                    <div>
+                        <div style="font-size: 11px; color: #64748b;">Nom complet</div>
+                        <div style="font-size: 14px; font-weight: bold; color: #0f172a;">${demande.nom || 'N/A'}</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 11px; color: #64748b;">Téléphone</div>
+                        <div style="font-size: 14px; color: #0f172a;">${demande.telephone || 'N/A'}</div>
+                    </div>
+                    ${demande.email ? `
+                    <div style="grid-column: span 2;">
+                        <div style="font-size: 11px; color: #64748b;">Email</div>
+                        <div style="font-size: 14px; color: #0f172a;">${demande.email}</div>
+                    </div>` : ''}
+                </div>
             </div>
             
-            ${demande.dateRdv ? `
-            <div style="margin-bottom: 20px;">
-                <h3 style="color: #0f172a; border-left: 3px solid #0f172a; padding-left: 10px;">Rendez-vous</h3>
-                <p><strong>Date :</strong> ${demande.dateRdv}</p>
-                <p><strong>Heure :</strong> ${demande.heureRdv || 'N/A'}</p>
+            <!-- Section Panne -->
+            <div style="margin-bottom: 25px;">
+                <div style="font-size: 14px; font-weight: bold; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; border-left: 4px solid #0f172a; padding-left: 12px;">
+                    Description de la Panne
+                </div>
+                <div style="padding: 15px; background: #fef2f2; border-radius: 10px; border: 1px solid #fecaca;">
+                    <div style="font-size: 13px; color: #0f172a; line-height: 1.6;">${demande.description || 'N/A'}</div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                    <div style="padding: 12px; background: #f8fafc; border-radius: 8px;">
+                        <div style="font-size: 11px; color: #64748b;">Niveau d'urgence</div>
+                        <div style="font-size: 14px; font-weight: bold; color: ${demande.urgence === 'haute' ? '#ef4444' : demande.urgence === 'moyenne' ? '#f59e0b' : '#22c55e'};">
+                            ${demande.urgence === 'haute' ? '🔴 URGENT' : demande.urgence === 'moyenne' ? '🟡 MOYEN' : '🟢 NORMAL'}
+                        </div>
+                    </div>
+                    <div style="padding: 12px; background: #f8fafc; border-radius: 8px;">
+                        <div style="font-size: 11px; color: #64748b;">Diagnostic préliminaire</div>
+                        <div style="font-size: 12px; color: #0f172a; margin-top: 4px;">${demande.diagnosticIA || 'À déterminer'}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section Garage et RDV -->
+            ${demande.garage || demande.dateRdv ? `
+            <div style="margin-bottom: 25px;">
+                <div style="font-size: 14px; font-weight: bold; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; border-left: 4px solid #0f172a; padding-left: 12px;">
+                    Informations Complémentaires
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; background: #f8fafc; border-radius: 10px;">
+                    ${demande.garage ? `
+                    <div>
+                        <div style="font-size: 11px; color: #64748b;">Garage assigné</div>
+                        <div style="font-size: 14px; font-weight: bold; color: #0f172a;">🏷️ ${demande.garage}</div>
+                    </div>` : ''}
+                    ${demande.dateRdv ? `
+                    <div>
+                        <div style="font-size: 11px; color: #64748b;">Rendez-vous</div>
+                        <div style="font-size: 14px; color: #0f172a;">📅 ${demande.dateRdv} ${demande.heureRdv ? 'à ' + demande.heureRdv : ''}</div>
+                    </div>` : ''}
+                    ${demande.lieu ? `
+                    <div style="grid-column: span 2;">
+                        <div style="font-size: 11px; color: #64748b;">Localisation du véhicule</div>
+                        <div style="font-size: 14px; color: #0f172a;">📍 ${demande.lieu}</div>
+                    </div>` : ''}
+                </div>
             </div>` : ''}
             
-            <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0; font-size: 11px; color: #94a3b8;">
-                Développé par NTR - Assist-Garage Pro
+            <!-- Pied de page -->
+            <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 2px solid #e2e8f0;">
+                <div style="font-size: 12px; color: #0f172a; font-weight: bold;">ASSIST-GARAGE PRO</div>
+                <div style="font-size: 10px; color: #94a3b8; margin-top: 5px;">
+                    Ce document est généré automatiquement - Pour toute question, contactez votre garage
+                </div>
+                <div style="font-size: 9px; color: #cbd5e1; margin-top: 10px;">
+                    Développé par NTR - Solution de gestion professionnelle
+                </div>
             </div>
         </div>
     `;
@@ -1419,12 +1504,12 @@ async function genererPDFPourDemande(id) {
     document.getElementById('btnGenererPDF').onclick = function() {
         if (typeof html2pdf !== 'undefined') {
             html2pdf().from(pdfContent).set({
-                margin: [15, 15, 15, 15],
-                filename: `Fiche_${demande.numeroDemande || id}.pdf`,
-                html2canvas: { scale: 2 },
+                margin: [20, 20, 20, 20],
+                filename: `Fiche_Reception_${demande.numeroDemande || id}.pdf`,
+                html2canvas: { scale: 2, useCORS: true },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             }).save();
-            afficherToast('📄 PDF généré avec succès', 'success');
+            afficherToast('📄 Fiche générée avec succès', 'success');
         }
     };
 }
