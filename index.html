@@ -1261,7 +1261,7 @@ function afficherDemandesFiltrees() {
 }
 
 // ============================================================
-// FICHE PDF PROFESSIONNELLE - VERSION COMPACTE UNE PAGE
+// FICHE PDF PROFESSIONNELLE - VERSION FINALE CORRIGÉE
 // ============================================================
 async function genererPDFPourDemande(id) {
     const demande = allDemandes.find(d => d.id === id);
@@ -1273,7 +1273,7 @@ async function genererPDFPourDemande(id) {
     if (demande.media && demande.mediaType === 'image') {
         mediaHTML = `
             <div style="margin-bottom: 8px;">
-                <div style="font-size: 11px; font-weight: bold; color: #0f172a; text-transform: uppercase; margin-bottom: 4px; border-left: 3px solid #0f172a; padding-left: 6px;">Photo du véhicule</div>
+                <div style="font-size: 12px; font-weight: bold; color: #0f172a; text-transform: uppercase; margin-bottom: 4px; border-left: 3px solid #0f172a; padding-left: 6px;">Photo du véhicule</div>
                 <div style="text-align: center; padding: 5px; border: 1px solid #e2e8f0; border-radius: 3px;">
                     <img src="${demande.media}" style="max-width: 100%; max-height: 150px; border-radius: 3px;">
                 </div>
@@ -1282,79 +1282,79 @@ async function genererPDFPourDemande(id) {
     }
     
     pdfContent.innerHTML = `
-        <div style="font-family: Arial, Helvetica, sans-serif; max-width: 100%; margin: 0; padding: 10px; background: #ffffff; color: #1a1a1a; font-size: 11px;">
-            <!-- En-tête compact -->
-            <div style="text-align: center; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 2px solid #0f172a;">
-                <div style="font-size: 18px; font-weight: bold; color: #0f172a; letter-spacing: 1px; margin-bottom: 2px;">🚗 ASSIST-GARAGE</div>
-                <div style="font-size: 9px; color: #475569; letter-spacing: 1px; text-transform: uppercase;">Fiche de Réception Véhicule</div>
+        <div style="font-family: Arial, Helvetica, sans-serif; width: 100%; margin: 0; padding: 0; background: #ffffff; color: #1a1a1a; font-size: 11px; line-height: 1.4;">
+            <!-- En-tête -->
+            <div style="text-align: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #0f172a;">
+                <div style="font-size: 20px; font-weight: bold; color: #0f172a; letter-spacing: 1px; margin-bottom: 3px;">🚗 ASSIST-GARAGE</div>
+                <div style="font-size: 10px; color: #475569; letter-spacing: 1px; text-transform: uppercase;">Fiche de Réception Véhicule</div>
             </div>
             
             <!-- Numéro et date -->
-            <table style="width: 100%; margin-bottom: 10px; border-collapse: collapse;">
+            <table style="width: 100%; margin-bottom: 15px; border-collapse: collapse;">
                 <tr>
-                    <td style="width: 50%; padding: 5px 8px; background: #f1f5f9; border: 1px solid #e2e8f0;">
-                        <span style="font-size: 8px; color: #64748b; text-transform: uppercase;">N° de dossier</span><br>
-                        <span style="font-size: 12px; font-weight: bold; color: #0f172a;">${demande.numeroDemande || id}</span>
+                    <td style="width: 50%; padding: 8px 10px; background: #f1f5f9; border: 1px solid #e2e8f0;">
+                        <span style="font-size: 9px; color: #64748b; text-transform: uppercase;">N° de dossier</span><br>
+                        <span style="font-size: 14px; font-weight: bold; color: #0f172a;">${demande.numeroDemande || id}</span>
                     </td>
-                    <td style="width: 50%; padding: 5px 8px; background: #f1f5f9; border: 1px solid #e2e8f0; text-align: right;">
-                        <span style="font-size: 8px; color: #64748b; text-transform: uppercase;">Date de réception</span><br>
-                        <span style="font-size: 10px; color: #0f172a;">${demande.date || new Date().toLocaleString('fr-FR')}</span>
+                    <td style="width: 50%; padding: 8px 10px; background: #f1f5f9; border: 1px solid #e2e8f0; text-align: right;">
+                        <span style="font-size: 9px; color: #64748b; text-transform: uppercase;">Date de réception</span><br>
+                        <span style="font-size: 12px; color: #0f172a;">${demande.date || new Date().toLocaleString('fr-FR')}</span>
                     </td>
                 </tr>
             </table>
             
             <!-- Section Véhicule -->
-            <div style="margin-bottom: 8px;">
-                <div style="font-size: 11px; font-weight: bold; color: #0f172a; text-transform: uppercase; margin-bottom: 4px; border-left: 3px solid #0f172a; padding-left: 6px;">Informations Véhicule</div>
-                <table style="width: 100%; border-collapse: collapse; font-size: 10px;">
+            <div style="margin-bottom: 15px;">
+                <div style="font-size: 12px; font-weight: bold; color: #0f172a; text-transform: uppercase; margin-bottom: 5px; border-left: 3px solid #0f172a; padding-left: 8px; background: #f8fafc; padding-top: 3px; padding-bottom: 3px;">Informations Véhicule</div>
+                <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
                     <tr>
-                        <td style="padding: 4px 6px; border: 1px solid #e2e8f0; width: 20%; background: #f8fafc;"><strong>Immatriculation</strong></td>
-                        <td style="padding: 4px 6px; border: 1px solid #e2e8f0; width: 30%;">${demande.immatriculation || 'N/A'}</td>
-                        <td style="padding: 4px 6px; border: 1px solid #e2e8f0; width: 20%; background: #f8fafc;"><strong>Kilométrage</strong></td>
-                        <td style="padding: 4px 6px; border: 1px solid #e2e8f0; width: 30%;">${demande.kilometrage || 'N/A'} km</td>
+                        <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 20%; background: #f8fafc;"><strong>Immatriculation</strong></td>
+                        <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 30%;">${demande.immatriculation || 'N/A'}</td>
+                        <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 20%; background: #f8fafc;"><strong>Kilométrage</strong></td>
+                        <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 30%;">${demande.kilometrage || 'N/A'} km</td>
                     </tr>
                     <tr>
-                        <td style="padding: 4px 6px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Marque</strong></td>
-                        <td style="padding: 4px 6px; border: 1px solid #e2e8f0;">${demande.marque || 'N/A'}</td>
-                        <td style="padding: 4px 6px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Modèle</strong></td>
-                        <td style="padding: 4px 6px; border: 1px solid #e2e8f0;">${demande.modele || 'N/A'}</td>
+                        <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Marque</strong></td>
+                        <td style="padding: 6px 8px; border: 1px solid #e2e8f0;">${demande.marque || 'N/A'}</td>
+                        <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Modèle</strong></td>
+                        <td style="padding: 6px 8px; border: 1px solid #e2e8f0;">${demande.modele || 'N/A'}</td>
                     </tr>
                 </table>
             </div>
             
             <!-- Section Client -->
-            <div style="margin-bottom: 8px;">
-                <div style="font-size: 11px; font-weight: bold; color: #0f172a; text-transform: uppercase; margin-bottom: 4px; border-left: 3px solid #0f172a; padding-left: 6px;">Informations Client</div>
-                <table style="width: 100%; border-collapse: collapse; font-size: 10px;">
+            <div style="margin-bottom: 15px;">
+                <div style="font-size: 12px; font-weight: bold; color: #0f172a; text-transform: uppercase; margin-bottom: 5px; border-left: 3px solid #0f172a; padding-left: 8px; background: #f8fafc; padding-top: 3px; padding-bottom: 3px;">Informations Client</div>
+                <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
                     <tr>
-                        <td style="padding: 4px 6px; border: 1px solid #e2e8f0; width: 20%; background: #f8fafc;"><strong>Nom complet</strong></td>
-                        <td style="padding: 4px 6px; border: 1px solid #e2e8f0; width: 80%;">${demande.nom || 'N/A'}</td>
+                        <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 20%; background: #f8fafc;"><strong>Nom complet</strong></td>
+                        <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 80%;">${demande.nom || 'N/A'}</td>
                     </tr>
                     <tr>
-                        <td style="padding: 4px 6px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Téléphone</strong></td>
-                        <td style="padding: 4px 6px; border: 1px solid #e2e8f0;">${demande.telephone || 'N/A'}</td>
+                        <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Téléphone</strong></td>
+                        <td style="padding: 6px 8px; border: 1px solid #e2e8f0;">${demande.telephone || 'N/A'}</td>
                     </tr>
                     ${demande.email ? `
                     <tr>
-                        <td style="padding: 4px 6px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Email</strong></td>
-                        <td style="padding: 4px 6px; border: 1px solid #e2e8f0;">${demande.email}</td>
+                        <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Email</strong></td>
+                        <td style="padding: 6px 8px; border: 1px solid #e2e8f0;">${demande.email}</td>
                     </tr>` : ''}
                 </table>
             </div>
             
             <!-- Section Panne -->
-            <div style="margin-bottom: 8px;">
-                <div style="font-size: 11px; font-weight: bold; color: #0f172a; text-transform: uppercase; margin-bottom: 4px; border-left: 3px solid #0f172a; padding-left: 6px;">Description de la Panne</div>
-                <div style="padding: 6px 8px; border: 1px solid #e2e8f0; border-radius: 3px; font-size: 10px; line-height: 1.4; background: #fef2f2;">${demande.description || 'N/A'}</div>
-                <table style="width: 100%; margin-top: 4px; border-collapse: collapse; font-size: 10px;">
+            <div style="margin-bottom: 15px;">
+                <div style="font-size: 12px; font-weight: bold; color: #0f172a; text-transform: uppercase; margin-bottom: 5px; border-left: 3px solid #0f172a; padding-left: 8px; background: #f8fafc; padding-top: 3px; padding-bottom: 3px;">Description de la Panne</div>
+                <div style="padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 3px; font-size: 11px; line-height: 1.5; background: #fef2f2; margin-bottom: 8px;">${demande.description || 'N/A'}</div>
+                <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
                     <tr>
-                        <td style="padding: 4px 6px; border: 1px solid #e2e8f0; width: 50%; background: #f8fafc;">
+                        <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 50%; background: #f8fafc;">
                             <strong>Niveau d'urgence :</strong> 
                             <span style="color: ${demande.urgence === 'haute' ? '#ef4444' : demande.urgence === 'moyenne' ? '#f59e0b' : '#22c55e'}; font-weight: bold;">
                                 ${demande.urgence === 'haute' ? '🔴 URGENT' : demande.urgence === 'moyenne' ? '🟡 MOYEN' : '🟢 NORMAL'}
                             </span>
                         </td>
-                        <td style="padding: 4px 6px; border: 1px solid #e2e8f0; width: 50%;"><strong>Diagnostic :</strong> ${demande.diagnosticIA || 'À déterminer'}</td>
+                        <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 50%;"><strong>Diagnostic :</strong> ${demande.diagnosticIA || 'À déterminer'}</td>
                     </tr>
                 </table>
             </div>
@@ -1362,18 +1362,19 @@ async function genererPDFPourDemande(id) {
             ${mediaHTML}
             
             ${demande.garage || demande.dateRdv || demande.lieu ? `
-            <div style="margin-bottom: 8px;">
-                <div style="font-size: 11px; font-weight: bold; color: #0f172a; text-transform: uppercase; margin-bottom: 4px; border-left: 3px solid #0f172a; padding-left: 6px;">Informations Complémentaires</div>
-                <table style="width: 100%; border-collapse: collapse; font-size: 10px;">
-                    ${demande.garage ? `<tr><td style="padding: 4px 6px; border: 1px solid #e2e8f0; width: 25%; background: #f8fafc;"><strong>Garage assigné</strong></td><td style="padding: 4px 6px; border: 1px solid #e2e8f0; width: 75%;">${demande.garage}</td></tr>` : ''}
-                    ${demande.dateRdv ? `<tr><td style="padding: 4px 6px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Rendez-vous</strong></td><td style="padding: 4px 6px; border: 1px solid #e2e8f0;">${demande.dateRdv} ${demande.heureRdv ? 'à ' + demande.heureRdv : ''}</td></tr>` : ''}
-                    ${demande.lieu ? `<tr><td style="padding: 4px 6px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Localisation</strong></td><td style="padding: 4px 6px; border: 1px solid #e2e8f0;">${demande.lieu}</td></tr>` : ''}
+            <div style="margin-bottom: 15px;">
+                <div style="font-size: 12px; font-weight: bold; color: #0f172a; text-transform: uppercase; margin-bottom: 5px; border-left: 3px solid #0f172a; padding-left: 8px; background: #f8fafc; padding-top: 3px; padding-bottom: 3px;">Informations Complémentaires</div>
+                <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
+                    ${demande.garage ? `<tr><td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 25%; background: #f8fafc;"><strong>Garage assigné</strong></td><td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 75%;">${demande.garage}</td></tr>` : ''}
+                    ${demande.dateRdv ? `<tr><td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Rendez-vous</strong></td><td style="padding: 6px 8px; border: 1px solid #e2e8f0;">${demande.dateRdv} ${demande.heureRdv ? 'à ' + demande.heureRdv : ''}</td></tr>` : ''}
+                    ${demande.lieu ? `<tr><td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Localisation</strong></td><td style="padding: 6px 8px; border: 1px solid #e2e8f0;">${demande.lieu}</td></tr>` : ''}
                 </table>
             </div>` : ''}
             
             <!-- Pied de page -->
-            <div style="text-align: center; margin-top: 10px; padding-top: 6px; border-top: 1px solid #cbd5e1; font-size: 8px; color: #64748b;">
-                <strong>ASSIST-GARAGE PRO</strong> - Développé par NTR - Document généré automatiquement
+            <div style="text-align: center; margin-top: 20px; padding-top: 10px; border-top: 1px solid #cbd5e1; font-size: 9px; color: #64748b;">
+                <strong>ASSIST-GARAGE PRO</strong> - Développé par NTR<br>
+                Document généré automatiquement - Pour toute question, contactez votre garage
             </div>
         </div>
     `;
@@ -1382,30 +1383,41 @@ async function genererPDFPourDemande(id) {
     
     document.getElementById('btnGenererPDF').onclick = function() {
         if (typeof html2pdf !== 'undefined') {
-            // Options optimisées pour une seule page A4
             const opt = {
-                margin: [5, 5, 5, 5], // Marges réduites à 5mm
+                margin: [0, 0, 0, 0], // Aucune marge
                 filename: `Fiche_Reception_${demande.numeroDemande || id}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
+                image: { type: 'jpeg', quality: 1 },
                 html2canvas: { 
                     scale: 2, 
                     useCORS: true,
-                    letterRendering: true,
-                    width: 794, // Largeur A4 en pixels à 96 DPI
-                    height: 1123 // Hauteur A4 en pixels à 96 DPI
+                    width: 794, // Largeur A4
+                    height: 1123, // Hauteur A4
+                    scrollY: 0,
+                    scrollX: 0,
+                    windowWidth: 794
                 },
                 jsPDF: { 
                     unit: 'mm', 
                     format: 'a4', 
                     orientation: 'portrait',
-                    compress: true
+                    compress: true,
+                    hotfixes: ['px_scaling']
                 },
                 pagebreak: { 
-                    mode: ['avoid-all', 'css', 'legacy'] // Éviter les sauts de page
+                    mode: ['avoid-all', 'css', 'legacy'] 
                 }
             };
             
-            html2pdf().from(pdfContent).set(opt).save();
+            // Utiliser une promesse pour forcer le rendu en haut
+            html2pdf().set(opt).from(pdfContent).toPdf().get('pdf').then(function(pdf) {
+                // Ajouter le contenu en haut de la page
+                const totalPages = pdf.internal.getNumberOfPages();
+                for (let i = 1; i <= totalPages; i++) {
+                    pdf.setPage(i);
+                    pdf.setFontSize(11);
+                }
+            }).save();
+            
             afficherToast('📄 Fiche générée avec succès', 'success');
         }
     };
