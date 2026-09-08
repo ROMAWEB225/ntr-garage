@@ -523,29 +523,30 @@
             font-weight: 500;
         }
         
-        /* Styles spécifiques pour le PDF */
+        /* Styles pour le PDF */
         .pdf-wrapper {
             font-family: 'Segoe UI', Arial, sans-serif;
             max-width: 100%;
-            padding: 15px 20px;
+            padding: 10px 15px;
             background: #ffffff;
             color: #1a1a1a;
-            line-height: 1.4;
+            line-height: 1.3;
+            font-size: 11px;
         }
         .pdf-wrapper .pdf-header {
             text-align: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
             border-bottom: 3px solid #0f172a;
         }
         .pdf-wrapper .pdf-header h1 {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
             color: #0f172a;
             letter-spacing: 1px;
         }
         .pdf-wrapper .pdf-header .sub {
-            font-size: 11px;
+            font-size: 10px;
             color: #475569;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -553,59 +554,63 @@
         .pdf-wrapper .pdf-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 11px;
+            font-size: 10px;
         }
         .pdf-wrapper .pdf-table td {
-            padding: 6px 8px;
+            padding: 4px 6px;
             border: 1px solid #e2e8f0;
         }
         .pdf-wrapper .pdf-table .label {
             background: #f8fafc;
             font-weight: 600;
-            width: 25%;
+            width: 22%;
         }
         .pdf-wrapper .pdf-section-title {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
             color: #0f172a;
             text-transform: uppercase;
-            margin: 10px 0 5px 0;
+            margin: 6px 0 4px 0;
             border-left: 3px solid #0f172a;
-            padding-left: 8px;
+            padding-left: 6px;
         }
         .pdf-wrapper .pdf-desc-box {
-            padding: 8px 10px;
+            padding: 6px 8px;
             border: 1px solid #e2e8f0;
             border-radius: 4px;
-            font-size: 11px;
-            line-height: 1.5;
+            font-size: 10px;
+            line-height: 1.4;
             background: #fef2f2;
-            min-height: 30px;
+            min-height: 25px;
         }
         .pdf-wrapper .pdf-footer {
             text-align: center;
-            margin-top: 15px;
-            padding-top: 8px;
+            margin-top: 10px;
+            padding-top: 6px;
             border-top: 1px solid #cbd5e1;
-            font-size: 9px;
+            font-size: 8px;
             color: #64748b;
         }
         .pdf-wrapper .pdf-photo {
             text-align: center;
-            padding: 8px;
+            padding: 5px;
             border: 1px solid #e2e8f0;
             border-radius: 4px;
             background: #f8fafc;
-            margin: 5px 0;
+            margin: 4px 0;
         }
         .pdf-wrapper .pdf-photo img {
             max-width: 100%;
-            max-height: 180px;
+            max-height: 150px;
             border-radius: 4px;
         }
         .pdf-wrapper .pdf-urgence-haute { color: #ef4444; font-weight: 700; }
         .pdf-wrapper .pdf-urgence-moyenne { color: #f59e0b; font-weight: 700; }
         .pdf-wrapper .pdf-urgence-basse { color: #22c55e; font-weight: 700; }
+        
+        .pdf-modal-content {
+            max-width: 700px !important;
+        }
         
         @media (max-width: 560px) {
             body {
@@ -928,12 +933,12 @@
     </div>
 
     <div id="pdfModal" class="modal">
-        <div class="modal-content" style="max-width: 700px;">
-            <h3 style="text-align: center; margin-bottom: 20px;">📄 Fiche de réception</h3>
-            <div id="pdfContent" style="background: white; padding: 10px; border-radius: 8px;"></div>
-            <div style="display: flex; gap: 10px; margin-top: 20px;">
-                <button id="btnGenererPDF" class="btn-primary" style="margin-top: 0;">⬇️ Télécharger PDF</button>
-                <button onclick="document.getElementById('pdfModal').style.display='none'" class="btn-secondary">Fermer</button>
+        <div class="modal-content pdf-modal-content">
+            <h3 style="text-align: center; margin-bottom: 15px;">📄 Fiche de réception</h3>
+            <div id="pdfContent" style="background: white; padding: 10px; border-radius: 8px; max-height: 500px; overflow-y: auto;"></div>
+            <div style="display: flex; gap: 10px; margin-top: 15px; justify-content: center;">
+                <button id="btnGenererPDF" class="btn-primary" style="margin: 0; padding: 10px 20px; width: auto;">⬇️ Télécharger PDF</button>
+                <button onclick="fermerPDFModal()" class="btn-secondary">Fermer</button>
             </div>
         </div>
     </div>
@@ -969,6 +974,7 @@
         let currentPage = 1;
         let allDemandes = [];
         let pdfGenerationInProgress = false;
+        let currentDemandeId = null;
 
         // ============================================================
         // FONCTIONS GLOBALES
@@ -1005,6 +1011,11 @@
             if (desc.includes("clim")) return '❄️ Clim → rechargement';
             if (desc.includes("moteur")) return '🔧 Moteur → diagnostic complet';
             return '🔍 Diagnostic complet nécessaire';
+        }
+
+        function fermerPDFModal() {
+            document.getElementById('pdfModal').style.display = 'none';
+            pdfGenerationInProgress = false;
         }
 
         // ============================================================
@@ -1406,6 +1417,65 @@
                 printWindow.document.close();
             });
 
+            // ============================================================
+            // GESTIONNAIRE PDF - CORRIGÉ
+            // ============================================================
+            document.getElementById('btnGenererPDF')?.addEventListener('click', function() {
+                if (pdfGenerationInProgress) {
+                    afficherToast('⏳ Génération en cours...', 'info');
+                    return;
+                }
+
+                const pdfContent = document.getElementById('pdfContent');
+                if (!pdfContent || pdfContent.innerHTML.trim() === '') {
+                    afficherToast('❌ Aucun contenu à exporter', 'error');
+                    return;
+                }
+
+                pdfGenerationInProgress = true;
+                this.disabled = true;
+                this.textContent = '⏳ Génération...';
+
+                // Configuration optimisée
+                const opt = {
+                    margin: [10, 10, 10, 10],
+                    filename: `Fiche_Reception_${currentDemandeId || 'demande'}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: {
+                        scale: 2,
+                        useCORS: true,
+                        letterRendering: true,
+                        logging: false,
+                        width: pdfContent.scrollWidth || 600,
+                        height: pdfContent.scrollHeight || 800
+                    },
+                    jsPDF: {
+                        unit: 'mm',
+                        format: 'a4',
+                        orientation: 'portrait'
+                    },
+                    pagebreak: { mode: ['avoid-all'] }
+                };
+
+                html2pdf()
+                    .from(pdfContent)
+                    .set(opt)
+                    .save()
+                    .then(() => {
+                        pdfGenerationInProgress = false;
+                        this.disabled = false;
+                        this.textContent = '⬇️ Télécharger PDF';
+                        afficherToast('📄 Fiche générée avec succès', 'success');
+                    })
+                    .catch((err) => {
+                        pdfGenerationInProgress = false;
+                        this.disabled = false;
+                        this.textContent = '⬇️ Télécharger PDF';
+                        console.error('Erreur PDF:', err);
+                        afficherToast('❌ Erreur lors de la génération du PDF: ' + err.message, 'error');
+                    });
+            });
+
             genererQRCode();
 
             const today = new Date().toISOString().split('T')[0];
@@ -1586,11 +1656,11 @@
         }
 
         // ============================================================
-        // FICHE DE RÉCEPTION PROFESSIONNELLE (PDF) - VERSION FINALE CORRIGÉE
+        // FICHE DE RÉCEPTION PROFESSIONNELLE (PDF) - VERSION CORRIGÉE
         // ============================================================
-        async function genererPDFPourDemande(id) {
+        function genererPDFPourDemande(id) {
             if (pdfGenerationInProgress) {
-                afficherToast('⏳ Génération en cours...', 'info');
+                afficherToast('⏳ Une génération est déjà en cours...', 'info');
                 return;
             }
 
@@ -1600,9 +1670,9 @@
                 return;
             }
 
-            pdfGenerationInProgress = true;
+            currentDemandeId = demande.numeroDemande || id;
 
-            // Construire le HTML du PDF avec des classes dédiées
+            // Construire le HTML du PDF
             let html = `
                 <div class="pdf-wrapper">
                     <div class="pdf-header">
@@ -1610,23 +1680,21 @@
                         <div class="sub">Fiche de Réception Véhicule</div>
                     </div>
 
-                    <!-- Numéro et date -->
-                    <table class="pdf-table" style="margin-bottom: 12px;">
+                    <table class="pdf-table" style="margin-bottom: 10px;">
                         <tr>
                             <td style="width: 50%; background: #f1f5f9; border-radius: 4px 0 0 4px;">
-                                <div style="color: #64748b; font-size: 10px; text-transform: uppercase;">N° de dossier</div>
-                                <strong style="font-size: 14px; color: #0f172a;">${demande.numeroDemande || id}</strong>
+                                <div style="color: #64748b; font-size: 9px; text-transform: uppercase;">N° de dossier</div>
+                                <strong style="font-size: 13px; color: #0f172a;">${demande.numeroDemande || id}</strong>
                             </td>
                             <td style="width: 50%; background: #f1f5f9; border-radius: 0 4px 4px 0; text-align: right;">
-                                <div style="color: #64748b; font-size: 10px; text-transform: uppercase;">Date de réception</div>
-                                <span style="font-size: 13px; color: #0f172a;">${demande.date || new Date().toLocaleString('fr-FR')}</span>
+                                <div style="color: #64748b; font-size: 9px; text-transform: uppercase;">Date de réception</div>
+                                <span style="font-size: 12px; color: #0f172a;">${demande.date || new Date().toLocaleString('fr-FR')}</span>
                             </td>
                         </tr>
                     </table>
 
-                    <!-- Véhicule -->
                     <div class="pdf-section-title">Informations Véhicule</div>
-                    <table class="pdf-table" style="margin-bottom: 8px;">
+                    <table class="pdf-table" style="margin-bottom: 6px;">
                         <tr>
                             <td class="label">Immatriculation</td>
                             <td style="width: 30%;">${demande.immatriculation || 'N/A'}</td>
@@ -1641,9 +1709,8 @@
                         </tr>
                     </table>
 
-                    <!-- Client -->
                     <div class="pdf-section-title">Informations Client</div>
-                    <table class="pdf-table" style="margin-bottom: 8px;">
+                    <table class="pdf-table" style="margin-bottom: 6px;">
                         <tr>
                             <td class="label">Nom complet</td>
                             <td colspan="3">${demande.nom || 'N/A'}</td>
@@ -1659,12 +1726,11 @@
                         </tr>` : ''}
                     </table>
 
-                    <!-- Panne -->
                     <div class="pdf-section-title">Description de la Panne</div>
-                    <div class="pdf-desc-box" style="margin-bottom: 5px;">
+                    <div class="pdf-desc-box" style="margin-bottom: 4px;">
                         ${demande.description || 'N/A'}
                     </div>
-                    <table class="pdf-table" style="margin-bottom: 8px;">
+                    <table class="pdf-table" style="margin-bottom: 6px;">
                         <tr>
                             <td style="width: 50%; background: #f8fafc;">
                                 <strong>Niveau d'urgence :</strong>
@@ -1686,7 +1752,7 @@
 
                     ${demande.garage || demande.dateRdv || demande.lieu ? `
                     <div class="pdf-section-title">Informations Complémentaires</div>
-                    <table class="pdf-table" style="margin-bottom: 8px;">
+                    <table class="pdf-table" style="margin-bottom: 6px;">
                         ${demande.garage ? `
                         <tr>
                             <td class="label">Garage assigné</td>
@@ -1716,48 +1782,13 @@
             pdfContent.innerHTML = html;
             document.getElementById('pdfModal').style.display = 'flex';
 
-            // Gérer le téléchargement
-            document.getElementById('btnGenererPDF').onclick = function() {
-                if (pdfGenerationInProgress) return;
-                pdfGenerationInProgress = true;
+            // Réinitialiser le bouton de téléchargement
+            const btnGenerer = document.getElementById('btnGenererPDF');
+            btnGenerer.disabled = false;
+            btnGenerer.textContent = '⬇️ Télécharger PDF';
+            pdfGenerationInProgress = false;
 
-                const element = document.getElementById('pdfContent');
-
-                // Configuration optimisée pour éviter les espaces vides
-                const opt = {
-                    margin: [8, 8, 8, 8],
-                    filename: `Fiche_Reception_${demande.numeroDemande || id}.pdf`,
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: {
-                        scale: 2,
-                        useCORS: true,
-                        letterRendering: true,
-                        logging: false,
-                        width: element.scrollWidth,
-                        height: element.scrollHeight
-                    },
-                    jsPDF: {
-                        unit: 'mm',
-                        format: 'a4',
-                        orientation: 'portrait'
-                    },
-                    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-                };
-
-                html2pdf()
-                    .from(element)
-                    .set(opt)
-                    .save()
-                    .then(() => {
-                        pdfGenerationInProgress = false;
-                        afficherToast('📄 Fiche générée avec succès', 'success');
-                    })
-                    .catch((err) => {
-                        pdfGenerationInProgress = false;
-                        console.error('Erreur PDF:', err);
-                        afficherToast('❌ Erreur lors de la génération du PDF', 'error');
-                    });
-            };
+            afficherToast('📄 Aperçu prêt, cliquez sur "Télécharger PDF"', 'success');
         }
 
         async function updateStatus(id, statut) {
