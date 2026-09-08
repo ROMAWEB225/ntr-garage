@@ -522,6 +522,91 @@
             text-decoration: none;
             font-weight: 500;
         }
+        
+        /* Styles spécifiques pour le PDF */
+        .pdf-wrapper {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            max-width: 100%;
+            padding: 15px 20px;
+            background: #ffffff;
+            color: #1a1a1a;
+            line-height: 1.4;
+        }
+        .pdf-wrapper .pdf-header {
+            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #0f172a;
+        }
+        .pdf-wrapper .pdf-header h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: 1px;
+        }
+        .pdf-wrapper .pdf-header .sub {
+            font-size: 11px;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .pdf-wrapper .pdf-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+        .pdf-wrapper .pdf-table td {
+            padding: 6px 8px;
+            border: 1px solid #e2e8f0;
+        }
+        .pdf-wrapper .pdf-table .label {
+            background: #f8fafc;
+            font-weight: 600;
+            width: 25%;
+        }
+        .pdf-wrapper .pdf-section-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #0f172a;
+            text-transform: uppercase;
+            margin: 10px 0 5px 0;
+            border-left: 3px solid #0f172a;
+            padding-left: 8px;
+        }
+        .pdf-wrapper .pdf-desc-box {
+            padding: 8px 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 11px;
+            line-height: 1.5;
+            background: #fef2f2;
+            min-height: 30px;
+        }
+        .pdf-wrapper .pdf-footer {
+            text-align: center;
+            margin-top: 15px;
+            padding-top: 8px;
+            border-top: 1px solid #cbd5e1;
+            font-size: 9px;
+            color: #64748b;
+        }
+        .pdf-wrapper .pdf-photo {
+            text-align: center;
+            padding: 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            background: #f8fafc;
+            margin: 5px 0;
+        }
+        .pdf-wrapper .pdf-photo img {
+            max-width: 100%;
+            max-height: 180px;
+            border-radius: 4px;
+        }
+        .pdf-wrapper .pdf-urgence-haute { color: #ef4444; font-weight: 700; }
+        .pdf-wrapper .pdf-urgence-moyenne { color: #f59e0b; font-weight: 700; }
+        .pdf-wrapper .pdf-urgence-basse { color: #22c55e; font-weight: 700; }
+        
         @media (max-width: 560px) {
             body {
                 padding: 16px;
@@ -561,7 +646,6 @@
                 <span class="badge-free">📱 VERSION PRO</span>
             </div>
 
-            <!-- Bannière Smartlink -->
             <div class="ad-banner" onclick="ouvrirSmartlink()">
                 <div class="ad-icon">🎯</div>
                 <div class="ad-text">
@@ -571,7 +655,6 @@
                 <div class="ad-cta">Voir l'offre</div>
             </div>
 
-            <!-- Section QR Code -->
             <div class="qr-section">
                 <div id="qrcode" class="qr-code"></div>
                 <div id="currentUrl" style="font-size: 11px; color: #64748b; word-break: break-all; margin-top: 10px;"></div>
@@ -581,14 +664,12 @@
                 </div>
             </div>
 
-            <!-- Indicateur Garage -->
             <div style="text-align: center; margin: 4px 0 12px 0;">
                 <span style="font-size: 13px; color: #64748b;">
                     📍 Garage : <strong id="clientGarageName" style="color: #0f172a;">Standard</strong>
                 </span>
             </div>
 
-            <!-- Bouton Installation -->
             <div style="text-align: center; margin: 16px 0;">
                 <button id="btnInstaller" style="display:none; background: #0f172a; color: white; border: none; padding: 14px 24px; border-radius: 40px; font-size: 15px; font-weight: 600; cursor: pointer; width: 100%; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.15); transition: all 0.3s ease;">
                     📱 Installer l'application sur mon téléphone
@@ -596,14 +677,12 @@
                 <p style="font-size: 11px; color: #94a3b8; margin-top: 6px;">Gratuit • Sans inscription • Fonctionne hors-ligne</p>
             </div>
 
-            <!-- Tabs -->
             <div class="tabs">
                 <div class="tab active" data-tab="panne">📝 Signalement</div>
                 <div class="tab" data-tab="suivi">🔍 Suivi</div>
                 <div class="tab" data-tab="offres">🎁 Offres</div>
             </div>
 
-            <!-- Tab: Signalement -->
             <div id="tab-panne" class="tab-content active">
                 <div class="section-title">🚘 Informations véhicule</div>
                 <div class="row-2cols">
@@ -653,9 +732,7 @@
                     </select>
                 </div>
 
-                <!-- Sélection média -->
                 <div class="section-title">📎 Médias joints</div>
-
                 <div class="media-selection">
                     <div class="media-option" onclick="ouvrirCamera()">
                         <span class="media-icon">📷</span>
@@ -663,21 +740,18 @@
                         <span class="media-capacity">Photo directe</span>
                         <div class="capacity-bar"><div class="capacity-fill" style="width: 100%;"></div></div>
                     </div>
-
                     <div class="media-option" onclick="ouvrirGalerie()">
                         <span class="media-icon">🖼️</span>
                         <span class="media-label">Galerie</span>
                         <span class="media-capacity">Max 5 MB</span>
                         <div class="capacity-bar"><div class="capacity-fill" style="width: 80%;"></div></div>
                     </div>
-
                     <div class="media-option" onclick="ouvrirVideo()">
                         <span class="media-icon">🎥</span>
                         <span class="media-label">Vidéo</span>
                         <span class="media-capacity">Max 10 MB</span>
                         <div class="capacity-bar"><div class="capacity-fill" style="width: 60%;"></div></div>
                     </div>
-
                     <div class="media-option" onclick="ouvrirAudio()">
                         <span class="media-icon">🎙️</span>
                         <span class="media-label">Audio</span>
@@ -685,19 +759,15 @@
                         <div class="capacity-bar"><div class="capacity-fill" style="width: 70%;"></div></div>
                     </div>
                 </div>
-
                 <input type="file" id="fichierMedia" accept="image/*,video/*,audio/*" style="display:none">
 
-                <!-- Barre de progression -->
                 <div class="progress-container" id="progressContainer">
                     <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
                     <div class="progress-text" id="progressText">Téléchargement... 0%</div>
                 </div>
 
-                <!-- Aperçu média -->
                 <div class="preview-media" id="previewMedia"></div>
 
-                <!-- Diagnostic IA -->
                 <div id="iaDiagnostic" style="display:none; background: #f8fafc; border-radius: 16px; padding: 14px; margin: 16px 0; font-size: 13px; color: #475569; border-left: 3px solid #0f172a;">
                     <strong>🤖 Diagnostic IA :</strong>
                     <p id="iaResultat"></p>
@@ -707,7 +777,6 @@
                 <div id="message" style="margin-top: 16px; font-size: 13px; text-align: center;"></div>
             </div>
 
-            <!-- Tab: Suivi -->
             <div id="tab-suivi" class="tab-content">
                 <div class="section-title">🔍 Suivi de votre véhicule</div>
                 <input type="text" id="trackingCode" placeholder="Entrez votre numéro (ex: AG-2025-001)">
@@ -723,7 +792,6 @@
                     <div id="trackingLastUpdate" style="font-size: 11px; color: #94a3b8; text-align: center; margin-top: 16px;"></div>
                 </div>
 
-                <!-- Bannière -->
                 <div class="ad-banner" style="margin-top: 20px;" onclick="ouvrirSmartlink()">
                     <div class="ad-icon">💡</div>
                     <div class="ad-text">
@@ -734,7 +802,6 @@
                 </div>
             </div>
 
-            <!-- Tab: Offres -->
             <div id="tab-offres" class="tab-content">
                 <div class="section-title">🎁 Offres partenaires</div>
                 <p style="color: #64748b; font-size: 14px; margin-bottom: 16px;">
@@ -768,7 +835,6 @@
 
             <button id="btnAllerDashboard" class="btn-secondary" style="margin-top: 20px; width: 100%;">🔐 Accès réception</button>
 
-            <!-- Mention NTR -->
             <div class="brand-footer">
                 Développé par <a href="https://github.com/romaweb225" target="_blank">NTR</a>
             </div>
@@ -783,7 +849,6 @@
                 <div class="subtitle">ESPACE RÉCEPTION</div>
             </div>
 
-            <!-- Dashboard Header -->
             <div class="dashboard-header">
                 <div class="search-bar">
                     <span class="search-icon">🔍</span>
@@ -796,7 +861,6 @@
                 </select>
             </div>
 
-            <!-- Sélecteur garage -->
             <div style="margin-bottom: 20px; padding: 16px 20px; background: #f8fafc; border-radius: 16px; border: 1px solid #e2e8f0;">
                 <label for="selectGarage" style="font-weight: 600; font-size: 14px; color: #0f172a;">🔧 Garage :</label>
                 <select id="selectGarage" style="margin-left: 12px; padding: 8px 12px; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 14px; cursor: pointer;">
@@ -811,7 +875,6 @@
                 </select>
             </div>
 
-            <!-- Stats (3 colonnes) -->
             <div class="stats">
                 <div class="stat-card">
                     <div class="stat-number" id="statTotal">0</div>
@@ -827,7 +890,6 @@
                 </div>
             </div>
 
-            <!-- Filtres -->
             <div class="filtres">
                 <button class="filtre-btn active" data-filtre="toutes">📋 TOUTES</button>
                 <button class="filtre-btn" data-filtre="urgentes">🔴 URGENTES</button>
@@ -836,10 +898,8 @@
                 <button class="filtre-btn" data-filtre="pretes">✅ PRETE</button>
             </div>
 
-            <!-- Liste -->
             <div id="listeDemandes" style="max-height: 500px; overflow-y: auto;"></div>
 
-            <!-- Pagination -->
             <div class="pagination">
                 <button class="page-btn" id="btnPrev">← Précédent</button>
                 <span id="pageInfo" style="font-size: 12px; color: #64748b;">Page 1</span>
@@ -850,7 +910,6 @@
                 <button id="btnQuitterDashboard" class="btn-secondary">⬅️ Retour à l'accueil</button>
             </div>
 
-            <!-- Mention NTR -->
             <div class="brand-footer">
                 Développé par <a href="https://github.com/romaweb225" target="_blank">NTR</a>
             </div>
@@ -871,7 +930,7 @@
     <div id="pdfModal" class="modal">
         <div class="modal-content" style="max-width: 700px;">
             <h3 style="text-align: center; margin-bottom: 20px;">📄 Fiche de réception</h3>
-            <div id="pdfContent"></div>
+            <div id="pdfContent" style="background: white; padding: 10px; border-radius: 8px;"></div>
             <div style="display: flex; gap: 10px; margin-top: 20px;">
                 <button id="btnGenererPDF" class="btn-primary" style="margin-top: 0;">⬇️ Télécharger PDF</button>
                 <button onclick="document.getElementById('pdfModal').style.display='none'" class="btn-secondary">Fermer</button>
@@ -887,7 +946,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js">
     </script>
 
-    <!-- Social Bar Adsterra -->
     <script type='text/javascript' src='//pl31125299.profitableratecpmnetwork.com/7d/47/2d/7d472d1e372e98bc61d61a51d74661d4.js'>
     </script>
 
@@ -910,6 +968,7 @@
         let currentFiltre = "toutes";
         let currentPage = 1;
         let allDemandes = [];
+        let pdfGenerationInProgress = false;
 
         // ============================================================
         // FONCTIONS GLOBALES
@@ -1132,7 +1191,6 @@
         // INITIALISATION
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
-            // Firebase
             const firebaseConfig = {
                 apiKey: "AIzaSyAxfEpi-NERVExxVYD2EmH7JppiIQDwWOM",
                 authDomain: "ntr-garage.firebaseapp.com",
@@ -1149,14 +1207,12 @@
                 console.log("Firebase déjà initialisé");
             }
 
-            // Gestionnaire de fichier
             document.getElementById('fichierMedia').addEventListener('change', function(e) {
                 if (e.target.files[0]) {
                     gererFichierMedia(e.target.files[0]);
                 }
             });
 
-            // Tabs
             document.querySelectorAll('.tab').forEach(tab => {
                 tab.addEventListener('click', function() {
                     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -1166,17 +1222,15 @@
                 });
             });
 
-            // Urgence
             document.querySelectorAll('[data-urgence]').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('[data-urgence]').forEach(b => b.classList.remove(
-                    'urgence-selected'));
+                        'urgence-selected'));
                     btn.classList.add('urgence-selected');
                     niveauUrgence = btn.dataset.urgence;
                 });
             });
 
-            // IA Diagnostic
             document.getElementById('description')?.addEventListener('input', function(e) {
                 const desc = e.target.value;
                 const iaDiagnostic = document.getElementById('iaDiagnostic');
@@ -1188,7 +1242,6 @@
                 }
             });
 
-            // Envoi de demande
             document.getElementById('btnEnvoyer')?.addEventListener('click', async function() {
                 const nom = document.getElementById('clientNom').value.trim();
                 const immat = document.getElementById('immatriculation').value.trim();
@@ -1235,8 +1288,7 @@
 
                     ['clientNom', 'immatriculation', 'clientEmail', 'clientTel', 'marque',
                         'modele', 'kilometrage', 'description', 'lieu', 'dateRdv'
-                    ]
-                    .forEach(id => document.getElementById(id).value = '');
+                    ].forEach(id => document.getElementById(id).value = '');
                     document.getElementById('heureRdv').value = '';
                     clearMedia();
                     document.getElementById('iaDiagnostic').style.display = 'none';
@@ -1248,7 +1300,6 @@
                 }
             });
 
-            // Navigation dashboard
             document.getElementById('btnAllerDashboard')?.addEventListener('click', function() {
                 const pwd = prompt("🔐 Mot de passe réception :");
                 if (pwd === CONFIG.MOT_DE_PASSE) {
@@ -1266,7 +1317,6 @@
                 if (unsubscribeDashboard) unsubscribeDashboard();
             });
 
-            // Suivi
             document.getElementById('btnTracker')?.addEventListener('click', function() {
                 const code = document.getElementById('trackingCode').value.trim().toUpperCase();
                 const trackingError = document.getElementById('trackingError');
@@ -1308,7 +1358,6 @@
                     });
             });
 
-            // Copier lien
             document.getElementById('btnCopierLien')?.addEventListener('click', async function() {
                 try {
                     await navigator.clipboard.writeText(window.location.href);
@@ -1318,7 +1367,6 @@
                 }
             });
 
-            // Imprimer QR
             document.getElementById('btnImprimerQR')?.addEventListener('click', function() {
                 const qrDiv = document.getElementById('qrcode');
                 const qrHTML = qrDiv.innerHTML;
@@ -1358,15 +1406,12 @@
                 printWindow.document.close();
             });
 
-            // QR Code
             genererQRCode();
 
-            // Initialisation
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('dateRdv').min = today;
             document.getElementById('clientGarageName').textContent = getGarageFromURL();
 
-            // Service Worker
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('/ntr-garage/sw.js')
                     .then(() => console.log('✅ Service Worker enregistré'))
@@ -1541,165 +1586,177 @@
         }
 
         // ============================================================
-        // FICHE DE RÉCEPTION PROFESSIONNELLE (PDF) - VERSION CORRIGÉE
+        // FICHE DE RÉCEPTION PROFESSIONNELLE (PDF) - VERSION FINALE CORRIGÉE
         // ============================================================
         async function genererPDFPourDemande(id) {
+            if (pdfGenerationInProgress) {
+                afficherToast('⏳ Génération en cours...', 'info');
+                return;
+            }
+
             const demande = allDemandes.find(d => d.id === id);
-            if (!demande) return;
+            if (!demande) {
+                afficherToast('❌ Demande introuvable', 'error');
+                return;
+            }
 
-            const pdfContent = document.getElementById('pdfContent');
+            pdfGenerationInProgress = true;
 
-            // Construction de la fiche avec une mise en page optimisée
+            // Construire le HTML du PDF avec des classes dédiées
             let html = `
-                    <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 100%; padding: 5px 0; color: #1a1a1a; line-height: 1.4;">
-                        <!-- En-tête -->
-                        <div style="text-align: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 3px solid #0f172a;">
-                            <div style="font-size: 22px; font-weight: 700; color: #0f172a; letter-spacing: 1px;">🚗 ASSIST-GARAGE</div>
-                            <div style="font-size: 11px; color: #475569; text-transform: uppercase; letter-spacing: 1px;">Fiche de Réception Véhicule</div>
-                        </div>
-
-                        <!-- Numéro et date -->
-                        <table style="width: 100%; margin-bottom: 12px; border-collapse: collapse; font-size: 12px;">
-                            <tr>
-                                <td style="width: 50%; padding: 8px 10px; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 4px 0 0 4px;">
-                                    <span style="color: #64748b; font-size: 10px; text-transform: uppercase;">N° de dossier</span><br>
-                                    <strong style="font-size: 14px; color: #0f172a;">${demande.numeroDemande || id}</strong>
-                                </td>
-                                <td style="width: 50%; padding: 8px 10px; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 0 4px 4px 0; text-align: right;">
-                                    <span style="color: #64748b; font-size: 10px; text-transform: uppercase;">Date de réception</span><br>
-                                    <span style="font-size: 13px; color: #0f172a;">${demande.date || new Date().toLocaleString('fr-FR')}</span>
-                                </td>
-                            </tr>
-                        </table>
-
-                        <!-- Véhicule -->
-                        <div style="margin-bottom: 10px;">
-                            <div style="font-size: 12px; font-weight: 700; color: #0f172a; text-transform: uppercase; margin-bottom: 5px; border-left: 3px solid #0f172a; padding-left: 8px;">Informations Véhicule</div>
-                            <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
-                                <tr>
-                                    <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 20%; background: #f8fafc;"><strong>Immatriculation</strong></td>
-                                    <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 30%;">${demande.immatriculation || 'N/A'}</td>
-                                    <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 20%; background: #f8fafc;"><strong>Kilométrage</strong></td>
-                                    <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 30%;">${demande.kilometrage || 'N/A'} km</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Marque</strong></td>
-                                    <td style="padding: 6px 8px; border: 1px solid #e2e8f0;">${demande.marque || 'N/A'}</td>
-                                    <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Modèle</strong></td>
-                                    <td style="padding: 6px 8px; border: 1px solid #e2e8f0;">${demande.modele || 'N/A'}</td>
-                                </tr>
-                            </table>
-                        </div>
-
-                        <!-- Client -->
-                        <div style="margin-bottom: 10px;">
-                            <div style="font-size: 12px; font-weight: 700; color: #0f172a; text-transform: uppercase; margin-bottom: 5px; border-left: 3px solid #0f172a; padding-left: 8px;">Informations Client</div>
-                            <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
-                                <tr>
-                                    <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 20%; background: #f8fafc;"><strong>Nom complet</strong></td>
-                                    <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 80%;">${demande.nom || 'N/A'}</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Téléphone</strong></td>
-                                    <td style="padding: 6px 8px; border: 1px solid #e2e8f0;">${demande.telephone || 'N/A'}</td>
-                                </tr>
-                                ${demande.email ? `
-                                <tr>
-                                    <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Email</strong></td>
-                                    <td style="padding: 6px 8px; border: 1px solid #e2e8f0;">${demande.email}</td>
-                                </tr>` : ''}
-                            </table>
-                        </div>
-
-                        <!-- Panne -->
-                        <div style="margin-bottom: 10px;">
-                            <div style="font-size: 12px; font-weight: 700; color: #0f172a; text-transform: uppercase; margin-bottom: 5px; border-left: 3px solid #0f172a; padding-left: 8px;">Description de la Panne</div>
-                            <div style="padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 11px; line-height: 1.5; background: #fef2f2; min-height: 30px;">
-                                ${demande.description || 'N/A'}
-                            </div>
-                            <table style="width: 100%; margin-top: 5px; border-collapse: collapse; font-size: 11px;">
-                                <tr>
-                                    <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 50%; background: #f8fafc;">
-                                        <strong>Niveau d'urgence :</strong>
-                                        <span style="color: ${demande.urgence === 'haute' ? '#ef4444' : demande.urgence === 'moyenne' ? '#f59e0b' : '#22c55e'}; font-weight: 700;">
-                                            ${demande.urgence === 'haute' ? '🔴 URGENT' : demande.urgence === 'moyenne' ? '🟡 MOYEN' : '🟢 NORMAL'}
-                                        </span>
-                                    </td>
-                                    <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 50%;">
-                                        <strong>Diagnostic :</strong> ${demande.diagnosticIA || 'À déterminer'}
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-
-                        <!-- Photo (si présente) -->
-                        ${demande.media && demande.mediaType === 'image' ? `
-                        <div style="margin-bottom: 10px;">
-                            <div style="font-size: 12px; font-weight: 700; color: #0f172a; text-transform: uppercase; margin-bottom: 5px; border-left: 3px solid #0f172a; padding-left: 8px;">Photo du véhicule</div>
-                            <div style="text-align: center; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; background: #f8fafc;">
-                                <img src="${demande.media}" style="max-width: 100%; max-height: 180px; border-radius: 4px;">
-                            </div>
-                        </div>` : ''}
-
-                        <!-- Infos complémentaires -->
-                        ${demande.garage || demande.dateRdv || demande.lieu ? `
-                        <div style="margin-bottom: 10px;">
-                            <div style="font-size: 12px; font-weight: 700; color: #0f172a; text-transform: uppercase; margin-bottom: 5px; border-left: 3px solid #0f172a; padding-left: 8px;">Informations Complémentaires</div>
-                            <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
-                                ${demande.garage ? `
-                                <tr>
-                                    <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 30%; background: #f8fafc;"><strong>Garage assigné</strong></td>
-                                    <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 70%;">${demande.garage}</td>
-                                </tr>` : ''}
-                                ${demande.dateRdv ? `
-                                <tr>
-                                    <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Rendez-vous</strong></td>
-                                    <td style="padding: 6px 8px; border: 1px solid #e2e8f0;">${demande.dateRdv} ${demande.heureRdv ? 'à ' + demande.heureRdv : ''}</td>
-                                </tr>` : ''}
-                                ${demande.lieu ? `
-                                <tr>
-                                    <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Localisation</strong></td>
-                                    <td style="padding: 6px 8px; border: 1px solid #e2e8f0;">${demande.lieu}</td>
-                                </tr>` : ''}
-                            </table>
-                        </div>` : ''}
-
-                        <!-- Pied de page -->
-                        <div style="text-align: center; margin-top: 15px; padding-top: 8px; border-top: 1px solid #cbd5e1; font-size: 9px; color: #64748b;">
-                            <strong>ASSIST-GARAGE PRO</strong> - Document généré automatiquement<br>
-                            Pour toute question, contactez votre garage
-                        </div>
+                <div class="pdf-wrapper">
+                    <div class="pdf-header">
+                        <h1>🚗 ASSIST-GARAGE</h1>
+                        <div class="sub">Fiche de Réception Véhicule</div>
                     </div>
-                `;
 
+                    <!-- Numéro et date -->
+                    <table class="pdf-table" style="margin-bottom: 12px;">
+                        <tr>
+                            <td style="width: 50%; background: #f1f5f9; border-radius: 4px 0 0 4px;">
+                                <div style="color: #64748b; font-size: 10px; text-transform: uppercase;">N° de dossier</div>
+                                <strong style="font-size: 14px; color: #0f172a;">${demande.numeroDemande || id}</strong>
+                            </td>
+                            <td style="width: 50%; background: #f1f5f9; border-radius: 0 4px 4px 0; text-align: right;">
+                                <div style="color: #64748b; font-size: 10px; text-transform: uppercase;">Date de réception</div>
+                                <span style="font-size: 13px; color: #0f172a;">${demande.date || new Date().toLocaleString('fr-FR')}</span>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- Véhicule -->
+                    <div class="pdf-section-title">Informations Véhicule</div>
+                    <table class="pdf-table" style="margin-bottom: 8px;">
+                        <tr>
+                            <td class="label">Immatriculation</td>
+                            <td style="width: 30%;">${demande.immatriculation || 'N/A'}</td>
+                            <td class="label">Kilométrage</td>
+                            <td style="width: 30%;">${demande.kilometrage || 'N/A'} km</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Marque</td>
+                            <td>${demande.marque || 'N/A'}</td>
+                            <td class="label">Modèle</td>
+                            <td>${demande.modele || 'N/A'}</td>
+                        </tr>
+                    </table>
+
+                    <!-- Client -->
+                    <div class="pdf-section-title">Informations Client</div>
+                    <table class="pdf-table" style="margin-bottom: 8px;">
+                        <tr>
+                            <td class="label">Nom complet</td>
+                            <td colspan="3">${demande.nom || 'N/A'}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">Téléphone</td>
+                            <td colspan="3">${demande.telephone || 'N/A'}</td>
+                        </tr>
+                        ${demande.email ? `
+                        <tr>
+                            <td class="label">Email</td>
+                            <td colspan="3">${demande.email}</td>
+                        </tr>` : ''}
+                    </table>
+
+                    <!-- Panne -->
+                    <div class="pdf-section-title">Description de la Panne</div>
+                    <div class="pdf-desc-box" style="margin-bottom: 5px;">
+                        ${demande.description || 'N/A'}
+                    </div>
+                    <table class="pdf-table" style="margin-bottom: 8px;">
+                        <tr>
+                            <td style="width: 50%; background: #f8fafc;">
+                                <strong>Niveau d'urgence :</strong>
+                                <span class="pdf-urgence-${demande.urgence || 'basse'}">
+                                    ${demande.urgence === 'haute' ? '🔴 URGENT' : demande.urgence === 'moyenne' ? '🟡 MOYEN' : '🟢 NORMAL'}
+                                </span>
+                            </td>
+                            <td style="width: 50%; background: #f8fafc;">
+                                <strong>Diagnostic :</strong> ${demande.diagnosticIA || 'À déterminer'}
+                            </td>
+                        </tr>
+                    </table>
+
+                    ${demande.media && demande.mediaType === 'image' ? `
+                    <div class="pdf-section-title">Photo du véhicule</div>
+                    <div class="pdf-photo">
+                        <img src="${demande.media}" alt="Photo du véhicule">
+                    </div>` : ''}
+
+                    ${demande.garage || demande.dateRdv || demande.lieu ? `
+                    <div class="pdf-section-title">Informations Complémentaires</div>
+                    <table class="pdf-table" style="margin-bottom: 8px;">
+                        ${demande.garage ? `
+                        <tr>
+                            <td class="label">Garage assigné</td>
+                            <td colspan="3">${demande.garage}</td>
+                        </tr>` : ''}
+                        ${demande.dateRdv ? `
+                        <tr>
+                            <td class="label">Rendez-vous</td>
+                            <td colspan="3">${demande.dateRdv} ${demande.heureRdv ? 'à ' + demande.heureRdv : ''}</td>
+                        </tr>` : ''}
+                        ${demande.lieu ? `
+                        <tr>
+                            <td class="label">Localisation</td>
+                            <td colspan="3">${demande.lieu}</td>
+                        </tr>` : ''}
+                    </table>` : ''}
+
+                    <div class="pdf-footer">
+                        <strong>ASSIST-GARAGE PRO</strong> - Document généré automatiquement<br>
+                        Pour toute question, contactez votre garage
+                    </div>
+                </div>
+            `;
+
+            // Afficher dans le modal
+            const pdfContent = document.getElementById('pdfContent');
             pdfContent.innerHTML = html;
             document.getElementById('pdfModal').style.display = 'flex';
 
+            // Gérer le téléchargement
             document.getElementById('btnGenererPDF').onclick = function() {
-                if (typeof html2pdf !== 'undefined') {
-                    const element = document.getElementById('pdfContent');
-                    const opt = {
-                        margin: [10, 10, 10, 10],
-                        filename: `Fiche_Reception_${demande.numeroDemande || id}.pdf`,
-                        image: { type: 'jpeg', quality: 0.95 },
-                        html2canvas: {
-                            scale: 2,
-                            useCORS: true,
-                            letterRendering: true,
-                            width: element.scrollWidth,
-                            height: element.scrollHeight
-                        },
-                        jsPDF: {
-                            unit: 'mm',
-                            format: 'a4',
-                            orientation: 'portrait'
-                        }
-                    };
-                    html2pdf().from(element).set(opt).save();
-                    afficherToast('📄 Fiche générée avec succès', 'success');
-                } else {
-                    afficherToast('❌ Erreur: Bibliothèque PDF non chargée', 'error');
-                }
+                if (pdfGenerationInProgress) return;
+                pdfGenerationInProgress = true;
+
+                const element = document.getElementById('pdfContent');
+
+                // Configuration optimisée pour éviter les espaces vides
+                const opt = {
+                    margin: [8, 8, 8, 8],
+                    filename: `Fiche_Reception_${demande.numeroDemande || id}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: {
+                        scale: 2,
+                        useCORS: true,
+                        letterRendering: true,
+                        logging: false,
+                        width: element.scrollWidth,
+                        height: element.scrollHeight
+                    },
+                    jsPDF: {
+                        unit: 'mm',
+                        format: 'a4',
+                        orientation: 'portrait'
+                    },
+                    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+                };
+
+                html2pdf()
+                    .from(element)
+                    .set(opt)
+                    .save()
+                    .then(() => {
+                        pdfGenerationInProgress = false;
+                        afficherToast('📄 Fiche générée avec succès', 'success');
+                    })
+                    .catch((err) => {
+                        pdfGenerationInProgress = false;
+                        console.error('Erreur PDF:', err);
+                        afficherToast('❌ Erreur lors de la génération du PDF', 'error');
+                    });
             };
         }
 
