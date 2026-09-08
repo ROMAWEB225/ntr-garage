@@ -7,8 +7,9 @@
     <meta name="theme-color" content="#0f172a">
     <link rel="manifest" href="/ntr-garage/site.webmanifest">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <!-- QR Code Library avec fallback -->
+    <!-- QR Code Library -->
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    
     <style>
         :root {
             --primary: #0f172a;
@@ -30,7 +31,6 @@
             background: var(--bg);
             min-height: 100vh;
             padding: 20px;
-            transition: all 0.3s ease;
         }
         
         .container, .dashboard-container {
@@ -130,25 +130,6 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         
-        .qr-code img, .qr-code canvas {
-            display: block;
-            margin: 0 auto;
-        }
-        
-        .qr-placeholder {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 140px;
-            height: 140px;
-            margin: 0 auto;
-            background: #f1f5f9;
-            border-radius: 12px;
-            color: #64748b;
-            font-size: 12px;
-        }
-        
         .tabs {
             display: flex;
             gap: 4px;
@@ -188,8 +169,6 @@
             margin: 20px 0 12px 0; 
         }
         
-        .section-title:first-of-type { margin-top: 0; }
-        
         .row-2cols { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
@@ -212,6 +191,105 @@
             outline: none;
             border-color: var(--primary);
             box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
+        }
+        
+        /* ===== NOUVEAU : SÉLECTION MÉDIA AVEC CAPACITÉ ===== */
+        .media-selection {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 12px 0;
+        }
+        
+        .media-option {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .media-option:hover {
+            border-color: #0f172a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .media-option.active {
+            border-color: #0f172a;
+            background: #f8fafc;
+        }
+        
+        .media-icon {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .media-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0f172a;
+            display: block;
+        }
+        
+        .media-capacity {
+            font-size: 11px;
+            color: #64748b;
+            display: block;
+            margin-top: 4px;
+        }
+        
+        .capacity-bar {
+            width: 100%;
+            height: 4px;
+            background: #f1f5f9;
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        
+        .capacity-fill {
+            height: 100%;
+            background: #0f172a;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+        
+        /* ===== BARRE DE PROGRESSION ===== */
+        .progress-container {
+            display: none;
+            margin: 12px 0;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0f172a, #22c55e);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+        
+        .progress-text {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 8px;
+            text-align: center;
         }
         
         .btn-urgence { 
@@ -244,31 +322,6 @@
             border-color: var(--primary) !important; 
         }
         
-        .media-buttons { 
-            display: flex; 
-            gap: 10px; 
-            flex-wrap: wrap; 
-            margin: 12px 0; 
-        }
-        
-        .btn-media {
-            flex: 1;
-            background: var(--card);
-            border: 1px solid var(--border);
-            padding: 10px;
-            border-radius: 40px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
-            color: #475569;
-            transition: all 0.2s ease;
-        }
-        
-        .btn-media:hover { 
-            border-color: var(--primary); 
-            background: #f8fafc; 
-        }
-        
         .preview-media {
             background: #f8fafc;
             border-radius: 16px;
@@ -280,7 +333,7 @@
         .preview-media img, .preview-media video { 
             max-width: 100%; 
             border-radius: 12px; 
-            max-height: 160px; 
+            max-height: 200px; 
         }
         
         .preview-media audio { width: 100%; }
@@ -301,8 +354,11 @@
         
         .btn-primary:hover { 
             background: var(--primary-light); 
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
         }
         
         .btn-secondary {
@@ -351,12 +407,6 @@
             font-size: 18px;
         }
         
-        .sort-options {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-        
         .stats {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -369,13 +419,6 @@
             padding: 16px; 
             border-radius: 20px; 
             text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         
         .stat-number { 
@@ -421,12 +464,6 @@
             padding: 18px;
             margin-bottom: 14px;
             position: relative;
-            transition: all 0.3s ease;
-        }
-        
-        .demande:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            transform: translateY(-1px);
         }
         
         .demande.haute { border-left: 3px solid var(--danger); }
@@ -476,12 +513,6 @@
             width: 90%;
             max-height: 80vh;
             overflow-y: auto;
-            animation: slideUp 0.3s ease;
-        }
-        
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
         }
         
         .toast {
@@ -496,12 +527,6 @@
             display: none;
             z-index: 1000;
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            animation: slideIn 0.3s ease;
-        }
-        
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
         }
         
         .pagination {
@@ -521,12 +546,6 @@
             transition: all 0.2s ease;
         }
         
-        .page-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-        
         @media (max-width: 560px) {
             body { padding: 16px; }
             .container, .dashboard-container { padding: 20px; }
@@ -534,9 +553,7 @@
             .stats { grid-template-columns: repeat(2, 1fr); }
             .btn-urgence { flex-direction: column; }
             .ad-banner { flex-wrap: wrap; justify-content: center; text-align: center; }
-            .ad-banner .ad-cta { width: 100%; text-align: center; }
-            .dashboard-header { flex-direction: column; }
-            .search-bar { width: 100%; }
+            .media-selection { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -551,46 +568,34 @@
             <span class="badge-free">📱 VERSION PRO</span>
         </div>
 
-        <!-- ===== BANNIÈRE SMARTLINK PRINCIPALE ===== -->
+        <!-- Bannière Smartlink -->
         <div class="ad-banner" onclick="ouvrirSmartlink()">
             <div class="ad-icon">🎯</div>
             <div class="ad-text">
                 <strong>🔒 Offre partenaire exclusive</strong>
-                <small>Découvrez nos offres spéciales pour les professionnels</small>
+                <small>Découvrez nos offres spéciales</small>
             </div>
             <div class="ad-cta">Voir l'offre</div>
         </div>
 
-        <!-- ===== SECTION QR CODE ===== -->
+        <!-- Section QR Code -->
         <div class="qr-section">
-            <div id="qrcode" class="qr-code">
-                <div class="qr-placeholder">
-                    <span style="font-size: 24px; margin-bottom: 8px;">📱</span>
-                    <span>Génération du QR code...</span>
-                </div>
-            </div>
+            <div id="qrcode" class="qr-code"></div>
             <div id="currentUrl" style="font-size: 11px; color: #64748b; word-break: break-all; margin-top: 10px;"></div>
             <div style="display: flex; gap: 10px; justify-content: center; margin-top: 12px;">
-                <button id="btnCopierLien" class="btn-secondary">📋 Copier le lien</button>
-                <button id="btnImprimerQR" class="btn-secondary">🖨️ Imprimer QR</button>
+                <button id="btnCopierLien" class="btn-secondary">📋 Copier</button>
+                <button id="btnImprimerQR" class="btn-secondary">🖨️ Imprimer</button>
             </div>
         </div>
 
-        <!-- ===== INDICATEUR GARAGE ===== -->
+        <!-- Indicateur Garage -->
         <div style="text-align: center; margin: 4px 0 12px 0;">
             <span style="font-size: 13px; color: #64748b;">
                 📍 Garage : <strong id="clientGarageName" style="color: #0f172a;">Standard</strong>
             </span>
         </div>
 
-        <!-- ===== BOUTON INSTALLATION ===== -->
-        <div style="text-align: center; margin: 16px 0;">
-            <button id="btnInstaller" style="display:none; background: #0f172a; color: white; border: none; padding: 14px 24px; border-radius: 40px; font-size: 15px; font-weight: 600; cursor: pointer; width: 100%; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.15); transition: all 0.3s ease;">
-                📱 Installer l'application
-            </button>
-            <p style="font-size: 11px; color: #94a3b8; margin-top: 6px;">Gratuit • Sans inscription • Fonctionne hors-ligne</p>
-        </div>
-
+        <!-- Tabs -->
         <div class="tabs">
             <div class="tab active" data-tab="panne">📝 Signalement</div>
             <div class="tab" data-tab="suivi">🔍 Suivi</div>
@@ -605,10 +610,9 @@
                 <input type="text" id="modele" placeholder="Modèle *">
             </div>
             <div class="row-2cols">
-                <input type="text" id="immatriculation" placeholder="Immatriculation *" maxlength="20">
+                <input type="text" id="immatriculation" placeholder="Immatriculation *">
                 <input type="number" id="kilometrage" placeholder="Kilométrage">
             </div>
-            <input type="date" id="dateMiseService">
 
             <div class="section-title">👤 Coordonnées</div>
             <input type="text" id="clientNom" placeholder="Nom et prénom *">
@@ -618,7 +622,7 @@
             </div>
 
             <div class="section-title">🔧 Description de la panne</div>
-            <textarea id="description" rows="3" placeholder="Décrivez le problème en détail... *"></textarea>
+            <textarea id="description" rows="3" placeholder="Décrivez le problème... *"></textarea>
 
             <div class="section-title">⚠️ Niveau d'urgence</div>
             <div class="btn-urgence">
@@ -630,11 +634,11 @@
             <div class="section-title">📍 Localisation</div>
             <input type="text" id="lieu" placeholder="Lieu du véhicule">
 
-            <div class="section-title">📅 Prise de rendez-vous</div>
+            <div class="section-title">📅 Rendez-vous</div>
             <div class="row-2cols">
                 <input type="date" id="dateRdv">
                 <select id="heureRdv">
-                    <option value="">Sélectionner l'heure</option>
+                    <option value="">Heure</option>
                     <option value="08:00">08:00 - 09:00</option>
                     <option value="09:00">09:00 - 10:00</option>
                     <option value="10:00">10:00 - 11:00</option>
@@ -647,17 +651,62 @@
                 </select>
             </div>
 
-            <div class="section-title">📎 Médias</div>
-            <div class="media-buttons">
-                <button id="btnPhoto" class="btn-media">📷 Photo</button>
-                <button id="btnGalerie" class="btn-media">🖼️ Galerie</button>
-                <button id="btnVideo" class="btn-media">🎥 Vidéo</button>
-                <button id="btnAudio" class="btn-media">🎙️ Audio</button>
+            <!-- ===== NOUVEAU : SÉLECTION MÉDIA AVEC CAPACITÉ ===== -->
+            <div class="section-title">📎 Médias joints</div>
+            
+            <div class="media-selection">
+                <div class="media-option" data-media-type="camera" onclick="ouvrirCamera()">
+                    <span class="media-icon">📷</span>
+                    <span class="media-label">Appareil photo</span>
+                    <span class="media-capacity">Photo directe</span>
+                    <div class="capacity-bar">
+                        <div class="capacity-fill" style="width: 100%;"></div>
+                    </div>
+                </div>
+                
+                <div class="media-option" data-media-type="galerie" onclick="ouvrirGalerie()">
+                    <span class="media-icon">🖼️</span>
+                    <span class="media-label">Galerie</span>
+                    <span class="media-capacity">Max 5 MB</span>
+                    <div class="capacity-bar">
+                        <div class="capacity-fill" style="width: 80%;"></div>
+                    </div>
+                </div>
+                
+                <div class="media-option" data-media-type="video" onclick="ouvrirVideo()">
+                    <span class="media-icon">🎥</span>
+                    <span class="media-label">Vidéo</span>
+                    <span class="media-capacity">Max 10 MB</span>
+                    <div class="capacity-bar">
+                        <div class="capacity-fill" style="width: 60%;"></div>
+                    </div>
+                </div>
+                
+                <div class="media-option" data-media-type="audio" onclick="ouvrirAudio()">
+                    <span class="media-icon">🎙️</span>
+                    <span class="media-label">Audio</span>
+                    <span class="media-capacity">Max 5 MB</span>
+                    <div class="capacity-bar">
+                        <div class="capacity-fill" style="width: 70%;"></div>
+                    </div>
+                </div>
             </div>
+            
             <input type="file" id="fichierMedia" accept="image/*,video/*,audio/*" style="display:none">
-            <div id="previewMedia" class="preview-media"></div>
+            
+            <!-- Barre de progression -->
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-text" id="progressText">Téléchargement... 0%</div>
+            </div>
+            
+            <!-- Aperçu média -->
+            <div class="preview-media" id="previewMedia"></div>
 
-            <div class="ia-diagnostic" id="iaDiagnostic" style="display:none; background: #f8fafc; border-radius: 16px; padding: 14px; margin: 16px 0; font-size: 13px; color: #475569; border-left: 3px solid #0f172a;">
+            <!-- Diagnostic IA -->
+            <div id="iaDiagnostic" style="display:none; background: #f8fafc; border-radius: 16px; padding: 14px; margin: 16px 0; font-size: 13px; color: #475569; border-left: 3px solid #0f172a;">
                 <strong>🤖 Diagnostic IA :</strong>
                 <p id="iaResultat"></p>
             </div>
@@ -674,7 +723,7 @@
             <div id="trackingError" style="color: #ef4444; font-size: 13px; margin-top: 10px; text-align: center;"></div>
 
             <div id="trackingInfo" style="display: none; margin-top: 24px;">
-                <div id="trackingVehicleInfo" style="background: #f8fafc; border-radius: 20px; padding: 16px; margin: 16px 0; text-align: left;"></div>
+                <div id="trackingVehicleInfo" style="background: #f8fafc; border-radius: 20px; padding: 16px; margin: 16px 0;"></div>
                 <div style="background: #f1f5f9; border-radius: 60px; height: 6px; margin: 24px 0; overflow: hidden;">
                     <div id="trackingProgressFill" style="background: #0f172a; width: 0%; height: 100%; transition: width 0.3s ease;"></div>
                 </div>
@@ -682,12 +731,12 @@
                 <div id="trackingLastUpdate" style="font-size: 11px; color: #94a3b8; text-align: center; margin-top: 16px;"></div>
             </div>
 
-            <!-- Bannière dans Suivi -->
+            <!-- Bannière -->
             <div class="ad-banner" style="margin-top: 20px;" onclick="ouvrirSmartlink()">
                 <div class="ad-icon">💡</div>
                 <div class="ad-text">
                     <strong>💰 Gagnez de l'argent</strong>
-                    <small>Des offres exclusives pour les utilisateurs</small>
+                    <small>Des offres exclusives</small>
                 </div>
                 <div class="ad-cta">En savoir plus</div>
             </div>
@@ -696,43 +745,17 @@
         <!-- Tab: Offres -->
         <div id="tab-offres" class="tab-content">
             <div class="section-title">🎁 Offres partenaires</div>
-            <p style="color: #64748b; font-size: 14px; margin-bottom: 16px;">
-                Découvrez des offres exclusives qui vous permettent de gagner de l'argent ou d'obtenir des réductions.
-            </p>
-            
-            <div class="ad-banner" onclick="ouvrirSmartlink()" style="background: linear-gradient(135deg, #eef2ff, #f8fafc);">
+            <div class="ad-banner" onclick="ouvrirSmartlink()">
                 <div class="ad-icon">💰</div>
                 <div class="ad-text">
                     <strong>Gagnez jusqu'à 100 000 FCFA</strong>
-                    <small>Inscrivez-vous et profitez de nos offres partenaires</small>
+                    <small>Inscrivez-vous et profitez de nos offres</small>
                 </div>
                 <div class="ad-cta">Je m'inscris</div>
-            </div>
-            
-            <div class="ad-banner" onclick="ouvrirSmartlink()" style="background: linear-gradient(135deg, #fce7f3, #f8fafc);">
-                <div class="ad-icon">🛒</div>
-                <div class="ad-text">
-                    <strong>Réductions exclusives</strong>
-                    <small>Jusqu'à -50% sur des produits et services</small>
-                </div>
-                <div class="ad-cta">Voir les offres</div>
-            </div>
-            
-            <div class="ad-banner" onclick="ouvrirSmartlink()" style="background: linear-gradient(135deg, #d1fae5, #f8fafc);">
-                <div class="ad-icon">📱</div>
-                <div class="ad-text">
-                    <strong>Applications gratuites</strong>
-                    <small>Testez des applications et gagnez des récompenses</small>
-                </div>
-                <div class="ad-cta">Tester</div>
             </div>
         </div>
 
         <button id="btnAllerDashboard" class="btn-secondary" style="margin-top: 20px; width: 100%;">🔐 Accès réception</button>
-
-        <div style="text-align: center; margin-top: 20px; padding-top: 16px; border-top: 1px solid #e2e8f0; font-size: 11px; color: #94a3b8;">
-            Développé par <a href="https://github.com/romaweb225" target="_blank" style="color: #0f172a; text-decoration: none; font-weight: 500;">NTR</a>
-        </div>
     </div>
 </div>
 
@@ -748,22 +771,18 @@
         <div class="dashboard-header">
             <div class="search-bar">
                 <span class="search-icon">🔍</span>
-                <input type="text" id="searchInput" placeholder="Rechercher (immat, nom, n°)">
+                <input type="text" id="searchInput" placeholder="Rechercher...">
             </div>
-            <div class="sort-options">
-                <select id="sortBy" style="padding: 8px 12px; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 13px; cursor: pointer;">
-                    <option value="date">📅 Par date</option>
-                    <option value="urgence">⚠️ Par urgence</option>
-                    <option value="statut">📊 Par statut</option>
-                </select>
-                <button id="btnExportCSV" class="btn-secondary">📊 Export</button>
-            </div>
+            <select id="sortBy" style="padding: 8px 12px; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 13px; cursor: pointer;">
+                <option value="date">📅 Par date</option>
+                <option value="urgence">⚠️ Par urgence</option>
+                <option value="statut">📊 Par statut</option>
+            </select>
         </div>
 
-        <!-- Sélecteur de garage -->
-        <div style="margin-bottom: 20px; padding: 16px 20px; background: #f8fafc; border-radius: 16px; border: 1px solid #e2e8f0;">
-            <label for="selectGarage" style="font-weight: 600; font-size: 14px; color: #0f172a;">🔧 Garage :</label>
-            <select id="selectGarage" style="margin-left: 12px; padding: 8px 12px; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 14px; cursor: pointer;">
+        <!-- Sélecteur garage -->
+        <div style="margin-bottom: 20px;">
+            <select id="selectGarage" style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 14px;">
                 <option value="tous">📋 Tous les garages</option>
                 <option value="Toure">Garage Toure</option>
                 <option value="Momo">Garage Momo</option>
@@ -775,21 +794,21 @@
             </select>
         </div>
 
-        <!-- Statistiques -->
+        <!-- Stats -->
         <div class="stats">
-            <div class="stat-card" data-filter="toutes">
+            <div class="stat-card">
                 <div class="stat-number" id="statTotal">0</div>
                 <div class="stat-label">Total</div>
             </div>
-            <div class="stat-card" data-filter="non-lues">
+            <div class="stat-card">
                 <div class="stat-number" id="statNonLues">0</div>
                 <div class="stat-label">Non traitées</div>
             </div>
-            <div class="stat-card" data-filter="urgentes">
+            <div class="stat-card">
                 <div class="stat-number" id="statUrgentes">0</div>
                 <div class="stat-label">Urgentes</div>
             </div>
-            <div class="stat-card" data-filter="satisfaction">
+            <div class="stat-card">
                 <div class="stat-number" id="statSatisfaction">—</div>
                 <div class="stat-label">Satisfaction</div>
             </div>
@@ -798,61 +817,39 @@
         <!-- Filtres -->
         <div class="filtres">
             <button class="filtre-btn active" data-filtre="toutes">📋 Toutes</button>
-            <button class="filtre-btn" data-filtre="non-lues">🆕 Non traitées</button>
+            <button class="filtre-btn" data-filtre="non-lues">🆕 Non lues</button>
             <button class="filtre-btn" data-filtre="urgentes">🔴 Urgentes</button>
-            <button class="filtre-btn" data-filtre="en-reparation">🔧 En réparation</button>
-            <button class="filtre-btn" data-filtre="pretes">✅ Prêtes</button>
         </div>
 
-        <!-- Liste des demandes -->
-        <div id="listeDemandes" style="max-height: 600px; overflow-y: auto;"></div>
+        <!-- Liste -->
+        <div id="listeDemandes" style="max-height: 500px; overflow-y: auto;"></div>
 
         <!-- Pagination -->
         <div class="pagination">
-            <button class="page-btn" id="btnPrev">← Précédent</button>
-            <span id="pageInfo" style="font-size: 12px; color: #64748b;">Page 1</span>
-            <button class="page-btn" id="btnNext">Suivant →</button>
+            <button class="page-btn" id="btnPrev">←</button>
+            <span id="pageInfo">Page 1</span>
+            <button class="page-btn" id="btnNext">→</button>
         </div>
 
-        <div style="margin-top: 20px; text-align: center;">
-            <button id="btnQuitterDashboard" class="btn-secondary">⬅️ Retour à l'accueil</button>
-        </div>
+        <button id="btnQuitterDashboard" class="btn-secondary" style="margin-top: 20px; width: 100%;">⬅️ Retour</button>
     </div>
 </div>
 
-<!-- Modal Média -->
+<!-- Modals -->
 <div id="mediaModal" class="modal">
     <div class="modal-content">
-        <h3 style="margin-bottom: 16px;">📷 Média joint</h3>
+        <h3>📷 Média joint</h3>
         <div id="mediaModalContent" style="text-align: center;"></div>
-        <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: center;">
-            <button onclick="fermerMediaModal()" class="btn-secondary">Fermer</button>
-        </div>
+        <button onclick="fermerMediaModal()" class="btn-secondary" style="margin-top: 20px;">Fermer</button>
     </div>
 </div>
 
-<!-- Modal Notes -->
-<div id="notesModal" class="modal">
-    <div class="modal-content">
-        <h3 style="margin-bottom: 16px;">📝 Notes internes</h3>
-        <div id="notesList" style="font-size: 12px; color: #64748b; max-height: 200px; overflow-y: auto;"></div>
-        <textarea id="newNote" rows="3" placeholder="Ajouter une note interne..." style="margin-top: 12px;"></textarea>
-        <div style="display: flex; gap: 10px; margin-top: 12px;">
-            <button id="btnAddNote" class="btn-primary" style="margin-top: 0;">➕ Ajouter</button>
-            <button onclick="document.getElementById('notesModal').style.display='none'" class="btn-secondary">Fermer</button>
-        </div>
-    </div>
-</div>
-
-<!-- Modal PDF -->
 <div id="pdfModal" class="modal">
     <div class="modal-content">
-        <h3 style="margin-bottom: 16px;">📄 Fiche de réception</h3>
+        <h3>📄 Fiche de réception</h3>
         <div id="pdfContent"></div>
-        <div style="display: flex; gap: 10px; margin-top: 20px;">
-            <button id="btnGenererPDF" class="btn-primary" style="margin-top: 0;">⬇️ Télécharger PDF</button>
-            <button onclick="document.getElementById('pdfModal').style.display='none'" class="btn-secondary">Fermer</button>
-        </div>
+        <button id="btnGenererPDF" class="btn-primary" style="margin-top: 20px;">⬇️ Télécharger PDF</button>
+        <button onclick="document.getElementById('pdfModal').style.display='none'" class="btn-secondary">Fermer</button>
     </div>
 </div>
 
@@ -862,6 +859,9 @@
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
+<!-- Social Bar Adsterra -->
+<script type='text/javascript' src='//pl31125299.profitableratecpmnetwork.com/7d/47/2d/7d472d1e372e98bc61d61a51d74661d4.js'></script>
+
 <script>
 // ============================================================
 // CONFIGURATION
@@ -870,340 +870,129 @@ const CONFIG = {
     MOT_DE_PASSE: "Ly@m101288",
     ITEMS_PER_PAGE: 10,
     MAX_FILE_SIZE: 5 * 1024 * 1024,
+    MAX_VIDEO_SIZE: 10 * 1024 * 1024,
     SMARTLINK_URL: "https://www.profitableratecpmnetwork.com/k9vfm5y88?key=f28dab4e4533beafd809528362e68455"
 };
 
+let mediaData = null;
+let mediaType = null;
+let niveauUrgence = "basse";
+let unsubscribeDashboard = null;
+let currentFiltre = "toutes";
+let trackingUnsubscribe = null;
+let currentPage = 1;
+let allDemandes = [];
+
 // ============================================================
-// FONCTION SMARTLINK
+// FONCTIONS GLOBALES
 // ============================================================
 function ouvrirSmartlink() {
-    console.log("🔗 Ouverture du smartlink...");
-    if (CONFIG.SMARTLINK_URL) {
-        window.open(CONFIG.SMARTLINK_URL, '_blank');
-    } else {
-        afficherToast("🔗 Smartlink non configuré");
-    }
+    window.open(CONFIG.SMARTLINK_URL, '_blank');
 }
 
-// ============================================================
-// FONCTIONS MÉDIA
-// ============================================================
-function afficherMediaModal(mediaData, mediaType) {
-    const modal = document.getElementById('mediaModal');
-    const content = document.getElementById('mediaModalContent');
-    
-    if (!mediaData) {
-        content.innerHTML = '<p>❌ Aucun média disponible</p>';
-    } else if (mediaType === 'image') {
-        content.innerHTML = `<img src="${mediaData}" style="max-width:100%;max-height:400px;border-radius:12px;">`;
-    } else if (mediaType === 'video') {
-        content.innerHTML = `<video src="${mediaData}" controls style="max-width:100%;max-height:400px;border-radius:12px;"></video>`;
-    } else if (mediaType === 'audio') {
-        content.innerHTML = `<audio src="${mediaData}" controls style="width:100%;"></audio>`;
-    }
-    
-    modal.style.display = 'flex';
-}
-
-function fermerMediaModal() {
-    document.getElementById('mediaModal').style.display = 'none';
-}
-
-function getGarageFromURL() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get('garage') || 'Standard';
-}
-
-// ============================================================
-// SCRIPT PRINCIPAL
-// ============================================================
-(function() {
-    // Firebase
-    const firebaseConfig = {
-        apiKey: "AIzaSyAxfEpi-NERVExxVYD2EmH7JppiIQDwWOM",
-        authDomain: "ntr-garage.firebaseapp.com",
-        projectId: "ntr-garage",
-        storageBucket: "ntr-garage.firebasestorage.app",
-        messagingSenderId: "606167388967",
-        appId: "1:606167388967:web:7ad669fd353cdeeb7a8f02"
-    };
-
-    let db;
-    try {
-        firebase.initializeApp(firebaseConfig);
-        db = firebase.firestore();
-        console.log("🔥 Firebase connecté");
-    } catch(e) {
-        console.log("Firebase déjà initialisé");
-        db = firebase.firestore();
-    }
-
-    // État
-    let mediaData = null;
-    let mediaType = null;
-    let niveauUrgence = "basse";
-    let unsubscribeDashboard = null;
-    let currentFiltre = "toutes";
-    let trackingUnsubscribe = null;
-    let currentPage = 1;
-    let allDemandes = [];
-    let demandeSelectionnee = null;
-
-    // DOM
-    const clientScreen = document.getElementById('clientScreen');
-    const dashboardScreen = document.getElementById('dashboardScreen');
+function afficherToast(message, type = 'info') {
     const toast = document.getElementById('toast');
-    const garageActuel = getGarageFromURL();
+    toast.textContent = message;
+    toast.style.display = 'block';
+    toast.style.background = type === 'error' ? '#ef4444' : 
+                            type === 'success' ? '#22c55e' : '#0f172a';
+    setTimeout(() => toast.style.display = 'none', 4000);
+}
 
-    // ============================================================
-    // UTILITAIRES
-    // ============================================================
-    function afficherToast(message, type = 'info') {
-        toast.textContent = message;
-        toast.style.display = 'block';
-        toast.style.background = type === 'error' ? '#ef4444' : 
-                                type === 'success' ? '#22c55e' : '#0f172a';
-        clearTimeout(toast.timeout);
-        toast.timeout = setTimeout(() => toast.style.display = 'none', 4000);
+// ============================================================
+// FONCTIONS MÉDIA AVEC CAMÉRA DIRECTE
+// ============================================================
+function ouvrirCamera() {
+    console.log("📷 Ouverture de la caméra...");
+    mediaType = 'camera';
+    const input = document.getElementById('fichierMedia');
+    input.accept = 'image/*';
+    input.capture = 'environment'; // Force l'ouverture de la caméra arrière
+    input.click();
+}
+
+function ouvrirGalerie() {
+    console.log("🖼️ Ouverture de la galerie...");
+    mediaType = 'galerie';
+    const input = document.getElementById('fichierMedia');
+    input.accept = 'image/*';
+    input.removeAttribute('capture'); // Pas de capture, ouvre la galerie
+    input.click();
+}
+
+function ouvrirVideo() {
+    console.log("🎥 Ouverture vidéo...");
+    mediaType = 'video';
+    const input = document.getElementById('fichierMedia');
+    input.accept = 'video/*';
+    input.capture = 'environment'; // Caméra vidéo sur mobile
+    input.click();
+}
+
+function ouvrirAudio() {
+    console.log("🎙️ Ouverture audio...");
+    mediaType = 'audio';
+    const input = document.getElementById('fichierMedia');
+    input.accept = 'audio/*';
+    input.removeAttribute('capture');
+    input.click();
+}
+
+// ============================================================
+// GESTION DES FICHIERS AVEC PROGRESSION
+// ============================================================
+function simulerProgression(callback) {
+    const progressContainer = document.getElementById('progressContainer');
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    
+    progressContainer.style.display = 'block';
+    let progress = 0;
+    
+    const interval = setInterval(() => {
+        progress += Math.random() * 30;
+        if (progress >= 100) {
+            progress = 100;
+            clearInterval(interval);
+            progressFill.style.width = '100%';
+            progressText.textContent = '✅ Téléchargement terminé !';
+            setTimeout(() => {
+                progressContainer.style.display = 'none';
+                progressFill.style.width = '0%';
+                if (callback) callback();
+            }, 500);
+        } else {
+            progressFill.style.width = progress + '%';
+            progressText.textContent = `Téléchargement... ${Math.floor(progress)}%`;
+        }
+    }, 200);
+}
+
+function gererFichierMedia(file) {
+    const maxSize = mediaType === 'video' ? CONFIG.MAX_VIDEO_SIZE : CONFIG.MAX_FILE_SIZE;
+    
+    if (file.size > maxSize) {
+        const maxMB = maxSize / (1024 * 1024);
+        afficherToast(`❌ Fichier trop lourd (max ${maxMB}MB)`, 'error');
+        return;
     }
 
-    function genererNumeroDemande() {
-        const now = new Date();
-        return `AG-${now.getFullYear()}-${String(Math.floor(Math.random() * 900) + 100)}`;
-    }
-
-    function analyserPanne(description) {
-        const desc = description.toLowerCase();
-        const diagnostics = [
-            { keywords: ['bruit', 'claquement', 'siffle'], message: '🔊 Bruit suspect → vérifier courroie, roulements' },
-            { keywords: ['fumee', 'fumée', 'brûle'], message: '💨 Fumée → vérifier niveau d\'huile' },
-            { keywords: ['voyant', 'témoin', 'alerte'], message: '💡 Voyant allumé → diagnostic électronique' },
-            { keywords: ['frein', 'freinage'], message: '🛑 Frein → contrôle des plaquettes' },
-            { keywords: ['batterie', 'démarre'], message: '🔋 Batterie → tester la charge' },
-            { keywords: ['climatisation', 'clim'], message: '❄️ Clim → rechargement nécessaire' },
-            { keywords: ['moteur', 'puissance'], message: '🔧 Moteur → diagnostic complet' },
-            { keywords: ['fuite', 'coule'], message: '💧 Fuite → vérifier joints' }
-        ];
+    simulerProgression(() => {
+        const reader = new FileReader();
         
-        const diagnostic = diagnostics.find(d => d.keywords.some(k => desc.includes(k)));
-        return diagnostic ? diagnostic.message : '🔍 Diagnostic complet nécessaire';
-    }
-
-    // ============================================================
-    // GÉNÉRATION QR CODE AVEC FALLBACK
-    // ============================================================
-    function genererQRCode() {
-        const url = window.location.href;
-        const urlElem = document.getElementById('currentUrl');
-        if (urlElem) urlElem.textContent = url;
-        
-        const qrDiv = document.getElementById('qrcode');
-        if (!qrDiv) return;
-        
-        // Vérifier si la bibliothèque QRCode est chargée
-        if (typeof QRCode !== 'undefined') {
-            try {
-                qrDiv.innerHTML = '';
-                new QRCode(qrDiv, {
-                    text: url,
-                    width: 140,
-                    height: 140,
-                    colorDark: "#0f172a",
-                    colorLight: "#ffffff",
-                    correctLevel: QRCode.CorrectLevel.H
-                });
-                console.log("✅ QR Code généré avec succès");
-            } catch(e) {
-                console.error("❌ Erreur QR Code:", e);
-                afficherFallbackQR(qrDiv, url);
+        reader.onprogress = function(e) {
+            if (e.lengthComputable) {
+                const percent = Math.round((e.loaded / e.total) * 100);
+                document.getElementById('progressFill').style.width = percent + '%';
+                document.getElementById('progressText').textContent = `Lecture... ${percent}%`;
             }
-        } else {
-            console.log("⚠️ Bibliothèque QRCode non chargée, utilisation du fallback");
-            afficherFallbackQR(qrDiv, url);
-        }
-    }
-
-    function afficherFallbackQR(qrDiv, url) {
-        // Fallback : afficher un lien cliquable
-        qrDiv.innerHTML = `
-            <div style="text-align: center; padding: 20px;">
-                <span style="font-size: 48px;">📱</span>
-                <p style="font-size: 12px; color: #64748b; margin-top: 8px;">Scannez ou cliquez :</p>
-                <a href="${url}" style="font-size: 10px; color: #0f172a; word-break: break-all;">${url}</a>
-            </div>
-        `;
-        console.log("📱 QR Code fallback affiché");
-    }
-
-    // ============================================================
-    // COPIE ET IMPRESSION
-    // ============================================================
-    document.getElementById('btnCopierLien')?.addEventListener('click', async function() {
-        try {
-            await navigator.clipboard.writeText(window.location.href);
-            afficherToast('📋 Lien copié !', 'success');
-        } catch(e) {
-            // Fallback pour anciens navigateurs
-            const textarea = document.createElement('textarea');
-            textarea.value = window.location.href;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textarea);
-            afficherToast('📋 Lien copié !', 'success');
-        }
-    });
-
-    document.getElementById('btnImprimerQR')?.addEventListener('click', function() {
-        const qrContent = document.getElementById('qrcode').innerHTML;
-        const currentUrl = window.location.href;
-        
-        const printWindow = window.open('', '_blank', 'width=400,height=600');
-        if (printWindow) {
-            printWindow.document.write(`
-                <html>
-                <head>
-                    <title>QR Code Assist-Garage</title>
-                    <style>
-                        body { 
-                            display: flex; 
-                            justify-content: center; 
-                            align-items: center; 
-                            height: 100vh; 
-                            flex-direction: column; 
-                            font-family: Arial, sans-serif; 
-                            margin: 0; 
-                            padding: 20px; 
-                        }
-                        .qr-container { 
-                            text-align: center; 
-                            padding: 30px; 
-                            border: 1px solid #e2e8f0; 
-                            border-radius: 16px; 
-                        }
-                        .qr-container h1 { 
-                            font-size: 24px; 
-                            color: #0f172a; 
-                            margin-bottom: 4px; 
-                        }
-                        .qr-container .sub { 
-                            font-size: 12px; 
-                            color: #64748b; 
-                            margin-bottom: 20px; 
-                        }
-                        .qr-code-wrapper { 
-                            display: inline-block; 
-                            padding: 16px; 
-                            border: 1px solid #e2e8f0; 
-                            border-radius: 12px; 
-                        }
-                        .url { 
-                            font-size: 11px; 
-                            color: #94a3b8; 
-                            margin-top: 16px; 
-                            word-break: break-all; 
-                        }
-                    </style>
-                </head>
-                <body>
-                    <div class="qr-container">
-                        <h1>🚗 ASSIST-GARAGE</h1>
-                        <div class="sub">Scannez pour accéder à l'application</div>
-                        <div class="qr-code-wrapper">${qrContent}</div>
-                        <div class="url">${currentUrl}</div>
-                    </div>
-                    <script>
-                        window.onload = function() { 
-                            window.print(); 
-                        };
-                    <\/script>
-                </body>
-                </html>
-            `);
-            printWindow.document.close();
-        } else {
-            afficherToast("❌ Impossible d'ouvrir la fenêtre d'impression", 'error');
-        }
-    });
-
-    // ============================================================
-    // ENVOI DE DEMANDE
-    // ============================================================
-    document.getElementById('btnEnvoyer')?.addEventListener('click', async function() {
-        const data = {
-            nom: document.getElementById('clientNom').value.trim(),
-            immatriculation: document.getElementById('immatriculation').value.trim().toUpperCase(),
-            email: document.getElementById('clientEmail').value.trim(),
-            telephone: document.getElementById('clientTel').value.trim(),
-            marque: document.getElementById('marque').value.trim(),
-            modele: document.getElementById('modele').value.trim(),
-            kilometrage: document.getElementById('kilometrage').value.trim(),
-            description: document.getElementById('description').value.trim(),
-            lieu: document.getElementById('lieu').value.trim(),
-            dateRdv: document.getElementById('dateRdv').value,
-            heureRdv: document.getElementById('heureRdv').value,
-            dateMiseService: document.getElementById('dateMiseService').value
         };
-
-        // Validation simple
-        if (!data.nom || !data.immatriculation || !data.telephone || !data.description) {
-            afficherToast('❌ Veuillez remplir les champs obligatoires (*)', 'error');
-            return;
-        }
-
-        const btnEnvoyer = document.getElementById('btnEnvoyer');
-        btnEnvoyer.disabled = true;
-        btnEnvoyer.textContent = '⏳ Envoi en cours...';
-
-        const demande = {
-            ...data,
-            urgence: niveauUrgence,
-            media: mediaData || null,
-            mediaType: mediaType || null,
-            date: new Date().toLocaleString('fr-FR'),
-            dateTimestamp: new Date(),
-            lu: false,
-            statut: 0,
-            diagnosticIA: analyserPanne(data.description),
-            numeroDemande: genererNumeroDemande(),
-            garage: garageActuel,
-            notes: []
-        };
-
-        try {
-            await db.collection('demandes').add(demande);
-            afficherToast(`✅ Demande envoyée ! N°: ${demande.numeroDemande}`, 'success');
-            
-            // Réinitialiser
-            ['clientNom', 'immatriculation', 'clientEmail', 'clientTel', 'marque', 
-             'modele', 'kilometrage', 'description', 'lieu', 'dateRdv', 'dateMiseService']
-                .forEach(id => document.getElementById(id).value = '');
-            document.getElementById('heureRdv').value = '';
-            clearMedia();
-            document.getElementById('iaDiagnostic').style.display = 'none';
-            
-        } catch(error) {
-            afficherToast('❌ Erreur: ' + error.message, 'error');
-        } finally {
-            btnEnvoyer.disabled = false;
-            btnEnvoyer.textContent = '📤 Soumettre la demande';
-        }
-    });
-
-    // ============================================================
-    // GESTION DES MÉDIAS
-    // ============================================================
-    function gererFichierMedia(file) {
-        if (file.size > CONFIG.MAX_FILE_SIZE) {
-            afficherToast('❌ Fichier trop lourd (max 5MB)', 'error');
-            return;
-        }
-
-        const previewMedia = document.getElementById('previewMedia');
         
-        if (mediaType === 'image') {
-            const reader = new FileReader();
-            reader.onload = function(e) {
+        reader.onload = function(e) {
+            const previewMedia = document.getElementById('previewMedia');
+            
+            if (mediaType === 'camera' || mediaType === 'galerie') {
+                // Compression d'image
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
@@ -1221,64 +1010,74 @@ function getGarageFromURL() {
                     canvas.height = height;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
+                    
                     mediaData = canvas.toDataURL('image/jpeg', 0.7);
+                    mediaType = 'image';
                     
                     previewMedia.style.display = 'block';
                     previewMedia.innerHTML = `
-                        <img src="${mediaData}" style="max-width:100%;max-height:160px;border-radius:12px;">
+                        <img src="${mediaData}" style="max-width:100%;max-height:200px;border-radius:12px;">
                         <button onclick="clearMedia()" class="btn-secondary" style="margin-top:8px;">🗑️ Supprimer</button>
                     `;
                 };
                 img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        } else {
-            const reader = new FileReader();
-            reader.onload = function(e) {
+            } else if (mediaType === 'video') {
                 mediaData = e.target.result;
                 previewMedia.style.display = 'block';
-                if (mediaType === 'video') {
-                    previewMedia.innerHTML = `
-                        <video src="${mediaData}" controls style="max-width:100%;max-height:160px;"></video>
-                        <button onclick="clearMedia()" class="btn-secondary" style="margin-top:8px;">🗑️ Supprimer</button>
-                    `;
-                } else {
-                    previewMedia.innerHTML = `
-                        <audio src="${mediaData}" controls style="width:100%;"></audio>
-                        <button onclick="clearMedia()" class="btn-secondary" style="margin-top:8px;">🗑️ Supprimer</button>
-                    `;
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-    }
+                previewMedia.innerHTML = `
+                    <video src="${mediaData}" controls style="max-width:100%;max-height:200px;"></video>
+                    <button onclick="clearMedia()" class="btn-secondary" style="margin-top:8px;">🗑️ Supprimer</button>
+                `;
+            } else if (mediaType === 'audio') {
+                mediaData = e.target.result;
+                previewMedia.style.display = 'block';
+                previewMedia.innerHTML = `
+                    <audio src="${mediaData}" controls style="width:100%;"></audio>
+                    <button onclick="clearMedia()" class="btn-secondary" style="margin-top:8px;">🗑️ Supprimer</button>
+                `;
+            }
+        };
+        
+        reader.readAsDataURL(file);
+    });
+}
 
-    window.clearMedia = function() {
-        mediaData = null;
-        mediaType = null;
-        document.getElementById('previewMedia').style.display = 'none';
-        document.getElementById('previewMedia').innerHTML = '';
-        document.getElementById('fichierMedia').value = '';
+function clearMedia() {
+    mediaData = null;
+    mediaType = null;
+    document.getElementById('previewMedia').style.display = 'none';
+    document.getElementById('previewMedia').innerHTML = '';
+    document.getElementById('fichierMedia').value = '';
+}
+
+// ============================================================
+// INITIALISATION
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+    // Firebase
+    const firebaseConfig = {
+        apiKey: "AIzaSyAxfEpi-NERVExxVYD2EmH7JppiIQDwWOM",
+        authDomain: "ntr-garage.firebaseapp.com",
+        projectId: "ntr-garage",
+        storageBucket: "ntr-garage.firebasestorage.app",
+        messagingSenderId: "606167388967",
+        appId: "1:606167388967:web:7ad669fd353cdeeb7a8f02"
     };
 
-    // ============================================================
-    // NAVIGATION
-    // ============================================================
-    document.getElementById('btnAllerDashboard')?.addEventListener('click', function() {
-        const pwd = prompt("🔐 Mot de passe réception :");
-        if (pwd === CONFIG.MOT_DE_PASSE) {
-            clientScreen.style.display = 'none';
-            dashboardScreen.style.display = 'block';
-            chargerDemandesRealtime();
-        } else {
-            alert("❌ Mot de passe incorrect");
-        }
-    });
+    let db;
+    try {
+        firebase.initializeApp(firebaseConfig);
+        db = firebase.firestore();
+        console.log("🔥 Firebase connecté");
+    } catch(e) {
+        db = firebase.firestore();
+    }
 
-    document.getElementById('btnQuitterDashboard')?.addEventListener('click', function() {
-        dashboardScreen.style.display = 'none';
-        clientScreen.style.display = 'block';
-        if (unsubscribeDashboard) unsubscribeDashboard();
+    // Gestionnaire de fichier
+    document.getElementById('fichierMedia').addEventListener('change', function(e) {
+        if (e.target.files[0]) {
+            gererFichierMedia(e.target.files[0]);
+        }
     });
 
     // Tabs
@@ -1301,35 +1100,6 @@ function getGarageFromURL() {
     });
     document.querySelector('[data-urgence="basse"]')?.classList.add('urgence-selected');
 
-    // Médias
-    document.getElementById('btnPhoto')?.addEventListener('click', () => {
-        mediaType = 'image';
-        document.getElementById('fichierMedia').accept = 'image/*';
-        document.getElementById('fichierMedia').click();
-    });
-
-    document.getElementById('btnGalerie')?.addEventListener('click', () => {
-        mediaType = 'image';
-        document.getElementById('fichierMedia').accept = 'image/*';
-        document.getElementById('fichierMedia').click();
-    });
-
-    document.getElementById('btnVideo')?.addEventListener('click', () => {
-        mediaType = 'video';
-        document.getElementById('fichierMedia').accept = 'video/*';
-        document.getElementById('fichierMedia').click();
-    });
-
-    document.getElementById('btnAudio')?.addEventListener('click', () => {
-        mediaType = 'audio';
-        document.getElementById('fichierMedia').accept = 'audio/*';
-        document.getElementById('fichierMedia').click();
-    });
-
-    document.getElementById('fichierMedia')?.addEventListener('change', function(e) {
-        if (e.target.files[0]) gererFichierMedia(e.target.files[0]);
-    });
-
     // IA Diagnostic
     document.getElementById('description')?.addEventListener('input', function(e) {
         const desc = e.target.value;
@@ -1342,287 +1112,304 @@ function getGarageFromURL() {
         }
     });
 
-    // ============================================================
-    // DASHBOARD
-    // ============================================================
-    async function chargerDemandesRealtime() {
-        if (unsubscribeDashboard) {
-            unsubscribeDashboard();
-            unsubscribeDashboard = null;
-        }
+    // Envoi de demande
+    document.getElementById('btnEnvoyer')?.addEventListener('click', async function() {
+        const nom = document.getElementById('clientNom').value.trim();
+        const immat = document.getElementById('immatriculation').value.trim();
+        const tel = document.getElementById('clientTel').value.trim();
+        const desc = document.getElementById('description').value.trim();
 
-        const garageFiltre = document.getElementById('selectGarage').value;
-        let query = db.collection('demandes');
-        
-        if (garageFiltre !== 'tous') {
-            query = query.where('garage', '==', garageFiltre);
-        }
-        query = query.orderBy('dateTimestamp', 'desc');
-
-        unsubscribeDashboard = query.onSnapshot(function(snapshot) {
-            allDemandes = [];
-            snapshot.forEach(function(doc) {
-                allDemandes.push({ id: doc.id, ...doc.data() });
-            });
-            
-            mettreAJourStats();
-            afficherDemandesFiltrees();
-        }, function(error) {
-            console.error("❌ Erreur Firestore:", error);
-            afficherToast('❌ Erreur de chargement', 'error');
-        });
-    }
-
-    function mettreAJourStats() {
-        document.getElementById('statTotal').textContent = allDemandes.length;
-        document.getElementById('statNonLues').textContent = allDemandes.filter(d => !d.lu).length;
-        document.getElementById('statUrgentes').textContent = allDemandes.filter(d => d.urgence === 'haute').length;
-    }
-
-    function filtrerDemandes() {
-        let filtered = [...allDemandes];
-        
-        if (currentFiltre === 'non-lues') filtered = filtered.filter(d => !d.lu);
-        if (currentFiltre === 'urgentes') filtered = filtered.filter(d => d.urgence === 'haute');
-        if (currentFiltre === 'en-reparation') filtered = filtered.filter(d => d.statut === 1);
-        if (currentFiltre === 'pretes') filtered = filtered.filter(d => d.statut === 2);
-        
-        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-        if (searchTerm) {
-            filtered = filtered.filter(d => 
-                (d.immatriculation || '').toLowerCase().includes(searchTerm) ||
-                (d.nom || '').toLowerCase().includes(searchTerm) ||
-                (d.numeroDemande || '').toLowerCase().includes(searchTerm)
-            );
-        }
-        
-        const sortBy = document.getElementById('sortBy').value;
-        if (sortBy === 'urgence') {
-            const ordre = { 'haute': 0, 'moyenne': 1, 'basse': 2 };
-            filtered.sort((a, b) => (ordre[a.urgence] || 3) - (ordre[b.urgence] || 3));
-        }
-        
-        return filtered;
-    }
-
-    function afficherDemandesFiltrees() {
-        const filtered = filtrerDemandes();
-        const totalPages = Math.ceil(filtered.length / CONFIG.ITEMS_PER_PAGE);
-        
-        if (currentPage > totalPages) currentPage = 1;
-        const start = (currentPage - 1) * CONFIG.ITEMS_PER_PAGE;
-        const end = start + CONFIG.ITEMS_PER_PAGE;
-        const pageDemandes = filtered.slice(start, end);
-        
-        afficherListeDemandes(pageDemandes);
-        document.getElementById('pageInfo').textContent = `Page ${currentPage} / ${totalPages || 1}`;
-        document.getElementById('btnPrev').disabled = currentPage <= 1;
-        document.getElementById('btnNext').disabled = currentPage >= totalPages;
-    }
-
-    function afficherListeDemandes(demandes) {
-        const listeDiv = document.getElementById('listeDemandes');
-        
-        if (demandes.length === 0) {
-            listeDiv.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;">📭 Aucune demande</div>';
+        if (!nom || !immat || !tel || !desc) {
+            afficherToast('❌ Veuillez remplir les champs obligatoires (*)', 'error');
             return;
         }
 
-        listeDiv.innerHTML = demandes.map(demande => {
+        const btnEnvoyer = this;
+        btnEnvoyer.disabled = true;
+        btnEnvoyer.textContent = '⏳ Envoi en cours...';
+
+        const demande = {
+            nom: nom,
+            immatriculation: immat.toUpperCase(),
+            email: document.getElementById('clientEmail').value.trim(),
+            telephone: tel,
+            marque: document.getElementById('marque').value.trim(),
+            modele: document.getElementById('modele').value.trim(),
+            kilometrage: document.getElementById('kilometrage').value.trim(),
+            description: desc,
+            lieu: document.getElementById('lieu').value.trim(),
+            dateRdv: document.getElementById('dateRdv').value,
+            heureRdv: document.getElementById('heureRdv').value,
+            urgence: niveauUrgence,
+            media: mediaData || null,
+            mediaType: mediaType || null,
+            date: new Date().toLocaleString('fr-FR'),
+            dateTimestamp: new Date(),
+            lu: false,
+            statut: 0,
+            diagnosticIA: analyserPanne(desc),
+            numeroDemande: `AG-${new Date().getFullYear()}-${Math.floor(Math.random() * 900) + 100}`,
+            garage: getGarageFromURL()
+        };
+
+        try {
+            await db.collection('demandes').add(demande);
+            afficherToast(`✅ Demande envoyée ! N°: ${demande.numeroDemande}`, 'success');
+            
+            // Réinitialiser
+            ['clientNom', 'immatriculation', 'clientEmail', 'clientTel', 'marque', 
+             'modele', 'kilometrage', 'description', 'lieu', 'dateRdv']
+                .forEach(id => document.getElementById(id).value = '');
+            document.getElementById('heureRdv').value = '';
+            clearMedia();
+            document.getElementById('iaDiagnostic').style.display = 'none';
+        } catch(error) {
+            afficherToast('❌ Erreur: ' + error.message, 'error');
+        } finally {
+            btnEnvoyer.disabled = false;
+            btnEnvoyer.textContent = '📤 Soumettre la demande';
+        }
+    });
+
+    // Navigation dashboard
+    document.getElementById('btnAllerDashboard')?.addEventListener('click', function() {
+        const pwd = prompt("🔐 Mot de passe réception :");
+        if (pwd === CONFIG.MOT_DE_PASSE) {
+            document.getElementById('clientScreen').style.display = 'none';
+            document.getElementById('dashboardScreen').style.display = 'block';
+            chargerDemandesRealtime();
+        } else {
+            alert("❌ Mot de passe incorrect");
+        }
+    });
+
+    document.getElementById('btnQuitterDashboard')?.addEventListener('click', function() {
+        document.getElementById('dashboardScreen').style.display = 'none';
+        document.getElementById('clientScreen').style.display = 'block';
+        if (unsubscribeDashboard) unsubscribeDashboard();
+    });
+
+    // QR Code
+    genererQRCode();
+    
+    // Initialisation
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('dateRdv').min = today;
+    document.getElementById('clientGarageName').textContent = getGarageFromURL();
+});
+
+// ============================================================
+// FONCTIONS UTILITAIRES
+// ============================================================
+function analyserPanne(description) {
+    const desc = description.toLowerCase();
+    if (desc.includes("bruit")) return '🔊 Bruit suspect → vérifier courroie';
+    if (desc.includes("fumee")) return '💨 Fumée → vérifier huile';
+    if (desc.includes("voyant")) return '💡 Voyant → diagnostic électronique';
+    if (desc.includes("frein")) return '🛑 Frein → contrôle plaquettes';
+    if (desc.includes("batterie")) return '🔋 Batterie → tester charge';
+    if (desc.includes("clim")) return '❄️ Clim → rechargement';
+    if (desc.includes("moteur")) return '🔧 Moteur → diagnostic complet';
+    return '🔍 Diagnostic complet nécessaire';
+}
+
+function genererQRCode() {
+    const url = window.location.href;
+    document.getElementById('currentUrl').textContent = url;
+    
+    const qrDiv = document.getElementById('qrcode');
+    if (typeof QRCode !== 'undefined') {
+        qrDiv.innerHTML = '';
+        new QRCode(qrDiv, {
+            text: url,
+            width: 140,
+            height: 140,
+            colorDark: "#0f172a",
+            colorLight: "#ffffff"
+        });
+    } else {
+        qrDiv.innerHTML = `<a href="${url}" style="font-size: 10px;">${url}</a>`;
+    }
+}
+
+function getGarageFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('garage') || 'Standard';
+}
+
+function fermerMediaModal() {
+    document.getElementById('mediaModal').style.display = 'none';
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+async function chargerDemandesRealtime() {
+    if (unsubscribeDashboard) {
+        unsubscribeDashboard();
+        unsubscribeDashboard = null;
+    }
+
+    const db = firebase.firestore();
+    const garageFiltre = document.getElementById('selectGarage').value;
+    let query = db.collection('demandes');
+    
+    if (garageFiltre !== 'tous') {
+        query = query.where('garage', '==', garageFiltre);
+    }
+    query = query.orderBy('dateTimestamp', 'desc');
+
+    unsubscribeDashboard = query.onSnapshot(function(snapshot) {
+        allDemandes = [];
+        snapshot.forEach(function(doc) {
+            allDemandes.push({ id: doc.id, ...doc.data() });
+        });
+        
+        document.getElementById('statTotal').textContent = allDemandes.length;
+        document.getElementById('statNonLues').textContent = allDemandes.filter(d => !d.lu).length;
+        document.getElementById('statUrgentes').textContent = allDemandes.filter(d => d.urgence === 'haute').length;
+        
+        afficherDemandesFiltrees();
+    });
+}
+
+function afficherDemandesFiltrees() {
+    let filtered = [...allDemandes];
+    
+    if (currentFiltre === 'non-lues') filtered = filtered.filter(d => !d.lu);
+    if (currentFiltre === 'urgentes') filtered = filtered.filter(d => d.urgence === 'haute');
+    
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+    if (searchTerm) {
+        filtered = filtered.filter(d => 
+            (d.immatriculation || '').toLowerCase().includes(searchTerm) ||
+            (d.nom || '').toLowerCase().includes(searchTerm)
+        );
+    }
+    
+    const totalPages = Math.ceil(filtered.length / CONFIG.ITEMS_PER_PAGE);
+    if (currentPage > totalPages) currentPage = 1;
+    
+    const start = (currentPage - 1) * CONFIG.ITEMS_PER_PAGE;
+    const end = start + CONFIG.ITEMS_PER_PAGE;
+    const pageDemandes = filtered.slice(start, end);
+    
+    const listeDiv = document.getElementById('listeDemandes');
+    if (pageDemandes.length === 0) {
+        listeDiv.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;">📭 Aucune demande</div>';
+    } else {
+        listeDiv.innerHTML = pageDemandes.map(demande => {
             const statutLabels = ['🟡 En attente', '🔧 En réparation', '✅ Prête'];
             const statutActuel = demande.statut || 0;
-            const urgenceLabels = { 'haute': '🔴 URGENT', 'moyenne': '🟡 MOYEN', 'basse': '🟢 BAS' };
             
             return `
                 <div class="demande ${demande.urgence || 'basse'}">
-                    <span class="badge-urgence ${demande.urgence || 'basse'}">${urgenceLabels[demande.urgence] || '🟢 BAS'}</span>
+                    <span class="badge-urgence ${demande.urgence || 'basse'}">${demande.urgence === 'haute' ? '🔴 URGENT' : demande.urgence === 'moyenne' ? '🟡 MOYEN' : '🟢 BAS'}</span>
                     <div><strong>📋 N° :</strong> ${demande.numeroDemande || demande.id.substring(0, 8)}</div>
-                    <div><strong>🚘 Véhicule :</strong> ${demande.immatriculation || '-'} - ${demande.marque || ''} ${demande.modele || ''}</div>
+                    <div><strong>🚘 Véhicule :</strong> ${demande.immatriculation || '-'}</div>
                     <div><strong>👤 Client :</strong> ${demande.nom || 'Client'}</div>
                     <div style="margin:8px 0;font-size:13px;">${demande.description || ''}</div>
-                    ${demande.garage ? `<div style="font-size:12px;color:#64748b;">🏷️ ${demande.garage}</div>` : ''}
                     <div class="actions">
-                        <select class="status-select" data-id="${demande.id}" style="padding: 6px 12px; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 12px; cursor: pointer;">
+                        <select class="status-select" data-id="${demande.id}">
                             <option value="0" ${statutActuel === 0 ? 'selected' : ''}>🟡 En attente</option>
                             <option value="1" ${statutActuel === 1 ? 'selected' : ''}>🔧 En réparation</option>
                             <option value="2" ${statutActuel === 2 ? 'selected' : ''}>✅ Prête</option>
                         </select>
-                        <button class="btn-secondary" onclick="genererPDFPourDemande('${demande.id}')">📄 PDF</button>
                         <button class="btn-secondary" onclick="supprimerDemande('${demande.id}')">🗑️</button>
                     </div>
                 </div>
             `;
         }).join('');
-
+        
         document.querySelectorAll('.status-select').forEach(select => {
             select.addEventListener('change', function() {
                 updateStatus(this.dataset.id, parseInt(this.value));
             });
         });
     }
+    
+    document.getElementById('pageInfo').textContent = `Page ${currentPage} / ${totalPages || 1}`;
+    document.getElementById('btnPrev').disabled = currentPage <= 1;
+    document.getElementById('btnNext').disabled = currentPage >= totalPages;
+}
 
-    window.updateStatus = async function(id, statut) {
-        try {
-            await db.collection('demandes').doc(id).update({
-                statut: statut,
-                dateStatut: new Date()
-            });
-            afficherToast('✅ Statut mis à jour', 'success');
-        } catch(error) {
-            afficherToast('❌ Erreur: ' + error.message, 'error');
-        }
-    };
-
-    window.supprimerDemande = async function(id) {
-        if (confirm('🗑️ Supprimer cette demande ?')) {
-            await db.collection('demandes').doc(id).delete();
-            afficherToast('🗑️ Demande supprimée', 'success');
-        }
-    };
-
-    window.genererPDFPourDemande = function(id) {
-        const demande = allDemandes.find(d => d.id === id);
-        if (demande) {
-            const pdfContent = document.getElementById('pdfContent');
-            pdfContent.innerHTML = `
-                <div style="font-family:Arial,sans-serif;">
-                    <h2 style="text-align:center;">ASSIST-GARAGE</h2>
-                    <p><strong>N°:</strong> ${demande.numeroDemande || id}</p>
-                    <p><strong>Date:</strong> ${demande.date || ''}</p>
-                    <p><strong>Véhicule:</strong> ${demande.immatriculation} - ${demande.marque} ${demande.modele}</p>
-                    <p><strong>Client:</strong> ${demande.nom}</p>
-                    <p><strong>Téléphone:</strong> ${demande.telephone || 'N/A'}</p>
-                    <p><strong>Description:</strong> ${demande.description}</p>
-                    <p><strong>Urgence:</strong> ${demande.urgence}</p>
-                    <p><strong>Diagnostic IA:</strong> ${demande.diagnosticIA || 'N/A'}</p>
-                    ${demande.garage ? `<p><strong>Garage:</strong> ${demande.garage}</p>` : ''}
-                </div>
-            `;
-            document.getElementById('pdfModal').style.display = 'flex';
-            
-            document.getElementById('btnGenererPDF').onclick = function() {
-                if (typeof html2pdf !== 'undefined') {
-                    html2pdf().from(pdfContent).set({
-                        margin: [15, 15, 15, 15],
-                        filename: `Fiche_${demande.numeroDemande || id}.pdf`,
-                        html2canvas: { scale: 2 },
-                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                    }).save();
-                }
-            };
-        }
-    };
-
-    // Filtres
-    document.querySelectorAll('.filtre-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.querySelectorAll('.filtre-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentFiltre = btn.dataset.filtre;
-            currentPage = 1;
-            afficherDemandesFiltrees();
+async function updateStatus(id, statut) {
+    try {
+        await firebase.firestore().collection('demandes').doc(id).update({
+            statut: statut,
+            dateStatut: new Date()
         });
-    });
+        afficherToast('✅ Statut mis à jour', 'success');
+    } catch(error) {
+        afficherToast('❌ Erreur', 'error');
+    }
+}
 
-    // Recherche
-    document.getElementById('searchInput')?.addEventListener('input', function() {
+async function supprimerDemande(id) {
+    if (confirm('🗑️ Supprimer cette demande ?')) {
+        await firebase.firestore().collection('demandes').doc(id).delete();
+        afficherToast('🗑️ Demande supprimée', 'success');
+    }
+}
+
+// Événements dashboard
+document.getElementById('searchInput')?.addEventListener('input', () => {
+    currentPage = 1;
+    afficherDemandesFiltrees();
+});
+
+document.getElementById('sortBy')?.addEventListener('change', () => {
+    currentPage = 1;
+    afficherDemandesFiltrees();
+});
+
+document.getElementById('selectGarage')?.addEventListener('change', () => {
+    currentPage = 1;
+    chargerDemandesRealtime();
+});
+
+document.getElementById('btnPrev')?.addEventListener('click', () => {
+    if (currentPage > 1) {
+        currentPage--;
+        afficherDemandesFiltrees();
+    }
+});
+
+document.getElementById('btnNext')?.addEventListener('click', () => {
+    currentPage++;
+    afficherDemandesFiltrees();
+});
+
+document.querySelectorAll('.filtre-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.filtre-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFiltre = btn.dataset.filtre;
         currentPage = 1;
         afficherDemandesFiltrees();
     });
+});
 
-    // Tri
-    document.getElementById('sortBy')?.addEventListener('change', function() {
-        currentPage = 1;
-        afficherDemandesFiltrees();
-    });
+// Copie et impression QR
+document.getElementById('btnCopierLien')?.addEventListener('click', async function() {
+    try {
+        await navigator.clipboard.writeText(window.location.href);
+        afficherToast('📋 Lien copié !', 'success');
+    } catch(e) {
+        afficherToast('❌ Erreur de copie', 'error');
+    }
+});
 
-    // Garage
-    document.getElementById('selectGarage')?.addEventListener('change', function() {
-        currentPage = 1;
-        chargerDemandesRealtime();
-    });
+// Service Worker
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/ntr-garage/sw.js')
+        .then(() => console.log('✅ Service Worker enregistré'))
+        .catch(err => console.log('❌ Service Worker:', err));
+}
 
-    // Pagination
-    document.getElementById('btnPrev')?.addEventListener('click', function() {
-        if (currentPage > 1) {
-            currentPage--;
-            afficherDemandesFiltrees();
-        }
-    });
-
-    document.getElementById('btnNext')?.addEventListener('click', function() {
-        currentPage++;
-        afficherDemandesFiltrees();
-    });
-
-    // Export CSV
-    document.getElementById('btnExportCSV')?.addEventListener('click', function() {
-        const filtered = filtrerDemandes();
-        if (filtered.length === 0) {
-            afficherToast('❌ Aucune donnée à exporter', 'error');
-            return;
-        }
-        
-        const headers = ['Numéro', 'Date', 'Client', 'Téléphone', 'Véhicule', 'Immatriculation', 
-                        'Urgence', 'Statut', 'Description', 'Garage'];
-        const csv = [headers.join(';')];
-        
-        filtered.forEach(d => {
-            const row = [
-                d.numeroDemande || '',
-                d.date || '',
-                d.nom || '',
-                d.telephone || '',
-                `${d.marque || ''} ${d.modele || ''}`,
-                d.immatriculation || '',
-                d.urgence || '',
-                ['En attente', 'En réparation', 'Prête'][d.statut || 0],
-                (d.description || '').replace(/;/g, ','),
-                d.garage || ''
-            ];
-            csv.push(row.join(';'));
-        });
-        
-        const blob = new Blob([csv.join('\n')], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = `demandes_${new Date().toISOString().split('T')[0]}.csv`;
-        link.click();
-        afficherToast('📊 Export CSV réussi', 'success');
-    });
-
-    // ============================================================
-    // INITIALISATION
-    // ============================================================
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('dateRdv').min = today;
-    document.getElementById('clientGarageName').textContent = garageActuel;
-    
-    // Fermer les modales
-    window.onclick = function(event) {
-        if (event.target.classList.contains('modal')) {
-            event.target.style.display = 'none';
-        }
-    };
-
-    // Initialisation du QR Code
-    setTimeout(genererQRCode, 500);
-    
-    console.log('🚗 Assist-Garage PRO initialisé');
-    console.log('🏷️ Garage:', garageActuel);
-    console.log('📱 QR Code en cours de génération...');
-    
-    // Vérifier si la bibliothèque QRCode est chargée
-    setTimeout(function() {
-        if (typeof QRCode === 'undefined') {
-            console.warn('⚠️ Bibliothèque QRCode non disponible, utilisation du fallback');
-            afficherFallbackQR(document.getElementById('qrcode'), window.location.href);
-        } else {
-            genererQRCode();
-        }
-    }, 1000);
-})();
+console.log('🚗 Assist-Garage PRO initialisé');
+console.log('📷 Caméra directe activée');
+console.log('📊 Barres de progression activées');
 </script>
-
 </body>
 </html>
