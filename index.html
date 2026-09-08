@@ -73,7 +73,7 @@
             letter-spacing: 0.5px;
         }
         
-        /* ===== BANNIÈRES SMARTLINK ===== */
+        /* Bannières Smartlink */
         .ad-banner {
             background: linear-gradient(135deg, #f8fafc, #eef2ff);
             border-radius: 16px;
@@ -110,7 +110,7 @@
         }
         .ad-banner .ad-cta:hover { background: #1e293b; }
         
-        /* ===== SECTION QR CODE ===== */
+        /* QR Code */
         .qr-section {
             background: #f8fafc;
             border-radius: 20px;
@@ -193,7 +193,7 @@
             box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
         }
         
-        /* ===== NOUVEAU : SÉLECTION MÉDIA AVEC CAPACITÉ ===== */
+        /* Sélection média */
         .media-selection {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -216,11 +216,6 @@
             border-color: #0f172a;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        
-        .media-option.active {
-            border-color: #0f172a;
-            background: #f8fafc;
         }
         
         .media-icon {
@@ -259,7 +254,7 @@
             transition: width 0.3s ease;
         }
         
-        /* ===== BARRE DE PROGRESSION ===== */
+        /* Barre de progression */
         .progress-container {
             display: none;
             margin: 12px 0;
@@ -377,7 +372,7 @@
             border-color: var(--primary); 
         }
         
-        /* Dashboard Styles */
+        /* Dashboard */
         .dashboard-header {
             display: flex;
             justify-content: space-between;
@@ -409,7 +404,7 @@
         
         .stats {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 12px;
             margin-bottom: 24px;
         }
@@ -464,6 +459,11 @@
             padding: 18px;
             margin-bottom: 14px;
             position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .demande:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
         
         .demande.haute { border-left: 3px solid var(--danger); }
@@ -482,6 +482,12 @@
         .badge-urgence.haute { background: #fef2f2; color: var(--danger); }
         .badge-urgence.moyenne { background: #fffbeb; color: var(--warning); }
         .badge-urgence.basse { background: #f0fdf4; color: var(--success); }
+        
+        .demande-date {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
         
         .actions { 
             display: flex; 
@@ -544,6 +550,21 @@
             background: var(--card);
             cursor: pointer;
             transition: all 0.2s ease;
+        }
+        
+        .brand-footer {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 11px;
+            color: #94a3b8;
+        }
+        
+        .brand-footer a {
+            color: #0f172a;
+            text-decoration: none;
+            font-weight: 500;
         }
         
         @media (max-width: 560px) {
@@ -651,11 +672,11 @@
                 </select>
             </div>
 
-            <!-- ===== NOUVEAU : SÉLECTION MÉDIA AVEC CAPACITÉ ===== -->
+            <!-- Sélection média -->
             <div class="section-title">📎 Médias joints</div>
             
             <div class="media-selection">
-                <div class="media-option" data-media-type="camera" onclick="ouvrirCamera()">
+                <div class="media-option" onclick="ouvrirCamera()">
                     <span class="media-icon">📷</span>
                     <span class="media-label">Appareil photo</span>
                     <span class="media-capacity">Photo directe</span>
@@ -664,7 +685,7 @@
                     </div>
                 </div>
                 
-                <div class="media-option" data-media-type="galerie" onclick="ouvrirGalerie()">
+                <div class="media-option" onclick="ouvrirGalerie()">
                     <span class="media-icon">🖼️</span>
                     <span class="media-label">Galerie</span>
                     <span class="media-capacity">Max 5 MB</span>
@@ -673,7 +694,7 @@
                     </div>
                 </div>
                 
-                <div class="media-option" data-media-type="video" onclick="ouvrirVideo()">
+                <div class="media-option" onclick="ouvrirVideo()">
                     <span class="media-icon">🎥</span>
                     <span class="media-label">Vidéo</span>
                     <span class="media-capacity">Max 10 MB</span>
@@ -682,7 +703,7 @@
                     </div>
                 </div>
                 
-                <div class="media-option" data-media-type="audio" onclick="ouvrirAudio()">
+                <div class="media-option" onclick="ouvrirAudio()">
                     <span class="media-icon">🎙️</span>
                     <span class="media-label">Audio</span>
                     <span class="media-capacity">Max 5 MB</span>
@@ -756,6 +777,11 @@
         </div>
 
         <button id="btnAllerDashboard" class="btn-secondary" style="margin-top: 20px; width: 100%;">🔐 Accès réception</button>
+
+        <!-- Mention NTR -->
+        <div class="brand-footer">
+            Développé par <a href="https://github.com/romaweb225" target="_blank">NTR</a>
+        </div>
     </div>
 </div>
 
@@ -794,31 +820,29 @@
             </select>
         </div>
 
-        <!-- Stats -->
+        <!-- Stats (3 colonnes) -->
         <div class="stats">
             <div class="stat-card">
                 <div class="stat-number" id="statTotal">0</div>
                 <div class="stat-label">Total</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="statNonLues">0</div>
-                <div class="stat-label">Non traitées</div>
-            </div>
-            <div class="stat-card">
                 <div class="stat-number" id="statUrgentes">0</div>
                 <div class="stat-label">Urgentes</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="statSatisfaction">—</div>
-                <div class="stat-label">Satisfaction</div>
+                <div class="stat-number" id="statEnAttente">0</div>
+                <div class="stat-label">En attente</div>
             </div>
         </div>
 
-        <!-- Filtres -->
+        <!-- Filtres modifiés -->
         <div class="filtres">
-            <button class="filtre-btn active" data-filtre="toutes">📋 Toutes</button>
-            <button class="filtre-btn" data-filtre="non-lues">🆕 Non lues</button>
-            <button class="filtre-btn" data-filtre="urgentes">🔴 Urgentes</button>
+            <button class="filtre-btn active" data-filtre="toutes">📋 TOUTES</button>
+            <button class="filtre-btn" data-filtre="urgentes">🔴 URGENTES</button>
+            <button class="filtre-btn" data-filtre="en-attente">🟡 EN ATTENTE</button>
+            <button class="filtre-btn" data-filtre="en-reparation">🔧 EN REPARATION</button>
+            <button class="filtre-btn" data-filtre="pretes">✅ PRETE</button>
         </div>
 
         <!-- Liste -->
@@ -832,6 +856,11 @@
         </div>
 
         <button id="btnQuitterDashboard" class="btn-secondary" style="margin-top: 20px; width: 100%;">⬅️ Retour</button>
+
+        <!-- Mention NTR -->
+        <div class="brand-footer">
+            Développé par <a href="https://github.com/romaweb225" target="_blank">NTR</a>
+        </div>
     </div>
 </div>
 
@@ -900,37 +929,33 @@ function afficherToast(message, type = 'info') {
 }
 
 // ============================================================
-// FONCTIONS MÉDIA AVEC CAMÉRA DIRECTE
+// FONCTIONS MÉDIA
 // ============================================================
 function ouvrirCamera() {
-    console.log("📷 Ouverture de la caméra...");
     mediaType = 'camera';
     const input = document.getElementById('fichierMedia');
     input.accept = 'image/*';
-    input.capture = 'environment'; // Force l'ouverture de la caméra arrière
+    input.capture = 'environment';
     input.click();
 }
 
 function ouvrirGalerie() {
-    console.log("🖼️ Ouverture de la galerie...");
     mediaType = 'galerie';
     const input = document.getElementById('fichierMedia');
     input.accept = 'image/*';
-    input.removeAttribute('capture'); // Pas de capture, ouvre la galerie
+    input.removeAttribute('capture');
     input.click();
 }
 
 function ouvrirVideo() {
-    console.log("🎥 Ouverture vidéo...");
     mediaType = 'video';
     const input = document.getElementById('fichierMedia');
     input.accept = 'video/*';
-    input.capture = 'environment'; // Caméra vidéo sur mobile
+    input.capture = 'environment';
     input.click();
 }
 
 function ouvrirAudio() {
-    console.log("🎙️ Ouverture audio...");
     mediaType = 'audio';
     const input = document.getElementById('fichierMedia');
     input.accept = 'audio/*';
@@ -938,9 +963,6 @@ function ouvrirAudio() {
     input.click();
 }
 
-// ============================================================
-// GESTION DES FICHIERS AVEC PROGRESSION
-// ============================================================
 function simulerProgression(callback) {
     const progressContainer = document.getElementById('progressContainer');
     const progressFill = document.getElementById('progressFill');
@@ -980,19 +1002,10 @@ function gererFichierMedia(file) {
     simulerProgression(() => {
         const reader = new FileReader();
         
-        reader.onprogress = function(e) {
-            if (e.lengthComputable) {
-                const percent = Math.round((e.loaded / e.total) * 100);
-                document.getElementById('progressFill').style.width = percent + '%';
-                document.getElementById('progressText').textContent = `Lecture... ${percent}%`;
-            }
-        };
-        
         reader.onload = function(e) {
             const previewMedia = document.getElementById('previewMedia');
             
             if (mediaType === 'camera' || mediaType === 'galerie') {
-                // Compression d'image
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
@@ -1156,7 +1169,6 @@ document.addEventListener('DOMContentLoaded', function() {
             await db.collection('demandes').add(demande);
             afficherToast(`✅ Demande envoyée ! N°: ${demande.numeroDemande}`, 'success');
             
-            // Réinitialiser
             ['clientNom', 'immatriculation', 'clientEmail', 'clientTel', 'marque', 
              'modele', 'kilometrage', 'description', 'lieu', 'dateRdv']
                 .forEach(id => document.getElementById(id).value = '');
@@ -1266,8 +1278,8 @@ async function chargerDemandesRealtime() {
         });
         
         document.getElementById('statTotal').textContent = allDemandes.length;
-        document.getElementById('statNonLues').textContent = allDemandes.filter(d => !d.lu).length;
         document.getElementById('statUrgentes').textContent = allDemandes.filter(d => d.urgence === 'haute').length;
+        document.getElementById('statEnAttente').textContent = allDemandes.filter(d => d.statut === 0).length;
         
         afficherDemandesFiltrees();
     });
@@ -1276,8 +1288,11 @@ async function chargerDemandesRealtime() {
 function afficherDemandesFiltrees() {
     let filtered = [...allDemandes];
     
-    if (currentFiltre === 'non-lues') filtered = filtered.filter(d => !d.lu);
+    // Filtres modifiés
     if (currentFiltre === 'urgentes') filtered = filtered.filter(d => d.urgence === 'haute');
+    if (currentFiltre === 'en-attente') filtered = filtered.filter(d => d.statut === 0);
+    if (currentFiltre === 'en-reparation') filtered = filtered.filter(d => d.statut === 1);
+    if (currentFiltre === 'pretes') filtered = filtered.filter(d => d.statut === 2);
     
     const searchTerm = document.getElementById('searchInput').value.toLowerCase();
     if (searchTerm) {
@@ -1301,20 +1316,26 @@ function afficherDemandesFiltrees() {
         listeDiv.innerHTML = pageDemandes.map(demande => {
             const statutLabels = ['🟡 En attente', '🔧 En réparation', '✅ Prête'];
             const statutActuel = demande.statut || 0;
+            const urgenceLabels = { 'haute': '🔴 URGENT', 'moyenne': '🟡 MOYEN', 'basse': '🟢 BAS' };
             
             return `
                 <div class="demande ${demande.urgence || 'basse'}">
-                    <span class="badge-urgence ${demande.urgence || 'basse'}">${demande.urgence === 'haute' ? '🔴 URGENT' : demande.urgence === 'moyenne' ? '🟡 MOYEN' : '🟢 BAS'}</span>
+                    <div style="display:flex;justify-content:space-between;align-items:start;">
+                        <span class="badge-urgence ${demande.urgence || 'basse'}">${urgenceLabels[demande.urgence] || '🟢 BAS'}</span>
+                        <span class="demande-date">📅 ${demande.date || ''}</span>
+                    </div>
                     <div><strong>📋 N° :</strong> ${demande.numeroDemande || demande.id.substring(0, 8)}</div>
-                    <div><strong>🚘 Véhicule :</strong> ${demande.immatriculation || '-'}</div>
-                    <div><strong>👤 Client :</strong> ${demande.nom || 'Client'}</div>
+                    <div><strong>🚘 Véhicule :</strong> ${demande.immatriculation || '-'} - ${demande.marque || ''} ${demande.modele || ''}</div>
+                    <div><strong>👤 Client :</strong> ${demande.nom || 'Client'} (${demande.telephone || 'N/A'})</div>
                     <div style="margin:8px 0;font-size:13px;">${demande.description || ''}</div>
+                    ${demande.garage ? `<div style="font-size:12px;color:#64748b;">🏷️ ${demande.garage}</div>` : ''}
                     <div class="actions">
-                        <select class="status-select" data-id="${demande.id}">
+                        <select class="status-select" data-id="${demande.id}" style="padding: 6px 12px; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 12px; cursor: pointer;">
                             <option value="0" ${statutActuel === 0 ? 'selected' : ''}>🟡 En attente</option>
                             <option value="1" ${statutActuel === 1 ? 'selected' : ''}>🔧 En réparation</option>
                             <option value="2" ${statutActuel === 2 ? 'selected' : ''}>✅ Prête</option>
                         </select>
+                        <button class="btn-secondary" onclick="genererPDFPourDemande('${demande.id}')">📄 PDF</button>
                         <button class="btn-secondary" onclick="supprimerDemande('${demande.id}')">🗑️</button>
                     </div>
                 </div>
@@ -1331,6 +1352,81 @@ function afficherDemandesFiltrees() {
     document.getElementById('pageInfo').textContent = `Page ${currentPage} / ${totalPages || 1}`;
     document.getElementById('btnPrev').disabled = currentPage <= 1;
     document.getElementById('btnNext').disabled = currentPage >= totalPages;
+}
+
+// ============================================================
+// GÉNÉRATION PDF (RÉINTÉGRÉE)
+// ============================================================
+async function genererPDFPourDemande(id) {
+    const demande = allDemandes.find(d => d.id === id);
+    if (!demande) return;
+    
+    const pdfContent = document.getElementById('pdfContent');
+    pdfContent.innerHTML = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #0f172a; padding-bottom: 20px;">
+                <h2 style="color: #0f172a; margin-bottom: 5px;">ASSIST-GARAGE PRO</h2>
+                <p style="color: #64748b; font-size: 14px;">Fiche de réception</p>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                <div>
+                    <strong>N° de demande :</strong> ${demande.numeroDemande || id}
+                </div>
+                <div>
+                    <strong>Date :</strong> ${demande.date || ''}
+                </div>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <h3 style="color: #0f172a; border-left: 3px solid #0f172a; padding-left: 10px;">Véhicule</h3>
+                <p><strong>Immatriculation :</strong> ${demande.immatriculation || 'N/A'}</p>
+                <p><strong>Marque :</strong> ${demande.marque || 'N/A'}</p>
+                <p><strong>Modèle :</strong> ${demande.modele || 'N/A'}</p>
+                <p><strong>Kilométrage :</strong> ${demande.kilometrage || 'N/A'} km</p>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <h3 style="color: #0f172a; border-left: 3px solid #0f172a; padding-left: 10px;">Client</h3>
+                <p><strong>Nom :</strong> ${demande.nom || 'N/A'}</p>
+                <p><strong>Téléphone :</strong> ${demande.telephone || 'N/A'}</p>
+                <p><strong>Email :</strong> ${demande.email || 'N/A'}</p>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <h3 style="color: #0f172a; border-left: 3px solid #0f172a; padding-left: 10px;">Panne</h3>
+                <p><strong>Description :</strong> ${demande.description || 'N/A'}</p>
+                <p><strong>Urgence :</strong> ${demande.urgence === 'haute' ? '🔴 Haute' : demande.urgence === 'moyenne' ? '🟡 Moyenne' : '🟢 Basse'}</p>
+                <p><strong>Diagnostic IA :</strong> ${demande.diagnosticIA || 'N/A'}</p>
+                ${demande.garage ? `<p><strong>Garage :</strong> ${demande.garage}</p>` : ''}
+            </div>
+            
+            ${demande.dateRdv ? `
+            <div style="margin-bottom: 20px;">
+                <h3 style="color: #0f172a; border-left: 3px solid #0f172a; padding-left: 10px;">Rendez-vous</h3>
+                <p><strong>Date :</strong> ${demande.dateRdv}</p>
+                <p><strong>Heure :</strong> ${demande.heureRdv || 'N/A'}</p>
+            </div>` : ''}
+            
+            <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0; font-size: 11px; color: #94a3b8;">
+                Développé par NTR - Assist-Garage Pro
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('pdfModal').style.display = 'flex';
+    
+    document.getElementById('btnGenererPDF').onclick = function() {
+        if (typeof html2pdf !== 'undefined') {
+            html2pdf().from(pdfContent).set({
+                margin: [15, 15, 15, 15],
+                filename: `Fiche_${demande.numeroDemande || id}.pdf`,
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            }).save();
+            afficherToast('📄 PDF généré avec succès', 'success');
+        }
+    };
 }
 
 async function updateStatus(id, statut) {
@@ -1408,8 +1504,6 @@ if ('serviceWorker' in navigator) {
 }
 
 console.log('🚗 Assist-Garage PRO initialisé');
-console.log('📷 Caméra directe activée');
-console.log('📊 Barres de progression activées');
 </script>
 </body>
 </html>
