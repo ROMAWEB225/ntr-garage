@@ -6,27 +6,47 @@
     <title>Assist-Garage - Solution de Gestion Pro</title>
     <meta name="theme-color" content="#0f172a">
     <link rel="manifest" href="/ntr-garage/site.webmanifest">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js">
+    </script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
             font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
             background: #f1f5f9;
             min-height: 100vh;
             padding: 20px;
         }
-        .container, .dashboard-container {
+        .container,
+        .dashboard-container {
             max-width: 700px;
             margin: 0 auto;
             background: white;
             border-radius: 24px;
             padding: 28px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
-        .logo { text-align: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #e2e8f0; }
-        .logo h1 { font-size: 22px; font-weight: 600; color: #0f172a; }
-        .logo .subtitle { font-size: 12px; color: #64748b; margin-top: 4px; }
+        .logo {
+            text-align: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .logo h1 {
+            font-size: 22px;
+            font-weight: 600;
+            color: #0f172a;
+        }
+        .logo .subtitle {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 4px;
+        }
         .logo .badge-free {
             display: inline-block;
             background: #22c55e;
@@ -51,12 +71,39 @@
             transition: all 0.3s ease;
             cursor: pointer;
         }
-        .ad-banner:hover { border-color: #8b5cf6; box-shadow: 0 4px 16px rgba(139, 92, 246, 0.12); transform: translateY(-2px); }
-        .ad-banner .ad-icon { font-size: 24px; flex-shrink: 0; }
-        .ad-banner .ad-text { flex: 1; font-size: 13px; color: #1a1a1a; }
-        .ad-banner .ad-text strong { color: #0f172a; font-weight: 600; }
-        .ad-banner .ad-text small { display: block; font-size: 11px; color: #64748b; margin-top: 2px; }
-        .ad-banner .ad-cta { background: #0f172a; color: white; padding: 6px 16px; border-radius: 40px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+        .ad-banner:hover {
+            border-color: #8b5cf6;
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.12);
+            transform: translateY(-2px);
+        }
+        .ad-banner .ad-icon {
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+        .ad-banner .ad-text {
+            flex: 1;
+            font-size: 13px;
+            color: #1a1a1a;
+        }
+        .ad-banner .ad-text strong {
+            color: #0f172a;
+            font-weight: 600;
+        }
+        .ad-banner .ad-text small {
+            display: block;
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 2px;
+        }
+        .ad-banner .ad-cta {
+            background: #0f172a;
+            color: white;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
         .qr-section {
             background: #f8fafc;
             border-radius: 20px;
@@ -65,7 +112,14 @@
             margin: 20px 0;
             border: 1px solid #e2e8f0;
         }
-        .qr-code { display: inline-block; padding: 12px; background: white; border-radius: 16px; min-width: 140px; min-height: 140px; }
+        .qr-code {
+            display: inline-block;
+            padding: 12px;
+            background: white;
+            border-radius: 16px;
+            min-width: 140px;
+            min-height: 140px;
+        }
         .tabs {
             display: flex;
             gap: 4px;
@@ -87,13 +141,34 @@
             border: none;
             transition: all 0.2s ease;
         }
-        .tab.active { background: white; color: #0f172a; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        .section-title { font-size: 14px; font-weight: 600; color: #0f172a; margin: 20px 0 12px 0; }
-        .section-title:first-of-type { margin-top: 0; }
-        .row-2cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        input, textarea, select {
+        .tab.active {
+            background: white;
+            color: #0f172a;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0f172a;
+            margin: 20px 0 12px 0;
+        }
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+        .row-2cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        input,
+        textarea,
+        select {
             width: 100%;
             padding: 12px 14px;
             margin: 6px 0;
@@ -104,12 +179,18 @@
             background: white;
             transition: border-color 0.2s ease;
         }
-        input:focus, textarea:focus, select:focus {
+        input:focus,
+        textarea:focus,
+        select:focus {
             outline: none;
             border-color: #0f172a;
             box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
         }
-        .btn-urgence { display: flex; gap: 10px; margin: 12px 0; }
+        .btn-urgence {
+            display: flex;
+            gap: 10px;
+            margin: 12px 0;
+        }
         .btn-urgence button {
             flex: 1;
             padding: 10px;
@@ -122,8 +203,15 @@
             font-size: 13px;
             transition: all 0.2s ease;
         }
-        .btn-urgence button:hover { border-color: #0f172a; background: #f8fafc; }
-        .urgence-selected { background: #0f172a !important; color: white !important; border-color: #0f172a !important; }
+        .btn-urgence button:hover {
+            border-color: #0f172a;
+            background: #f8fafc;
+        }
+        .urgence-selected {
+            background: #0f172a !important;
+            color: white !important;
+            border-color: #0f172a !important;
+        }
         .media-selection {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -138,19 +226,84 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        .media-option:hover { border-color: #0f172a; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .media-icon { font-size: 32px; display: block; margin-bottom: 8px; }
-        .media-label { font-size: 14px; font-weight: 600; color: #0f172a; display: block; }
-        .media-capacity { font-size: 11px; color: #64748b; display: block; margin-top: 4px; }
-        .capacity-bar { width: 100%; height: 4px; background: #f1f5f9; border-radius: 2px; margin-top: 8px; overflow: hidden; }
-        .capacity-fill { height: 100%; background: #0f172a; border-radius: 2px; }
-        .progress-container { display: none; margin: 12px 0; padding: 12px; background: #f8fafc; border-radius: 12px; }
-        .progress-bar { width: 100%; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, #0f172a, #22c55e); border-radius: 4px; transition: width 0.3s ease; width: 0%; }
-        .progress-text { font-size: 12px; color: #64748b; margin-top: 8px; text-align: center; }
-        .preview-media { background: #f8fafc; border-radius: 16px; padding: 12px; margin: 12px 0; display: none; }
-        .preview-media img, .preview-media video { max-width: 100%; border-radius: 12px; max-height: 200px; }
-        .preview-media audio { width: 100%; }
+        .media-option:hover {
+            border-color: #0f172a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .media-icon {
+            font-size: 32px;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .media-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0f172a;
+            display: block;
+        }
+        .media-capacity {
+            font-size: 11px;
+            color: #64748b;
+            display: block;
+            margin-top: 4px;
+        }
+        .capacity-bar {
+            width: 100%;
+            height: 4px;
+            background: #f1f5f9;
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        .capacity-fill {
+            height: 100%;
+            background: #0f172a;
+            border-radius: 2px;
+        }
+        .progress-container {
+            display: none;
+            margin: 12px 0;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 12px;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #0f172a, #22c55e);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+        .progress-text {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 8px;
+            text-align: center;
+        }
+        .preview-media {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 12px;
+            margin: 12px 0;
+            display: none;
+        }
+        .preview-media img,
+        .preview-media video {
+            max-width: 100%;
+            border-radius: 12px;
+            max-height: 200px;
+        }
+        .preview-media audio {
+            width: 100%;
+        }
         .btn-primary {
             background: #0f172a;
             color: white;
@@ -164,8 +317,13 @@
             margin-top: 16px;
             transition: background 0.2s ease;
         }
-        .btn-primary:hover { background: #1e293b; }
-        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-primary:hover {
+            background: #1e293b;
+        }
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
         .btn-secondary {
             background: white;
             border: 1px solid #e2e8f0;
@@ -176,16 +334,63 @@
             color: #475569;
             transition: all 0.2s ease;
         }
-        .btn-secondary:hover { background: #f8fafc; border-color: #0f172a; }
-        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
-        .search-bar { flex: 1; min-width: 200px; position: relative; }
-        .search-bar input { padding-left: 40px; margin: 0; }
-        .search-bar .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #64748b; font-size: 18px; }
-        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
-        .stat-card { background: #f8fafc; padding: 16px; border-radius: 20px; text-align: center; }
-        .stat-number { font-size: 28px; font-weight: 700; color: #0f172a; }
-        .stat-label { font-size: 12px; color: #64748b; margin-top: 4px; }
-        .filtres { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+        .btn-secondary:hover {
+            background: #f8fafc;
+            border-color: #0f172a;
+        }
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .search-bar {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+        .search-bar input {
+            padding-left: 40px;
+            margin: 0;
+        }
+        .search-bar .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-size: 18px;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .stat-card {
+            background: #f8fafc;
+            padding: 16px;
+            border-radius: 20px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+        .filtres {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
         .filtre-btn {
             padding: 6px 14px;
             border: 1px solid #e2e8f0;
@@ -196,7 +401,11 @@
             color: #475569;
             transition: all 0.2s ease;
         }
-        .filtre-btn.active { background: #0f172a; color: white; border-color: #0f172a; }
+        .filtre-btn.active {
+            background: #0f172a;
+            color: white;
+            border-color: #0f172a;
+        }
         .demande {
             background: white;
             border: 1px solid #e2e8f0;
@@ -206,10 +415,18 @@
             position: relative;
             transition: all 0.3s ease;
         }
-        .demande:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-        .demande.haute { border-left: 3px solid #ef4444; }
-        .demande.moyenne { border-left: 3px solid #f59e0b; }
-        .demande.basse { border-left: 3px solid #22c55e; }
+        .demande:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        .demande.haute {
+            border-left: 3px solid #ef4444;
+        }
+        .demande.moyenne {
+            border-left: 3px solid #f59e0b;
+        }
+        .demande.basse {
+            border-left: 3px solid #22c55e;
+        }
         .badge-urgence {
             display: inline-block;
             padding: 2px 10px;
@@ -218,11 +435,30 @@
             font-weight: 600;
             margin-bottom: 10px;
         }
-        .badge-urgence.haute { background: #fef2f2; color: #ef4444; }
-        .badge-urgence.moyenne { background: #fffbeb; color: #f59e0b; }
-        .badge-urgence.basse { background: #f0fdf4; color: #22c55e; }
-        .demande-date { font-size: 11px; color: #94a3b8; margin-bottom: 8px; }
-        .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center; }
+        .badge-urgence.haute {
+            background: #fef2f2;
+            color: #ef4444;
+        }
+        .badge-urgence.moyenne {
+            background: #fffbeb;
+            color: #f59e0b;
+        }
+        .badge-urgence.basse {
+            background: #f0fdf4;
+            color: #22c55e;
+        }
+        .demande-date {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+            align-items: center;
+        }
         .modal {
             display: none;
             position: fixed;
@@ -230,7 +466,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0, 0, 0, 0.6);
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -256,9 +492,15 @@
             font-size: 13px;
             display: none;
             z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
         }
-        .pagination { display: flex; justify-content: center; align-items: center; gap: 8px; margin-top: 20px; }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
         .page-btn {
             padding: 6px 12px;
             border: 1px solid #e2e8f0;
@@ -267,1187 +509,1653 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
-        .brand-footer { text-align: center; margin-top: 20px; padding-top: 16px; border-top: 1px solid #e2e8f0; font-size: 11px; color: #94a3b8; }
-        .brand-footer a { color: #0f172a; text-decoration: none; font-weight: 500; }
+        .brand-footer {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 11px;
+            color: #94a3b8;
+        }
+        .brand-footer a {
+            color: #0f172a;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Garage selector */
+        .garage-selector {
+            margin-bottom: 20px;
+            padding: 16px 20px;
+            background: #f8fafc;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .garage-selector label {
+            font-weight: 600;
+            font-size: 14px;
+            color: #0f172a;
+        }
+        .garage-selector select {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 14px;
+            background: white;
+            min-width: 180px;
+            cursor: pointer;
+        }
+        .garage-selector select:focus {
+            outline: none;
+            border-color: #0f172a;
+            box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
+        }
+        .garage-indicator {
+            text-align: center;
+            font-size: 13px;
+            color: #64748b;
+            margin: 4px 0 12px 0;
+            padding: 6px 12px;
+            background: #f8fafc;
+            border-radius: 30px;
+            display: inline-block;
+        }
+        .garage-indicator strong {
+            color: #0f172a;
+        }
+
+        /* Media preview mini */
+        .media-preview-mini {
+            margin-top: 8px;
+            padding: 8px 14px;
+            background: #f1f5f9;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-block;
+            border: 1px solid #e2e8f0;
+            font-size: 13px;
+        }
+        .media-preview-mini:hover {
+            background: #e2e8f0;
+            transform: scale(1.02);
+        }
+        .media-preview-mini img {
+            max-width: 80px;
+            max-height: 80px;
+            border-radius: 8px;
+        }
+        .media-preview-mini video {
+            max-width: 80px;
+            max-height: 80px;
+            border-radius: 8px;
+        }
+
+        .ia-diagnostic {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 14px;
+            margin: 16px 0;
+            font-size: 13px;
+            color: #475569;
+            border-left: 3px solid #0f172a;
+            display: none;
+        }
+
+        /* PDF Styles */
+        .pdf-wrapper {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            max-width: 100%;
+            padding: 10px 15px;
+            background: #ffffff;
+            color: #1a1a1a;
+            line-height: 1.3;
+            font-size: 11px;
+        }
+        .pdf-wrapper .pdf-header {
+            text-align: center;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 3px solid #0f172a;
+        }
+        .pdf-wrapper .pdf-header h1 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #0f172a;
+            letter-spacing: 1px;
+        }
+        .pdf-wrapper .pdf-header .sub {
+            font-size: 10px;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .pdf-wrapper .pdf-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+        }
+        .pdf-wrapper .pdf-table td {
+            padding: 4px 6px;
+            border: 1px solid #e2e8f0;
+        }
+        .pdf-wrapper .pdf-table .label {
+            background: #f8fafc;
+            font-weight: 600;
+            width: 22%;
+        }
+        .pdf-wrapper .pdf-section-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: #0f172a;
+            text-transform: uppercase;
+            margin: 6px 0 4px 0;
+            border-left: 3px solid #0f172a;
+            padding-left: 6px;
+        }
+        .pdf-wrapper .pdf-desc-box {
+            padding: 6px 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            font-size: 10px;
+            line-height: 1.4;
+            background: #fef2f2;
+            min-height: 25px;
+        }
+        .pdf-wrapper .pdf-footer {
+            text-align: center;
+            margin-top: 10px;
+            padding-top: 6px;
+            border-top: 1px solid #cbd5e1;
+            font-size: 8px;
+            color: #64748b;
+        }
+        .pdf-wrapper .pdf-photo {
+            text-align: center;
+            padding: 5px;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            background: #f8fafc;
+            margin: 4px 0;
+        }
+        .pdf-wrapper .pdf-photo img {
+            max-width: 100%;
+            max-height: 150px;
+            border-radius: 4px;
+        }
+        .pdf-wrapper .pdf-urgence-haute {
+            color: #ef4444;
+            font-weight: 700;
+        }
+        .pdf-wrapper .pdf-urgence-moyenne {
+            color: #f59e0b;
+            font-weight: 700;
+        }
+        .pdf-wrapper .pdf-urgence-basse {
+            color: #22c55e;
+            font-weight: 700;
+        }
+
+        .pdf-modal-content {
+            max-width: 700px !important;
+        }
+
+        .status-step {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            opacity: 0.4;
+        }
+        .status-step.active {
+            opacity: 1;
+        }
+        .status-step.completed {
+            opacity: 1;
+        }
+        .status-icon {
+            width: 48px;
+            height: 48px;
+            background: #f1f5f9;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+        .status-step.active .status-icon {
+            background: #0f172a;
+            color: white;
+        }
+        .status-step.completed .status-icon {
+            background: #22c55e;
+            color: white;
+        }
+        .vehicle-info {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 16px;
+            margin: 16px 0;
+            text-align: left;
+        }
+        .vehicle-info p {
+            margin: 4px 0;
+        }
+
+        .ad-footer {
+            text-align: center;
+            margin-top: 16px;
+            padding: 10px;
+            background: #f8fafc;
+            border-radius: 12px;
+            font-size: 11px;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        .ad-footer:hover {
+            border-color: #e2e8f0;
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+        .ad-footer span {
+            font-weight: 500;
+            color: #0f172a;
+        }
+
         @media (max-width: 560px) {
-            body { padding: 16px; }
-            .container, .dashboard-container { padding: 20px; }
-            .row-2cols { grid-template-columns: 1fr; }
-            .stats { grid-template-columns: repeat(2, 1fr); }
-            .btn-urgence { flex-direction: column; }
-            .ad-banner { flex-wrap: wrap; justify-content: center; text-align: center; }
-            .media-selection { grid-template-columns: 1fr; }
+            body {
+                padding: 16px;
+            }
+            .container,
+            .dashboard-container {
+                padding: 20px;
+            }
+            .row-2cols {
+                grid-template-columns: 1fr;
+            }
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .btn-urgence {
+                flex-direction: column;
+            }
+            .ad-banner {
+                flex-wrap: wrap;
+                justify-content: center;
+                text-align: center;
+            }
+            .media-selection {
+                grid-template-columns: 1fr;
+            }
+            .garage-selector {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .garage-selector select {
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
 
-<!-- CLIENT SCREEN -->
-<div id="clientScreen">
-    <div class="container">
-        <div class="logo">
-            <h1>🚗 ASSIST-GARAGE</h1>
-            <div class="subtitle">RÉPARATION · ENTRETIEN · DÉPANNAGE</div>
-            <span class="badge-free">📱 VERSION PRO</span>
-        </div>
-
-        <!-- Bannière Smartlink -->
-        <div class="ad-banner" onclick="ouvrirSmartlink()">
-            <div class="ad-icon">🎯</div>
-            <div class="ad-text">
-                <strong>🔒 Offre partenaire exclusive</strong>
-                <small>Découvrez nos offres spéciales</small>
-            </div>
-            <div class="ad-cta">Voir l'offre</div>
-        </div>
-
-        <!-- Section QR Code -->
-        <div class="qr-section">
-            <div id="qrcode" class="qr-code"></div>
-            <div id="currentUrl" style="font-size: 11px; color: #64748b; word-break: break-all; margin-top: 10px;"></div>
-            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 12px;">
-                <button id="btnCopierLien" class="btn-secondary">📋 Copier le lien</button>
-                <button id="btnImprimerQR" class="btn-secondary">🖨️ Imprimer QR</button>
-            </div>
-        </div>
-
-        <!-- Indicateur Garage -->
-        <div style="text-align: center; margin: 4px 0 12px 0;">
-            <span style="font-size: 13px; color: #64748b;">
-                📍 Garage : <strong id="clientGarageName" style="color: #0f172a;">Standard</strong>
-            </span>
-        </div>
-
-        <!-- Bouton Installation -->
-        <div style="text-align: center; margin: 16px 0;">
-            <button id="btnInstaller" style="display:none; background: #0f172a; color: white; border: none; padding: 14px 24px; border-radius: 40px; font-size: 15px; font-weight: 600; cursor: pointer; width: 100%; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.15); transition: all 0.3s ease;">
-                📱 Installer l'application sur mon téléphone
-            </button>
-            <p style="font-size: 11px; color: #94a3b8; margin-top: 6px;">Gratuit • Sans inscription • Fonctionne hors-ligne</p>
-        </div>
-
-        <!-- Tabs -->
-        <div class="tabs">
-            <div class="tab active" data-tab="panne">📝 Signalement</div>
-            <div class="tab" data-tab="suivi">🔍 Suivi</div>
-            <div class="tab" data-tab="offres">🎁 Offres</div>
-        </div>
-
-        <!-- Tab: Signalement -->
-        <div id="tab-panne" class="tab-content active">
-            <div class="section-title">🚘 Informations véhicule</div>
-            <div class="row-2cols">
-                <input type="text" id="marque" placeholder="Marque *">
-                <input type="text" id="modele" placeholder="Modèle *">
-            </div>
-            <div class="row-2cols">
-                <input type="text" id="immatriculation" placeholder="Immatriculation *">
-                <input type="number" id="kilometrage" placeholder="Kilométrage">
-            </div>
-            <input type="date" id="dateMiseService">
-
-            <div class="section-title">👤 Coordonnées</div>
-            <input type="text" id="clientNom" placeholder="Nom et prénom *">
-            <div class="row-2cols">
-                <input type="email" id="clientEmail" placeholder="Email">
-                <input type="tel" id="clientTel" placeholder="Téléphone *">
+    <!-- CLIENT SCREEN -->
+    <div id="clientScreen">
+        <div class="container">
+            <div class="logo">
+                <h1>🚗 ASSIST-GARAGE</h1>
+                <div class="subtitle">RÉPARATION · ENTRETIEN · DÉPANNAGE</div>
+                <span class="badge-free">📱 VERSION PRO</span>
             </div>
 
-            <div class="section-title">🔧 Description de la panne</div>
-            <textarea id="description" rows="3" placeholder="Décrivez le problème... *"></textarea>
-
-            <div class="section-title">⚠️ Niveau d'urgence</div>
-            <div class="btn-urgence">
-                <button data-urgence="basse" class="urgence-selected">🟢 Basse</button>
-                <button data-urgence="moyenne">🟡 Moyenne</button>
-                <button data-urgence="haute">🔴 Haute</button>
+            <!-- Bannière Smartlink -->
+            <div class="ad-banner" onclick="ouvrirSmartlink()">
+                <div class="ad-icon">🎯</div>
+                <div class="ad-text">
+                    <strong>🔒 Offre partenaire exclusive</strong>
+                    <small>Découvrez nos offres spéciales</small>
+                </div>
+                <div class="ad-cta">Voir l'offre</div>
             </div>
 
-            <div class="section-title">📍 Localisation</div>
-            <input type="text" id="lieu" placeholder="Lieu du véhicule">
+            <!-- Section QR Code -->
+            <div class="qr-section">
+                <div id="qrcode" class="qr-code"></div>
+                <div id="currentUrl" style="font-size: 11px; color: #64748b; word-break: break-all; margin-top: 10px;"></div>
+                <div style="display: flex; gap: 10px; justify-content: center; margin-top: 12px;">
+                    <button id="btnCopierLien" class="btn-secondary">📋 Copier le lien</button>
+                    <button id="btnImprimerQR" class="btn-secondary">🖨️ Imprimer QR</button>
+                </div>
+            </div>
 
-            <div class="section-title">📅 Prise de rendez-vous</div>
-            <div class="row-2cols">
-                <input type="date" id="dateRdv">
-                <select id="heureRdv">
-                    <option value="">Sélectionner l'heure</option>
-                    <option value="08:00">08:00 - 09:00</option>
-                    <option value="09:00">09:00 - 10:00</option>
-                    <option value="10:00">10:00 - 11:00</option>
-                    <option value="11:00">11:00 - 12:00</option>
-                    <option value="13:00">13:00 - 14:00</option>
-                    <option value="14:00">14:00 - 15:00</option>
-                    <option value="15:00">15:00 - 16:00</option>
-                    <option value="16:00">16:00 - 17:00</option>
-                    <option value="17:00">17:00 - 18:00</option>
+            <!-- Indicateur Garage -->
+            <div style="text-align: center; margin: 4px 0 12px 0;">
+                <span class="garage-indicator" id="clientGarageIndicator">
+                    📍 Garage : <strong id="clientGarageName">Standard</strong>
+                </span>
+            </div>
+
+            <!-- Bouton Installation -->
+            <div style="text-align: center; margin: 16px 0;">
+                <button id="btnInstaller" style="display:none; background: #0f172a; color: white; border: none; padding: 14px 24px; border-radius: 40px; font-size: 15px; font-weight: 600; cursor: pointer; width: 100%; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.15); transition: all 0.3s ease;">
+                    📱 Installer l'application sur mon téléphone
+                </button>
+                <p style="font-size: 11px; color: #94a3b8; margin-top: 6px;">Gratuit • Sans inscription • Fonctionne hors-ligne</p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <div class="tab active" data-tab="panne">📝 Signalement</div>
+                <div class="tab" data-tab="suivi">🔍 Suivi</div>
+                <div class="tab" data-tab="offres">🎁 Offres</div>
+            </div>
+
+            <!-- Tab: Signalement -->
+            <div id="tab-panne" class="tab-content active">
+                <div class="section-title">🚘 Informations véhicule</div>
+                <div class="row-2cols">
+                    <input type="text" id="marque" placeholder="Marque *">
+                    <input type="text" id="modele" placeholder="Modèle *">
+                </div>
+                <div class="row-2cols">
+                    <input type="text" id="immatriculation" placeholder="Immatriculation *">
+                    <input type="number" id="kilometrage" placeholder="Kilométrage">
+                </div>
+                <input type="date" id="dateMiseService">
+
+                <div class="section-title">👤 Coordonnées</div>
+                <input type="text" id="clientNom" placeholder="Nom et prénom *">
+                <div class="row-2cols">
+                    <input type="email" id="clientEmail" placeholder="Email">
+                    <input type="tel" id="clientTel" placeholder="Téléphone *">
+                </div>
+
+                <div class="section-title">🔧 Description de la panne</div>
+                <textarea id="description" rows="3" placeholder="Décrivez le problème... *"></textarea>
+
+                <div class="section-title">⚠️ Niveau d'urgence</div>
+                <div class="btn-urgence">
+                    <button data-urgence="basse" class="urgence-selected">🟢 Basse</button>
+                    <button data-urgence="moyenne">🟡 Moyenne</button>
+                    <button data-urgence="haute">🔴 Haute</button>
+                </div>
+
+                <div class="section-title">📍 Localisation</div>
+                <input type="text" id="lieu" placeholder="Lieu du véhicule">
+
+                <div class="section-title">📅 Prise de rendez-vous</div>
+                <div class="row-2cols">
+                    <input type="date" id="dateRdv">
+                    <select id="heureRdv">
+                        <option value="">Sélectionner l'heure</option>
+                        <option value="08:00">08:00 - 09:00</option>
+                        <option value="09:00">09:00 - 10:00</option>
+                        <option value="10:00">10:00 - 11:00</option>
+                        <option value="11:00">11:00 - 12:00</option>
+                        <option value="13:00">13:00 - 14:00</option>
+                        <option value="14:00">14:00 - 15:00</option>
+                        <option value="15:00">15:00 - 16:00</option>
+                        <option value="16:00">16:00 - 17:00</option>
+                        <option value="17:00">17:00 - 18:00</option>
+                    </select>
+                </div>
+
+                <!-- Sélection média -->
+                <div class="section-title">📎 Médias joints</div>
+
+                <div class="media-selection">
+                    <div class="media-option" onclick="ouvrirCamera()">
+                        <span class="media-icon">📷</span>
+                        <span class="media-label">Appareil photo</span>
+                        <span class="media-capacity">Photo directe</span>
+                        <div class="capacity-bar"><div class="capacity-fill" style="width: 100%;"></div></div>
+                    </div>
+
+                    <div class="media-option" onclick="ouvrirGalerie()">
+                        <span class="media-icon">🖼️</span>
+                        <span class="media-label">Galerie</span>
+                        <span class="media-capacity">Max 5 MB</span>
+                        <div class="capacity-bar"><div class="capacity-fill" style="width: 80%;"></div></div>
+                    </div>
+
+                    <div class="media-option" onclick="ouvrirVideo()">
+                        <span class="media-icon">🎥</span>
+                        <span class="media-label">Vidéo</span>
+                        <span class="media-capacity">Max 10 MB</span>
+                        <div class="capacity-bar"><div class="capacity-fill" style="width: 60%;"></div></div>
+                    </div>
+
+                    <div class="media-option" onclick="ouvrirAudio()">
+                        <span class="media-icon">🎙️</span>
+                        <span class="media-label">Audio</span>
+                        <span class="media-capacity">Max 5 MB</span>
+                        <div class="capacity-bar"><div class="capacity-fill" style="width: 70%;"></div></div>
+                    </div>
+                </div>
+
+                <input type="file" id="fichierMedia" accept="image/*,video/*,audio/*" style="display:none">
+
+                <!-- Barre de progression -->
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+                    <div class="progress-text" id="progressText">Téléchargement... 0%</div>
+                </div>
+
+                <!-- Aperçu média -->
+                <div class="preview-media" id="previewMedia"></div>
+
+                <!-- Diagnostic IA -->
+                <div class="ia-diagnostic" id="iaDiagnostic">
+                    <strong>🤖 Diagnostic IA :</strong>
+                    <p id="iaResultat"></p>
+                </div>
+
+                <button id="btnEnvoyer" class="btn-primary">📤 Soumettre la demande</button>
+                <div id="message" style="margin-top: 16px; font-size: 13px; text-align: center;"></div>
+            </div>
+
+            <!-- Tab: Suivi -->
+            <div id="tab-suivi" class="tab-content">
+                <div class="section-title">🔍 Suivi de votre véhicule</div>
+                <input type="text" id="trackingCode" placeholder="Entrez votre numéro (ex: AG-2025-001)">
+                <button id="btnTracker" class="btn-primary">🔎 Suivre mon véhicule</button>
+                <div id="trackingError" style="color: #ef4444; font-size: 13px; margin-top: 10px; text-align: center;"></div>
+
+                <div id="trackingInfo" style="display: none; margin-top: 24px;">
+                    <div id="trackingVehicleInfo" class="vehicle-info"></div>
+                    <div style="background: #f1f5f9; border-radius: 60px; height: 6px; margin: 24px 0; overflow: hidden;">
+                        <div id="trackingProgressFill" style="background: #0f172a; width: 0%; height: 100%; transition: width 0.3s ease;"></div>
+                    </div>
+                    <div id="trackingSteps"></div>
+                    <div id="trackingLastUpdate" style="font-size: 11px; color: #94a3b8; text-align: center; margin-top: 16px;"></div>
+                </div>
+
+                <!-- Bannière -->
+                <div class="ad-banner" style="margin-top: 20px;" onclick="ouvrirSmartlink()">
+                    <div class="ad-icon">💡</div>
+                    <div class="ad-text">
+                        <strong>💰 Gagnez de l'argent</strong>
+                        <small>Des offres exclusives pour les utilisateurs</small>
+                    </div>
+                    <div class="ad-cta">En savoir plus</div>
+                </div>
+            </div>
+
+            <!-- Tab: Offres -->
+            <div id="tab-offres" class="tab-content">
+                <div class="section-title">🎁 Offres partenaires</div>
+                <p style="color: #64748b; font-size: 14px; margin-bottom: 16px;">
+                    Découvrez des offres exclusives qui vous permettent de gagner de l'argent ou d'obtenir des réductions.
+                </p>
+                <div class="ad-banner" onclick="ouvrirSmartlink()">
+                    <div class="ad-icon">💰</div>
+                    <div class="ad-text">
+                        <strong>Gagnez jusqu'à 100 000 FCFA</strong>
+                        <small>Inscrivez-vous et profitez de nos offres partenaires</small>
+                    </div>
+                    <div class="ad-cta">Je m'inscris</div>
+                </div>
+                <div class="ad-banner" onclick="ouvrirSmartlink()">
+                    <div class="ad-icon">🛒</div>
+                    <div class="ad-text">
+                        <strong>Réductions exclusives</strong>
+                        <small>Jusqu'à -50% sur des produits et services</small>
+                    </div>
+                    <div class="ad-cta">Voir les offres</div>
+                </div>
+                <div class="ad-banner" onclick="ouvrirSmartlink()">
+                    <div class="ad-icon">📱</div>
+                    <div class="ad-text">
+                        <strong>Applications gratuites</strong>
+                        <small>Testez des applications et gagnez des récompenses</small>
+                    </div>
+                    <div class="ad-cta">Tester</div>
+                </div>
+            </div>
+
+            <button id="btnAllerDashboard" class="btn-secondary" style="margin-top: 20px; width: 100%;">🔐 Accès réception</button>
+
+            <!-- Mention NTR -->
+            <div class="brand-footer">
+                Développé par <a href="https://github.com/romaweb225" target="_blank">NTR</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- DASHBOARD SCREEN -->
+    <div id="dashboardScreen" style="display: none;">
+        <div class="dashboard-container">
+            <div class="logo">
+                <h1>🚗 ASSIST-GARAGE</h1>
+                <div class="subtitle">ESPACE RÉCEPTION</div>
+            </div>
+
+            <!-- Dashboard Header -->
+            <div class="dashboard-header">
+                <div class="search-bar">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="searchInput" placeholder="Rechercher (immat, nom, n°)">
+                </div>
+                <select id="sortBy" style="padding: 8px 12px; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 13px; cursor: pointer;">
+                    <option value="date">📅 Par date</option>
+                    <option value="urgence">⚠️ Par urgence</option>
+                    <option value="statut">📊 Par statut</option>
                 </select>
             </div>
 
-            <!-- Sélection média -->
-            <div class="section-title">📎 Médias joints</div>
-            
-            <div class="media-selection">
-                <div class="media-option" onclick="ouvrirCamera()">
-                    <span class="media-icon">📷</span>
-                    <span class="media-label">Appareil photo</span>
-                    <span class="media-capacity">Photo directe</span>
-                    <div class="capacity-bar"><div class="capacity-fill" style="width: 100%;"></div></div>
-                </div>
-                
-                <div class="media-option" onclick="ouvrirGalerie()">
-                    <span class="media-icon">🖼️</span>
-                    <span class="media-label">Galerie</span>
-                    <span class="media-capacity">Max 5 MB</span>
-                    <div class="capacity-bar"><div class="capacity-fill" style="width: 80%;"></div></div>
-                </div>
-                
-                <div class="media-option" onclick="ouvrirVideo()">
-                    <span class="media-icon">🎥</span>
-                    <span class="media-label">Vidéo</span>
-                    <span class="media-capacity">Max 10 MB</span>
-                    <div class="capacity-bar"><div class="capacity-fill" style="width: 60%;"></div></div>
-                </div>
-                
-                <div class="media-option" onclick="ouvrirAudio()">
-                    <span class="media-icon">🎙️</span>
-                    <span class="media-label">Audio</span>
-                    <span class="media-capacity">Max 5 MB</span>
-                    <div class="capacity-bar"><div class="capacity-fill" style="width: 70%;"></div></div>
-                </div>
-            </div>
-            
-            <input type="file" id="fichierMedia" accept="image/*,video/*,audio/*" style="display:none">
-            
-            <!-- Barre de progression -->
-            <div class="progress-container" id="progressContainer">
-                <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-                <div class="progress-text" id="progressText">Téléchargement... 0%</div>
-            </div>
-            
-            <!-- Aperçu média -->
-            <div class="preview-media" id="previewMedia"></div>
-
-            <!-- Diagnostic IA -->
-            <div id="iaDiagnostic" style="display:none; background: #f8fafc; border-radius: 16px; padding: 14px; margin: 16px 0; font-size: 13px; color: #475569; border-left: 3px solid #0f172a;">
-                <strong>🤖 Diagnostic IA :</strong>
-                <p id="iaResultat"></p>
+            <!-- Sélecteur garage -->
+            <div class="garage-selector">
+                <label for="selectGarage">🔧 Garage :</label>
+                <select id="selectGarage">
+                    <option value="tous">📋 Tous les garages</option>
+                    <option value="Toure">Garage Toure</option>
+                    <option value="Momo">Garage Momo</option>
+                    <option value="ClimAuto">Clim Auto</option>
+                    <option value="PrestigeAuto">Prestige Auto</option>
+                    <option value="CIAuto">Côte d'Ivoire Auto</option>
+                    <option value="Ivoiremotor">Ivoiremotor</option>
+                    <option value="SamMotors">Sam Motors</option>
+                </select>
             </div>
 
-            <button id="btnEnvoyer" class="btn-primary">📤 Soumettre la demande</button>
-            <div id="message" style="margin-top: 16px; font-size: 13px; text-align: center;"></div>
-        </div>
-
-        <!-- Tab: Suivi -->
-        <div id="tab-suivi" class="tab-content">
-            <div class="section-title">🔍 Suivi de votre véhicule</div>
-            <input type="text" id="trackingCode" placeholder="Entrez votre numéro (ex: AG-2025-001)">
-            <button id="btnTracker" class="btn-primary">🔎 Suivre mon véhicule</button>
-            <div id="trackingError" style="color: #ef4444; font-size: 13px; margin-top: 10px; text-align: center;"></div>
-
-            <div id="trackingInfo" style="display: none; margin-top: 24px;">
-                <div id="trackingVehicleInfo" style="background: #f8fafc; border-radius: 20px; padding: 16px; margin: 16px 0;"></div>
-                <div style="background: #f1f5f9; border-radius: 60px; height: 6px; margin: 24px 0; overflow: hidden;">
-                    <div id="trackingProgressFill" style="background: #0f172a; width: 0%; height: 100%; transition: width 0.3s ease;"></div>
+            <!-- Stats (4 colonnes) -->
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="statTotal">0</div>
+                    <div class="stat-label">Total</div>
                 </div>
-                <div id="trackingSteps"></div>
-                <div id="trackingLastUpdate" style="font-size: 11px; color: #94a3b8; text-align: center; margin-top: 16px;"></div>
+                <div class="stat-card">
+                    <div class="stat-number" id="statNonLues">0</div>
+                    <div class="stat-label">Non traitées</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="statUrgentes">0</div>
+                    <div class="stat-label">Urgentes</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="statSatisfaction">0</div>
+                    <div class="stat-label">Note moyenne</div>
+                </div>
             </div>
 
-            <!-- Bannière -->
-            <div class="ad-banner" style="margin-top: 20px;" onclick="ouvrirSmartlink()">
-                <div class="ad-icon">💡</div>
-                <div class="ad-text">
-                    <strong>💰 Gagnez de l'argent</strong>
-                    <small>Des offres exclusives pour les utilisateurs</small>
-                </div>
-                <div class="ad-cta">En savoir plus</div>
+            <!-- Filtres -->
+            <div class="filtres">
+                <button class="filtre-btn active" data-filtre="toutes">📋 TOUTES</button>
+                <button class="filtre-btn" data-filtre="non-lues">🆕 NON TRAITÉES</button>
+                <button class="filtre-btn" data-filtre="urgentes">🔴 URGENTES</button>
             </div>
-        </div>
 
-        <!-- Tab: Offres -->
-        <div id="tab-offres" class="tab-content">
-            <div class="section-title">🎁 Offres partenaires</div>
-            <p style="color: #64748b; font-size: 14px; margin-bottom: 16px;">
-                Découvrez des offres exclusives qui vous permettent de gagner de l'argent ou d'obtenir des réductions.
-            </p>
-            <div class="ad-banner" onclick="ouvrirSmartlink()">
-                <div class="ad-icon">💰</div>
-                <div class="ad-text">
-                    <strong>Gagnez jusqu'à 100 000 FCFA</strong>
-                    <small>Inscrivez-vous et profitez de nos offres partenaires</small>
-                </div>
-                <div class="ad-cta">Je m'inscris</div>
-            </div>
-            <div class="ad-banner" onclick="ouvrirSmartlink()">
-                <div class="ad-icon">🛒</div>
-                <div class="ad-text">
-                    <strong>Réductions exclusives</strong>
-                    <small>Jusqu'à -50% sur des produits et services</small>
-                </div>
-                <div class="ad-cta">Voir les offres</div>
-            </div>
-            <div class="ad-banner" onclick="ouvrirSmartlink()">
-                <div class="ad-icon">📱</div>
-                <div class="ad-text">
-                    <strong>Applications gratuites</strong>
-                    <small>Testez des applications et gagnez des récompenses</small>
-                </div>
-                <div class="ad-cta">Tester</div>
-            </div>
-        </div>
+            <!-- Liste -->
+            <div id="listeDemandes" style="max-height: 500px; overflow-y: auto;"></div>
 
-        <button id="btnAllerDashboard" class="btn-secondary" style="margin-top: 20px; width: 100%;">🔐 Accès réception</button>
+            <!-- Pagination -->
+            <div class="pagination">
+                <button class="page-btn" id="btnPrev">← Précédent</button>
+                <span id="pageInfo" style="font-size: 12px; color: #64748b;">Page 1</span>
+                <button class="page-btn" id="btnNext">Suivant →</button>
+            </div>
 
-        <!-- Mention NTR -->
-        <div class="brand-footer">
-            Développé par <a href="https://github.com/romaweb225" target="_blank">NTR</a>
+            <div style="margin-top: 20px; text-align: center;">
+                <button id="btnQuitterDashboard" class="btn-secondary">⬅️ Retour à l'accueil</button>
+            </div>
+
+            <!-- Mention NTR -->
+            <div class="brand-footer">
+                Développé par <a href="https://github.com/romaweb225" target="_blank">NTR</a>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- DASHBOARD SCREEN -->
-<div id="dashboardScreen" style="display: none;">
-    <div class="dashboard-container">
-        <div class="logo">
-            <h1>🚗 ASSIST-GARAGE</h1>
-            <div class="subtitle">ESPACE RÉCEPTION</div>
-        </div>
-
-        <!-- Dashboard Header -->
-        <div class="dashboard-header">
-            <div class="search-bar">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="searchInput" placeholder="Rechercher (immat, nom, n°)">
+    <!-- Modals -->
+    <div id="mediaModal" class="modal">
+        <div class="modal-content">
+            <h3 style="margin-bottom: 16px;">📷 Média joint</h3>
+            <div id="mediaModalContent" style="text-align: center;"></div>
+            <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: center;">
+                <button onclick="fermerMediaModal()" class="btn-secondary">Fermer</button>
             </div>
-            <select id="sortBy" style="padding: 8px 12px; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 13px; cursor: pointer;">
-                <option value="date">📅 Par date</option>
-                <option value="urgence">⚠️ Par urgence</option>
-                <option value="statut">📊 Par statut</option>
-            </select>
-        </div>
-
-        <!-- Sélecteur garage -->
-        <div style="margin-bottom: 20px; padding: 16px 20px; background: #f8fafc; border-radius: 16px; border: 1px solid #e2e8f0;">
-            <label for="selectGarage" style="font-weight: 600; font-size: 14px; color: #0f172a;">🔧 Garage :</label>
-            <select id="selectGarage" style="margin-left: 12px; padding: 8px 12px; border-radius: 12px; border: 1px solid #e2e8f0; font-size: 14px; cursor: pointer;">
-                <option value="tous">📋 Tous les garages</option>
-                <option value="Toure">Garage Toure</option>
-                <option value="Momo">Garage Momo</option>
-                <option value="ClimAuto">Clim Auto</option>
-                <option value="PrestigeAuto">Prestige Auto</option>
-                <option value="CIAuto">Côte d'Ivoire Auto</option>
-                <option value="Ivoiremotor">Ivoiremotor</option>
-                <option value="SamMotors">Sam Motors</option>
-            </select>
-        </div>
-
-        <!-- Stats (3 colonnes) -->
-        <div class="stats">
-            <div class="stat-card">
-                <div class="stat-number" id="statTotal">0</div>
-                <div class="stat-label">Total</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="statUrgentes">0</div>
-                <div class="stat-label">Urgentes</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-number" id="statEnAttente">0</div>
-                <div class="stat-label">En attente</div>
-            </div>
-        </div>
-
-        <!-- Filtres -->
-        <div class="filtres">
-            <button class="filtre-btn active" data-filtre="toutes">📋 TOUTES</button>
-            <button class="filtre-btn" data-filtre="urgentes">🔴 URGENTES</button>
-            <button class="filtre-btn" data-filtre="en-attente">🟡 EN ATTENTE</button>
-            <button class="filtre-btn" data-filtre="en-reparation">🔧 EN REPARATION</button>
-            <button class="filtre-btn" data-filtre="pretes">✅ PRETE</button>
-        </div>
-
-        <!-- Liste -->
-        <div id="listeDemandes" style="max-height: 500px; overflow-y: auto;"></div>
-
-        <!-- Pagination -->
-        <div class="pagination">
-            <button class="page-btn" id="btnPrev">← Précédent</button>
-            <span id="pageInfo" style="font-size: 12px; color: #64748b;">Page 1</span>
-            <button class="page-btn" id="btnNext">Suivant →</button>
-        </div>
-
-        <div style="margin-top: 20px; text-align: center;">
-            <button id="btnQuitterDashboard" class="btn-secondary">⬅️ Retour à l'accueil</button>
-        </div>
-
-        <!-- Mention NTR -->
-        <div class="brand-footer">
-            Développé par <a href="https://github.com/romaweb225" target="_blank">NTR</a>
         </div>
     </div>
-</div>
 
-<!-- Modals -->
-<div id="mediaModal" class="modal">
-    <div class="modal-content">
-        <h3 style="margin-bottom: 16px;">📷 Média joint</h3>
-        <div id="mediaModalContent" style="text-align: center;"></div>
-        <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: center;">
-            <button onclick="fermerMediaModal()" class="btn-secondary">Fermer</button>
+    <div id="pdfModal" class="modal">
+        <div class="modal-content pdf-modal-content">
+            <h3 style="text-align: center; margin-bottom: 15px;">📄 Fiche de réception</h3>
+            <div id="pdfContent" style="background: white; padding: 10px; border-radius: 8px; max-height: 500px; overflow-y: auto;"></div>
+            <div style="display: flex; gap: 10px; margin-top: 15px; justify-content: center;">
+                <button id="btnGenererPDF" class="btn-primary" style="margin: 0; padding: 10px 20px; width: auto;">⬇️ Télécharger PDF</button>
+                <button onclick="fermerPDFModal()" class="btn-secondary">Fermer</button>
+            </div>
         </div>
     </div>
-</div>
 
-<div id="pdfModal" class="modal">
-    <div class="modal-content" style="max-width: 700px;">
-        <h3 style="text-align: center; margin-bottom: 20px;">📄 Fiche de réception</h3>
-        <div id="pdfContent"></div>
-        <div style="display: flex; gap: 10px; margin-top: 20px;">
-            <button id="btnGenererPDF" class="btn-primary" style="margin-top: 0;">⬇️ Télécharger PDF</button>
-            <button onclick="document.getElementById('pdfModal').style.display='none'" class="btn-secondary">Fermer</button>
-        </div>
-    </div>
-</div>
+    <div id="toast" class="toast"></div>
 
-<div id="toast" class="toast"></div>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js">
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js">
+    </script>
 
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <!-- Social Bar Adsterra -->
+    <script type='text/javascript' src='//pl31125299.profitableratecpmnetwork.com/7d/47/2d/7d472d1e372e98bc61d61a51d74661d4.js'>
+    </script>
 
-<!-- Social Bar Adsterra -->
-<script type='text/javascript' src='//pl31125299.profitableratecpmnetwork.com/7d/47/2d/7d472d1e372e98bc61d61a51d74661d4.js'></script>
+    <script>
+        // ============================================================
+        // CONFIGURATION
+        // ============================================================
+        const CONFIG = {
+            MOT_DE_PASSE: "Ly@m101288",
+            ITEMS_PER_PAGE: 10,
+            MAX_FILE_SIZE: 5 * 1024 * 1024,
+            MAX_VIDEO_SIZE: 10 * 1024 * 1024,
+            SMARTLINK_URL: "https://www.profitableratecpmnetwork.com/k9vfm5y88?key=f28dab4e4533beafd809528362e68455"
+        };
 
-<script>
-// ============================================================
-// CONFIGURATION
-// ============================================================
-const CONFIG = {
-    MOT_DE_PASSE: "Ly@m101288",
-    ITEMS_PER_PAGE: 10,
-    MAX_FILE_SIZE: 5 * 1024 * 1024,
-    MAX_VIDEO_SIZE: 10 * 1024 * 1024,
-    SMARTLINK_URL: "https://www.profitableratecpmnetwork.com/k9vfm5y88?key=f28dab4e4533beafd809528362e68455"
-};
+        let mediaData = null;
+        let mediaType = null;
+        let niveauUrgence = "basse";
+        let unsubscribeDashboard = null;
+        let currentFiltre = "toutes";
+        let currentPage = 1;
+        let allDemandes = [];
+        let pdfGenerationInProgress = false;
+        let currentDemandeId = null;
+        let trackingUnsubscribe = null;
 
-let mediaData = null;
-let mediaType = null;
-let niveauUrgence = "basse";
-let unsubscribeDashboard = null;
-let currentFiltre = "toutes";
-let currentPage = 1;
-let allDemandes = [];
-
-// ============================================================
-// FONCTIONS GLOBALES
-// ============================================================
-function ouvrirSmartlink() {
-    window.open(CONFIG.SMARTLINK_URL, '_blank');
-}
-
-function afficherToast(message, type = 'info') {
-    const toast = document.getElementById('toast');
-    toast.textContent = message;
-    toast.style.display = 'block';
-    toast.style.background = type === 'error' ? '#ef4444' : 
-                            type === 'success' ? '#22c55e' : '#0f172a';
-    setTimeout(() => toast.style.display = 'none', 4000);
-}
-
-function getGarageFromURL() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get('garage') || 'Standard';
-}
-
-function genererNumeroDemande() {
-    return `AG-${new Date().getFullYear()}-${Math.floor(Math.random() * 900) + 100}`;
-}
-
-function analyserPanne(description) {
-    const desc = description.toLowerCase();
-    if (desc.includes("bruit")) return '🔊 Bruit suspect → vérifier courroie';
-    if (desc.includes("fumee")) return '💨 Fumée → vérifier huile';
-    if (desc.includes("voyant")) return '💡 Voyant → diagnostic électronique';
-    if (desc.includes("frein")) return '🛑 Frein → contrôle plaquettes';
-    if (desc.includes("batterie")) return '🔋 Batterie → tester charge';
-    if (desc.includes("clim")) return '❄️ Clim → rechargement';
-    if (desc.includes("moteur")) return '🔧 Moteur → diagnostic complet';
-    return '🔍 Diagnostic complet nécessaire';
-}
-
-// ============================================================
-// FONCTIONS MÉDIA
-// ============================================================
-function ouvrirCamera() {
-    mediaType = 'camera';
-    const input = document.getElementById('fichierMedia');
-    input.accept = 'image/*';
-    input.capture = 'environment';
-    input.click();
-}
-
-function ouvrirGalerie() {
-    mediaType = 'galerie';
-    const input = document.getElementById('fichierMedia');
-    input.accept = 'image/*';
-    input.removeAttribute('capture');
-    input.click();
-}
-
-function ouvrirVideo() {
-    mediaType = 'video';
-    const input = document.getElementById('fichierMedia');
-    input.accept = 'video/*';
-    input.capture = 'environment';
-    input.click();
-}
-
-function ouvrirAudio() {
-    mediaType = 'audio';
-    const input = document.getElementById('fichierMedia');
-    input.accept = 'audio/*';
-    input.removeAttribute('capture');
-    input.click();
-}
-
-function simulerProgression(callback) {
-    const progressContainer = document.getElementById('progressContainer');
-    const progressFill = document.getElementById('progressFill');
-    const progressText = document.getElementById('progressText');
-    
-    progressContainer.style.display = 'block';
-    let progress = 0;
-    
-    const interval = setInterval(() => {
-        progress += Math.random() * 30;
-        if (progress >= 100) {
-            progress = 100;
-            clearInterval(interval);
-            progressFill.style.width = '100%';
-            progressText.textContent = '✅ Téléchargement terminé !';
-            setTimeout(() => {
-                progressContainer.style.display = 'none';
-                progressFill.style.width = '0%';
-                if (callback) callback();
-            }, 500);
-        } else {
-            progressFill.style.width = progress + '%';
-            progressText.textContent = `Téléchargement... ${Math.floor(progress)}%`;
+        // ============================================================
+        // FONCTIONS GLOBALES
+        // ============================================================
+        function ouvrirSmartlink() {
+            window.open(CONFIG.SMARTLINK_URL, '_blank');
         }
-    }, 200);
-}
 
-function gererFichierMedia(file) {
-    const maxSize = mediaType === 'video' ? CONFIG.MAX_VIDEO_SIZE : CONFIG.MAX_FILE_SIZE;
-    
-    if (file.size > maxSize) {
-        afficherToast(`❌ Fichier trop lourd (max ${maxSize / (1024 * 1024)}MB)`, 'error');
-        return;
-    }
+        function afficherToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            toast.style.background = type === 'error' ? '#ef4444' :
+                type === 'success' ? '#22c55e' : '#0f172a';
+            setTimeout(() => toast.style.display = 'none', 4000);
+        }
 
-    simulerProgression(() => {
-        const reader = new FileReader();
-        
-        reader.onload = function(e) {
-            const previewMedia = document.getElementById('previewMedia');
-            
-            if (mediaType === 'camera' || mediaType === 'galerie') {
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    let width = img.width;
-                    let height = img.height;
-                    const maxDim = 800;
-                    
-                    if (width > maxDim || height > maxDim) {
-                        const ratio = Math.min(maxDim / width, maxDim / height);
-                        width *= ratio;
-                        height *= ratio;
-                    }
-                    
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    
-                    mediaData = canvas.toDataURL('image/jpeg', 0.7);
-                    mediaType = 'image';
-                    
-                    previewMedia.style.display = 'block';
-                    previewMedia.innerHTML = `
-                        <img src="${mediaData}" style="max-width:100%;max-height:200px;border-radius:12px;">
-                        <button onclick="clearMedia()" class="btn-secondary" style="margin-top:8px;">🗑️ Supprimer</button>
-                    `;
-                };
-                img.src = e.target.result;
-            } else if (mediaType === 'video') {
-                mediaData = e.target.result;
-                previewMedia.style.display = 'block';
-                previewMedia.innerHTML = `
-                    <video src="${mediaData}" controls style="max-width:100%;max-height:200px;"></video>
-                    <button onclick="clearMedia()" class="btn-secondary" style="margin-top:8px;">🗑️ Supprimer</button>
-                `;
-            } else if (mediaType === 'audio') {
-                mediaData = e.target.result;
-                previewMedia.style.display = 'block';
-                previewMedia.innerHTML = `
-                    <audio src="${mediaData}" controls style="width:100%;"></audio>
-                    <button onclick="clearMedia()" class="btn-secondary" style="margin-top:8px;">🗑️ Supprimer</button>
-                `;
+        function getGarageFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('garage') || 'Standard';
+        }
+
+        function genererNumeroDemande() {
+            return `AG-${new Date().getFullYear()}-${Math.floor(Math.random() * 900) + 100}`;
+        }
+
+        function analyserPanne(description) {
+            const desc = description.toLowerCase();
+            if (desc.includes("bruit")) return '🔊 Bruit suspect → vérifier courroie';
+            if (desc.includes("fumee")) return '💨 Fumée → vérifier huile';
+            if (desc.includes("voyant")) return '💡 Voyant → diagnostic électronique';
+            if (desc.includes("frein")) return '🛑 Frein → contrôle plaquettes';
+            if (desc.includes("batterie")) return '🔋 Batterie → tester charge';
+            if (desc.includes("clim")) return '❄️ Clim → rechargement';
+            if (desc.includes("moteur")) return '🔧 Moteur → diagnostic complet';
+            return '🔍 Diagnostic complet nécessaire';
+        }
+
+        function fermerPDFModal() {
+            document.getElementById('pdfModal').style.display = 'none';
+            pdfGenerationInProgress = false;
+        }
+
+        function showMessage(msg, isSuccess) {
+            const msgDiv = document.getElementById('message');
+            if (msgDiv) {
+                msgDiv.innerHTML = msg;
+                msgDiv.style.color = isSuccess ? '#0f172a' : '#ef4444';
+                msgDiv.style.background = isSuccess ? '#f0fdf4' : '#fef2f2';
+                msgDiv.style.padding = '10px';
+                msgDiv.style.borderRadius = '12px';
+                setTimeout(function() { msgDiv.innerHTML = ''; }, 4000);
             }
-        };
-        
-        reader.readAsDataURL(file);
-    });
-}
-
-function clearMedia() {
-    mediaData = null;
-    mediaType = null;
-    document.getElementById('previewMedia').style.display = 'none';
-    document.getElementById('previewMedia').innerHTML = '';
-    document.getElementById('fichierMedia').value = '';
-}
-
-function afficherMediaModal(mediaData, mediaType) {
-    const modal = document.getElementById('mediaModal');
-    const content = document.getElementById('mediaModalContent');
-    
-    if (!mediaData) {
-        content.innerHTML = '<p>❌ Aucun média disponible</p>';
-    } else if (mediaType === 'image') {
-        content.innerHTML = `<img src="${mediaData}" style="max-width:100%;max-height:400px;border-radius:12px;">`;
-    } else if (mediaType === 'video') {
-        content.innerHTML = `<video src="${mediaData}" controls style="max-width:100%;max-height:400px;border-radius:12px;"></video>`;
-    } else if (mediaType === 'audio') {
-        content.innerHTML = `<audio src="${mediaData}" controls style="width:100%;"></audio>`;
-    }
-    
-    modal.style.display = 'flex';
-}
-
-function fermerMediaModal() {
-    document.getElementById('mediaModal').style.display = 'none';
-}
-
-// ============================================================
-// QR CODE
-// ============================================================
-function genererQRCode() {
-    const url = window.location.href;
-    document.getElementById('currentUrl').textContent = url;
-    
-    const qrDiv = document.getElementById('qrcode');
-    if (typeof QRCode !== 'undefined') {
-        qrDiv.innerHTML = '';
-        new QRCode(qrDiv, {
-            text: url,
-            width: 140,
-            height: 140,
-            colorDark: "#0f172a",
-            colorLight: "#ffffff"
-        });
-    } else {
-        qrDiv.innerHTML = `<a href="${url}" style="font-size: 10px;">${url}</a>`;
-    }
-}
-
-// ============================================================
-// INITIALISATION
-// ============================================================
-document.addEventListener('DOMContentLoaded', function() {
-    // Firebase
-    const firebaseConfig = {
-        apiKey: "AIzaSyAxfEpi-NERVExxVYD2EmH7JppiIQDwWOM",
-        authDomain: "ntr-garage.firebaseapp.com",
-        projectId: "ntr-garage",
-        storageBucket: "ntr-garage.firebasestorage.app",
-        messagingSenderId: "606167388967",
-        appId: "1:606167388967:web:7ad669fd353cdeeb7a8f02"
-    };
-
-    try {
-        firebase.initializeApp(firebaseConfig);
-        console.log("🔥 Firebase connecté");
-    } catch(e) {
-        console.log("Firebase déjà initialisé");
-    }
-
-    // Gestionnaire de fichier
-    document.getElementById('fichierMedia').addEventListener('change', function(e) {
-        if (e.target.files[0]) {
-            gererFichierMedia(e.target.files[0]);
-        }
-    });
-
-    // Tabs
-    document.querySelectorAll('.tab').forEach(tab => {
-        tab.addEventListener('click', function() {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
-        });
-    });
-
-    // Urgence
-    document.querySelectorAll('[data-urgence]').forEach(btn => {
-        btn.addEventListener('click', function() {
-            document.querySelectorAll('[data-urgence]').forEach(b => b.classList.remove('urgence-selected'));
-            btn.classList.add('urgence-selected');
-            niveauUrgence = btn.dataset.urgence;
-        });
-    });
-
-    // IA Diagnostic
-    document.getElementById('description')?.addEventListener('input', function(e) {
-        const desc = e.target.value;
-        const iaDiagnostic = document.getElementById('iaDiagnostic');
-        if (desc.length > 10) {
-            iaDiagnostic.style.display = 'block';
-            document.getElementById('iaResultat').textContent = analyserPanne(desc);
-        } else {
-            iaDiagnostic.style.display = 'none';
-        }
-    });
-
-    // Envoi de demande
-    document.getElementById('btnEnvoyer')?.addEventListener('click', async function() {
-        const nom = document.getElementById('clientNom').value.trim();
-        const immat = document.getElementById('immatriculation').value.trim();
-        const tel = document.getElementById('clientTel').value.trim();
-        const desc = document.getElementById('description').value.trim();
-
-        if (!nom || !immat || !tel || !desc) {
-            afficherToast('❌ Veuillez remplir les champs obligatoires (*)', 'error');
-            return;
         }
 
-        const btnEnvoyer = this;
-        btnEnvoyer.disabled = true;
-        btnEnvoyer.textContent = '⏳ Envoi en cours...';
-
-        const demande = {
-            nom: nom,
-            immatriculation: immat.toUpperCase(),
-            email: document.getElementById('clientEmail').value.trim(),
-            telephone: tel,
-            marque: document.getElementById('marque').value.trim(),
-            modele: document.getElementById('modele').value.trim(),
-            kilometrage: document.getElementById('kilometrage').value.trim(),
-            description: desc,
-            lieu: document.getElementById('lieu').value.trim(),
-            dateRdv: document.getElementById('dateRdv').value,
-            heureRdv: document.getElementById('heureRdv').value,
-            urgence: niveauUrgence,
-            media: mediaData || null,
-            mediaType: mediaType || null,
-            date: new Date().toLocaleString('fr-FR'),
-            dateTimestamp: new Date(),
-            lu: false,
-            statut: 0,
-            diagnosticIA: analyserPanne(desc),
-            numeroDemande: genererNumeroDemande(),
-            garage: getGarageFromURL()
-        };
-
-        try {
-            const db = firebase.firestore();
-            await db.collection('demandes').add(demande);
-            afficherToast(`✅ Demande envoyée ! N°: ${demande.numeroDemande}`, 'success');
-            
-            ['clientNom', 'immatriculation', 'clientEmail', 'clientTel', 'marque', 
-             'modele', 'kilometrage', 'description', 'lieu', 'dateRdv']
-                .forEach(id => document.getElementById(id).value = '');
-            document.getElementById('heureRdv').value = '';
-            clearMedia();
-            document.getElementById('iaDiagnostic').style.display = 'none';
-        } catch(error) {
-            afficherToast('❌ Erreur: ' + error.message, 'error');
-        } finally {
-            btnEnvoyer.disabled = false;
-            btnEnvoyer.textContent = '📤 Soumettre la demande';
+        // ============================================================
+        // FONCTIONS MÉDIA
+        // ============================================================
+        function ouvrirCamera() {
+            mediaType = 'camera';
+            const input = document.getElementById('fichierMedia');
+            input.accept = 'image/*';
+            input.capture = 'environment';
+            input.click();
         }
-    });
 
-    // Navigation dashboard
-    document.getElementById('btnAllerDashboard')?.addEventListener('click', function() {
-        const pwd = prompt("🔐 Mot de passe réception :");
-        if (pwd === CONFIG.MOT_DE_PASSE) {
-            document.getElementById('clientScreen').style.display = 'none';
-            document.getElementById('dashboardScreen').style.display = 'block';
-            chargerDemandesRealtime();
-        } else {
-            alert("❌ Mot de passe incorrect");
+        function ouvrirGalerie() {
+            mediaType = 'galerie';
+            const input = document.getElementById('fichierMedia');
+            input.accept = 'image/*';
+            input.removeAttribute('capture');
+            input.click();
         }
-    });
 
-    document.getElementById('btnQuitterDashboard')?.addEventListener('click', function() {
-        document.getElementById('dashboardScreen').style.display = 'none';
-        document.getElementById('clientScreen').style.display = 'block';
-        if (unsubscribeDashboard) unsubscribeDashboard();
-    });
-
-    // Suivi
-    document.getElementById('btnTracker')?.addEventListener('click', function() {
-        const code = document.getElementById('trackingCode').value.trim().toUpperCase();
-        const trackingError = document.getElementById('trackingError');
-        
-        if (!code) {
-            trackingError.textContent = '⚠️ Veuillez entrer un numéro de demande';
-            return;
+        function ouvrirVideo() {
+            mediaType = 'video';
+            const input = document.getElementById('fichierMedia');
+            input.accept = 'video/*';
+            input.capture = 'environment';
+            input.click();
         }
-        
-        trackingError.textContent = '🔍 Recherche en cours...';
-        
-        const db = firebase.firestore();
-        db.collection('demandes')
-            .where('numeroDemande', '==', code)
-            .get()
-            .then((querySnapshot) => {
-                if (querySnapshot.empty) {
-                    return db.collection('demandes').doc(code).get().then((doc) => {
-                        if (doc.exists) {
-                            return { id: doc.id, ...doc.data() };
+
+        function ouvrirAudio() {
+            mediaType = 'audio';
+            const input = document.getElementById('fichierMedia');
+            input.accept = 'audio/*';
+            input.removeAttribute('capture');
+            input.click();
+        }
+
+        function simulerProgression(callback) {
+            const progressContainer = document.getElementById('progressContainer');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+
+            progressContainer.style.display = 'block';
+            let progress = 0;
+
+            const interval = setInterval(() => {
+                progress += Math.random() * 30;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    progressFill.style.width = '100%';
+                    progressText.textContent = '✅ Téléchargement terminé !';
+                    setTimeout(() => {
+                        progressContainer.style.display = 'none';
+                        progressFill.style.width = '0%';
+                        if (callback) callback();
+                    }, 500);
+                } else {
+                    progressFill.style.width = progress + '%';
+                    progressText.textContent = `Téléchargement... ${Math.floor(progress)}%`;
+                }
+            }, 200);
+        }
+
+        function gererFichierMedia(file) {
+            const maxSize = mediaType === 'video' ? CONFIG.MAX_VIDEO_SIZE : CONFIG.MAX_FILE_SIZE;
+
+            if (file.size > maxSize) {
+                afficherToast(`❌ Fichier trop lourd (max ${maxSize / (1024 * 1024)}MB)`, 'error');
+                return;
+            }
+
+            simulerProgression(() => {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const previewMedia = document.getElementById('previewMedia');
+
+                    if (mediaType === 'camera' || mediaType === 'galerie') {
+                        const img = new Image();
+                        img.onload = function() {
+                            const canvas = document.createElement('canvas');
+                            let width = img.width;
+                            let height = img.height;
+                            const maxDim = 800;
+
+                            if (width > maxDim || height > maxDim) {
+                                const ratio = Math.min(maxDim / width, maxDim / height);
+                                width *= ratio;
+                                height *= ratio;
+                            }
+
+                            canvas.width = width;
+                            canvas.height = height;
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0, width, height);
+
+                            mediaData = canvas.toDataURL('image/jpeg', 0.7);
+                            mediaType = 'image';
+
+                            previewMedia.style.display = 'block';
+                            previewMedia.innerHTML = `
+                                        <img src="${mediaData}" style="max-width:100%;max-height:200px;border-radius:12px;">
+                                        <button onclick="clearMedia()" class="btn-secondary" style="margin-top:8px;">🗑️ Supprimer</button>
+                                    `;
+                        };
+                        img.src = e.target.result;
+                    } else if (mediaType === 'video') {
+                        mediaData = e.target.result;
+                        previewMedia.style.display = 'block';
+                        previewMedia.innerHTML = `
+                                    <video src="${mediaData}" controls style="max-width:100%;max-height:200px;"></video>
+                                    <button onclick="clearMedia()" class="btn-secondary" style="margin-top:8px;">🗑️ Supprimer</button>
+                                `;
+                    } else if (mediaType === 'audio') {
+                        mediaData = e.target.result;
+                        previewMedia.style.display = 'block';
+                        previewMedia.innerHTML = `
+                                    <audio src="${mediaData}" controls style="width:100%;"></audio>
+                                    <button onclick="clearMedia()" class="btn-secondary" style="margin-top:8px;">🗑️ Supprimer</button>
+                                `;
+                    }
+                };
+
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function clearMedia() {
+            mediaData = null;
+            mediaType = null;
+            document.getElementById('previewMedia').style.display = 'none';
+            document.getElementById('previewMedia').innerHTML = '';
+            document.getElementById('fichierMedia').value = '';
+        }
+
+        function afficherMediaModal(mediaData, mediaType) {
+            const modal = document.getElementById('mediaModal');
+            const content = document.getElementById('mediaModalContent');
+
+            if (!mediaData) {
+                content.innerHTML = '<p>❌ Aucun média disponible</p>';
+            } else if (mediaType === 'image') {
+                content.innerHTML =
+                    `<img src="${mediaData}" style="max-width:100%;max-height:400px;border-radius:12px;">`;
+            } else if (mediaType === 'video') {
+                content.innerHTML =
+                    `<video src="${mediaData}" controls style="max-width:100%;max-height:400px;border-radius:12px;"></video>`;
+            } else if (mediaType === 'audio') {
+                content.innerHTML =
+                    `<audio src="${mediaData}" controls style="width:100%;"></audio>`;
+            }
+
+            modal.style.display = 'flex';
+        }
+
+        function fermerMediaModal() {
+            document.getElementById('mediaModal').style.display = 'none';
+        }
+
+        // ============================================================
+        // QR CODE
+        // ============================================================
+        function genererQRCode() {
+            const url = window.location.href;
+            document.getElementById('currentUrl').textContent = url;
+
+            const qrDiv = document.getElementById('qrcode');
+            if (typeof QRCode !== 'undefined') {
+                qrDiv.innerHTML = '';
+                new QRCode(qrDiv, {
+                    text: url,
+                    width: 140,
+                    height: 140,
+                    colorDark: "#0f172a",
+                    colorLight: "#ffffff"
+                });
+            } else {
+                qrDiv.innerHTML = `<a href="${url}" style="font-size: 10px;">${url}</a>`;
+            }
+        }
+
+        // ============================================================
+        // INITIALISATION
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Firebase
+            const firebaseConfig = {
+                apiKey: "AIzaSyAxfEpi-NERVExxVYD2EmH7JppiIQDwWOM",
+                authDomain: "ntr-garage.firebaseapp.com",
+                projectId: "ntr-garage",
+                storageBucket: "ntr-garage.firebasestorage.app",
+                messagingSenderId: "606167388967",
+                appId: "1:606167388967:web:7ad669fd353cdeeb7a8f02"
+            };
+
+            try {
+                firebase.initializeApp(firebaseConfig);
+                console.log("🔥 Firebase connecté");
+            } catch (e) {
+                console.log("Firebase déjà initialisé");
+            }
+
+            // Gestionnaire de fichier
+            document.getElementById('fichierMedia').addEventListener('change', function(e) {
+                if (e.target.files[0]) {
+                    gererFichierMedia(e.target.files[0]);
+                }
+            });
+
+            // Tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+                });
+            });
+
+            // Urgence
+            document.querySelectorAll('[data-urgence]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('[data-urgence]').forEach(b => b.classList.remove(
+                        'urgence-selected'));
+                    btn.classList.add('urgence-selected');
+                    niveauUrgence = btn.dataset.urgence;
+                });
+            });
+
+            // IA Diagnostic
+            document.getElementById('description')?.addEventListener('input', function(e) {
+                const desc = e.target.value;
+                const iaDiagnostic = document.getElementById('iaDiagnostic');
+                if (desc.length > 10) {
+                    iaDiagnostic.style.display = 'block';
+                    document.getElementById('iaResultat').textContent = analyserPanne(desc);
+                } else {
+                    iaDiagnostic.style.display = 'none';
+                }
+            });
+
+            // Envoi de demande
+            document.getElementById('btnEnvoyer')?.addEventListener('click', async function() {
+                const nom = document.getElementById('clientNom').value.trim();
+                const immat = document.getElementById('immatriculation').value.trim();
+                const tel = document.getElementById('clientTel').value.trim();
+                const desc = document.getElementById('description').value.trim();
+
+                if (!nom || !immat || !tel || !desc) {
+                    afficherToast('❌ Veuillez remplir les champs obligatoires (*)', 'error');
+                    return;
+                }
+
+                const btnEnvoyer = this;
+                btnEnvoyer.disabled = true;
+                btnEnvoyer.textContent = '⏳ Envoi en cours...';
+
+                const demande = {
+                    nom: nom,
+                    immatriculation: immat.toUpperCase(),
+                    email: document.getElementById('clientEmail').value.trim(),
+                    telephone: tel,
+                    marque: document.getElementById('marque').value.trim(),
+                    modele: document.getElementById('modele').value.trim(),
+                    kilometrage: document.getElementById('kilometrage').value.trim(),
+                    description: desc,
+                    lieu: document.getElementById('lieu').value.trim(),
+                    dateRdv: document.getElementById('dateRdv').value,
+                    heureRdv: document.getElementById('heureRdv').value,
+                    urgence: niveauUrgence,
+                    media: mediaData || null,
+                    mediaType: mediaType || null,
+                    date: new Date().toLocaleString('fr-FR'),
+                    dateTimestamp: new Date(),
+                    lu: false,
+                    statut: 0,
+                    diagnosticIA: analyserPanne(desc),
+                    numeroDemande: genererNumeroDemande(),
+                    garage: getGarageFromURL()
+                };
+
+                try {
+                    const db = firebase.firestore();
+                    await db.collection('demandes').add(demande);
+                    afficherToast(`✅ Demande envoyée ! N°: ${demande.numeroDemande}`, 'success');
+
+                    ['clientNom', 'immatriculation', 'clientEmail', 'clientTel', 'marque',
+                        'modele', 'kilometrage', 'description', 'lieu', 'dateRdv'
+                    ].forEach(id => document.getElementById(id).value = '');
+                    document.getElementById('heureRdv').value = '';
+                    clearMedia();
+                    document.getElementById('iaDiagnostic').style.display = 'none';
+                } catch (error) {
+                    afficherToast('❌ Erreur: ' + error.message, 'error');
+                } finally {
+                    btnEnvoyer.disabled = false;
+                    btnEnvoyer.textContent = '📤 Soumettre la demande';
+                }
+            });
+
+            // Navigation dashboard
+            document.getElementById('btnAllerDashboard')?.addEventListener('click', function() {
+                const pwd = prompt("🔐 Mot de passe réception :");
+                if (pwd === CONFIG.MOT_DE_PASSE) {
+                    document.getElementById('clientScreen').style.display = 'none';
+                    document.getElementById('dashboardScreen').style.display = 'block';
+                    chargerDemandesRealtime();
+                } else {
+                    alert("❌ Mot de passe incorrect");
+                }
+            });
+
+            document.getElementById('btnQuitterDashboard')?.addEventListener('click', function() {
+                document.getElementById('dashboardScreen').style.display = 'none';
+                document.getElementById('clientScreen').style.display = 'block';
+                if (unsubscribeDashboard) unsubscribeDashboard();
+            });
+
+            // Suivi
+            document.getElementById('btnTracker')?.addEventListener('click', function() {
+                const code = document.getElementById('trackingCode').value.trim().toUpperCase();
+                const trackingError = document.getElementById('trackingError');
+
+                if (!code) {
+                    trackingError.textContent = '⚠️ Veuillez entrer un numéro de demande';
+                    return;
+                }
+
+                trackingError.textContent = '🔍 Recherche en cours...';
+
+                const db = firebase.firestore();
+                db.collection('demandes')
+                    .where('numeroDemande', '==', code)
+                    .get()
+                    .then((querySnapshot) => {
+                        if (querySnapshot.empty) {
+                            return db.collection('demandes').doc(code).get().then((doc) => {
+                                if (doc.exists) {
+                                    return { id: doc.id, ...doc.data() };
+                                }
+                                throw new Error('NOT_FOUND');
+                            });
                         }
-                        throw new Error('NOT_FOUND');
+                        const doc = querySnapshot.docs[0];
+                        return { id: doc.id, ...doc.data() };
+                    })
+                    .then((demande) => {
+                        afficherSuiviClient(demande);
+                        trackingError.textContent = '';
+                    })
+                    .catch((error) => {
+                        if (error.message === 'NOT_FOUND') {
+                            trackingError.textContent = '❌ Aucune demande trouvée avec ce numéro';
+                        } else {
+                            trackingError.textContent = '❌ Erreur: ' + error.message;
+                        }
+                        document.getElementById('trackingInfo').style.display = 'none';
+                    });
+            });
+
+            // Copier lien
+            document.getElementById('btnCopierLien')?.addEventListener('click', async function() {
+                try {
+                    await navigator.clipboard.writeText(window.location.href);
+                    afficherToast('📋 Lien copié !', 'success');
+                } catch (e) {
+                    afficherToast('❌ Erreur de copie', 'error');
+                }
+            });
+
+            // Imprimer QR
+            document.getElementById('btnImprimerQR')?.addEventListener('click', function() {
+                const qrDiv = document.getElementById('qrcode');
+                const qrHTML = qrDiv.innerHTML;
+                const currentUrl = window.location.href;
+
+                const printWindow = window.open('', '_blank', 'width=400,height=600');
+                if (!printWindow) {
+                    afficherToast("❌ Veuillez autoriser les popups", 'error');
+                    return;
+                }
+
+                printWindow.document.write(`
+                            <!DOCTYPE html>
+                            <html>
+                            <head>
+                                <title>QR Code - Assist-Garage</title>
+                                <style>
+                                    body { display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; font-family: Arial, sans-serif; }
+                                    .qr-container { text-align: center; padding: 30px; border: 2px solid #0f172a; border-radius: 16px; }
+                                    .qr-container h1 { font-size: 22px; color: #0f172a; margin-bottom: 5px; }
+                                    .qr-code-box { display: inline-block; padding: 15px; border: 1px solid #e2e8f0; border-radius: 8px; margin: 15px 0; }
+                                    .url-text { font-size: 10px; color: #64748b; word-break: break-all; margin-top: 15px; }
+                                </style>
+                            </head>
+                            <body>
+                                <div class="qr-container">
+                                    <h1>🚗 ASSIST-GARAGE</h1>
+                                    <div class="qr-code-box">${qrHTML}</div>
+                                    <div class="url-text">${currentUrl}</div>
+                                </div>
+                                <script>
+                                    window.onload = function() { setTimeout(function() { window.print(); }, 500); };
+                                <\/script>
+                            </body>
+                            </html>
+                        `);
+                printWindow.document.close();
+            });
+
+            // QR Code
+            genererQRCode();
+
+            // Initialisation
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('dateRdv').min = today;
+            document.getElementById('clientGarageName').textContent = getGarageFromURL();
+
+            // Service Worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/ntr-garage/sw.js')
+                    .then(() => console.log('✅ Service Worker enregistré'))
+                    .catch(err => console.log('❌ Service Worker:', err));
+            }
+
+            // ============================================================
+            // GESTIONNAIRE PDF - CORRIGÉ
+            // ============================================================
+            document.getElementById('btnGenererPDF')?.addEventListener('click', function() {
+                if (pdfGenerationInProgress) {
+                    afficherToast('⏳ Génération en cours...', 'info');
+                    return;
+                }
+
+                const pdfContent = document.getElementById('pdfContent');
+                if (!pdfContent || pdfContent.innerHTML.trim() === '') {
+                    afficherToast('❌ Aucun contenu à exporter', 'error');
+                    return;
+                }
+
+                pdfGenerationInProgress = true;
+                this.disabled = true;
+                this.textContent = '⏳ Génération...';
+
+                const opt = {
+                    margin: [10, 10, 10, 10],
+                    filename: `Fiche_Reception_${currentDemandeId || 'demande'}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: {
+                        scale: 2,
+                        useCORS: true,
+                        letterRendering: true,
+                        logging: false,
+                        width: pdfContent.scrollWidth || 600,
+                        height: pdfContent.scrollHeight || 800
+                    },
+                    jsPDF: {
+                        unit: 'mm',
+                        format: 'a4',
+                        orientation: 'portrait'
+                    },
+                    pagebreak: { mode: ['avoid-all'] }
+                };
+
+                html2pdf()
+                    .from(pdfContent)
+                    .set(opt)
+                    .save()
+                    .then(() => {
+                        pdfGenerationInProgress = false;
+                        this.disabled = false;
+                        this.textContent = '⬇️ Télécharger PDF';
+                        afficherToast('📄 Fiche générée avec succès', 'success');
+                    })
+                    .catch((err) => {
+                        pdfGenerationInProgress = false;
+                        this.disabled = false;
+                        this.textContent = '⬇️ Télécharger PDF';
+                        console.error('Erreur PDF:', err);
+                        afficherToast('❌ Erreur lors de la génération du PDF: ' + err.message, 'error');
+                    });
+            });
+        });
+
+        // ============================================================
+        // SUIVI CLIENT
+        // ============================================================
+        function afficherSuiviClient(demande) {
+            const trackingInfo = document.getElementById('trackingInfo');
+            const statut = demande.statut || 0;
+
+            trackingInfo.style.display = 'block';
+
+            const vehicleInfo = document.getElementById('trackingVehicleInfo');
+            vehicleInfo.innerHTML = `
+                        <p><strong>📋 N° de demande :</strong> ${demande.numeroDemande || demande.id}</p>
+                        <p><strong>🚘 Véhicule :</strong> ${demande.immatriculation || 'N/A'} - ${demande.marque || ''} ${demande.modele || ''}</p>
+                        <p><strong>👤 Client :</strong> ${demande.nom || 'N/A'}</p>
+                        <p><strong>🔧 Panne :</strong> ${demande.description || 'N/A'}</p>
+                        ${demande.garage ? `<p><strong>🏷️ Garage :</strong> ${demande.garage}</p>` : ''}
+                    `;
+
+            const progressFill = document.getElementById('trackingProgressFill');
+            progressFill.style.width = ((statut + 1) * 33.33) + '%';
+
+            let stepsHtml = '';
+            if (statut === 0) {
+                stepsHtml = `
+                            <div class="status-step active"><div class="status-icon">🟡</div><div><strong>En attente</strong><br><small>Votre demande a été enregistrée</small></div></div>
+                            <div class="status-step"><div class="status-icon">🔧</div><div><strong>En réparation</strong><br><small>Notre équipe s'occupe de votre véhicule</small></div></div>
+                            <div class="status-step"><div class="status-icon">✅</div><div><strong>Prête</strong><br><small>Votre véhicule est disponible</small></div></div>
+                        `;
+            } else if (statut === 1) {
+                stepsHtml = `
+                            <div class="status-step completed"><div class="status-icon">🟡</div><div><strong>En attente</strong><br><small>Votre demande a été enregistrée</small></div></div>
+                            <div class="status-step active"><div class="status-icon">🔧</div><div><strong>En réparation</strong><br><small>Notre équipe s'occupe de votre véhicule</small></div></div>
+                            <div class="status-step"><div class="status-icon">✅</div><div><strong>Prête</strong><br><small>Votre véhicule est disponible</small></div></div>
+                        `;
+            } else {
+                stepsHtml = `
+                            <div class="status-step completed"><div class="status-icon">🟡</div><div><strong>En attente</strong><br><small>Votre demande a été enregistrée</small></div></div>
+                            <div class="status-step completed"><div class="status-icon">🔧</div><div><strong>En réparation</strong><br><small>Notre équipe s'occupe de votre véhicule</small></div></div>
+                            <div class="status-step active"><div class="status-icon">✅</div><div><strong>Prête</strong><br><small>Votre véhicule est disponible</small></div></div>
+                        `;
+            }
+            document.getElementById('trackingSteps').innerHTML = stepsHtml;
+
+            document.getElementById('trackingLastUpdate').textContent = '🕐 Dernière mise à jour : ' + (demande.date ||
+                new Date().toLocaleString('fr-FR'));
+        }
+
+        // ============================================================
+        // DASHBOARD
+        // ============================================================
+        async function chargerDemandesRealtime() {
+            if (unsubscribeDashboard) {
+                unsubscribeDashboard();
+                unsubscribeDashboard = null;
+            }
+
+            const db = firebase.firestore();
+            const garageFiltre = document.getElementById('selectGarage').value;
+            let query = db.collection('demandes');
+
+            if (garageFiltre !== 'tous') {
+                query = query.where('garage', '==', garageFiltre);
+            }
+            query = query.orderBy('dateTimestamp', 'desc');
+
+            unsubscribeDashboard = query.onSnapshot(function(snapshot) {
+                allDemandes = [];
+                let totalSat = 0;
+                let nbSat = 0;
+
+                snapshot.forEach(function(doc) {
+                    const d = doc.data();
+                    allDemandes.push({ id: doc.id, ...d });
+                    if (d.satisfaction) {
+                        totalSat += d.satisfaction;
+                        nbSat++;
+                    }
+                });
+
+                document.getElementById('statTotal').textContent = allDemandes.length;
+                document.getElementById('statNonLues').textContent = allDemandes.filter(d => !d.lu).length;
+                document.getElementById('statUrgentes').textContent = allDemandes.filter(d => d.urgence === 'haute')
+                    .length;
+                document.getElementById('statSatisfaction').textContent = nbSat > 0 ? (totalSat / nbSat).toFixed(1) +
+                    ' ★' : '0 ★';
+
+                afficherDemandesFiltrees();
+            });
+        }
+
+        function afficherDemandesFiltrees() {
+            let filtered = [...allDemandes];
+
+            if (currentFiltre === 'non-lues') filtered = filtered.filter(d => !d.lu);
+            if (currentFiltre === 'urgentes') filtered = filtered.filter(d => d.urgence === 'haute');
+
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            if (searchTerm) {
+                filtered = filtered.filter(d =>
+                    (d.immatriculation || '').toLowerCase().includes(searchTerm) ||
+                    (d.nom || '').toLowerCase().includes(searchTerm)
+                );
+            }
+
+            const totalPages = Math.ceil(filtered.length / CONFIG.ITEMS_PER_PAGE);
+            if (currentPage > totalPages) currentPage = 1;
+
+            const start = (currentPage - 1) * CONFIG.ITEMS_PER_PAGE;
+            const end = start + CONFIG.ITEMS_PER_PAGE;
+            const pageDemandes = filtered.slice(start, end);
+
+            const listeDiv = document.getElementById('listeDemandes');
+            if (pageDemandes.length === 0) {
+                listeDiv.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;">📭 Aucune demande</div>';
+            } else {
+                listeDiv.innerHTML = pageDemandes.map(demande => {
+                    const statutActuel = demande.statut || 0;
+                    const urgenceLabels = { 'haute': '🔴 URGENT', 'moyenne': '🟡 MOYEN', 'basse': '🟢 BAS' };
+
+                    let satisfactionHtml = '';
+                    if (demande.satisfaction) {
+                        let stars = '';
+                        for (let i = 0; i < demande.satisfaction; i++) stars += '★';
+                        for (let i = demande.satisfaction; i < 5; i++) stars += '☆';
+                        satisfactionHtml = '<div style="margin-top:8px;">⭐ ' + stars + '</div>';
+                    }
+
+                    let mediaHTML = '';
+                    if (demande.media && demande.mediaType) {
+                        const mediaIcon = demande.mediaType === 'image' ? '📷' : (demande.mediaType === 'video' ?
+                            '🎥' : '🎙️');
+                        const mediaDataEscaped = demande.media.replace(/'/g, "\\'");
+                        mediaHTML = `
+                                    <div class="media-preview-mini" onclick="afficherMediaModal('${mediaDataEscaped}', '${demande.mediaType}')">
+                                        ${mediaIcon} Voir le média joint
+                                    </div>
+                                `;
+                    }
+
+                    return `
+                                <div class="demande ${demande.urgence || 'basse'}">
+                                    <div style="display:flex;justify-content:space-between;align-items:start;">
+                                        <span class="badge-urgence ${demande.urgence || 'basse'}">${urgenceLabels[demande.urgence] || '🟢 BAS'}</span>
+                                        <span class="demande-date">📅 ${demande.date || ''}</span>
+                                    </div>
+                                    <div><strong>📋 N° :</strong> ${demande.numeroDemande || demande.id.substring(0, 8)}</div>
+                                    <div><strong>🚘 Véhicule :</strong> ${demande.immatriculation || '-'} - ${demande.marque || ''} ${demande.modele || ''}</div>
+                                    <div><strong>👤 Client :</strong> ${demande.nom || 'Client'} (${demande.telephone || 'N/A'})</div>
+                                    <div style="margin:8px 0;font-size:13px;">${demande.description || ''}</div>
+                                    ${demande.lieu ? '<div style="font-size:12px;color:#64748b;">📍 Lieu : ' + demande.lieu + '</div>' : ''}
+                                    ${demande.dateRdv ? '<div style="font-size:12px;">📅 RDV : ' + demande.dateRdv + ' ' + (demande.heureRdv || '') + '</div>' : ''}
+                                    ${demande.garage ? '<div style="font-size:12px;color:#64748b;">🏷️ Garage : ' + demande.garage + '</div>' : ''}
+                                    ${satisfactionHtml}
+                                    ${mediaHTML}
+                                    <div class="actions">
+                                        <select class="status-select" data-id="${demande.id}" style="padding: 6px 12px; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 12px; cursor: pointer;">
+                                            <option value="0" ${statutActuel === 0 ? 'selected' : ''}>🟡 En attente</option>
+                                            <option value="1" ${statutActuel === 1 ? 'selected' : ''}>🔧 En réparation</option>
+                                            <option value="2" ${statutActuel === 2 ? 'selected' : ''}>✅ Prête</option>
+                                        </select>
+                                        <button class="btn-secondary btn-pdf" data-id="${demande.id}" data-json='${JSON.stringify(demande).replace(/'/g, "&#39;")}'>📄 PDF</button>
+                                        <button class="btn-secondary btn-supprimer" data-id="${demande.id}">🗑️</button>
+                                    </div>
+                                </div>
+                            `;
+                }).join('');
+
+                // Attacher les événements
+                document.querySelectorAll('.status-select').forEach(select => {
+                    select.addEventListener('change', function() {
+                        updateStatus(this.dataset.id, parseInt(this.value));
+                    });
+                });
+
+                document.querySelectorAll('.btn-pdf').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const demande = JSON.parse(this.dataset.json);
+                        genererPDF(demande);
+                    });
+                });
+
+                document.querySelectorAll('.btn-supprimer').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        supprimerDemande(this.dataset.id);
+                    });
+                });
+            }
+
+            // Marquer comme lues
+            pageDemandes.forEach(d => {
+                if (!d.lu) {
+                    firebase.firestore().collection('demandes').doc(d.id).update({ lu: true }).catch(e => {});
+                }
+            });
+
+            document.getElementById('pageInfo').textContent = `Page ${currentPage} / ${totalPages || 1}`;
+            document.getElementById('btnPrev').disabled = currentPage <= 1;
+            document.getElementById('btnNext').disabled = currentPage >= totalPages;
+        }
+
+        // ============================================================
+        // FICHE DE RÉCEPTION PROFESSIONNELLE (PDF) - QUI FONCTIONNE PARFAITEMENT
+        // ============================================================
+        function genererPDF(demande) {
+            if (pdfGenerationInProgress) {
+                afficherToast('⏳ Une génération est déjà en cours...', 'info');
+                return;
+            }
+
+            currentDemandeId = demande.numeroDemande || demande.id;
+
+            // Construire le HTML du PDF
+            let html = `
+                        <div class="pdf-wrapper">
+                            <div class="pdf-header">
+                                <h1>🚗 ASSIST-GARAGE</h1>
+                                <div class="sub">Fiche de Réception Véhicule</div>
+                            </div>
+
+                            <table class="pdf-table" style="margin-bottom: 10px;">
+                                <tr>
+                                    <td style="width: 50%; background: #f1f5f9; border-radius: 4px 0 0 4px;">
+                                        <div style="color: #64748b; font-size: 9px; text-transform: uppercase;">N° de dossier</div>
+                                        <strong style="font-size: 13px; color: #0f172a;">${demande.numeroDemande || demande.id}</strong>
+                                    </td>
+                                    <td style="width: 50%; background: #f1f5f9; border-radius: 0 4px 4px 0; text-align: right;">
+                                        <div style="color: #64748b; font-size: 9px; text-transform: uppercase;">Date de réception</div>
+                                        <span style="font-size: 12px; color: #0f172a;">${demande.date || new Date().toLocaleString('fr-FR')}</span>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <div class="pdf-section-title">Informations Véhicule</div>
+                            <table class="pdf-table" style="margin-bottom: 6px;">
+                                <tr>
+                                    <td class="label">Immatriculation</td>
+                                    <td style="width: 30%;">${demande.immatriculation || 'N/A'}</td>
+                                    <td class="label">Kilométrage</td>
+                                    <td style="width: 30%;">${demande.kilometrage || 'N/A'} km</td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Marque</td>
+                                    <td>${demande.marque || 'N/A'}</td>
+                                    <td class="label">Modèle</td>
+                                    <td>${demande.modele || 'N/A'}</td>
+                                </tr>
+                            </table>
+
+                            <div class="pdf-section-title">Informations Client</div>
+                            <table class="pdf-table" style="margin-bottom: 6px;">
+                                <tr>
+                                    <td class="label">Nom complet</td>
+                                    <td colspan="3">${demande.nom || 'N/A'}</td>
+                                </tr>
+                                <tr>
+                                    <td class="label">Téléphone</td>
+                                    <td colspan="3">${demande.telephone || 'N/A'}</td>
+                                </tr>
+                                ${demande.email ? `
+                                <tr>
+                                    <td class="label">Email</td>
+                                    <td colspan="3">${demande.email}</td>
+                                </tr>` : ''}
+                            </table>
+
+                            <div class="pdf-section-title">Description de la Panne</div>
+                            <div class="pdf-desc-box" style="margin-bottom: 4px;">
+                                ${demande.description || 'N/A'}
+                            </div>
+                            <table class="pdf-table" style="margin-bottom: 6px;">
+                                <tr>
+                                    <td style="width: 50%; background: #f8fafc;">
+                                        <strong>Niveau d'urgence :</strong>
+                                        <span class="pdf-urgence-${demande.urgence || 'basse'}">
+                                            ${demande.urgence === 'haute' ? '🔴 URGENT' : demande.urgence === 'moyenne' ? '🟡 MOYEN' : '🟢 NORMAL'}
+                                        </span>
+                                    </td>
+                                    <td style="width: 50%; background: #f8fafc;">
+                                        <strong>Diagnostic :</strong> ${demande.diagnosticIA || 'À déterminer'}
+                                    </td>
+                                </tr>
+                            </table>
+
+                            ${demande.media && demande.mediaType === 'image' ? `
+                            <div class="pdf-section-title">Photo du véhicule</div>
+                            <div class="pdf-photo">
+                                <img src="${demande.media}" alt="Photo du véhicule">
+                            </div>` : ''}
+
+                            ${demande.garage || demande.dateRdv || demande.lieu ? `
+                            <div class="pdf-section-title">Informations Complémentaires</div>
+                            <table class="pdf-table" style="margin-bottom: 6px;">
+                                ${demande.garage ? `
+                                <tr>
+                                    <td class="label">Garage assigné</td>
+                                    <td colspan="3">${demande.garage}</td>
+                                </tr>` : ''}
+                                ${demande.dateRdv ? `
+                                <tr>
+                                    <td class="label">Rendez-vous</td>
+                                    <td colspan="3">${demande.dateRdv} ${demande.heureRdv ? 'à ' + demande.heureRdv : ''}</td>
+                                </tr>` : ''}
+                                ${demande.lieu ? `
+                                <tr>
+                                    <td class="label">Localisation</td>
+                                    <td colspan="3">${demande.lieu}</td>
+                                </tr>` : ''}
+                            </table>` : ''}
+
+                            <div class="pdf-footer">
+                                <strong>ASSIST-GARAGE PRO</strong> - Document généré automatiquement<br>
+                                Pour toute question, contactez votre garage
+                            </div>
+                        </div>
+                    `;
+
+            // Afficher dans le modal
+            const pdfContent = document.getElementById('pdfContent');
+            pdfContent.innerHTML = html;
+            document.getElementById('pdfModal').style.display = 'flex';
+
+            // Réinitialiser le bouton de téléchargement
+            const btnGenerer = document.getElementById('btnGenererPDF');
+            btnGenerer.disabled = false;
+            btnGenerer.textContent = '⬇️ Télécharger PDF';
+            pdfGenerationInProgress = false;
+
+            afficherToast('📄 Aperçu prêt, cliquez sur "Télécharger PDF"', 'success');
+        }
+
+        async function updateStatus(id, statut) {
+            try {
+                await firebase.firestore().collection('demandes').doc(id).update({
+                    statut: statut,
+                    dateStatut: new Date()
+                });
+                afficherToast('✅ Statut mis à jour', 'success');
+            } catch (error) {
+                afficherToast('❌ Erreur', 'error');
+            }
+        }
+
+        async function supprimerDemande(id) {
+            if (confirm('🗑️ Supprimer cette demande ?')) {
+                await firebase.firestore().collection('demandes').doc(id).delete();
+                afficherToast('🗑️ Demande supprimée', 'success');
+            }
+        }
+
+        // Événements dashboard
+        document.getElementById('searchInput')?.addEventListener('input', () => {
+            currentPage = 1;
+            afficherDemandesFiltrees();
+        });
+
+        document.getElementById('sortBy')?.addEventListener('change', () => {
+            currentPage = 1;
+            afficherDemandesFiltrees();
+        });
+
+        document.getElementById('selectGarage')?.addEventListener('change', () => {
+            currentPage = 1;
+            chargerDemandesRealtime();
+        });
+
+        document.getElementById('btnPrev')?.addEventListener('click', () => {
+            if (currentPage > 1) {
+                currentPage--;
+                afficherDemandesFiltrees();
+            }
+        });
+
+        document.getElementById('btnNext')?.addEventListener('click', () => {
+            currentPage++;
+            afficherDemandesFiltrees();
+        });
+
+        document.querySelectorAll('.filtre-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filtre-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFiltre = btn.dataset.filtre;
+                currentPage = 1;
+                afficherDemandesFiltrees();
+            });
+        });
+
+        console.log('🚗 Assist-Garage PRO initialisé avec succès');
+    </script>
+
+    <!-- Script d'installation PWA -->
+    <script>
+        (function() {
+            let deferredPrompt;
+            const btnInstall = document.getElementById('btnInstaller');
+
+            window.addEventListener('beforeinstallprompt', (e) => {
+                console.log('🔔 Installation détectée comme possible');
+                e.preventDefault();
+                deferredPrompt = e;
+                if (btnInstall) {
+                    btnInstall.style.display = 'block';
+                }
+            });
+
+            if (btnInstall) {
+                btnInstall.addEventListener('click', () => {
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        deferredPrompt.userChoice.then((choiceResult) => {
+                            if (choiceResult.outcome === 'accepted') {
+                                console.log('✅ L\'utilisateur a installé l\'application !');
+                                afficherToast('🎉 Application installée avec succès !');
+                            } else {
+                                console.log('❌ L\'utilisateur a refusé l\'installation.');
+                            }
+                            deferredPrompt = null;
+                            btnInstall.style.display = 'none';
+                        });
+                    } else {
+                        alert('📱 Pour installer l\'application :\n\n' +
+                            '1. Cliquez sur le menu ⋮ (Chrome) ou sur le partage (Safari)\n' +
+                            '2. Sélectionnez "Ajouter à l\'écran d\'accueil"');
+                    }
+                });
+            }
+
+            window.addEventListener('appinstalled', () => {
+                console.log('🎉 Application installée avec succès !');
+                if (btnInstall) {
+                    btnInstall.style.display = 'none';
+                }
+            });
+
+            const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+            if (isSafari && window.navigator.standalone === false) {
+                if (btnInstall) {
+                    btnInstall.textContent = '📱 Ajouter à l\'écran d\'accueil (Safari)';
+                    btnInstall.style.display = 'block';
+                    btnInstall.addEventListener('click', () => {
+                        alert('📱 Pour ajouter Assist-Garage à votre écran d\'accueil :\n\n' +
+                            '1. Tapez sur l\'icône de partage (carré avec une flèche)\n' +
+                            '2. Faites défiler vers le bas et tapez "Sur l\'écran d\'accueil"\n' +
+                            '3. Tapez sur "Ajouter"');
                     });
                 }
-                const doc = querySnapshot.docs[0];
-                return { id: doc.id, ...doc.data() };
-            })
-            .then((demande) => {
-                afficherSuiviClient(demande);
-                trackingError.textContent = '';
-            })
-            .catch((error) => {
-                if (error.message === 'NOT_FOUND') {
-                    trackingError.textContent = '❌ Aucune demande trouvée avec ce numéro';
-                } else {
-                    trackingError.textContent = '❌ Erreur: ' + error.message;
-                }
-                document.getElementById('trackingInfo').style.display = 'none';
-            });
-    });
-
-    // Copier lien
-    document.getElementById('btnCopierLien')?.addEventListener('click', async function() {
-        try {
-            await navigator.clipboard.writeText(window.location.href);
-            afficherToast('📋 Lien copié !', 'success');
-        } catch(e) {
-            afficherToast('❌ Erreur de copie', 'error');
-        }
-    });
-
-    // Imprimer QR
-    document.getElementById('btnImprimerQR')?.addEventListener('click', function() {
-        const qrDiv = document.getElementById('qrcode');
-        const qrHTML = qrDiv.innerHTML;
-        const currentUrl = window.location.href;
-        
-        const printWindow = window.open('', '_blank', 'width=400,height=600');
-        if (!printWindow) {
-            afficherToast("❌ Veuillez autoriser les popups", 'error');
-            return;
-        }
-        
-        printWindow.document.write(`
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>QR Code - Assist-Garage</title>
-                <style>
-                    body { display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; font-family: Arial, sans-serif; }
-                    .qr-container { text-align: center; padding: 30px; border: 2px solid #0f172a; border-radius: 16px; }
-                    .qr-container h1 { font-size: 22px; color: #0f172a; margin-bottom: 5px; }
-                    .qr-code-box { display: inline-block; padding: 15px; border: 1px solid #e2e8f0; border-radius: 8px; margin: 15px 0; }
-                    .url-text { font-size: 10px; color: #64748b; word-break: break-all; margin-top: 15px; }
-                </style>
-            </head>
-            <body>
-                <div class="qr-container">
-                    <h1>🚗 ASSIST-GARAGE</h1>
-                    <div class="qr-code-box">${qrHTML}</div>
-                    <div class="url-text">${currentUrl}</div>
-                </div>
-                <script>
-                    window.onload = function() { setTimeout(function() { window.print(); }, 500); };
-                <\/script>
-            </body>
-            </html>
-        `);
-        printWindow.document.close();
-    });
-
-    // QR Code
-    genererQRCode();
-    
-    // Initialisation
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('dateRdv').min = today;
-    document.getElementById('clientGarageName').textContent = getGarageFromURL();
-
-    // Service Worker
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/ntr-garage/sw.js')
-            .then(() => console.log('✅ Service Worker enregistré'))
-            .catch(err => console.log('❌ Service Worker:', err));
-    }
-});
-
-// ============================================================
-// SUIVI CLIENT
-// ============================================================
-function afficherSuiviClient(demande) {
-    const trackingInfo = document.getElementById('trackingInfo');
-    const statut = demande.statut || 0;
-    
-    trackingInfo.style.display = 'block';
-    
-    const vehicleInfo = document.getElementById('trackingVehicleInfo');
-    vehicleInfo.innerHTML = `
-        <div style="margin-bottom: 10px;"><strong>📋 N° de demande :</strong> ${demande.numeroDemande || demande.id}</div>
-        <div style="margin-bottom: 10px;"><strong>🚘 Véhicule :</strong> ${demande.immatriculation || 'N/A'} - ${demande.marque || ''} ${demande.modele || ''}</div>
-        <div style="margin-bottom: 10px;"><strong>👤 Client :</strong> ${demande.nom || 'N/A'}</div>
-        <div style="margin-bottom: 10px;"><strong>🔧 Panne :</strong> ${demande.description || 'N/A'}</div>
-        ${demande.garage ? `<div><strong>🏷️ Garage :</strong> ${demande.garage}</div>` : ''}
-    `;
-    
-    const progressFill = document.getElementById('trackingProgressFill');
-    progressFill.style.width = ((statut + 1) * 33.33) + '%';
-    
-    const stepsDiv = document.getElementById('trackingSteps');
-    stepsDiv.innerHTML = `
-        <div style="display: flex; align-items: center; margin: 15px 0; opacity: ${statut >= 0 ? '1' : '0.4'};">
-            <div style="width: 40px; height: 40px; border-radius: 50%; background: ${statut >= 0 ? '#22c55e' : '#e2e8f0'}; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-right: 15px;">🟡</div>
-            <div><strong>En attente</strong><br><small>Votre demande a été enregistrée</small></div>
-        </div>
-        <div style="display: flex; align-items: center; margin: 15px 0; opacity: ${statut >= 1 ? '1' : '0.4'};">
-            <div style="width: 40px; height: 40px; border-radius: 50%; background: ${statut >= 1 ? '#22c55e' : '#e2e8f0'}; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-right: 15px;">🔧</div>
-            <div><strong>En réparation</strong><br><small>Notre équipe s'occupe de votre véhicule</small></div>
-        </div>
-        <div style="display: flex; align-items: center; margin: 15px 0; opacity: ${statut >= 2 ? '1' : '0.4'};">
-            <div style="width: 40px; height: 40px; border-radius: 50%; background: ${statut >= 2 ? '#22c55e' : '#e2e8f0'}; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-right: 15px;">✅</div>
-            <div><strong>Prête</strong><br><small>Votre véhicule est disponible</small></div>
-        </div>
-    `;
-    
-    document.getElementById('trackingLastUpdate').textContent = '🕐 Dernière mise à jour : ' + (demande.date || new Date().toLocaleString('fr-FR'));
-}
-
-// ============================================================
-// DASHBOARD
-// ============================================================
-async function chargerDemandesRealtime() {
-    if (unsubscribeDashboard) {
-        unsubscribeDashboard();
-        unsubscribeDashboard = null;
-    }
-
-    const db = firebase.firestore();
-    const garageFiltre = document.getElementById('selectGarage').value;
-    let query = db.collection('demandes');
-    
-    if (garageFiltre !== 'tous') {
-        query = query.where('garage', '==', garageFiltre);
-    }
-    query = query.orderBy('dateTimestamp', 'desc');
-
-    unsubscribeDashboard = query.onSnapshot(function(snapshot) {
-        allDemandes = [];
-        snapshot.forEach(function(doc) {
-            allDemandes.push({ id: doc.id, ...doc.data() });
-        });
-        
-        document.getElementById('statTotal').textContent = allDemandes.length;
-        document.getElementById('statUrgentes').textContent = allDemandes.filter(d => d.urgence === 'haute').length;
-        document.getElementById('statEnAttente').textContent = allDemandes.filter(d => d.statut === 0).length;
-        
-        afficherDemandesFiltrees();
-    });
-}
-
-function afficherDemandesFiltrees() {
-    let filtered = [...allDemandes];
-    
-    if (currentFiltre === 'urgentes') filtered = filtered.filter(d => d.urgence === 'haute');
-    if (currentFiltre === 'en-attente') filtered = filtered.filter(d => d.statut === 0);
-    if (currentFiltre === 'en-reparation') filtered = filtered.filter(d => d.statut === 1);
-    if (currentFiltre === 'pretes') filtered = filtered.filter(d => d.statut === 2);
-    
-    const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-    if (searchTerm) {
-        filtered = filtered.filter(d => 
-            (d.immatriculation || '').toLowerCase().includes(searchTerm) ||
-            (d.nom || '').toLowerCase().includes(searchTerm)
-        );
-    }
-    
-    const totalPages = Math.ceil(filtered.length / CONFIG.ITEMS_PER_PAGE);
-    if (currentPage > totalPages) currentPage = 1;
-    
-    const start = (currentPage - 1) * CONFIG.ITEMS_PER_PAGE;
-    const end = start + CONFIG.ITEMS_PER_PAGE;
-    const pageDemandes = filtered.slice(start, end);
-    
-    const listeDiv = document.getElementById('listeDemandes');
-    if (pageDemandes.length === 0) {
-        listeDiv.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;">📭 Aucune demande</div>';
-    } else {
-        listeDiv.innerHTML = pageDemandes.map(demande => {
-            const statutActuel = demande.statut || 0;
-            const urgenceLabels = { 'haute': '🔴 URGENT', 'moyenne': '🟡 MOYEN', 'basse': '🟢 BAS' };
-            
-            let mediaHTML = '';
-            if (demande.media && demande.mediaType) {
-                if (demande.mediaType === 'image') {
-                    mediaHTML = `
-                        <div style="margin-top: 10px; cursor: pointer;" onclick="afficherMediaModal('${demande.media}', '${demande.mediaType}')">
-                            <img src="${demande.media}" style="max-width: 100%; max-height: 120px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                            <div style="font-size: 11px; color: #64748b; margin-top: 4px;">📷 Cliquer pour agrandir</div>
-                        </div>
-                    `;
-                } else if (demande.mediaType === 'video') {
-                    mediaHTML = `
-                        <div style="margin-top: 10px; cursor: pointer; padding: 15px; background: #f8fafc; border-radius: 8px; text-align: center;" onclick="afficherMediaModal('${demande.media}', '${demande.mediaType}')">
-                            🎥 Vidéo enregistrée - Cliquer pour visualiser
-                        </div>
-                    `;
-                } else if (demande.mediaType === 'audio') {
-                    mediaHTML = `
-                        <div style="margin-top: 10px; cursor: pointer; padding: 15px; background: #f8fafc; border-radius: 8px; text-align: center;" onclick="afficherMediaModal('${demande.media}', '${demande.mediaType}')">
-                            🎙️ Audio enregistré - Cliquer pour écouter
-                        </div>
-                    `;
-                }
             }
-            
-            return `
-                <div class="demande ${demande.urgence || 'basse'}">
-                    <div style="display:flex;justify-content:space-between;align-items:start;">
-                        <span class="badge-urgence ${demande.urgence || 'basse'}">${urgenceLabels[demande.urgence] || '🟢 BAS'}</span>
-                        <span class="demande-date">📅 ${demande.date || ''}</span>
-                    </div>
-                    <div><strong>📋 N° :</strong> ${demande.numeroDemande || demande.id.substring(0, 8)}</div>
-                    <div><strong>🚘 Véhicule :</strong> ${demande.immatriculation || '-'} - ${demande.marque || ''} ${demande.modele || ''}</div>
-                    <div><strong>👤 Client :</strong> ${demande.nom || 'Client'} (${demande.telephone || 'N/A'})</div>
-                    <div style="margin:8px 0;font-size:13px;">${demande.description || ''}</div>
-                    ${demande.garage ? `<div style="font-size:12px;color:#64748b;">🏷️ ${demande.garage}</div>` : ''}
-                    ${mediaHTML}
-                    <div class="actions">
-                        <select class="status-select" data-id="${demande.id}" style="padding: 6px 12px; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 12px; cursor: pointer;">
-                            <option value="0" ${statutActuel === 0 ? 'selected' : ''}>🟡 En attente</option>
-                            <option value="1" ${statutActuel === 1 ? 'selected' : ''}>🔧 En réparation</option>
-                            <option value="2" ${statutActuel === 2 ? 'selected' : ''}>✅ Prête</option>
-                        </select>
-                        <button class="btn-secondary" onclick="genererPDFPourDemande('${demande.id}')">📄 PDF</button>
-                        <button class="btn-secondary" onclick="supprimerDemande('${demande.id}')">🗑️</button>
-                    </div>
-                </div>
-            `;
-        }).join('');
-        
-        document.querySelectorAll('.status-select').forEach(select => {
-            select.addEventListener('change', function() {
-                updateStatus(this.dataset.id, parseInt(this.value));
-            });
-        });
-    }
-    
-    document.getElementById('pageInfo').textContent = `Page ${currentPage} / ${totalPages || 1}`;
-    document.getElementById('btnPrev').disabled = currentPage <= 1;
-    document.getElementById('btnNext').disabled = currentPage >= totalPages;
-}
-
-// ============================================================
-// FICHE PDF PROFESSIONNELLE
-// ============================================================
-async function genererPDFPourDemande(id) {
-    const demande = allDemandes.find(d => d.id === id);
-    if (!demande) return;
-    
-    const pdfContent = document.getElementById('pdfContent');
-    
-    let mediaHTML = '';
-    if (demande.media && demande.mediaType === 'image') {
-        mediaHTML = `
-            <div style="margin-bottom: 15px;">
-                <div style="font-size: 13px; font-weight: bold; color: #0f172a; text-transform: uppercase; margin-bottom: 8px; border-left: 3px solid #0f172a; padding-left: 8px;">
-                    Photo du véhicule
-                </div>
-                <div style="text-align: center; padding: 10px; border: 1px solid #e2e8f0; border-radius: 4px;">
-                    <img src="${demande.media}" style="max-width: 100%; max-height: 300px; border-radius: 4px;">
-                </div>
-            </div>
-        `;
-    }
-    
-    pdfContent.innerHTML = `
-        <div style="font-family: Arial, Helvetica, sans-serif; max-width: 100%; margin: 0; padding: 15px 20px; background: #ffffff; color: #1a1a1a;">
-            <div style="text-align: center; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #0f172a;">
-                <div style="font-size: 24px; font-weight: bold; color: #0f172a; letter-spacing: 1px; margin-bottom: 3px;">🚗 ASSIST-GARAGE</div>
-                <div style="font-size: 11px; color: #475569; letter-spacing: 1px; text-transform: uppercase;">Fiche de Réception Véhicule</div>
-            </div>
-            
-            <table style="width: 100%; margin-bottom: 20px; border-collapse: collapse;">
-                <tr>
-                    <td style="width: 50%; padding: 10px; background: #f1f5f9; border: 1px solid #e2e8f0;">
-                        <span style="font-size: 10px; color: #64748b; text-transform: uppercase;">N° de dossier</span><br>
-                        <span style="font-size: 15px; font-weight: bold; color: #0f172a;">${demande.numeroDemande || id}</span>
-                    </td>
-                    <td style="width: 50%; padding: 10px; background: #f1f5f9; border: 1px solid #e2e8f0; text-align: right;">
-                        <span style="font-size: 10px; color: #64748b; text-transform: uppercase;">Date de réception</span><br>
-                        <span style="font-size: 13px; color: #0f172a;">${demande.date || new Date().toLocaleString('fr-FR')}</span>
-                    </td>
-                </tr>
-            </table>
-            
-            <div style="margin-bottom: 15px;">
-                <div style="font-size: 13px; font-weight: bold; color: #0f172a; text-transform: uppercase; margin-bottom: 8px; border-left: 3px solid #0f172a; padding-left: 8px;">Informations Véhicule</div>
-                <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
-                    <tr>
-                        <td style="padding: 8px; border: 1px solid #e2e8f0; width: 25%; background: #f8fafc;"><strong>Immatriculation</strong></td>
-                        <td style="padding: 8px; border: 1px solid #e2e8f0; width: 25%;">${demande.immatriculation || 'N/A'}</td>
-                        <td style="padding: 8px; border: 1px solid #e2e8f0; width: 25%; background: #f8fafc;"><strong>Kilométrage</strong></td>
-                        <td style="padding: 8px; border: 1px solid #e2e8f0; width: 25%;">${demande.kilometrage || 'N/A'} km</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Marque</strong></td>
-                        <td style="padding: 8px; border: 1px solid #e2e8f0;">${demande.marque || 'N/A'}</td>
-                        <td style="padding: 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Modèle</strong></td>
-                        <td style="padding: 8px; border: 1px solid #e2e8f0;">${demande.modele || 'N/A'}</td>
-                    </tr>
-                </table>
-            </div>
-            
-            <div style="margin-bottom: 15px;">
-                <div style="font-size: 13px; font-weight: bold; color: #0f172a; text-transform: uppercase; margin-bottom: 8px; border-left: 3px solid #0f172a; padding-left: 8px;">Informations Client</div>
-                <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
-                    <tr>
-                        <td style="padding: 8px; border: 1px solid #e2e8f0; width: 25%; background: #f8fafc;"><strong>Nom complet</strong></td>
-                        <td style="padding: 8px; border: 1px solid #e2e8f0; width: 75%;">${demande.nom || 'N/A'}</td>
-                    </tr>
-                    <tr>
-                        <td style="padding: 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Téléphone</strong></td>
-                        <td style="padding: 8px; border: 1px solid #e2e8f0;">${demande.telephone || 'N/A'}</td>
-                    </tr>
-                    ${demande.email ? `
-                    <tr>
-                        <td style="padding: 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Email</strong></td>
-                        <td style="padding: 8px; border: 1px solid #e2e8f0;">${demande.email}</td>
-                    </tr>` : ''}
-                </table>
-            </div>
-            
-            <div style="margin-bottom: 15px;">
-                <div style="font-size: 13px; font-weight: bold; color: #0f172a; text-transform: uppercase; margin-bottom: 8px; border-left: 3px solid #0f172a; padding-left: 8px;">Description de la Panne</div>
-                <div style="padding: 10px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 12px; line-height: 1.5; background: #fef2f2;">${demande.description || 'N/A'}</div>
-                <table style="width: 100%; margin-top: 8px; border-collapse: collapse; font-size: 12px;">
-                    <tr>
-                        <td style="padding: 8px; border: 1px solid #e2e8f0; width: 50%; background: #f8fafc;">
-                            <strong>Niveau d'urgence :</strong> 
-                            <span style="color: ${demande.urgence === 'haute' ? '#ef4444' : demande.urgence === 'moyenne' ? '#f59e0b' : '#22c55e'}; font-weight: bold;">
-                                ${demande.urgence === 'haute' ? '🔴 URGENT' : demande.urgence === 'moyenne' ? '🟡 MOYEN' : '🟢 NORMAL'}
-                            </span>
-                        </td>
-                        <td style="padding: 8px; border: 1px solid #e2e8f0; width: 50%;"><strong>Diagnostic :</strong> ${demande.diagnosticIA || 'À déterminer'}</td>
-                    </tr>
-                </table>
-            </div>
-            
-            ${mediaHTML}
-            
-            ${demande.garage || demande.dateRdv || demande.lieu ? `
-            <div style="margin-bottom: 15px;">
-                <div style="font-size: 13px; font-weight: bold; color: #0f172a; text-transform: uppercase; margin-bottom: 8px; border-left: 3px solid #0f172a; padding-left: 8px;">Informations Complémentaires</div>
-                <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
-                    ${demande.garage ? `<tr><td style="padding: 8px; border: 1px solid #e2e8f0; width: 30%; background: #f8fafc;"><strong>Garage assigné</strong></td><td style="padding: 8px; border: 1px solid #e2e8f0; width: 70%;">${demande.garage}</td></tr>` : ''}
-                    ${demande.dateRdv ? `<tr><td style="padding: 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Rendez-vous</strong></td><td style="padding: 8px; border: 1px solid #e2e8f0;">${demande.dateRdv} ${demande.heureRdv ? 'à ' + demande.heureRdv : ''}</td></tr>` : ''}
-                    ${demande.lieu ? `<tr><td style="padding: 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Localisation</strong></td><td style="padding: 8px; border: 1px solid #e2e8f0;">${demande.lieu}</td></tr>` : ''}
-                </table>
-            </div>` : ''}
-            
-            <div style="text-align: center; margin-top: 20px; padding-top: 10px; border-top: 1px solid #cbd5e1; font-size: 10px; color: #64748b;">
-                <strong>ASSIST-GARAGE PRO</strong> - Document généré automatiquement<br>
-                Développé par NTR - Pour toute question, contactez votre garage
-            </div>
-        </div>
-    `;
-    
-    document.getElementById('pdfModal').style.display = 'flex';
-    
-    document.getElementById('btnGenererPDF').onclick = function() {
-        if (typeof html2pdf !== 'undefined') {
-            html2pdf().from(pdfContent).set({
-                margin: [10, 10, 10, 10],
-                filename: `Fiche_Reception_${demande.numeroDemande || id}.pdf`,
-                html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            }).save();
-            afficherToast('📄 Fiche générée avec succès', 'success');
-        }
-    };
-}
-
-async function updateStatus(id, statut) {
-    try {
-        await firebase.firestore().collection('demandes').doc(id).update({
-            statut: statut,
-            dateStatut: new Date()
-        });
-        afficherToast('✅ Statut mis à jour', 'success');
-    } catch(error) {
-        afficherToast('❌ Erreur', 'error');
-    }
-}
-
-async function supprimerDemande(id) {
-    if (confirm('🗑️ Supprimer cette demande ?')) {
-        await firebase.firestore().collection('demandes').doc(id).delete();
-        afficherToast('🗑️ Demande supprimée', 'success');
-    }
-}
-
-// Événements dashboard
-document.getElementById('searchInput')?.addEventListener('input', () => {
-    currentPage = 1;
-    afficherDemandesFiltrees();
-});
-
-document.getElementById('sortBy')?.addEventListener('change', () => {
-    currentPage = 1;
-    afficherDemandesFiltrees();
-});
-
-document.getElementById('selectGarage')?.addEventListener('change', () => {
-    currentPage = 1;
-    chargerDemandesRealtime();
-});
-
-document.getElementById('btnPrev')?.addEventListener('click', () => {
-    if (currentPage > 1) {
-        currentPage--;
-        afficherDemandesFiltrees();
-    }
-});
-
-document.getElementById('btnNext')?.addEventListener('click', () => {
-    currentPage++;
-    afficherDemandesFiltrees();
-});
-
-document.querySelectorAll('.filtre-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        document.querySelectorAll('.filtre-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentFiltre = btn.dataset.filtre;
-        currentPage = 1;
-        afficherDemandesFiltrees();
-    });
-});
-
-console.log('🚗 Assist-Garage PRO initialisé avec succès');
-</script>
+        })();
+    </script>
 </body>
 </html>
