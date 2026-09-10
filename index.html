@@ -675,19 +675,6 @@
             font-size: 8px;
             color: #64748b;
         }
-        .pdf-wrapper .pdf-photo {
-            text-align: center;
-            padding: 5px;
-            border: 1px solid #e2e8f0;
-            border-radius: 4px;
-            background: #f8fafc;
-            margin: 4px 0;
-        }
-        .pdf-wrapper .pdf-photo img {
-            max-width: 100%;
-            max-height: 150px;
-            border-radius: 4px;
-        }
         .pdf-wrapper .pdf-urgence-haute {
             color: #ef4444;
             font-weight: 700;
@@ -1909,7 +1896,7 @@
         }
 
         // ============================================================
-        // FICHE DE RÉCEPTION PROFESSIONNELLE (PDF) - QUI FONCTIONNE PARFAITEMENT
+        // FICHE DE RÉCEPTION PROFESSIONNELLE (PDF) - SANS PHOTO
         // ============================================================
         function genererPDF(demande) {
             if (pdfGenerationInProgress) {
@@ -1919,7 +1906,7 @@
 
             currentDemandeId = demande.numeroDemande || demande.id;
 
-            // Construire le HTML du PDF
+            // Construire le HTML du PDF (SANS la section photo)
             let html = `
                         <div class="pdf-wrapper">
                             <div class="pdf-header">
@@ -1990,12 +1977,6 @@
                                     </td>
                                 </tr>
                             </table>
-
-                            ${demande.media && demande.mediaType === 'image' ? `
-                            <div class="pdf-section-title">Photo du véhicule</div>
-                            <div class="pdf-photo">
-                                <img src="${demande.media}" alt="Photo du véhicule">
-                            </div>` : ''}
 
                             ${demande.garage || demande.dateRdv || demande.lieu ? `
                             <div class="pdf-section-title">Informations Complémentaires</div>
