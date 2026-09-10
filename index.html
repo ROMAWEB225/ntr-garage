@@ -569,30 +569,36 @@
             color: #0f172a;
         }
 
-        /* Media preview mini */
+        /* Media preview mini - CLIQUABLE ET TÉLÉCHARGEABLE */
         .media-preview-mini {
-            margin-top: 8px;
-            padding: 8px 14px;
+            margin-top: 10px;
+            padding: 10px 14px;
             background: #f1f5f9;
-            border-radius: 30px;
+            border-radius: 12px;
             cursor: pointer;
             transition: all 0.2s ease;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
             border: 1px solid #e2e8f0;
             font-size: 13px;
+            color: #0f172a;
+            font-weight: 500;
         }
         .media-preview-mini:hover {
             background: #e2e8f0;
             transform: scale(1.02);
+            border-color: #0f172a;
         }
         .media-preview-mini img {
-            max-width: 80px;
-            max-height: 80px;
+            max-width: 60px;
+            max-height: 60px;
             border-radius: 8px;
+            object-fit: cover;
         }
         .media-preview-mini video {
-            max-width: 80px;
-            max-height: 80px;
+            max-width: 60px;
+            max-height: 60px;
             border-radius: 8px;
         }
 
@@ -607,73 +613,89 @@
             display: none;
         }
 
-        /* PDF Styles */
+        /* PDF Styles - Police Georgia comme dans la première version */
         .pdf-wrapper {
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: 'Georgia', 'Times New Roman', serif;
             max-width: 100%;
             padding: 10px 15px;
             background: #ffffff;
             color: #1a1a1a;
-            line-height: 1.3;
-            font-size: 11px;
+            line-height: 1.4;
+            font-size: 12px;
         }
         .pdf-wrapper .pdf-header {
             text-align: center;
-            margin-bottom: 10px;
-            padding-bottom: 8px;
-            border-bottom: 3px solid #0f172a;
+            margin-bottom: 15px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #0f172a;
         }
         .pdf-wrapper .pdf-header h1 {
-            font-size: 20px;
-            font-weight: 700;
+            font-size: 24px;
+            font-weight: 300;
             color: #0f172a;
-            letter-spacing: 1px;
+            letter-spacing: 4px;
         }
         .pdf-wrapper .pdf-header .sub {
-            font-size: 10px;
+            font-size: 11px;
             color: #475569;
             text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 4px;
+        }
+        .pdf-wrapper .pdf-header .confidential {
+            font-size: 10px;
+            color: #94a3b8;
+            margin-top: 6px;
             letter-spacing: 1px;
+            font-style: italic;
         }
         .pdf-wrapper .pdf-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 10px;
+            font-size: 11px;
         }
         .pdf-wrapper .pdf-table td {
-            padding: 4px 6px;
+            padding: 6px 8px;
             border: 1px solid #e2e8f0;
         }
         .pdf-wrapper .pdf-table .label {
             background: #f8fafc;
             font-weight: 600;
             width: 22%;
+            color: #0f172a;
         }
         .pdf-wrapper .pdf-section-title {
-            font-size: 11px;
-            font-weight: 700;
+            font-size: 12px;
+            font-weight: 600;
             color: #0f172a;
             text-transform: uppercase;
-            margin: 6px 0 4px 0;
+            margin: 10px 0 6px 0;
             border-left: 3px solid #0f172a;
-            padding-left: 6px;
+            padding-left: 8px;
+            letter-spacing: 2px;
         }
         .pdf-wrapper .pdf-desc-box {
-            padding: 6px 8px;
+            padding: 8px 10px;
             border: 1px solid #e2e8f0;
             border-radius: 4px;
-            font-size: 10px;
-            line-height: 1.4;
+            font-size: 11px;
+            line-height: 1.5;
             background: #fef2f2;
-            min-height: 25px;
+            min-height: 30px;
         }
         .pdf-wrapper .pdf-footer {
             text-align: center;
-            margin-top: 10px;
-            padding-top: 6px;
+            margin-top: 15px;
+            padding-top: 10px;
             border-top: 1px solid #cbd5e1;
-            font-size: 8px;
+            font-size: 9px;
             color: #64748b;
+            letter-spacing: 1px;
+        }
+        .pdf-wrapper .pdf-footer .brand {
+            font-weight: 600;
+            color: #0f172a;
+            letter-spacing: 2px;
         }
         .pdf-wrapper .pdf-urgence-haute {
             color: #ef4444;
@@ -757,6 +779,87 @@
             color: #0f172a;
         }
 
+        /* Modal média - Améliorée pour zoom et téléchargement */
+        .media-modal-content {
+            max-width: 90vw !important;
+            max-height: 90vh !important;
+            width: auto !important;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .media-modal-content h3 {
+            margin-bottom: 16px;
+            color: #0f172a;
+        }
+        .media-display-container {
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 15px;
+            max-width: 100%;
+            max-height: 60vh;
+            overflow: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .media-display-container img {
+            max-width: 100%;
+            max-height: 55vh;
+            border-radius: 8px;
+            cursor: zoom-in;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        .media-display-container img.zoomed {
+            transform: scale(1.5);
+            cursor: zoom-out;
+        }
+        .media-display-container video {
+            max-width: 100%;
+            max-height: 55vh;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+        .media-display-container audio {
+            width: 400px;
+            max-width: 100%;
+            padding: 20px;
+        }
+        .media-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .btn-download {
+            background: #22c55e;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-download:hover {
+            background: #16a34a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+        }
+        .zoom-hint {
+            font-size: 11px;
+            color: #64748b;
+            text-align: center;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
         @media (max-width: 560px) {
             body {
                 padding: 16px;
@@ -789,6 +892,9 @@
             .garage-selector select {
                 width: 100%;
             }
+            .media-display-container img.zoomed {
+                transform: scale(1.2);
+            }
         }
     </style>
 </head>
@@ -803,7 +909,6 @@
                 <span class="badge-free">📱 VERSION PRO</span>
             </div>
 
-            <!-- Bannière Smartlink -->
             <div class="ad-banner" onclick="ouvrirSmartlink()">
                 <div class="ad-icon">🎯</div>
                 <div class="ad-text">
@@ -813,7 +918,6 @@
                 <div class="ad-cta">Voir l'offre</div>
             </div>
 
-            <!-- Section QR Code -->
             <div class="qr-section">
                 <div id="qrcode" class="qr-code"></div>
                 <div id="currentUrl" style="font-size: 11px; color: #64748b; word-break: break-all; margin-top: 10px;"></div>
@@ -823,14 +927,12 @@
                 </div>
             </div>
 
-            <!-- Indicateur Garage -->
             <div style="text-align: center; margin: 4px 0 12px 0;">
                 <span class="garage-indicator" id="clientGarageIndicator">
                     📍 Garage : <strong id="clientGarageName">Standard</strong>
                 </span>
             </div>
 
-            <!-- Bouton Installation -->
             <div style="text-align: center; margin: 16px 0;">
                 <button id="btnInstaller" style="display:none; background: #0f172a; color: white; border: none; padding: 14px 24px; border-radius: 40px; font-size: 15px; font-weight: 600; cursor: pointer; width: 100%; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.15); transition: all 0.3s ease;">
                     📱 Installer l'application sur mon téléphone
@@ -838,14 +940,12 @@
                 <p style="font-size: 11px; color: #94a3b8; margin-top: 6px;">Gratuit • Sans inscription • Fonctionne hors-ligne</p>
             </div>
 
-            <!-- Tabs -->
             <div class="tabs">
                 <div class="tab active" data-tab="panne">📝 Signalement</div>
                 <div class="tab" data-tab="suivi">🔍 Suivi</div>
                 <div class="tab" data-tab="offres">🎁 Offres</div>
             </div>
 
-            <!-- Tab: Signalement -->
             <div id="tab-panne" class="tab-content active">
                 <div class="section-title">🚘 Informations véhicule</div>
                 <div class="row-2cols">
@@ -895,7 +995,6 @@
                     </select>
                 </div>
 
-                <!-- Sélection média -->
                 <div class="section-title">📎 Médias joints</div>
 
                 <div class="media-selection">
@@ -930,16 +1029,13 @@
 
                 <input type="file" id="fichierMedia" accept="image/*,video/*,audio/*" style="display:none">
 
-                <!-- Barre de progression -->
                 <div class="progress-container" id="progressContainer">
                     <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
                     <div class="progress-text" id="progressText">Téléchargement... 0%</div>
                 </div>
 
-                <!-- Aperçu média -->
                 <div class="preview-media" id="previewMedia"></div>
 
-                <!-- Diagnostic IA -->
                 <div class="ia-diagnostic" id="iaDiagnostic">
                     <strong>🤖 Diagnostic IA :</strong>
                     <p id="iaResultat"></p>
@@ -949,7 +1045,6 @@
                 <div id="message" style="margin-top: 16px; font-size: 13px; text-align: center;"></div>
             </div>
 
-            <!-- Tab: Suivi -->
             <div id="tab-suivi" class="tab-content">
                 <div class="section-title">🔍 Suivi de votre véhicule</div>
                 <input type="text" id="trackingCode" placeholder="Entrez votre numéro (ex: AG-2025-001)">
@@ -965,7 +1060,6 @@
                     <div id="trackingLastUpdate" style="font-size: 11px; color: #94a3b8; text-align: center; margin-top: 16px;"></div>
                 </div>
 
-                <!-- Bannière -->
                 <div class="ad-banner" style="margin-top: 20px;" onclick="ouvrirSmartlink()">
                     <div class="ad-icon">💡</div>
                     <div class="ad-text">
@@ -976,7 +1070,6 @@
                 </div>
             </div>
 
-            <!-- Tab: Offres -->
             <div id="tab-offres" class="tab-content">
                 <div class="section-title">🎁 Offres partenaires</div>
                 <p style="color: #64748b; font-size: 14px; margin-bottom: 16px;">
@@ -1010,7 +1103,6 @@
 
             <button id="btnAllerDashboard" class="btn-secondary" style="margin-top: 20px; width: 100%;">🔐 Accès réception</button>
 
-            <!-- Mention NTR -->
             <div class="brand-footer">
                 Développé par <a href="https://github.com/romaweb225" target="_blank">NTR</a>
             </div>
@@ -1025,7 +1117,6 @@
                 <div class="subtitle">ESPACE RÉCEPTION</div>
             </div>
 
-            <!-- Dashboard Header -->
             <div class="dashboard-header">
                 <div class="search-bar">
                     <span class="search-icon">🔍</span>
@@ -1038,7 +1129,6 @@
                 </select>
             </div>
 
-            <!-- Sélecteur garage -->
             <div class="garage-selector">
                 <label for="selectGarage">🔧 Garage :</label>
                 <select id="selectGarage">
@@ -1053,7 +1143,6 @@
                 </select>
             </div>
 
-            <!-- Stats (4 colonnes) -->
             <div class="stats">
                 <div class="stat-card">
                     <div class="stat-number" id="statTotal">0</div>
@@ -1073,17 +1162,14 @@
                 </div>
             </div>
 
-            <!-- Filtres -->
             <div class="filtres">
                 <button class="filtre-btn active" data-filtre="toutes">📋 TOUTES</button>
                 <button class="filtre-btn" data-filtre="non-lues">🆕 NON TRAITÉES</button>
                 <button class="filtre-btn" data-filtre="urgentes">🔴 URGENTES</button>
             </div>
 
-            <!-- Liste -->
             <div id="listeDemandes" style="max-height: 500px; overflow-y: auto;"></div>
 
-            <!-- Pagination -->
             <div class="pagination">
                 <button class="page-btn" id="btnPrev">← Précédent</button>
                 <span id="pageInfo" style="font-size: 12px; color: #64748b;">Page 1</span>
@@ -1094,19 +1180,20 @@
                 <button id="btnQuitterDashboard" class="btn-secondary">⬅️ Retour à l'accueil</button>
             </div>
 
-            <!-- Mention NTR -->
             <div class="brand-footer">
                 Développé par <a href="https://github.com/romaweb225" target="_blank">NTR</a>
             </div>
         </div>
     </div>
 
-    <!-- Modals -->
+    <!-- Modal Média AMÉLIORÉE -->
     <div id="mediaModal" class="modal">
-        <div class="modal-content">
-            <h3 style="margin-bottom: 16px;">📷 Média joint</h3>
-            <div id="mediaModalContent" style="text-align: center;"></div>
-            <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: center;">
+        <div class="modal-content media-modal-content">
+            <h3>📷 Média joint</h3>
+            <div id="mediaModalContent" class="media-display-container"></div>
+            <div class="zoom-hint" id="zoomHint">💡 Cliquez sur l'image pour zoomer</div>
+            <div class="media-actions" style="margin-top: 15px;">
+                <button id="btnTelechargerMedia" class="btn-download">⬇️ Télécharger</button>
                 <button onclick="fermerMediaModal()" class="btn-secondary">Fermer</button>
             </div>
         </div>
@@ -1157,6 +1244,8 @@
         let pdfGenerationInProgress = false;
         let currentDemandeId = null;
         let trackingUnsubscribe = null;
+        let currentMediaForDownload = null;
+        let currentMediaTypeForDownload = null;
 
         // ============================================================
         // FONCTIONS GLOBALES
@@ -1346,28 +1435,76 @@
             document.getElementById('fichierMedia').value = '';
         }
 
-        function afficherMediaModal(mediaData, mediaType) {
+        // ============================================================
+        // MODAL MÉDIA AMÉLIORÉE - AVEC ZOOM ET TÉLÉCHARGEMENT
+        // ============================================================
+        function afficherMediaModal(mediaSrc, type) {
             const modal = document.getElementById('mediaModal');
             const content = document.getElementById('mediaModalContent');
+            const zoomHint = document.getElementById('zoomHint');
 
-            if (!mediaData) {
+            currentMediaForDownload = mediaSrc;
+            currentMediaTypeForDownload = type;
+
+            if (!mediaSrc) {
                 content.innerHTML = '<p>❌ Aucun média disponible</p>';
-            } else if (mediaType === 'image') {
-                content.innerHTML =
-                    `<img src="${mediaData}" style="max-width:100%;max-height:400px;border-radius:12px;">`;
-            } else if (mediaType === 'video') {
-                content.innerHTML =
-                    `<video src="${mediaData}" controls style="max-width:100%;max-height:400px;border-radius:12px;"></video>`;
-            } else if (mediaType === 'audio') {
-                content.innerHTML =
-                    `<audio src="${mediaData}" controls style="width:100%;"></audio>`;
+                zoomHint.style.display = 'none';
+                return;
+            }
+
+            if (type === 'image') {
+                content.innerHTML = `<img src="${mediaSrc}" id="zoomableImage" alt="Photo du véhicule">`;
+                zoomHint.style.display = 'block';
+                
+                // Ajouter la fonctionnalité de zoom au clic
+                setTimeout(() => {
+                    const img = document.getElementById('zoomableImage');
+                    if (img) {
+                        img.addEventListener('click', function() {
+                            this.classList.toggle('zoomed');
+                        });
+                    }
+                }, 50);
+            } else if (type === 'video') {
+                content.innerHTML = `<video src="${mediaSrc}" controls></video>`;
+                zoomHint.style.display = 'none';
+            } else if (type === 'audio') {
+                content.innerHTML = `<audio src="${mediaSrc}" controls></audio>`;
+                zoomHint.style.display = 'none';
+            } else {
+                content.innerHTML = '<p>❌ Type non reconnu</p>';
+                zoomHint.style.display = 'none';
             }
 
             modal.style.display = 'flex';
         }
 
+        function telechargerMedia() {
+            if (!currentMediaForDownload) {
+                afficherToast('❌ Aucun média à télécharger', 'error');
+                return;
+            }
+
+            const extension = currentMediaTypeForDownload === 'image' ? 'jpg' :
+                              currentMediaTypeForDownload === 'video' ? 'mp4' : 'mp3';
+            const timestamp = Date.now();
+            const filename = `media_assist_garage_${timestamp}.${extension}`;
+
+            // Créer un lien de téléchargement
+            const link = document.createElement('a');
+            link.href = currentMediaForDownload;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            afficherToast('⬇️ Téléchargement en cours...', 'success');
+        }
+
         function fermerMediaModal() {
             document.getElementById('mediaModal').style.display = 'none';
+            currentMediaForDownload = null;
+            currentMediaTypeForDownload = null;
         }
 
         // ============================================================
@@ -1396,7 +1533,6 @@
         // INITIALISATION
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
-            // Firebase
             const firebaseConfig = {
                 apiKey: "AIzaSyAxfEpi-NERVExxVYD2EmH7JppiIQDwWOM",
                 authDomain: "ntr-garage.firebaseapp.com",
@@ -1413,14 +1549,12 @@
                 console.log("Firebase déjà initialisé");
             }
 
-            // Gestionnaire de fichier
             document.getElementById('fichierMedia').addEventListener('change', function(e) {
                 if (e.target.files[0]) {
                     gererFichierMedia(e.target.files[0]);
                 }
             });
 
-            // Tabs
             document.querySelectorAll('.tab').forEach(tab => {
                 tab.addEventListener('click', function() {
                     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -1430,7 +1564,6 @@
                 });
             });
 
-            // Urgence
             document.querySelectorAll('[data-urgence]').forEach(btn => {
                 btn.addEventListener('click', function() {
                     document.querySelectorAll('[data-urgence]').forEach(b => b.classList.remove(
@@ -1440,7 +1573,6 @@
                 });
             });
 
-            // IA Diagnostic
             document.getElementById('description')?.addEventListener('input', function(e) {
                 const desc = e.target.value;
                 const iaDiagnostic = document.getElementById('iaDiagnostic');
@@ -1452,7 +1584,6 @@
                 }
             });
 
-            // Envoi de demande
             document.getElementById('btnEnvoyer')?.addEventListener('click', async function() {
                 const nom = document.getElementById('clientNom').value.trim();
                 const immat = document.getElementById('immatriculation').value.trim();
@@ -1511,7 +1642,6 @@
                 }
             });
 
-            // Navigation dashboard
             document.getElementById('btnAllerDashboard')?.addEventListener('click', function() {
                 const pwd = prompt("🔐 Mot de passe réception :");
                 if (pwd === CONFIG.MOT_DE_PASSE) {
@@ -1529,7 +1659,6 @@
                 if (unsubscribeDashboard) unsubscribeDashboard();
             });
 
-            // Suivi
             document.getElementById('btnTracker')?.addEventListener('click', function() {
                 const code = document.getElementById('trackingCode').value.trim().toUpperCase();
                 const trackingError = document.getElementById('trackingError');
@@ -1571,7 +1700,6 @@
                     });
             });
 
-            // Copier lien
             document.getElementById('btnCopierLien')?.addEventListener('click', async function() {
                 try {
                     await navigator.clipboard.writeText(window.location.href);
@@ -1581,7 +1709,6 @@
                 }
             });
 
-            // Imprimer QR
             document.getElementById('btnImprimerQR')?.addEventListener('click', function() {
                 const qrDiv = document.getElementById('qrcode');
                 const qrHTML = qrDiv.innerHTML;
@@ -1621,15 +1748,12 @@
                 printWindow.document.close();
             });
 
-            // QR Code
             genererQRCode();
 
-            // Initialisation
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('dateRdv').min = today;
             document.getElementById('clientGarageName').textContent = getGarageFromURL();
 
-            // Service Worker
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('/ntr-garage/sw.js')
                     .then(() => console.log('✅ Service Worker enregistré'))
@@ -1637,7 +1761,7 @@
             }
 
             // ============================================================
-            // GESTIONNAIRE PDF - CORRIGÉ
+            // GESTIONNAIRE PDF
             // ============================================================
             document.getElementById('btnGenererPDF')?.addEventListener('click', function() {
                 if (pdfGenerationInProgress) {
@@ -1693,6 +1817,9 @@
                         afficherToast('❌ Erreur lors de la génération du PDF: ' + err.message, 'error');
                     });
             });
+
+            // Bouton télécharger média
+            document.getElementById('btnTelechargerMedia')?.addEventListener('click', telechargerMedia);
         });
 
         // ============================================================
@@ -1829,7 +1956,8 @@
                         const mediaDataEscaped = demande.media.replace(/'/g, "\\'");
                         mediaHTML = `
                                     <div class="media-preview-mini" onclick="afficherMediaModal('${mediaDataEscaped}', '${demande.mediaType}')">
-                                        ${mediaIcon} Voir le média joint
+                                        <span style="font-size:20px;">${mediaIcon}</span>
+                                        <span>Voir / Télécharger le média</span>
                                     </div>
                                 `;
                     }
@@ -1862,7 +1990,6 @@
                             `;
                 }).join('');
 
-                // Attacher les événements
                 document.querySelectorAll('.status-select').forEach(select => {
                     select.addEventListener('change', function() {
                         updateStatus(this.dataset.id, parseInt(this.value));
@@ -1883,7 +2010,6 @@
                 });
             }
 
-            // Marquer comme lues
             pageDemandes.forEach(d => {
                 if (!d.lu) {
                     firebase.firestore().collection('demandes').doc(d.id).update({ lu: true }).catch(e => {});
@@ -1896,7 +2022,7 @@
         }
 
         // ============================================================
-        // FICHE DE RÉCEPTION PROFESSIONNELLE (PDF) - SANS PHOTO
+        // FICHE DE RÉCEPTION PDF - POLICE GEORGIA + MENTION CONFIDENTIEL
         // ============================================================
         function genererPDF(demande) {
             if (pdfGenerationInProgress) {
@@ -1906,52 +2032,52 @@
 
             currentDemandeId = demande.numeroDemande || demande.id;
 
-            // Construire le HTML du PDF (SANS la section photo)
             let html = `
                         <div class="pdf-wrapper">
                             <div class="pdf-header">
-                                <h1>🚗 ASSIST-GARAGE</h1>
-                                <div class="sub">Fiche de Réception Véhicule</div>
+                                <h1>ASSIST-GARAGE</h1>
+                                <div class="sub">Fiche de Réception</div>
+                                <div class="confidential">Document confidentiel</div>
                             </div>
 
-                            <table class="pdf-table" style="margin-bottom: 10px;">
+                            <table class="pdf-table" style="margin-bottom: 12px;">
                                 <tr>
-                                    <td style="width: 50%; background: #f1f5f9; border-radius: 4px 0 0 4px;">
-                                        <div style="color: #64748b; font-size: 9px; text-transform: uppercase;">N° de dossier</div>
-                                        <strong style="font-size: 13px; color: #0f172a;">${demande.numeroDemande || demande.id}</strong>
+                                    <td style="width: 50%; background: #f1f5f9;">
+                                        <div style="color: #64748b; font-size: 10px; text-transform: uppercase; letter-spacing: 1px;">N° de demande</div>
+                                        <strong style="font-size: 14px; color: #0f172a;">${demande.numeroDemande || demande.id}</strong>
                                     </td>
-                                    <td style="width: 50%; background: #f1f5f9; border-radius: 0 4px 4px 0; text-align: right;">
-                                        <div style="color: #64748b; font-size: 9px; text-transform: uppercase;">Date de réception</div>
-                                        <span style="font-size: 12px; color: #0f172a;">${demande.date || new Date().toLocaleString('fr-FR')}</span>
+                                    <td style="width: 50%; background: #f1f5f9; text-align: right;">
+                                        <div style="color: #64748b; font-size: 10px; text-transform: uppercase; letter-spacing: 1px;">Date</div>
+                                        <span style="font-size: 13px; color: #0f172a;">${demande.date || new Date().toLocaleString('fr-FR')}</span>
                                     </td>
                                 </tr>
                             </table>
 
-                            <div class="pdf-section-title">Informations Véhicule</div>
-                            <table class="pdf-table" style="margin-bottom: 6px;">
+                            <div class="pdf-section-title">Véhicule</div>
+                            <table class="pdf-table" style="margin-bottom: 10px;">
                                 <tr>
                                     <td class="label">Immatriculation</td>
-                                    <td style="width: 30%;">${demande.immatriculation || 'N/A'}</td>
+                                    <td style="width: 30%;">${demande.immatriculation || '-'}</td>
                                     <td class="label">Kilométrage</td>
-                                    <td style="width: 30%;">${demande.kilometrage || 'N/A'} km</td>
+                                    <td style="width: 30%;">${demande.kilometrage || '-'} km</td>
                                 </tr>
                                 <tr>
                                     <td class="label">Marque</td>
-                                    <td>${demande.marque || 'N/A'}</td>
+                                    <td>${demande.marque || '-'}</td>
                                     <td class="label">Modèle</td>
-                                    <td>${demande.modele || 'N/A'}</td>
+                                    <td>${demande.modele || '-'}</td>
                                 </tr>
                             </table>
 
-                            <div class="pdf-section-title">Informations Client</div>
-                            <table class="pdf-table" style="margin-bottom: 6px;">
+                            <div class="pdf-section-title">Client</div>
+                            <table class="pdf-table" style="margin-bottom: 10px;">
                                 <tr>
-                                    <td class="label">Nom complet</td>
-                                    <td colspan="3">${demande.nom || 'N/A'}</td>
+                                    <td class="label">Nom</td>
+                                    <td colspan="3">${demande.nom || '-'}</td>
                                 </tr>
                                 <tr>
                                     <td class="label">Téléphone</td>
-                                    <td colspan="3">${demande.telephone || 'N/A'}</td>
+                                    <td colspan="3">${demande.telephone || '-'}</td>
                                 </tr>
                                 ${demande.email ? `
                                 <tr>
@@ -1960,57 +2086,55 @@
                                 </tr>` : ''}
                             </table>
 
-                            <div class="pdf-section-title">Description de la Panne</div>
-                            <div class="pdf-desc-box" style="margin-bottom: 4px;">
-                                ${demande.description || 'N/A'}
+                            <div class="pdf-section-title">Panne</div>
+                            <div class="pdf-desc-box" style="margin-bottom: 6px;">
+                                ${demande.description || '-'}
                             </div>
-                            <table class="pdf-table" style="margin-bottom: 6px;">
+                            <table class="pdf-table" style="margin-bottom: 10px;">
                                 <tr>
                                     <td style="width: 50%; background: #f8fafc;">
-                                        <strong>Niveau d'urgence :</strong>
+                                        <strong>Urgence :</strong>
                                         <span class="pdf-urgence-${demande.urgence || 'basse'}">
-                                            ${demande.urgence === 'haute' ? '🔴 URGENT' : demande.urgence === 'moyenne' ? '🟡 MOYEN' : '🟢 NORMAL'}
+                                            ${demande.urgence === 'haute' ? '🔴 Haute' : demande.urgence === 'moyenne' ? '🟡 Moyenne' : '🟢 Basse'}
                                         </span>
                                     </td>
                                     <td style="width: 50%; background: #f8fafc;">
-                                        <strong>Diagnostic :</strong> ${demande.diagnosticIA || 'À déterminer'}
+                                        <strong>Lieu :</strong> ${demande.lieu || '-'}
                                     </td>
                                 </tr>
                             </table>
 
-                            ${demande.garage || demande.dateRdv || demande.lieu ? `
+                            ${demande.garage || demande.dateRdv ? `
                             <div class="pdf-section-title">Informations Complémentaires</div>
-                            <table class="pdf-table" style="margin-bottom: 6px;">
+                            <table class="pdf-table" style="margin-bottom: 10px;">
                                 ${demande.garage ? `
                                 <tr>
-                                    <td class="label">Garage assigné</td>
+                                    <td class="label">Garage</td>
                                     <td colspan="3">${demande.garage}</td>
                                 </tr>` : ''}
                                 ${demande.dateRdv ? `
                                 <tr>
-                                    <td class="label">Rendez-vous</td>
+                                    <td class="label">RDV programmé</td>
                                     <td colspan="3">${demande.dateRdv} ${demande.heureRdv ? 'à ' + demande.heureRdv : ''}</td>
                                 </tr>` : ''}
-                                ${demande.lieu ? `
+                                ${demande.diagnosticIA ? `
                                 <tr>
-                                    <td class="label">Localisation</td>
-                                    <td colspan="3">${demande.lieu}</td>
+                                    <td class="label">Diagnostic IA</td>
+                                    <td colspan="3" style="font-style: italic; color: #475569;">${demande.diagnosticIA}</td>
                                 </tr>` : ''}
                             </table>` : ''}
 
                             <div class="pdf-footer">
-                                <strong>ASSIST-GARAGE PRO</strong> - Document généré automatiquement<br>
-                                Pour toute question, contactez votre garage
+                                <span class="brand">ASSIST-GARAGE PRO</span> — Document généré automatiquement<br>
+                                Ce document est confidentiel et destiné à l'usage interne du garage
                             </div>
                         </div>
                     `;
 
-            // Afficher dans le modal
             const pdfContent = document.getElementById('pdfContent');
             pdfContent.innerHTML = html;
             document.getElementById('pdfModal').style.display = 'flex';
 
-            // Réinitialiser le bouton de téléchargement
             const btnGenerer = document.getElementById('btnGenererPDF');
             btnGenerer.disabled = false;
             btnGenerer.textContent = '⬇️ Télécharger PDF';
@@ -2038,7 +2162,6 @@
             }
         }
 
-        // Événements dashboard
         document.getElementById('searchInput')?.addEventListener('input', () => {
             currentPage = 1;
             afficherDemandesFiltrees();
@@ -2074,6 +2197,14 @@
                 currentPage = 1;
                 afficherDemandesFiltrees();
             });
+        });
+
+        // Fermer le modal au clic extérieur
+        document.getElementById('mediaModal')?.addEventListener('click', function(e) {
+            if (e.target === this) fermerMediaModal();
+        });
+        document.getElementById('pdfModal')?.addEventListener('click', function(e) {
+            if (e.target === this) fermerPDFModal();
         });
 
         console.log('🚗 Assist-Garage PRO initialisé avec succès');
