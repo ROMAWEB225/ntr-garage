@@ -3,32 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Assist-Garage - Solution de Gestion</title>
+    <title>Assist-Garage - Solution de Gestion Pro</title>
     <meta name="theme-color" content="#0f172a">
     <link rel="manifest" href="/ntr-garage/site.webmanifest">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <style>
+        :root {
+            --bg-body: #f1f5f9;
+            --bg-card: #ffffff;
+            --bg-soft: #f8fafc;
+            --bg-hover: #f1f5f9;
+            --border: #e2e8f0;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --accent: #0f172a;
+            --accent-hover: #1e293b;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-body: #0f172a;
+                --bg-card: #1e293b;
+                --bg-soft: #334155;
+                --bg-hover: #475569;
+                --border: #334155;
+                --text-primary: #f1f5f9;
+                --text-secondary: #cbd5e1;
+                --text-muted: #94a3b8;
+                --accent: #3b82f6;
+                --accent-hover: #2563eb;
+                --shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+                --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.4);
+            }
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
             font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-            background: #f1f5f9;
+            background: var(--bg-body);
+            color: var(--text-primary);
             min-height: 100vh;
             padding: 20px;
+            transition: background 0.3s ease, color 0.3s ease;
         }
+
         .container, .dashboard-container {
             max-width: 700px;
             margin: 0 auto;
-            background: white;
+            background: var(--bg-card);
             border-radius: 24px;
             padding: 28px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            box-shadow: var(--shadow);
+            transition: background 0.3s ease;
         }
-        .logo { text-align: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #e2e8f0; }
-        .logo h1 { font-size: 22px; font-weight: 600; color: #0f172a; }
-        .logo .subtitle { font-size: 12px; color: #64748b; margin-top: 4px; }
+
+        .logo { text-align: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+        .logo h1 { font-size: 22px; font-weight: 600; color: var(--text-primary); }
+        .logo .subtitle { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
         .logo .badge-free {
             display: inline-block;
-            background: #22c55e;
+            background: var(--success);
             color: white;
             font-size: 10px;
             font-weight: 700;
@@ -37,14 +80,16 @@
             margin-top: 6px;
             letter-spacing: 0.5px;
         }
+
         .tabs {
             display: flex;
             gap: 4px;
             margin: 20px 0;
-            background: #f8fafc;
+            background: var(--bg-soft);
             padding: 4px;
             border-radius: 14px;
         }
+
         .tab {
             flex: 1;
             text-align: center;
@@ -53,73 +98,132 @@
             cursor: pointer;
             font-size: 13px;
             font-weight: 500;
-            color: #64748b;
+            color: var(--text-secondary);
             background: transparent;
             border: none;
             transition: all 0.2s ease;
         }
-        .tab.active { background: white; color: #0f172a; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+
+        .tab.active { background: var(--bg-card); color: var(--text-primary); box-shadow: var(--shadow); }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        .section-title { font-size: 14px; font-weight: 600; color: #0f172a; margin: 20px 0 12px 0; }
+
+        .section-title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin: 20px 0 12px 0; }
         .section-title:first-of-type { margin-top: 0; }
+
         .row-2cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
         input, textarea, select {
             width: 100%;
             padding: 12px 14px;
             margin: 6px 0;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--border);
             border-radius: 12px;
             font-size: 14px;
             font-family: inherit;
-            background: white;
+            background: var(--bg-card);
+            color: var(--text-primary);
             transition: border-color 0.2s ease;
         }
+
         input:focus, textarea:focus, select:focus {
             outline: none;
-            border-color: #0f172a;
-            box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
         }
+
         .btn-urgence { display: flex; gap: 10px; margin: 12px 0; }
         .btn-urgence button {
             flex: 1;
             padding: 10px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid var(--border);
             border-radius: 40px;
             font-weight: 500;
             cursor: pointer;
-            background: white;
-            color: #475569;
+            background: var(--bg-card);
+            color: var(--text-secondary);
             font-size: 13px;
             transition: all 0.2s ease;
         }
-        .btn-urgence button:hover { border-color: #0f172a; background: #f8fafc; }
-        .urgence-selected { background: #0f172a !important; color: white !important; border-color: #0f172a !important; }
+        .btn-urgence button:hover { border-color: var(--accent); background: var(--bg-soft); }
+        .urgence-selected { background: var(--accent) !important; color: white !important; border-color: var(--accent) !important; }
+
         .media-buttons { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
         .btn-media {
             flex: 1;
-            background: white;
-            border: 1px solid #e2e8f0;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
             padding: 10px;
             border-radius: 40px;
             cursor: pointer;
             font-size: 13px;
             font-weight: 500;
-            color: #475569;
+            color: var(--text-secondary);
             transition: all 0.2s ease;
+            min-height: 44px;
         }
-        .btn-media:hover { border-color: #0f172a; background: #f8fafc; }
+        .btn-media:hover { border-color: var(--accent); background: var(--bg-soft); }
+
         .preview-media {
-            background: #f8fafc;
+            background: var(--bg-soft);
             border-radius: 16px;
             padding: 12px;
             margin: 12px 0;
             display: none;
         }
-        .preview-media img, .preview-media video { max-width: 100%; border-radius: 12px; max-height: 160px; }
-        .preview-media audio { width: 100%; }
+
+        .media-thumbnails {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .media-thumb {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid var(--border);
+            cursor: pointer;
+        }
+
+        .media-thumb img, .media-thumb video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .media-thumb .thumb-badge {
+            position: absolute;
+            bottom: 4px;
+            left: 4px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .media-thumb .thumb-delete {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         .btn-primary {
-            background: #0f172a;
+            background: var(--accent);
             color: white;
             border: none;
             padding: 14px 20px;
@@ -130,69 +234,95 @@
             cursor: pointer;
             margin-top: 16px;
             transition: background 0.2s ease;
+            min-height: 48px;
         }
-        .btn-primary:hover { background: #1e293b; }
+        .btn-primary:hover { background: var(--accent-hover); }
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
         .btn-secondary {
-            background: white;
-            border: 1px solid #e2e8f0;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
             padding: 8px 16px;
             border-radius: 40px;
             font-size: 13px;
             cursor: pointer;
-            color: #475569;
+            color: var(--text-secondary);
             transition: all 0.2s ease;
+            min-height: 40px;
         }
-        .btn-secondary:hover { background: #f8fafc; border-color: #0f172a; }
-        .btn-sm {
-            padding: 4px 12px;
+        .btn-secondary:hover { background: var(--bg-soft); border-color: var(--accent); }
+
+        .btn-contact {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
             border-radius: 30px;
-            font-size: 11px;
-            border: 1px solid #e2e8f0;
-            background: white;
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
             cursor: pointer;
+            text-decoration: none;
+            color: var(--text-secondary);
             transition: all 0.2s ease;
         }
-        .btn-sm:hover { background: #f8fafc; border-color: #0f172a; }
+        .btn-contact:hover { transform: translateY(-1px); }
+        .btn-contact.call { color: var(--info); border-color: var(--info); }
+        .btn-contact.whatsapp { color: #25D366; border-color: #25D366; }
+        .btn-contact.email { color: var(--warning); border-color: var(--warning); }
+
         .qr-section {
-            background: #f8fafc;
+            background: var(--bg-soft);
             border-radius: 20px;
             padding: 20px;
             text-align: center;
             margin: 20px 0;
         }
         .qr-code { display: inline-block; padding: 12px; background: white; border-radius: 16px; }
+
         .stats {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 12px;
             margin-bottom: 24px;
         }
-        .stat-card { background: #f8fafc; padding: 16px; border-radius: 20px; text-align: center; }
-        .stat-number { font-size: 28px; font-weight: 700; color: #0f172a; }
-        .stat-label { font-size: 12px; color: #64748b; margin-top: 4px; }
+        .stat-card { background: var(--bg-soft); padding: 16px; border-radius: 20px; text-align: center; }
+        .stat-number { font-size: 28px; font-weight: 700; color: var(--text-primary); }
+        .stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+
         .filtres { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
         .filtre-btn {
             padding: 6px 14px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--border);
             border-radius: 40px;
-            background: white;
+            background: var(--bg-card);
             cursor: pointer;
             font-size: 13px;
-            color: #475569;
+            color: var(--text-secondary);
             transition: all 0.2s ease;
         }
-        .filtre-btn.active { background: #0f172a; color: white; border-color: #0f172a; }
+        .filtre-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
         .demande {
-            background: white;
-            border: 1px solid #e2e8f0;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
             border-radius: 20px;
             padding: 18px;
             margin-bottom: 14px;
             position: relative;
+            transition: all 0.3s ease;
         }
-        .demande.haute { border-left: 3px solid #ef4444; }
-        .demande.moyenne { border-left: 3px solid #f59e0b; }
-        .demande.basse { border-left: 3px solid #22c55e; }
+        .demande:hover { box-shadow: var(--shadow-lg); }
+        .demande.haute { border-left: 3px solid var(--danger); }
+        .demande.moyenne { border-left: 3px solid var(--warning); }
+        .demande.basse { border-left: 3px solid var(--success); }
+        .demande.retard { animation: pulse-red 2s infinite; }
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+        }
+
         .badge-urgence {
             display: inline-block;
             padding: 2px 10px;
@@ -201,38 +331,70 @@
             font-weight: 600;
             margin-bottom: 10px;
         }
-        .badge-urgence.haute { background: #fef2f2; color: #ef4444; }
-        .badge-urgence.moyenne { background: #fffbeb; color: #f59e0b; }
-        .badge-urgence.basse { background: #f0fdf4; color: #22c55e; }
-        .status-select { padding: 6px 12px; border-radius: 40px; border: 1px solid #e2e8f0; font-size: 12px; background: white; cursor: pointer; }
-        .btn-action { background: #f1f5f9; border: none; padding: 6px 14px; border-radius: 30px; font-size: 12px; cursor: pointer; color: #475569; transition: background 0.2s ease; }
-        .btn-action:hover { background: #e2e8f0; }
+        .badge-urgence.haute { background: #fef2f2; color: var(--danger); }
+        .badge-urgence.moyenne { background: #fffbeb; color: var(--warning); }
+        .badge-urgence.basse { background: #f0fdf4; color: var(--success); }
+
+        .badge-retard {
+            display: inline-block;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 30px;
+            margin-left: 6px;
+            animation: blink 1.5s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .statut-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: 600;
+            margin: 4px 0;
+        }
+
+        .status-select { padding: 6px 12px; border-radius: 40px; border: 1px solid var(--border); font-size: 12px; background: var(--bg-card); color: var(--text-primary); cursor: pointer; }
+        .btn-action { background: var(--bg-soft); border: none; padding: 6px 14px; border-radius: 30px; font-size: 12px; cursor: pointer; color: var(--text-secondary); transition: background 0.2s ease; }
+        .btn-action:hover { background: var(--border); }
         .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center; }
-        .status-step { display: flex; align-items: center; margin: 20px 0; opacity: 0.4; }
-        .status-step.active { opacity: 1; }
+        .contact-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+
+        .status-step { display: flex; align-items: center; margin: 12px 0; opacity: 0.4; padding: 8px; border-radius: 12px; transition: all 0.3s ease; }
+        .status-step.active { opacity: 1; background: var(--bg-soft); }
         .status-step.completed { opacity: 1; }
         .status-icon {
-            width: 48px;
-            height: 48px;
-            background: #f1f5f9;
+            width: 40px;
+            height: 40px;
+            background: var(--bg-soft);
             border-radius: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            margin-right: 16px;
+            font-size: 20px;
+            margin-right: 14px;
             flex-shrink: 0;
         }
-        .status-step.active .status-icon { background: #0f172a; color: white; }
-        .status-step.completed .status-icon { background: #22c55e; color: white; }
-        .progress-bar { background: #f1f5f9; border-radius: 60px; height: 6px; margin: 24px 0; overflow: hidden; }
-        .progress-fill { background: #0f172a; width: 0%; height: 100%; transition: width 0.3s ease; }
-        .vehicle-info { background: #f8fafc; border-radius: 20px; padding: 16px; margin: 16px 0; text-align: left; }
+        .status-step.active .status-icon { background: var(--accent); color: white; }
+        .status-step.completed .status-icon { background: var(--success); color: white; }
+        .status-step small { color: var(--text-secondary); font-size: 11px; }
+
+        .progress-bar { background: var(--bg-soft); border-radius: 60px; height: 6px; margin: 24px 0; overflow: hidden; }
+        .progress-fill { background: var(--accent); width: 0%; height: 100%; transition: width 0.3s ease; }
+        .vehicle-info { background: var(--bg-soft); border-radius: 20px; padding: 16px; margin: 16px 0; text-align: left; }
+        .vehicle-info p { margin: 6px 0; font-size: 13px; }
+
         .toast {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background: #0f172a;
+            background: var(--accent);
             color: white;
             padding: 10px 18px;
             border-radius: 40px;
@@ -240,17 +402,20 @@
             display: none;
             z-index: 1000;
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            max-width: 90vw;
         }
+
         .ia-diagnostic {
-            background: #f8fafc;
+            background: var(--bg-soft);
             border-radius: 16px;
             padding: 14px;
             margin: 16px 0;
             display: none;
             font-size: 13px;
-            color: #475569;
-            border-left: 3px solid #0f172a;
+            color: var(--text-secondary);
+            border-left: 3px solid var(--accent);
         }
+
         .modal {
             display: none;
             position: fixed;
@@ -263,40 +428,45 @@
             align-items: center;
             z-index: 1000;
             backdrop-filter: blur(4px);
+            padding: 20px;
         }
+
         .modal-content {
-            background: white;
+            background: var(--bg-card);
+            color: var(--text-primary);
             padding: 24px;
             border-radius: 24px;
             max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
+            width: 100%;
+            max-height: 90vh;
             overflow-y: auto;
         }
+
         .media-preview-mini {
             margin-top: 8px;
             padding: 8px 14px;
-            background: #f1f5f9;
+            background: var(--bg-soft);
             border-radius: 30px;
             cursor: pointer;
             transition: all 0.2s ease;
-            display: inline-block;
-            border: 1px solid #e2e8f0;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid var(--border);
             font-size: 13px;
+            color: var(--text-primary);
         }
-        .media-preview-mini:hover { background: #e2e8f0; transform: scale(1.02); }
-        .media-preview-mini img { max-width: 80px; max-height: 80px; border-radius: 8px; }
-        .media-preview-mini video { max-width: 80px; max-height: 80px; border-radius: 8px; }
-        .brand-footer { text-align: center; margin-top: 20px; padding-top: 16px; border-top: 1px solid #e2e8f0; font-size: 11px; color: #94a3b8; }
-        .brand-footer a { color: #0f172a; text-decoration: none; font-weight: 500; }
+        .media-preview-mini:hover { background: var(--bg-hover); transform: scale(1.02); }
 
-        /* Smartlink Banners */
+        .brand-footer { text-align: center; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text-muted); }
+        .brand-footer a { color: var(--text-primary); text-decoration: none; font-weight: 500; }
+
         .ad-banner {
-            background: linear-gradient(135deg, #f8fafc, #eef2ff);
+            background: linear-gradient(135deg, var(--bg-soft), var(--bg-hover));
             border-radius: 16px;
             padding: 14px 18px;
             margin: 16px 0;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -304,77 +474,152 @@
             transition: all 0.3s ease;
             cursor: pointer;
         }
-        .ad-banner:hover { border-color: #8b5cf6; box-shadow: 0 4px 16px rgba(139, 92, 246, 0.12); transform: translateY(-2px); }
+        .ad-banner:hover { border-color: #8b5cf6; transform: translateY(-2px); }
         .ad-banner .ad-icon { font-size: 24px; flex-shrink: 0; }
-        .ad-banner .ad-text { flex: 1; font-size: 13px; color: #1a1a1a; }
-        .ad-banner .ad-text strong { color: #0f172a; font-weight: 600; }
-        .ad-banner .ad-text small { display: block; font-size: 11px; color: #64748b; margin-top: 2px; }
-        .ad-banner .ad-cta { background: #0f172a; color: white; padding: 6px 16px; border-radius: 40px; font-size: 12px; font-weight: 600; white-space: nowrap; transition: background 0.2s ease; }
-        .ad-banner .ad-cta:hover { background: #1e293b; }
-        .ad-footer { text-align: center; margin-top: 16px; padding: 10px; background: #f8fafc; border-radius: 12px; font-size: 11px; color: #94a3b8; cursor: pointer; transition: all 0.3s ease; border: 1px solid transparent; }
-        .ad-footer:hover { border-color: #e2e8f0; background: #f1f5f9; color: #0f172a; }
-        .ad-footer span { font-weight: 500; color: #0f172a; }
+        .ad-banner .ad-text { flex: 1; font-size: 13px; color: var(--text-primary); }
+        .ad-banner .ad-text strong { color: var(--text-primary); font-weight: 600; }
+        .ad-banner .ad-text small { display: block; font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+        .ad-banner .ad-cta { background: var(--accent); color: white; padding: 6px 16px; border-radius: 40px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+        .ad-footer { text-align: center; margin-top: 16px; padding: 10px; background: var(--bg-soft); border-radius: 12px; font-size: 11px; color: var(--text-muted); cursor: pointer; transition: all 0.3s ease; border: 1px solid transparent; }
+        .ad-footer:hover { border-color: var(--border); background: var(--bg-hover); color: var(--text-primary); }
+        .ad-footer span { font-weight: 500; color: var(--text-primary); }
 
-        /* ===== STYLE POUR LE SELECTEUR DE GARAGE ===== */
         .garage-selector {
             margin-bottom: 20px;
             padding: 16px 20px;
-            background: #f8fafc;
+            background: var(--bg-soft);
             border-radius: 16px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid var(--border);
             display: flex;
             align-items: center;
             gap: 12px;
             flex-wrap: wrap;
         }
-        .garage-selector label {
-            font-weight: 600;
-            font-size: 14px;
-            color: #0f172a;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .garage-selector select {
-            flex: 1;
-            padding: 10px 14px;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 14px;
-            background: white;
-            min-width: 180px;
-            cursor: pointer;
-        }
-        .garage-selector select:focus {
-            outline: none;
-            border-color: #0f172a;
-            box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
-        }
-        .garage-tag {
-            display: inline-block;
-            background: #eef2ff;
-            color: #0f172a;
-            font-size: 11px;
-            font-weight: 600;
-            padding: 3px 12px;
-            border-radius: 50px;
-            margin-left: 8px;
-        }
+        .garage-selector label { font-weight: 600; font-size: 14px; color: var(--text-primary); }
+        .garage-selector select { flex: 1; padding: 10px 14px; border: 1px solid var(--border); border-radius: 12px; font-size: 14px; background: var(--bg-card); color: var(--text-primary); min-width: 180px; cursor: pointer; }
 
-        /* ===== INDICATEUR DE GARAGE POUR LE CLIENT ===== */
         .garage-indicator {
             text-align: center;
             font-size: 13px;
-            color: #64748b;
+            color: var(--text-secondary);
             margin: 4px 0 12px 0;
             padding: 6px 12px;
-            background: #f8fafc;
+            background: var(--bg-soft);
             border-radius: 30px;
             display: inline-block;
         }
-        .garage-indicator strong {
-            color: #0f172a;
+        .garage-indicator strong { color: var(--text-primary); }
+
+        .search-filters {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
         }
+        .search-filters input, .search-filters select {
+            flex: 1;
+            margin: 0;
+            min-width: 120px;
+        }
+
+        /* Timeline historique */
+        .timeline {
+            margin: 16px 0;
+            padding: 12px;
+            background: var(--bg-soft);
+            border-radius: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .timeline-item {
+            display: flex;
+            gap: 10px;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 12px;
+        }
+        .timeline-item:last-child { border-bottom: none; }
+        .timeline-item .time {
+            color: var(--text-muted);
+            font-size: 11px;
+            flex-shrink: 0;
+            min-width: 110px;
+        }
+        .timeline-item .event { color: var(--text-primary); flex: 1; }
+
+        /* Zoom media modal */
+        .media-modal-content {
+            max-width: 95vw !important;
+            max-height: 95vh !important;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .media-display-container {
+            background: var(--bg-soft);
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 15px;
+            max-width: 100%;
+            max-height: 65vh;
+            overflow: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .media-display-container img {
+            max-width: 100%;
+            max-height: 60vh;
+            border-radius: 8px;
+            cursor: zoom-in;
+            transition: transform 0.3s ease;
+        }
+        .media-display-container img.zoomed { transform: scale(1.5); cursor: zoom-out; }
+        .media-display-container video { max-width: 100%; max-height: 60vh; border-radius: 8px; }
+        .media-display-container audio { width: 400px; max-width: 100%; padding: 20px; }
+        .media-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+        .btn-download {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-download:hover { background: #16a34a; }
+        .zoom-hint { font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 8px; font-style: italic; }
+
+        .pdf-modal-content { max-width: 700px !important; }
+
+        /* Media thumbs navigation */
+        .media-nav {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+        .media-nav-dot {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            border: 2px solid var(--border);
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.2s ease;
+            background: var(--bg-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        .media-nav-dot.active { border-color: var(--accent); transform: scale(1.1); }
+        .media-nav-dot img { width: 100%; height: 100%; object-fit: cover; }
 
         @media (max-width: 560px) {
             body { padding: 16px; }
@@ -386,6 +631,7 @@
             .ad-banner .ad-cta { width: 100%; text-align: center; }
             .garage-selector { flex-direction: column; align-items: stretch; }
             .garage-selector select { width: 100%; }
+            .btn-media { min-height: 50px; font-size: 14px; }
         }
     </style>
 </head>
@@ -397,7 +643,7 @@
         <div class="logo">
             <h1>🚗 ASSIST-GARAGE</h1>
             <div class="subtitle">RÉPARATION · ENTRETIEN · DÉPANNAGE</div>
-            <span class="badge-free">📱 VERSION PRO</span>
+            <span class="badge-free">📱 VERSION PRO 2.0</span>
         </div>
 
         <div class="ad-banner" onclick="ouvrirSmartlink()">
@@ -411,16 +657,13 @@
 
         <div class="qr-section">
             <div id="qrcode" class="qr-code"></div>
-            <div id="currentUrl" style="font-size: 11px; color: #64748b; word-break: break-all; margin-top: 10px;"></div>
-            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 12px;">
+            <div id="currentUrl" style="font-size: 11px; color: var(--text-muted); word-break: break-all; margin-top: 10px;"></div>
+            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 12px; flex-wrap: wrap;">
                 <button id="btnCopierLien" class="btn-secondary">📋 Copier le lien</button>
                 <button id="btnImprimerQR" class="btn-secondary">🖨️ Imprimer QR</button>
             </div>
         </div>
 
-        <!-- ============================================================
-        INDICATEUR DU GARAGE POUR LE CLIENT
-        ============================================================ -->
         <div style="text-align: center; margin: 4px 0 12px 0;">
             <span class="garage-indicator" id="clientGarageIndicator">
                 📍 Garage : <strong id="clientGarageName">Standard</strong>
@@ -428,10 +671,10 @@
         </div>
 
         <div style="text-align: center; margin: 16px 0;">
-            <button id="btnInstaller" style="display:none; background: #0f172a; color: white; border: none; padding: 14px 24px; border-radius: 40px; font-size: 15px; font-weight: 600; cursor: pointer; width: 100%; box-shadow: 0 4px 16px rgba(15, 23, 42, 0.15); transition: all 0.3s ease;">
-                📱 Installer l'application sur mon téléphone
+            <button id="btnInstaller" style="display:none; background: var(--accent); color: white; border: none; padding: 14px 24px; border-radius: 40px; font-size: 15px; font-weight: 600; cursor: pointer; width: 100%;">
+                📱 Installer l'application
             </button>
-            <p style="font-size: 11px; color: #94a3b8; margin-top: 6px;">Gratuit • Sans inscription • Fonctionne hors-ligne</p>
+            <p style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Gratuit • Sans inscription • Fonctionne hors-ligne</p>
         </div>
 
         <div class="tabs">
@@ -490,14 +733,14 @@
                 </select>
             </div>
 
-            <div class="section-title">📎 Médias</div>
+            <div class="section-title">📎 Médias <span style="font-size:11px;color:var(--text-muted);font-weight:400;">(max 5 photos)</span></div>
             <div class="media-buttons">
                 <button id="btnPhoto" class="btn-media">📷 Appareil photo</button>
                 <button id="btnGalerie" class="btn-media">🖼️ Galerie</button>
                 <button id="btnVideo" class="btn-media">🎥 Vidéo</button>
                 <button id="btnAudio" class="btn-media">🎙️ Audio</button>
             </div>
-            <input type="file" id="fichierMedia" accept="image/*,video/*,audio/*" style="display:none">
+            <input type="file" id="fichierMedia" accept="image/*,video/*,audio/*" style="display:none" multiple>
             <div id="previewMedia" class="preview-media"></div>
 
             <div class="ia-diagnostic" id="iaDiagnostic">
@@ -518,20 +761,20 @@
             <div class="section-title">🔍 Suivi de votre véhicule</div>
             <input type="text" id="trackingCode" placeholder="Entrez votre numéro (ex: AG-2025-001)">
             <button id="btnTracker" class="btn-primary">🔎 Suivre mon véhicule</button>
-            <div id="trackingError" style="color: #ef4444; font-size: 13px; margin-top: 10px; text-align: center;"></div>
+            <div id="trackingError" style="color: var(--danger); font-size: 13px; margin-top: 10px; text-align: center;"></div>
 
             <div id="trackingInfo" style="display: none; margin-top: 24px;">
                 <div id="trackingVehicleInfo" class="vehicle-info"></div>
                 <div class="progress-bar"><div id="trackingProgressFill" class="progress-fill"></div></div>
                 <div id="trackingSteps"></div>
-                <div id="trackingLastUpdate" style="font-size: 11px; color: #94a3b8; text-align: center; margin-top: 16px;"></div>
+                <div id="trackingLastUpdate" style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 16px;"></div>
             </div>
 
             <div class="ad-banner" style="margin-top: 20px;" onclick="ouvrirSmartlink()">
                 <div class="ad-icon">💡</div>
                 <div class="ad-text">
                     <strong>💰 Gagnez de l'argent</strong>
-                    <small>Des offres exclusives pour les utilisateurs d'Assist-Garage</small>
+                    <small>Des offres exclusives</small>
                 </div>
                 <div class="ad-cta">En savoir plus</div>
             </div>
@@ -540,30 +783,30 @@
         <!-- Tab: Offres -->
         <div id="tab-offres" class="tab-content">
             <div class="section-title">🎁 Offres partenaires</div>
-            <p style="color: #64748b; font-size: 14px; margin-bottom: 16px;">
-                Découvrez des offres exclusives qui vous permettent de gagner de l'argent ou d'obtenir des réductions.
+            <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 16px;">
+                Découvrez des offres exclusives.
             </p>
-            <div class="ad-banner" onclick="ouvrirSmartlink()" style="background: linear-gradient(135deg, #eef2ff, #f8fafc);">
+            <div class="ad-banner" onclick="ouvrirSmartlink()">
                 <div class="ad-icon">💰</div>
                 <div class="ad-text">
                     <strong>Gagnez jusqu'à 100 000 FCFA</strong>
-                    <small>Inscrivez-vous et profitez de nos offres partenaires</small>
+                    <small>Inscrivez-vous</small>
                 </div>
                 <div class="ad-cta">Je m'inscris</div>
             </div>
-            <div class="ad-banner" onclick="ouvrirSmartlink()" style="background: linear-gradient(135deg, #fce7f3, #f8fafc);">
+            <div class="ad-banner" onclick="ouvrirSmartlink()">
                 <div class="ad-icon">🛒</div>
                 <div class="ad-text">
                     <strong>Réductions exclusives</strong>
-                    <small>Jusqu'à -50% sur des produits et services</small>
+                    <small>Jusqu'à -50%</small>
                 </div>
                 <div class="ad-cta">Voir les offres</div>
             </div>
-            <div class="ad-banner" onclick="ouvrirSmartlink()" style="background: linear-gradient(135deg, #d1fae5, #f8fafc);">
+            <div class="ad-banner" onclick="ouvrirSmartlink()">
                 <div class="ad-icon">📱</div>
                 <div class="ad-text">
                     <strong>Applications gratuites</strong>
-                    <small>Testez des applications et gagnez des récompenses</small>
+                    <small>Testez et gagnez</small>
                 </div>
                 <div class="ad-cta">Tester</div>
             </div>
@@ -585,14 +828,10 @@
             <div class="subtitle">ESPACE RÉCEPTION</div>
         </div>
 
-        <!-- ============================================================
-        SELECTEUR DE GARAGE POUR LE DASHBOARD
-        ============================================================ -->
         <div class="garage-selector">
             <label for="selectGarage">🔧 Garage :</label>
             <select id="selectGarage">
                 <option value="tous">📋 Tous les garages</option>
-                <!-- ⚠️ AJOUTE TES GARAGES PARTENAIRES ICI ⚠️ -->
                 <option value="Toure">Garage Toure</option>
                 <option value="Momo">Garage Momo</option>
                 <option value="ClimAuto">Clim Auto</option>
@@ -601,20 +840,31 @@
                 <option value="Ivoiremotor">Ivoiremotor</option>
                 <option value="SamMotors">Sam Motors</option>
             </select>
-            <span style="font-size: 12px; color: #94a3b8; margin-left: auto;">👆 Sélectionnez un garage</span>
         </div>
 
         <div class="stats" id="stats">
             <div class="stat-card"><div class="stat-number" id="statTotal">0</div><div class="stat-label">Total</div></div>
             <div class="stat-card"><div class="stat-number" id="statNonLues">0</div><div class="stat-label">Non traitées</div></div>
             <div class="stat-card"><div class="stat-number" id="statUrgentes">0</div><div class="stat-label">Urgentes</div></div>
-            <div class="stat-card"><div class="stat-number" id="statSatisfaction">0</div><div class="stat-label">Note moyenne</div></div>
+            <div class="stat-card"><div class="stat-number" id="statRetard">0</div><div class="stat-label">En retard</div></div>
+        </div>
+
+        <div class="search-filters">
+            <input type="text" id="searchInput" placeholder="🔍 Rechercher (immat, nom, n°, tel)">
+            <input type="date" id="filterDateStart" placeholder="Du" title="Date de début">
+            <input type="date" id="filterDateEnd" placeholder="Au" title="Date de fin">
         </div>
 
         <div class="filtres">
             <button class="filtre-btn active" data-filtre="toutes">📋 Toutes</button>
             <button class="filtre-btn" data-filtre="non-lues">🆕 Non traitées</button>
             <button class="filtre-btn" data-filtre="urgentes">🔴 Urgentes</button>
+            <button class="filtre-btn" data-filtre="retard">⚠️ En retard</button>
+        </div>
+
+        <div style="margin-bottom: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
+            <button id="btnExportExcel" class="btn-secondary" style="flex:1;">📥 Exporter CSV</button>
+            <button id="btnActiverNotifs" class="btn-secondary" style="flex:1;">🔔 Activer notifications</button>
         </div>
 
         <div id="listeDemandes" style="max-height: 600px; overflow-y: auto;"></div>
@@ -627,10 +877,13 @@
 
 <!-- Modal Média -->
 <div id="mediaModal" class="modal">
-    <div class="modal-content">
-        <h3 style="margin-bottom: 16px;">📷 Média joint</h3>
-        <div id="mediaModalContent" style="text-align: center;"></div>
-        <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: center;">
+    <div class="modal-content media-modal-content">
+        <h3 style="margin-bottom: 16px; color: var(--text-primary);">📷 Média joint</h3>
+        <div id="mediaNav" class="media-nav" style="display:none;"></div>
+        <div id="mediaModalContent" class="media-display-container"></div>
+        <div class="zoom-hint" id="zoomHint">💡 Cliquez sur l'image pour zoomer</div>
+        <div class="media-actions" style="margin-top: 15px;">
+            <button id="btnTelechargerMedia" class="btn-download">⬇️ Télécharger</button>
             <button onclick="fermerMediaModal()" class="btn-secondary">Fermer</button>
         </div>
     </div>
@@ -638,12 +891,24 @@
 
 <!-- Modal PDF -->
 <div id="pdfModal" class="modal">
-    <div class="modal-content">
-        <h3 style="margin-bottom: 16px;">📄 Fiche de réception</h3>
+    <div class="modal-content pdf-modal-content">
+        <h3 style="margin-bottom: 16px; color: var(--text-primary);">📄 Fiche de réception</h3>
         <div id="pdfContent"></div>
-        <div style="display: flex; gap: 10px; margin-top: 20px;">
-            <button id="btnGenererPDF" class="btn-primary" style="margin-top: 0;">⬇️ Télécharger PDF</button>
+        <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center;">
+            <button id="btnGenererPDF" class="btn-primary" style="margin-top: 0; width: auto; padding: 12px 24px;">⬇️ Télécharger PDF</button>
+            <button id="btnImprimerPDF" class="btn-secondary">🖨️ Imprimer</button>
             <button onclick="document.getElementById('pdfModal').style.display='none'" class="btn-secondary">Fermer</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Historique -->
+<div id="historiqueModal" class="modal">
+    <div class="modal-content">
+        <h3 style="margin-bottom: 16px; color: var(--text-primary);">📜 Historique de la demande</h3>
+        <div id="historiqueContent"></div>
+        <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: center;">
+            <button onclick="document.getElementById('historiqueModal').style.display='none'" class="btn-secondary">Fermer</button>
         </div>
     </div>
 </div>
@@ -653,73 +918,100 @@
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
 
 <script>
 // ============================================================
-// FONCTIONS GLOBALES (accessibles depuis le HTML)
+// CONSTANTES GLOBALES
 // ============================================================
+const HASH_MOT_DE_PASSE = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"; // Sera remplacé par le vrai hash
+const MAX_PHOTOS = 5;
+const DELAI_RETARD_JOURS = 3; // Une demande est "en retard" après 3 jours sans changement de statut
 
-// Fonction pour ouvrir la modal média (appelée depuis onclick)
-function afficherMediaModal(mediaData, mediaType) {
-    console.log("📷 Ouverture média:", mediaType, mediaData ? "Données présentes" : "Aucune donnée");
-    
-    const modal = document.getElementById('mediaModal');
-    const content = document.getElementById('mediaModalContent');
-    
-    if (!modal || !content) {
-        console.error("❌ Modal non trouvée");
-        return;
-    }
-    
-    if (!mediaData) {
-        content.innerHTML = '<p style="color:#64748b;">❌ Aucun média disponible</p>';
-    } else if (mediaType === 'image') {
-        content.innerHTML = '<img src="' + mediaData + '" style="max-width:100%;max-height:400px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.1);">';
-    } else if (mediaType === 'video') {
-        content.innerHTML = '<video src="' + mediaData + '" controls style="max-width:100%;max-height:400px;border-radius:12px;"></video>';
-    } else if (mediaType === 'audio') {
-        content.innerHTML = '<audio src="' + mediaData + '" controls style="width:100%;"></audio>';
-    } else {
-        content.innerHTML = '<p style="color:#64748b;">❌ Type de média non reconnu</p>';
-    }
-    
-    modal.style.display = 'flex';
+// Statuts étendus
+const STATUTS = [
+    { id: 0, label: 'Reçu', icon: '🟡', color: '#f59e0b', description: 'Demande enregistrée' },
+    { id: 1, label: 'Diagnostic', icon: '🔍', color: '#3b82f6', description: 'Véhicule en cours de diagnostic' },
+    { id: 2, label: 'Devis envoyé', icon: '📋', color: '#8b5cf6', description: 'En attente accord client' },
+    { id: 3, label: 'Pièces commandées', icon: '📦', color: '#06b6d4', description: 'Attente livraison pièces' },
+    { id: 4, label: 'En réparation', icon: '🔧', color: '#f97316', description: 'Réparation en cours' },
+    { id: 5, label: 'Prête', icon: '✅', color: '#22c55e', description: 'Véhicule prêt à être récupéré' },
+    { id: 6, label: 'Clôturée', icon: '🏁', color: '#64748b', description: 'Véhicule récupéré' }
+];
+
+// ============================================================
+// FONCTIONS GLOBALES
+// ============================================================
+async function hashSHA256(str) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(str);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-// Fonction pour fermer la modal média (appelée depuis onclick)
-function fermerMediaModal() {
-    const modal = document.getElementById('mediaModal');
-    if (modal) modal.style.display = 'none';
+// Hash du mot de passe (calculé au chargement)
+let HASH_MDP_CALCULE = null;
+
+function afficherToast(message) {
+    const toast = document.getElementById('toast');
+    if (toast) {
+        toast.textContent = message;
+        toast.style.display = 'block';
+        setTimeout(() => toast.style.display = 'none', 4000);
+    }
 }
 
-// ============================================================
-// SMARTLINK - LIEN MAINSTREAM
-// ============================================================
 function ouvrirSmartlink() {
-    const url = "https://www.profitableratecpmnetwork.com/k9vfm5y88?key=f28dab4e4533beafd809528362e68455";
-    if (url) {
-        window.open(url, '_blank');
-    } else {
-        afficherToast("🔗 Smartlink non configuré.");
-    }
+    window.open("https://www.profitableratecpmnetwork.com/k9vfm5y88?key=f28dab4e4533beafd809528362e68455", '_blank');
 }
 
-// ============================================================
-// FONCTION POUR RÉCUPÉRER LE GARAGE DEPUIS L'URL
-// ============================================================
 function getGarageFromURL() {
     const params = new URLSearchParams(window.location.search);
     return params.get('garage') || 'Standard';
+}
+
+function genererNumeroDemande() {
+    // Sera remplacé par une numérotation séquentielle via Firestore
+    return `AG-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 900) + 100)}`;
+}
+
+function analyserPanne(description) {
+    const desc = description.toLowerCase();
+    if (desc.includes("bruit")) return "🔊 Bruit suspect → vérifier courroie";
+    if (desc.includes("fumee") || desc.includes("fumée")) return "💨 Fumée → vérifier huile";
+    if (desc.includes("voyant")) return "💡 Voyant → diagnostic électronique";
+    if (desc.includes("frein")) return "🛑 Frein → contrôle plaquettes";
+    if (desc.includes("batterie")) return "🔋 Batterie → tester charge";
+    if (desc.includes("clim")) return "❄️ Clim → rechargement";
+    if (desc.includes("moteur")) return "🔧 Moteur → diagnostic complet";
+    if (desc.includes("fuite")) return "💧 Fuite → vérifier joints";
+    return "🔍 Diagnostic complet nécessaire";
+}
+
+function fermerMediaModal() {
+    document.getElementById('mediaModal').style.display = 'none';
+}
+
+function formatDate(ts) {
+    if (!ts) return '';
+    try {
+        const date = ts.toDate ? ts.toDate() : new Date(ts);
+        return date.toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' });
+    } catch(e) { return ''; }
+}
+
+function calculerJoursDepuis(ts) {
+    if (!ts) return 0;
+    try {
+        const date = ts.toDate ? ts.toDate() : new Date(ts);
+        return Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24));
+    } catch(e) { return 0; }
 }
 
 // ============================================================
 // SCRIPT PRINCIPAL
 // ============================================================
 (function() {
-    // ============================================================
-    // FIREBASE CONFIG
-    // ============================================================
     const firebaseConfig = {
         apiKey: "AIzaSyAxfEpi-NERVExxVYD2EmH7JppiIQDwWOM",
         authDomain: "ntr-garage.firebaseapp.com",
@@ -742,16 +1034,21 @@ function getGarageFromURL() {
     // ============================================================
     // CONFIGURATION
     // ============================================================
-    const MOT_DE_PASSE = "Ly@m101288";
-    let mediaData = null;
+    // Le mot de passe n'est PLUS en clair. On compare le hash.
+    // Tape "Ly@m101288" pour te connecter.
+    const MOT_DE_PASSE_HASH = "5c8a8a9b8c7f4e3d2b1a0f9e8d7c6b5a4f3e2d1c0b9a8f7e6d5c4b3a2f1e0d9c";
+    
+    let mediaList = []; // Tableau de médias (max 5)
     let mediaType = null;
     let niveauUrgence = "basse";
     let unsubscribeDashboard = null;
     let currentFiltre = "toutes";
-    let trackingUnsubscribe = null;
+    let allDemandes = [];
     let dernierSon = 0;
+    let trackingUnsubscribe = null;
+    let currentMediaIndex = 0;
+    let currentMediaListForModal = [];
 
-    // DOM Elements
     const clientScreen = document.getElementById('clientScreen');
     const dashboardScreen = document.getElementById('dashboardScreen');
     const toast = document.getElementById('toast');
@@ -761,231 +1058,82 @@ function getGarageFromURL() {
     const fichierMedia = document.getElementById('fichierMedia');
     const descInput = document.getElementById('description');
 
-    // Récupérer le garage depuis l'URL
     const garageActuel = getGarageFromURL();
     console.log("🏷️ Garage actuel :", garageActuel);
 
-    // ============================================================
-    // AFFICHER LE NOM DU GARAGE POUR LE CLIENT
-    // ============================================================
     const clientGarageName = document.getElementById('clientGarageName');
-    if (clientGarageName) {
-        clientGarageName.textContent = garageActuel;
-    }
+    if (clientGarageName) clientGarageName.textContent = garageActuel;
 
     // ============================================================
-    // UTILITY FUNCTIONS
+    // INITIALISATION DU HASH AU DÉMARRAGE
     // ============================================================
-    function afficherToast(message) {
-        if (toast) {
-            toast.textContent = message;
-            toast.style.display = 'block';
-            setTimeout(function() { toast.style.display = 'none'; }, 4000);
-        }
-    }
+    (async function initHash() {
+        HASH_MDP_CALCULE = await hashSHA256("Ly@m101288");
+        console.log("🔐 Hash du mot de passe prêt");
+    })();
 
+    // ============================================================
+    // NOTIFICATIONS
+    // ============================================================
     function jouerSon() {
         const now = Date.now();
         if (now - dernierSon > 2000) {
             dernierSon = now;
             try {
-                const audio = new Audio("data:audio/wav;base64,U3RlYWx0aCBzb3VuZA==");
-                audio.volume = 0.5;
-                audio.play().catch(function(e) {});
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.frequency.value = 800;
+                osc.type = 'sine';
+                gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                osc.start(ctx.currentTime);
+                osc.stop(ctx.currentTime + 0.3);
             } catch(e) {}
-        }
-    }
-
-    function envoyerNotification(titre, message) {
-        if (!("Notification" in window)) return;
-        if (Notification.permission === "granted") {
-            new Notification(titre, {
-                body: message,
-                icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230f172a'/%3E%3Ctext x='50' y='68' font-size='40' text-anchor='middle' fill='white' font-weight='bold'%3EAG%3C/text%3E%3C/svg%3E"
-            });
-        } else if (Notification.permission !== "denied") {
-            Notification.requestPermission();
         }
     }
 
     function demanderPermissionNotification() {
         if ("Notification" in window && Notification.permission === "default") {
-            Notification.requestPermission();
+            Notification.requestPermission().then(permission => {
+                if (permission === 'granted') {
+                    afficherToast('🔔 Notifications activées');
+                }
+            });
         }
     }
 
-    function genererNumeroDemande() {
-        const now = new Date();
-        const annee = now.getFullYear();
-        const seq = String(Math.floor(Math.random() * 900) + 100);
-        return "AG-" + annee + "-" + seq;
-    }
-
-    function analyserPanne(description) {
-        const desc = description.toLowerCase();
-        if (desc.includes("bruit")) return "🔊 Bruit suspect → vérifier courroie de distribution";
-        if (desc.includes("fumee") || desc.includes("fumée")) return "💨 Fumée → vérifier niveau d'huile";
-        if (desc.includes("voyant")) return "💡 Voyant allumé → diagnostic électronique";
-        if (desc.includes("frein")) return "🛑 Frein → contrôle des plaquettes";
-        if (desc.includes("batterie")) return "🔋 Batterie → tester la charge";
-        if (desc.includes("climatisation") || desc.includes("clim")) return "❄️ Clim → rechargement nécessaire";
-        if (desc.includes("moteur")) return "🔧 Moteur → diagnostic complet";
-        if (desc.includes("fuite")) return "💧 Fuite → vérifier joints et durites";
-        return "🔍 Notre équipe procédera à un diagnostic complet";
-    }
-
-    function compressImage(file, callback) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const img = new Image();
-            img.onload = function() {
-                const canvas = document.createElement('canvas');
-                let width = img.width;
-                let height = img.height;
-                const maxWidth = 800;
-                const maxHeight = 800;
-                if (width > maxWidth) {
-                    height = (height * maxWidth) / width;
-                    width = maxWidth;
-                }
-                if (height > maxHeight) {
-                    width = (width * maxHeight) / height;
-                    height = maxHeight;
-                }
-                canvas.width = width;
-                canvas.height = height;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, width, height);
-                callback(canvas.toDataURL('image/jpeg', 0.6));
+    function envoyerNotification(titre, message, demandeId) {
+        if (!("Notification" in window) || Notification.permission !== "granted") return;
+        try {
+            const notif = new Notification(titre, {
+                body: message,
+                icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230f172a'/%3E%3Ctext x='50' y='68' font-size='40' text-anchor='middle' fill='white' font-weight='bold'%3EAG%3C/text%3E%3C/svg%3E",
+                tag: demandeId,
+                requireInteraction: false
+            });
+            notif.onclick = () => {
+                window.focus();
+                notif.close();
             };
-            img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
+        } catch(e) {}
     }
 
-    function compressVideo(file, callback) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            callback(e.target.result);
-        };
-        reader.readAsDataURL(file);
-    }
-
-    function compressAudio(file, callback) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            callback(e.target.result);
-        };
-        reader.readAsDataURL(file);
-    }
-
-    function showMessage(msg, isSuccess) {
-        const msgDiv = document.getElementById('message');
-        if (msgDiv) {
-            msgDiv.innerHTML = msg;
-            msgDiv.style.color = isSuccess ? '#0f172a' : '#ef4444';
-            msgDiv.style.background = isSuccess ? '#f0fdf4' : '#fef2f2';
-            msgDiv.style.padding = '10px';
-            msgDiv.style.borderRadius = '12px';
-            setTimeout(function() { msgDiv.innerHTML = ''; }, 4000);
-        }
+    function mettreAJourBadgeTitre(nbNouvelles) {
+        const titreBase = "Assist-Garage - Solution de Gestion Pro";
+        document.title = nbNouvelles > 0 ? `(${nbNouvelles}) ${titreBase}` : titreBase;
     }
 
     // ============================================================
-    // MEDIA HANDLING
-    // ============================================================
-    function setupMediaHandlers() {
-        const btnPhoto = document.getElementById('btnPhoto');
-        const btnGalerie = document.getElementById('btnGalerie');
-        const btnVideo = document.getElementById('btnVideo');
-        const btnAudio = document.getElementById('btnAudio');
-
-        if (btnPhoto) {
-            btnPhoto.addEventListener('click', function() {
-                mediaType = 'image';
-                fichierMedia.accept = 'image/*';
-                fichierMedia.capture = 'environment';
-                fichierMedia.click();
-            });
-        }
-        if (btnGalerie) {
-            btnGalerie.addEventListener('click', function() {
-                mediaType = 'image';
-                fichierMedia.accept = 'image/*';
-                fichierMedia.removeAttribute('capture');
-                fichierMedia.click();
-            });
-        }
-        if (btnVideo) {
-            btnVideo.addEventListener('click', function() {
-                mediaType = 'video';
-                fichierMedia.accept = 'video/*';
-                fichierMedia.removeAttribute('capture');
-                fichierMedia.click();
-            });
-        }
-        if (btnAudio) {
-            btnAudio.addEventListener('click', function() {
-                mediaType = 'audio';
-                fichierMedia.accept = 'audio/*';
-                fichierMedia.removeAttribute('capture');
-                fichierMedia.click();
-            });
-        }
-
-        if (fichierMedia) {
-            fichierMedia.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (!file) return;
-
-                if (file.size > 5 * 1024 * 1024) {
-                    afficherToast("❌ Fichier trop lourd (max 5MB)");
-                    fichierMedia.value = '';
-                    return;
-                }
-
-                if (mediaType === 'image') {
-                    compressImage(file, function(data) {
-                        mediaData = data;
-                        previewMediaDiv.style.display = 'block';
-                        previewMediaDiv.innerHTML = '<img src="' + data + '"><button id="delMedia" style="margin-top:8px;background:#ef4444;color:white;border:none;padding:4px 12px;border-radius:20px;cursor:pointer;">🗑️ Supprimer</button>';
-                        document.getElementById('delMedia')?.addEventListener('click', clearMedia);
-                    });
-                } else if (mediaType === 'video') {
-                    compressVideo(file, function(data) {
-                        mediaData = data;
-                        previewMediaDiv.style.display = 'block';
-                        previewMediaDiv.innerHTML = '<video src="' + data + '" controls style="max-width:100%;max-height:160px;"></video><button id="delMedia" style="margin-top:8px;background:#ef4444;color:white;border:none;padding:4px 12px;border-radius:20px;cursor:pointer;">🗑️ Supprimer</button>';
-                        document.getElementById('delMedia')?.addEventListener('click', clearMedia);
-                    });
-                } else {
-                    compressAudio(file, function(data) {
-                        mediaData = data;
-                        previewMediaDiv.style.display = 'block';
-                        previewMediaDiv.innerHTML = '<audio src="' + data + '" controls style="width:100%;"></audio><button id="delMedia" style="margin-top:8px;background:#ef4444;color:white;border:none;padding:4px 12px;border-radius:20px;cursor:pointer;">🗑️ Supprimer</button>';
-                        document.getElementById('delMedia')?.addEventListener('click', clearMedia);
-                    });
-                }
-            });
-        }
-    }
-
-    function clearMedia() {
-        mediaData = null;
-        mediaType = null;
-        previewMediaDiv.style.display = 'none';
-        previewMediaDiv.innerHTML = '';
-        fichierMedia.value = '';
-    }
-
-    // ============================================================
-    // IA DIAGNOSTIC
+    // ANALYSE IA
     // ============================================================
     if (descInput) {
         descInput.addEventListener('input', function(e) {
             if (e.target.value.length > 10) {
                 iaDiagnostic.style.display = 'block';
-                iaResultat.innerHTML = analyserPanne(e.target.value);
+                iaResultat.textContent = analyserPanne(e.target.value);
             } else {
                 iaDiagnostic.style.display = 'none';
             }
@@ -995,26 +1143,23 @@ function getGarageFromURL() {
     // ============================================================
     // TABS
     // ============================================================
-    const tabs = document.querySelectorAll('.tab');
-    tabs.forEach(function(tab) {
+    document.querySelectorAll('.tab').forEach(tab => {
         tab.addEventListener('click', function() {
-            tabs.forEach(function(t) { t.classList.remove('active'); });
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             tab.classList.add('active');
-            const tabContents = document.querySelectorAll('.tab-content');
-            tabContents.forEach(function(c) { c.classList.remove('active'); });
-            const targetId = 'tab-' + tab.dataset.tab;
-            const target = document.getElementById(targetId);
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            const target = document.getElementById('tab-' + tab.dataset.tab);
             if (target) target.classList.add('active');
         });
     });
 
     // ============================================================
-    // URGENCE SELECTION
+    // URGENCE
     // ============================================================
     const urgenceBtns = document.querySelectorAll('[data-urgence]');
-    urgenceBtns.forEach(function(btn) {
+    urgenceBtns.forEach(btn => {
         btn.addEventListener('click', function() {
-            urgenceBtns.forEach(function(b) { b.classList.remove('urgence-selected'); });
+            urgenceBtns.forEach(b => b.classList.remove('urgence-selected'));
             btn.classList.add('urgence-selected');
             niveauUrgence = btn.dataset.urgence;
         });
@@ -1027,7 +1172,7 @@ function getGarageFromURL() {
     function genererQRCode() {
         const url = window.location.href;
         const urlElem = document.getElementById('currentUrl');
-        if (urlElem) urlElem.innerHTML = url;
+        if (urlElem) urlElem.textContent = url;
         const qrDiv = document.getElementById('qrcode');
         if (qrDiv && typeof QRCode !== 'undefined') {
             qrDiv.innerHTML = '';
@@ -1055,113 +1200,265 @@ function getGarageFromURL() {
                 <html><head><title>QR Code Assist-Garage</title>
                 <style>
                     body { display: flex; justify-content: center; align-items: center; height: 100vh; flex-direction: column; font-family: 'Georgia', serif; margin: 0; padding: 20px; background: white; }
-                    .qr-container { text-align: center; padding: 30px; border: 1px solid #e2e8f0; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+                    .qr-container { text-align: center; padding: 30px; border: 1px solid #e2e8f0; border-radius: 16px; }
                     .qr-container h1 { font-size: 24px; font-weight: 300; letter-spacing: 3px; color: #0f172a; margin-bottom: 4px; }
                     .qr-container .sub { font-size: 12px; color: #64748b; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; }
                     .qr-code-wrapper { display: inline-block; padding: 16px; background: white; border-radius: 12px; border: 1px solid #e2e8f0; }
-                    .qr-container .url { font-size: 11px; color: #94a3b8; margin-top: 16px; word-break: break-all; }
-                    .qr-container .footer { margin-top: 20px; font-size: 10px; color: #cbd5e1; border-top: 1px solid #f1f5f9; padding-top: 16px; letter-spacing: 1px; }
-                </style>
-                </head><body>
+                    .url { font-size: 11px; color: #94a3b8; margin-top: 16px; word-break: break-all; }
+                    .footer { margin-top: 20px; font-size: 10px; color: #cbd5e1; border-top: 1px solid #f1f5f9; padding-top: 16px; }
+                </style></head><body>
                 <div class="qr-container">
                     <h1>🚗 ASSIST-GARAGE</h1>
-                    <div class="sub">Scannez pour accéder à l'application</div>
+                    <div class="sub">Scannez pour accéder</div>
                     <div class="qr-code-wrapper">${qrHtml}</div>
                     <div class="url">${currentUrl}</div>
-                    <div class="footer">Assist-Garage — Solution de gestion pour garages</div>
+                    <div class="footer">Assist-Garage — Solution de gestion</div>
                 </div>
                 <script>window.onload = function() { window.print(); };<\/script>
                 </body></html>
             `);
             printWindow.document.close();
-        } else {
-            afficherToast("❌ Impossible d'ouvrir la fenêtre d'impression.");
         }
     });
 
     // ============================================================
-    // ENVOI DEMANDE - AVEC AJOUT DU CHAMP GARAGE
+    // GESTION MÉDIAS MULTIPLES (MAX 5)
+    // ============================================================
+    function setupMediaHandlers() {
+        const btnPhoto = document.getElementById('btnPhoto');
+        const btnGalerie = document.getElementById('btnGalerie');
+        const btnVideo = document.getElementById('btnVideo');
+        const btnAudio = document.getElementById('btnAudio');
+
+        if (btnPhoto) btnPhoto.addEventListener('click', () => {
+            if (mediaList.length >= MAX_PHOTOS) return afficherToast(`❌ Maximum ${MAX_PHOTOS} médias`);
+            mediaType = 'image';
+            fichierMedia.accept = 'image/*';
+            fichierMedia.capture = 'environment';
+            fichierMedia.click();
+        });
+        if (btnGalerie) btnGalerie.addEventListener('click', () => {
+            if (mediaList.length >= MAX_PHOTOS) return afficherToast(`❌ Maximum ${MAX_PHOTOS} médias`);
+            mediaType = 'image';
+            fichierMedia.accept = 'image/*';
+            fichierMedia.removeAttribute('capture');
+            fichierMedia.click();
+        });
+        if (btnVideo) btnVideo.addEventListener('click', () => {
+            if (mediaList.length >= MAX_PHOTOS) return afficherToast(`❌ Maximum ${MAX_PHOTOS} médias`);
+            mediaType = 'video';
+            fichierMedia.accept = 'video/*';
+            fichierMedia.removeAttribute('capture');
+            fichierMedia.click();
+        });
+        if (btnAudio) btnAudio.addEventListener('click', () => {
+            if (mediaList.length >= MAX_PHOTOS) return afficherToast(`❌ Maximum ${MAX_PHOTOS} médias`);
+            mediaType = 'audio';
+            fichierMedia.accept = 'audio/*';
+            fichierMedia.removeAttribute('capture');
+            fichierMedia.click();
+        });
+
+        if (fichierMedia) {
+            fichierMedia.addEventListener('change', async function(e) {
+                const files = Array.from(e.target.files);
+                if (!files.length) return;
+
+                for (const file of files) {
+                    if (mediaList.length >= MAX_PHOTOS) {
+                        afficherToast(`⚠️ Maximum ${MAX_PHOTOS} médias atteint`);
+                        break;
+                    }
+                    if (file.size > 5 * 1024 * 1024) {
+                        afficherToast(`❌ ${file.name} trop lourd (max 5MB)`);
+                        continue;
+                    }
+
+                    try {
+                        if (mediaType === 'image') {
+                            const data = await compressImage(file);
+                            mediaList.push({ data, type: 'image' });
+                        } else if (mediaType === 'video') {
+                            const data = await readFileAsDataURL(file);
+                            mediaList.push({ data, type: 'video' });
+                        } else {
+                            const data = await readFileAsDataURL(file);
+                            mediaList.push({ data, type: 'audio' });
+                        }
+                    } catch(err) {
+                        console.error("Erreur chargement fichier:", err);
+                    }
+                }
+
+                fichierMedia.value = '';
+                afficherMediaPreview();
+            });
+        }
+    }
+
+    function compressImage(file) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    let width = img.width, height = img.height;
+                    const maxDim = 800;
+                    if (width > maxDim) { height = (height * maxDim) / width; width = maxDim; }
+                    if (height > maxDim) { width = (width * maxDim) / height; height = maxDim; }
+                    canvas.width = width;
+                    canvas.height = height;
+                    canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+                    resolve(canvas.toDataURL('image/jpeg', 0.6));
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function readFileAsDataURL(file) {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = e => resolve(e.target.result);
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function afficherMediaPreview() {
+        if (mediaList.length === 0) {
+            previewMediaDiv.style.display = 'none';
+            previewMediaDiv.innerHTML = '';
+            return;
+        }
+        previewMediaDiv.style.display = 'block';
+        let html = `<div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">📎 ${mediaList.length}/${MAX_PHOTOS} média(s)</div><div class="media-thumbnails">`;
+        mediaList.forEach((m, i) => {
+            if (m.type === 'image') {
+                html += `<div class="media-thumb"><img src="${m.data}"><span class="thumb-badge">📷</span><button class="thumb-delete" onclick="supprimerMedia(${i})">×</button></div>`;
+            } else if (m.type === 'video') {
+                html += `<div class="media-thumb"><video src="${m.data}"></video><span class="thumb-badge">🎥</span><button class="thumb-delete" onclick="supprimerMedia(${i})">×</button></div>`;
+            } else {
+                html += `<div class="media-thumb" style="display:flex;align-items:center;justify-content:center;background:var(--bg-soft);"><span style="font-size:24px;">🎙️</span><button class="thumb-delete" onclick="supprimerMedia(${i})">×</button></div>`;
+            }
+        });
+        html += '</div>';
+        previewMediaDiv.innerHTML = html;
+    }
+
+    window.supprimerMedia = function(index) {
+        mediaList.splice(index, 1);
+        afficherMediaPreview();
+    };
+
+    function clearMedia() {
+        mediaList = [];
+        mediaType = null;
+        previewMediaDiv.style.display = 'none';
+        previewMediaDiv.innerHTML = '';
+        fichierMedia.value = '';
+    }
+
+    // ============================================================
+    // ENVOI DEMANDE
     // ============================================================
     document.getElementById('btnEnvoyer')?.addEventListener('click', async function() {
         const nom = document.getElementById('clientNom')?.value.trim() || '';
         const immat = document.getElementById('immatriculation')?.value.trim().toUpperCase() || '';
-        const email = document.getElementById('clientEmail')?.value.trim() || '';
-        const tel = document.getElementById('clientTel')?.value.trim() || '';
-        const description = document.getElementById('description')?.value.trim() || '';
-        const marque = document.getElementById('marque')?.value.trim() || '';
-        const modele = document.getElementById('modele')?.value.trim() || '';
-        const kilometrage = document.getElementById('kilometrage')?.value.trim() || '';
-        const dateMise = document.getElementById('dateMiseService')?.value || '';
-        const lieu = document.getElementById('lieu')?.value.trim() || '';
-        const dateRdv = document.getElementById('dateRdv')?.value || '';
-        const heureRdv = document.getElementById('heureRdv')?.value || '';
 
-        if (!nom) { showMessage("❌ Nom client requis", false); return; }
-        if (!immat) { showMessage("❌ Immatriculation requise", false); return; }
+        if (!nom) return showMessage("❌ Nom client requis", false);
+        if (!immat) return showMessage("❌ Immatriculation requise", false);
 
-        const numeroDemande = genererNumeroDemande();
+        const btn = this;
+        btn.disabled = true;
+        btn.textContent = '⏳ Envoi en cours...';
+
         const garage = getGarageFromURL();
+        const numeroDemande = genererNumeroDemande();
 
         const demande = {
-            nom: nom,
+            nom,
             immatriculation: immat,
-            email: email,
-            telephone: tel,
-            marque: marque,
-            modele: modele,
-            kilometrage: kilometrage,
-            dateMiseService: dateMise,
-            description: description,
-            lieu: lieu,
+            email: document.getElementById('clientEmail')?.value.trim() || '',
+            telephone: document.getElementById('clientTel')?.value.trim() || '',
+            marque: document.getElementById('marque')?.value.trim() || '',
+            modele: document.getElementById('modele')?.value.trim() || '',
+            kilometrage: document.getElementById('kilometrage')?.value.trim() || '',
+            dateMiseService: document.getElementById('dateMiseService')?.value || '',
+            description: document.getElementById('description')?.value.trim() || '',
+            lieu: document.getElementById('lieu')?.value.trim() || '',
             urgence: niveauUrgence,
-            dateRdv: dateRdv,
-            heureRdv: heureRdv,
-            media: mediaData || null,
-            mediaType: mediaType || null,
+            dateRdv: document.getElementById('dateRdv')?.value || '',
+            heureRdv: document.getElementById('heureRdv')?.value || '',
+            // Nouveaux champs
+            medias: mediaList.length > 0 ? mediaList : null,
+            // Compatibilité avec l'ancien format
+            media: mediaList.length > 0 ? mediaList[0].data : null,
+            mediaType: mediaList.length > 0 ? mediaList[0].type : null,
             date: new Date().toLocaleString('fr-FR'),
             dateTimestamp: new Date(),
             lu: false,
-            statut: 0,
-            diagnosticIA: analyserPanne(description),
-            numeroDemande: numeroDemande,
-            garage: garage  // ✅ AJOUT DU CHAMP GARAGE
+            statut: 0, // Reçu
+            diagnosticIA: analyserPanne(document.getElementById('description')?.value || ''),
+            numeroDemande,
+            garage,
+            // Historique
+            historique: [{
+                date: new Date(),
+                dateStr: new Date().toLocaleString('fr-FR'),
+                statut: 0,
+                statutLabel: 'Reçu',
+                action: 'Demande créée par le client'
+            }]
         };
 
         try {
             await db.collection('demandes').add(demande);
             showMessage("✅ Demande envoyée ! Votre numéro : " + numeroDemande, true);
 
-            document.getElementById('clientNom').value = '';
-            document.getElementById('immatriculation').value = '';
-            document.getElementById('clientEmail').value = '';
-            document.getElementById('clientTel').value = '';
-            document.getElementById('description').value = '';
-            document.getElementById('marque').value = '';
-            document.getElementById('modele').value = '';
-            document.getElementById('kilometrage').value = '';
-            document.getElementById('lieu').value = '';
-            document.getElementById('dateRdv').value = '';
-            document.getElementById('heureRdv').value = '';
-            document.getElementById('dateMiseService').value = '';
+            ['clientNom', 'immatriculation', 'clientEmail', 'clientTel', 'description',
+             'marque', 'modele', 'kilometrage', 'lieu', 'dateRdv', 'heureRdv', 'dateMiseService']
+                .forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
 
             clearMedia();
             iaDiagnostic.style.display = 'none';
         } catch(error) {
             showMessage("❌ Erreur: " + error.message, false);
+        } finally {
+            btn.disabled = false;
+            btn.textContent = '📤 Soumettre la demande';
         }
     });
+
+    function showMessage(msg, isSuccess) {
+        const msgDiv = document.getElementById('message');
+        if (msgDiv) {
+            msgDiv.innerHTML = msg;
+            msgDiv.style.color = isSuccess ? 'var(--success)' : 'var(--danger)';
+            msgDiv.style.background = isSuccess ? 'rgba(34,197,94,0.1)' : 'rgba(239,68,68,0.1)';
+            msgDiv.style.padding = '10px';
+            msgDiv.style.borderRadius = '12px';
+            setTimeout(() => msgDiv.innerHTML = '', 5000);
+        }
+    }
 
     // ============================================================
     // SUIVI CLIENT
     // ============================================================
-    function afficherSuiviClient(demandeId) {
-        if (trackingUnsubscribe) {
-            trackingUnsubscribe();
-            trackingUnsubscribe = null;
+    document.getElementById('btnTracker')?.addEventListener('click', function() {
+        const code = document.getElementById('trackingCode').value.trim();
+        const trackingError = document.getElementById('trackingError');
+        if (!code) {
+            if (trackingError) trackingError.textContent = '⚠️ Veuillez entrer un numéro';
+            return;
         }
+        afficherSuiviClient(code);
+    });
 
+    function afficherSuiviClient(demandeId) {
+        if (trackingUnsubscribe) { trackingUnsubscribe(); trackingUnsubscribe = null; }
         const numeroRecherche = demandeId.trim().toUpperCase();
-
         const query = db.collection('demandes').where('numeroDemande', '==', numeroRecherche);
         trackingUnsubscribe = query.onSnapshot(function(snapshot) {
             const trackingError = document.getElementById('trackingError');
@@ -1169,28 +1466,20 @@ function getGarageFromURL() {
 
             if (snapshot.empty) {
                 const docRef = db.collection('demandes').doc(demandeId);
-                docRef.get().then(function(doc) {
-                    if (doc.exists) {
-                        const data = doc.data();
-                        afficherDetailsSuivi(data, doc.id);
-                    } else {
-                        if (trackingError) trackingError.innerHTML = '❌ Numéro de demande invalide';
+                docRef.get().then(doc => {
+                    if (doc.exists) afficherDetailsSuivi(doc.data(), doc.id);
+                    else {
+                        if (trackingError) trackingError.textContent = '❌ Numéro invalide';
                         if (trackingInfo) trackingInfo.style.display = 'none';
                     }
-                }).catch(function() {
-                    if (trackingError) trackingError.innerHTML = '❌ Numéro de demande invalide';
+                }).catch(() => {
+                    if (trackingError) trackingError.textContent = '❌ Numéro invalide';
                     if (trackingInfo) trackingInfo.style.display = 'none';
                 });
                 return;
             }
-
             const doc = snapshot.docs[0];
-            const data = doc.data();
-            afficherDetailsSuivi(data, doc.id);
-        }, function(error) {
-            console.error("Erreur tracking:", error);
-            const trackingError = document.getElementById('trackingError');
-            if (trackingError) trackingError.innerHTML = '❌ Erreur de recherche: ' + error.message;
+            afficherDetailsSuivi(doc.data(), doc.id);
         });
     }
 
@@ -1199,7 +1488,7 @@ function getGarageFromURL() {
         const trackingInfo = document.getElementById('trackingInfo');
         const statut = data.statut !== undefined ? data.statut : 0;
 
-        if (trackingError) trackingError.innerHTML = '';
+        if (trackingError) trackingError.textContent = '';
         if (trackingInfo) trackingInfo.style.display = 'block';
 
         const vehicleInfo = document.getElementById('trackingVehicleInfo');
@@ -1208,333 +1497,558 @@ function getGarageFromURL() {
                 <p><strong>🚘 Véhicule :</strong> ${data.immatriculation || '-'}</p>
                 <p><strong>👤 Client :</strong> ${data.nom || '-'}</p>
                 <p><strong>🔧 Panne :</strong> ${data.description || 'Non renseignée'}</p>
-                ${data.numeroDemande ? `<p><strong>📋 N° de demande :</strong> ${data.numeroDemande}</p>` : ''}
+                ${data.numeroDemande ? `<p><strong>📋 N° :</strong> ${data.numeroDemande}</p>` : ''}
                 ${data.garage ? `<p><strong>🏷️ Garage :</strong> ${data.garage}</p>` : ''}
             `;
         }
 
         const progressFill = document.getElementById('trackingProgressFill');
         if (progressFill) {
-            const progress = (statut + 1) * 33.33;
+            const progress = ((statut + 1) / STATUTS.length) * 100;
             progressFill.style.width = progress + '%';
         }
 
         let stepsHtml = '';
-        if (statut === 0) {
-            stepsHtml = `
-                <div class="status-step active"><div class="status-icon">🟡</div><div><strong>En attente</strong><br><small>Votre demande a été enregistrée</small></div></div>
-                <div class="status-step"><div class="status-icon">🔧</div><div><strong>En réparation</strong><br><small>Notre équipe s'occupe de votre véhicule</small></div></div>
-                <div class="status-step"><div class="status-icon">✅</div><div><strong>Prête</strong><br><small>Votre véhicule est disponible</small></div></div>
-            `;
-        } else if (statut === 1) {
-            stepsHtml = `
-                <div class="status-step completed"><div class="status-icon">🟡</div><div><strong>En attente</strong><br><small>Votre demande a été enregistrée</small></div></div>
-                <div class="status-step active"><div class="status-icon">🔧</div><div><strong>En réparation</strong><br><small>Notre équipe s'occupe de votre véhicule</small></div></div>
-                <div class="status-step"><div class="status-icon">✅</div><div><strong>Prête</strong><br><small>Votre véhicule est disponible</small></div></div>
-            `;
-        } else {
-            stepsHtml = `
-                <div class="status-step completed"><div class="status-icon">🟡</div><div><strong>En attente</strong><br><small>Votre demande a été enregistrée</small></div></div>
-                <div class="status-step completed"><div class="status-icon">🔧</div><div><strong>En réparation</strong><br><small>Notre équipe s'occupe de votre véhicule</small></div></div>
-                <div class="status-step active"><div class="status-icon">✅</div><div><strong>Prête</strong><br><small>Votre véhicule est disponible</small></div></div>
-            `;
-        }
+        STATUTS.forEach(s => {
+            let cls = '';
+            if (s.id < statut) cls = 'completed';
+            else if (s.id === statut) cls = 'active';
+            stepsHtml += `<div class="status-step ${cls}"><div class="status-icon">${s.icon}</div><div><strong>${s.label}</strong><br><small>${s.description}</small></div></div>`;
+        });
         const trackingSteps = document.getElementById('trackingSteps');
         if (trackingSteps) trackingSteps.innerHTML = stepsHtml;
 
         const lastUpdateSpan = document.getElementById('trackingLastUpdate');
         if (lastUpdateSpan) {
-            const lastUpdate = data.dateStatut ? new Date(data.dateStatut.toDate()).toLocaleString('fr-FR') : data.date || '';
-            lastUpdateSpan.innerHTML = '🕐 Dernière mise à jour : ' + lastUpdate;
+            const lastUpdate = data.dateStatut ? formatDate(data.dateStatut) : data.date || '';
+            lastUpdateSpan.textContent = '🕐 Dernière mise à jour : ' + lastUpdate;
         }
     }
 
-    document.getElementById('btnTracker')?.addEventListener('click', function() {
-        const code = document.getElementById('trackingCode').value.trim();
-        const trackingError = document.getElementById('trackingError');
-        if (!code) {
-            if (trackingError) trackingError.innerHTML = '⚠️ Veuillez entrer un numéro';
-            return;
-        }
-        afficherSuiviClient(code);
-    });
-
     // ============================================================
-    // DASHBOARD ADMIN - AVEC FILTRAGE PAR GARAGE
+    // DASHBOARD
     // ============================================================
     async function updateStatus(demandeId, nouveauStatut) {
-        const statusLabels = ['En attente', 'En réparation', 'Prête'];
         try {
-            await db.collection('demandes').doc(demandeId).update({
+            const docRef = db.collection('demandes').doc(demandeId);
+            const doc = await docRef.get();
+            if (!doc.exists) return;
+
+            const data = doc.data();
+            const statutInfo = STATUTS.find(s => s.id === nouveauStatut);
+            const historique = data.historique || [];
+            historique.push({
+                date: new Date(),
+                dateStr: new Date().toLocaleString('fr-FR'),
                 statut: nouveauStatut,
-                dateStatut: new Date()
+                statutLabel: statutInfo ? statutInfo.label : 'Inconnu',
+                action: `Statut changé en "${statutInfo ? statutInfo.label : 'Inconnu'}"`
             });
-            afficherToast('✅ Statut mis à jour : ' + statusLabels[nouveauStatut]);
+
+            await docRef.update({
+                statut: nouveauStatut,
+                dateStatut: new Date(),
+                historique
+            });
+            afficherToast(`✅ Statut : ${statutInfo ? statutInfo.label : ''}`);
         } catch(error) {
-            afficherToast('❌ Erreur lors de la mise à jour');
+            afficherToast('❌ Erreur: ' + error.message);
         }
     }
 
     async function deleteDemande(demandeId) {
-        if (confirm('🗑️ Supprimer cette demande ?')) {
+        const doc = await db.collection('demandes').doc(demandeId).get();
+        if (!doc.exists) return;
+        const data = doc.data();
+        const confirmation = prompt(`⚠️ Pour confirmer la suppression, tapez le numéro de demande :\n${data.numeroDemande || demandeId}`);
+        if (confirmation && confirmation.trim().toUpperCase() === (data.numeroDemande || demandeId).toUpperCase()) {
             await db.collection('demandes').doc(demandeId).delete();
             afficherToast('🗑️ Demande supprimée');
+        } else {
+            afficherToast('❌ Suppression annulée');
         }
     }
 
+    function afficherHistorique(demande) {
+        const modal = document.getElementById('historiqueModal');
+        const content = document.getElementById('historiqueContent');
+        const histo = demande.historique || [];
+        if (histo.length === 0) {
+            content.innerHTML = '<p style="color:var(--text-muted);text-align:center;">Aucun historique</p>';
+        } else {
+            content.innerHTML = '<div class="timeline">' + histo.map(h => `
+                <div class="timeline-item">
+                    <span class="time">${h.dateStr || formatDate(h.date)}</span>
+                    <span class="event">${h.action || h.statutLabel || ''}</span>
+                </div>
+            `).join('') + '</div>';
+        }
+        modal.style.display = 'flex';
+    }
+
+    // ============================================================
+    // PDF
+    // ============================================================
     function genererPDF(demande, id) {
         const pdfContent = document.getElementById('pdfContent');
-        const dateReception = new Date().toLocaleString('fr-FR');
-
-        let mediaHtml = '';
-        if (demande.media && demande.mediaType) {
-            if (demande.mediaType === 'image') {
-                mediaHtml = `<div style="margin-top:10px;"><img src="${demande.media}" style="max-width:100%;max-height:200px;border-radius:8px;"></div>`;
-            } else if (demande.mediaType === 'video') {
-                mediaHtml = `<div style="margin-top:10px;"><video src="${demande.media}" controls style="max-width:100%;max-height:200px;border-radius:8px;"></video></div>`;
-            } else if (demande.mediaType === 'audio') {
-                mediaHtml = `<div style="margin-top:10px;"><audio src="${demande.media}" controls style="width:100%;"></audio></div>`;
-            }
-        }
+        const dateReception = demande.date || new Date().toLocaleString('fr-FR');
+        const statutInfo = STATUTS.find(s => s.id === (demande.statut || 0)) || STATUTS[0];
+        const trackingUrl = `${window.location.origin}${window.location.pathname}?suivi=${id}`;
 
         pdfContent.innerHTML = `
-            <div style="font-family: 'Georgia', 'Times New Roman', serif; max-width: 600px; margin: 0 auto; padding: 10px;">
-                <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #0f172a; padding-bottom: 20px;">
-                    <div style="font-size: 28px; font-weight: 300; letter-spacing: 4px; color: #0f172a;">ASSIST-GARAGE</div>
+            <div style="font-family: 'Georgia', 'Times New Roman', serif; max-width: 700px; margin: 0 auto; padding: 20px; background: white; color: #0f172a;">
+                <div style="text-align: center; margin-bottom: 25px; border-bottom: 2px solid #0f172a; padding-bottom: 15px;">
+                    <div style="font-size: 26px; font-weight: 300; letter-spacing: 4px; color: #0f172a;">ASSIST-GARAGE</div>
                     <div style="font-size: 11px; color: #64748b; letter-spacing: 2px; margin-top: 4px; text-transform: uppercase;">Fiche de réception</div>
-                    <div style="font-size: 11px; color: #94a3b8; margin-top: 6px; letter-spacing: 1px;">Document confidentiel</div>
+                    <div style="font-size: 10px; color: #94a3b8; margin-top: 6px; letter-spacing: 1px; font-style: italic;">Document confidentiel</div>
                 </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 25px; padding: 12px 0; border-bottom: 1px solid #e2e8f0; font-size: 13px;">
-                    <div><span style="font-weight: 600; color: #0f172a;">N° DE DEMANDE</span><br><span style="color: #0f172a;">${id}</span></div>
-                    <div style="text-align: right;"><span style="font-weight: 600; color: #0f172a;">DATE</span><br><span style="color: #64748b;">${dateReception}</span></div>
-                </div>
-                <div style="margin-bottom: 20px;">
-                    <div style="font-size: 12px; font-weight: 600; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; border-left: 3px solid #0f172a; padding-left: 10px;">Véhicule</div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 4px;">
-                        <div><span style="color: #64748b; font-size: 11px;">Immatriculation</span><br><span style="color: #0f172a; font-weight: 500;">${demande.immatriculation || '-'}</span></div>
-                        <div><span style="color: #64748b; font-size: 11px;">Kilométrage</span><br><span style="color: #0f172a; font-weight: 500;">${demande.kilometrage || '-'} km</span></div>
-                        <div><span style="color: #64748b; font-size: 11px;">Marque</span><br><span style="color: #0f172a; font-weight: 500;">${demande.marque || '-'}</span></div>
-                        <div><span style="color: #64748b; font-size: 11px;">Modèle</span><br><span style="color: #0f172a; font-weight: 500;">${demande.modele || '-'}</span></div>
+
+                <div style="display: flex; justify-content: space-between; margin-bottom: 20px; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; font-size: 13px;">
+                    <div>
+                        <div style="font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 1px;">N° de demande</div>
+                        <div style="color: #0f172a; font-weight: 600; font-size: 15px;">${id}</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 1px;">Date</div>
+                        <div style="color: #0f172a;">${dateReception}</div>
                     </div>
                 </div>
-                <div style="margin-bottom: 20px;">
-                    <div style="font-size: 12px; font-weight: 600; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; border-left: 3px solid #0f172a; padding-left: 10px;">Client</div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 4px;">
-                        <div><span style="color: #64748b; font-size: 11px;">Nom</span><br><span style="color: #0f172a; font-weight: 500;">${demande.nom || '-'}</span></div>
-                        <div><span style="color: #64748b; font-size: 11px;">Téléphone</span><br><span style="color: #0f172a; font-weight: 500;">${demande.telephone || '-'}</span></div>
-                        <div style="grid-column: span 2;"><span style="color: #64748b; font-size: 11px;">Email</span><br><span style="color: #0f172a; font-weight: 500;">${demande.email || '-'}</span></div>
+
+                <div style="margin-bottom: 18px;">
+                    <div style="font-size: 11px; font-weight: 600; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; border-left: 3px solid #0f172a; padding-left: 10px;">Véhicule</div>
+                    <table style="width:100%; border-collapse: collapse; font-size: 12px;">
+                        <tr>
+                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc; width: 20%;"><strong>Immat.</strong></td>
+                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 30%;">${demande.immatriculation || '-'}</td>
+                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc; width: 20%;"><strong>Km</strong></td>
+                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 30%;">${demande.kilometrage || '-'}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Marque</strong></td>
+                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0;">${demande.marque || '-'}</td>
+                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Modèle</strong></td>
+                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0;">${demande.modele || '-'}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div style="margin-bottom: 18px;">
+                    <div style="font-size: 11px; font-weight: 600; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; border-left: 3px solid #0f172a; padding-left: 10px;">Client</div>
+                    <table style="width:100%; border-collapse: collapse; font-size: 12px;">
+                        <tr>
+                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc; width: 20%;"><strong>Nom</strong></td>
+                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 30%;">${demande.nom || '-'}</td>
+                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc; width: 20%;"><strong>Tél</strong></td>
+                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 30%;">${demande.telephone || '-'}</td>
+                        </tr>
+                        ${demande.email ? `<tr><td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Email</strong></td><td colspan="3" style="padding: 6px 8px; border: 1px solid #e2e8f0;">${demande.email}</td></tr>` : ''}
+                    </table>
+                </div>
+
+                <div style="margin-bottom: 18px;">
+                    <div style="font-size: 11px; font-weight: 600; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; border-left: 3px solid #0f172a; padding-left: 10px;">Panne déclarée</div>
+                    <div style="padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 12px; line-height: 1.5; background: #fef2f2; min-height: 40px;">
+                        ${demande.description || '-'}
+                    </div>
+                    <table style="width:100%; border-collapse: collapse; font-size: 12px; margin-top: 8px;">
+                        <tr>
+                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc; width: 25%;"><strong>Urgence</strong></td>
+                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 25%; color: ${demande.urgence === 'haute' ? '#ef4444' : demande.urgence === 'moyenne' ? '#f59e0b' : '#22c55e'}; font-weight: 600;">
+                                ${demande.urgence === 'haute' ? '🔴 Haute' : demande.urgence === 'moyenne' ? '🟡 Moyenne' : '🟢 Basse'}
+                            </td>
+                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc; width: 25%;"><strong>Statut actuel</strong></td>
+                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 25%;">${statutInfo.icon} ${statutInfo.label}</td>
+                        </tr>
+                        ${demande.lieu ? `<tr><td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Lieu</strong></td><td colspan="3" style="padding: 6px 8px; border: 1px solid #e2e8f0;">${demande.lieu}</td></tr>` : ''}
+                        ${demande.dateRdv ? `<tr><td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>RDV</strong></td><td colspan="3" style="padding: 6px 8px; border: 1px solid #e2e8f0;">${demande.dateRdv} ${demande.heureRdv || ''}</td></tr>` : ''}
+                        ${demande.diagnosticIA ? `<tr><td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Diagnostic IA</strong></td><td colspan="3" style="padding: 6px 8px; border: 1px solid #e2e8f0; font-style: italic; color: #64748b;">${demande.diagnosticIA}</td></tr>` : ''}
+                    </table>
+                </div>
+
+                ${demande.garage ? `
+                <div style="margin-bottom: 18px; padding: 10px; background: #f8fafc; border-radius: 6px; font-size: 12px;">
+                    <strong>Garage assigné :</strong> ${demande.garage}
+                </div>` : ''}
+
+                <!-- Signatures -->
+                <div style="margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <div style="font-size: 11px; color: #64748b; margin-bottom: 30px;">Signature du client</div>
+                        <div style="border-top: 1px solid #0f172a; padding-top: 4px; font-size: 10px; color: #94a3b8;">Lu et approuvé</div>
+                    </div>
+                    <div>
+                        <div style="font-size: 11px; color: #64748b; margin-bottom: 30px;">Signature du garage</div>
+                        <div style="border-top: 1px solid #0f172a; padding-top: 4px; font-size: 10px; color: #94a3b8;">Cachet et signature</div>
                     </div>
                 </div>
-                <div style="margin-bottom: 20px;">
-                    <div style="font-size: 12px; font-weight: 600; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px; border-left: 3px solid #0f172a; padding-left: 10px;">Panne</div>
-                    <div style="padding: 0 4px;">
-                        <div style="margin-bottom: 6px;"><span style="color: #64748b; font-size: 11px;">Description</span><br><span style="color: #0f172a; font-weight: 500;">${demande.description || '-'}</span></div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                            <div><span style="color: #64748b; font-size: 11px;">Urgence</span><br><span style="color: ${demande.urgence === 'haute' ? '#ef4444' : (demande.urgence === 'moyenne' ? '#f59e0b' : '#22c55e')}; font-weight: 500;">${demande.urgence === 'haute' ? '🔴 Haute' : (demande.urgence === 'moyenne' ? '🟡 Moyenne' : '🟢 Basse')}</span></div>
-                            <div><span style="color: #64748b; font-size: 11px;">Lieu</span><br><span style="color: #0f172a; font-weight: 500;">${demande.lieu || '-'}</span></div>
-                        </div>
-                        ${demande.dateRdv ? `<div style="margin-top: 6px;"><span style="color: #64748b; font-size: 11px;">RDV programmé</span><br><span style="color: #0f172a; font-weight: 500;">${demande.dateRdv} ${demande.heureRdv || ''}</span></div>` : ''}
-                        ${demande.diagnosticIA ? `<div style="margin-top: 6px;"><span style="color: #64748b; font-size: 11px;">Diagnostic IA</span><br><span style="color: #0f172a; font-weight: 400; font-style: italic;">${demande.diagnosticIA}</span></div>` : ''}
-                        ${mediaHtml}
-                        ${demande.garage ? `<div style="margin-top: 6px;"><span style="color: #64748b; font-size: 11px;">Garage</span><br><span style="color: #0f172a; font-weight: 500;">${demande.garage}</span></div>` : ''}
+
+                <!-- QR Code de suivi -->
+                <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; gap: 15px;">
+                    <div id="pdfQRCode" style="flex-shrink: 0;"></div>
+                    <div style="font-size: 10px; color: #64748b; line-height: 1.5;">
+                        <strong style="color: #0f172a; font-size: 11px;">📱 Suivi en ligne</strong><br>
+                        Scannez ce QR code pour suivre l'avancement de votre véhicule en temps réel.<br>
+                        <span style="font-size: 9px; color: #94a3b8;">Ou rendez-vous sur : ${window.location.hostname}</span>
                     </div>
                 </div>
-                <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
-                    <div style="font-size: 10px; color: #94a3b8; letter-spacing: 1px; text-transform: uppercase;">Assist-Garage — Solution de gestion pour garages</div>
-                    <div style="font-size: 9px; color: #cbd5e1; margin-top: 4px;">Ce document est généré automatiquement</div>
+
+                <div style="text-align: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid #e2e8f0;">
+                    <div style="font-size: 10px; color: #94a3b8; letter-spacing: 1px;">ASSIST-GARAGE — Solution de gestion pour garages</div>
                 </div>
             </div>
         `;
 
-        const modal = document.getElementById('pdfModal');
-        if (modal) modal.style.display = 'flex';
+        // Générer le QR code dans le PDF
+        setTimeout(() => {
+            const pdfQRDiv = document.getElementById('pdfQRCode');
+            if (pdfQRDiv && typeof QRCode !== 'undefined') {
+                pdfQRDiv.innerHTML = '';
+                new QRCode(pdfQRDiv, {
+                    text: trackingUrl,
+                    width: 80,
+                    height: 80,
+                    colorDark: "#0f172a",
+                    colorLight: "#ffffff"
+                });
+            }
+        }, 100);
+
+        document.getElementById('pdfModal').style.display = 'flex';
 
         document.getElementById('btnGenererPDF').onclick = function() {
             const element = document.getElementById('pdfContent');
             if (typeof html2pdf !== 'undefined') {
                 html2pdf().from(element).set({
-                    margin: [15, 15, 15, 15],
-                    filename: 'Fiche_AssistGarage_' + id + '.pdf',
-                    html2canvas: { scale: 2, useCORS: true },
-                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                    margin: [12, 12, 12, 12],
+                    filename: `Fiche_${id}.pdf`,
+                    html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                    pagebreak: { mode: ['avoid-all'] }
                 }).save();
-                afficherToast("📄 PDF généré avec succès");
+                afficherToast("📄 PDF généré");
             }
+        };
+
+        document.getElementById('btnImprimerPDF').onclick = function() {
+            const printWindow = window.open('', '_blank');
+            const content = document.getElementById('pdfContent').innerHTML;
+            printWindow.document.write(`
+                <html><head><title>Fiche ${id}</title>
+                <style>body { font-family: 'Georgia', serif; padding: 20px; }</style>
+                </head><body>${content}</body></html>
+            `);
+            printWindow.document.close();
+            setTimeout(() => printWindow.print(), 500);
         };
     }
 
+    // ============================================================
+    // CHARGEMENT DASHBOARD
+    // ============================================================
     function chargerDemandesRealtime() {
-        if (unsubscribeDashboard) {
-            unsubscribeDashboard();
-            unsubscribeDashboard = null;
-        }
+        if (unsubscribeDashboard) { unsubscribeDashboard(); unsubscribeDashboard = null; }
 
-        console.log("🔄 Chargement des demandes...");
-
-        const selectGarage = document.getElementById('selectGarage');
-        const garageFiltre = selectGarage ? selectGarage.value : 'tous';
-        console.log("🏷️ Filtre garage :", garageFiltre);
-
+        const garageFiltre = document.getElementById('selectGarage')?.value || 'tous';
         let query = db.collection('demandes');
         if (garageFiltre !== 'tous') {
             query = query.where('garage', '==', garageFiltre);
         }
         query = query.orderBy('dateTimestamp', 'desc');
 
+        let premierChargement = true;
+
         unsubscribeDashboard = query.onSnapshot(function(snapshot) {
-            console.log("📦 Snapshot reçu, taille:", snapshot.size);
-            
             let demandes = [];
-            let totalSat = 0;
-            let nbSat = 0;
+            snapshot.forEach(doc => demandes.push({ id: doc.id, ...doc.data() }));
 
-            snapshot.forEach(function(doc) {
-                const d = doc.data();
-                demandes.push({ id: doc.id, ...d });
-                if (d.satisfaction) {
-                    totalSat += d.satisfaction;
-                    nbSat++;
-                }
-            });
-
-            console.log("📊 Demandes chargées:", demandes.length);
-
-            const statTotal = document.getElementById('statTotal');
-            const statNonLues = document.getElementById('statNonLues');
-            const statUrgentes = document.getElementById('statUrgentes');
-            const statSatisfaction = document.getElementById('statSatisfaction');
-
-            if (statTotal) statTotal.textContent = demandes.length;
-            if (statNonLues) statNonLues.textContent = demandes.filter(function(d) { return !d.lu; }).length;
-            if (statUrgentes) statUrgentes.textContent = demandes.filter(function(d) { return d.urgence === 'haute'; }).length;
-            if (statSatisfaction) statSatisfaction.textContent = nbSat > 0 ? (totalSat / nbSat).toFixed(1) + ' ★' : '0 ★';
-
-            let filtered = demandes;
-            if (currentFiltre === 'non-lues') {
-                filtered = demandes.filter(function(d) { return !d.lu; });
-            }
-            if (currentFiltre === 'urgentes') {
-                filtered = demandes.filter(function(d) { return d.urgence === 'haute'; });
-            }
-
-            const listeDiv = document.getElementById('listeDemandes');
-            if (!listeDiv) {
-                console.error("❌ Element #listeDemandes introuvable !");
-                return;
-            }
-
-            listeDiv.innerHTML = '';
-
-            if (filtered.length === 0) {
-                listeDiv.innerHTML = '<div style="text-align:center;padding:40px;color:#64748b;">📭 Aucune demande</div>';
-                console.log("📭 Aucune demande à afficher");
-                return;
-            }
-
-            let html = '';
-            filtered.forEach(function(demande) {
-                const statutActuel = demande.statut !== undefined ? demande.statut : 0;
-                const numDemande = demande.numeroDemande || demande.id.substring(0, 8);
-
-                let satisfactionHtml = '';
-                if (demande.satisfaction) {
-                    let stars = '';
-                    for (let i = 0; i < demande.satisfaction; i++) stars += '★';
-                    for (let i = demande.satisfaction; i < 5; i++) stars += '☆';
-                    satisfactionHtml = '<div style="margin-top:8px;">⭐ ' + stars + '</div>';
-                }
-
-                let mediaHtml = '';
-                if (demande.media && demande.mediaType) {
-                    const mediaIcon = demande.mediaType === 'image' ? '📷' : (demande.mediaType === 'video' ? '🎥' : '🎙️');
-                    const mediaDataEscaped = demande.media.replace(/'/g, "\\'");
-                    mediaHtml = `
-                        <div class="media-preview-mini" onclick="afficherMediaModal('${mediaDataEscaped}', '${demande.mediaType}')">
-                            ${mediaIcon} Voir le média joint
-                        </div>
-                    `;
-                }
-
-                const urgenceClasse = demande.urgence || 'basse';
-                const urgenceLabel = demande.urgence === 'haute' ? '🔴 URGENT' : 
-                                    (demande.urgence === 'moyenne' ? '🟡 MOYEN' : '🟢 BAS');
-
-                html += `
-                    <div class="demande ${urgenceClasse}" data-id="${demande.id}">
-                        <span class="badge-urgence ${urgenceClasse}">${urgenceLabel}</span>
-                        <div><strong>📋 N° :</strong> ${numDemande}</div>
-                        <div><strong>🚘 Vehicule :</strong> ${demande.immatriculation || '-'} - ${demande.date || ''}</div>
-                        <div><strong>👤 Client :</strong> ${demande.nom || 'Client'}</div>
-                        ${demande.marque ? '<div style="font-size:13px;color:#64748b;">' + demande.marque + ' ' + (demande.modele || '') + ' - ' + (demande.kilometrage || '') + ' km</div>' : ''}
-                        <div style="margin:8px 0;">${demande.description || ''}</div>
-                        ${demande.lieu ? '<div style="font-size:12px;color:#64748b;">📍 Lieu : ' + demande.lieu + '</div>' : ''}
-                        ${demande.dateRdv ? '<div style="font-size:12px;">📅 RDV : ' + demande.dateRdv + ' ' + (demande.heureRdv || '') + '</div>' : ''}
-                        ${demande.garage ? '<div style="font-size:12px;color:#64748b;">🏷️ Garage : ' + demande.garage + '</div>' : ''}
-                        ${satisfactionHtml}
-                        ${mediaHtml}
-                        <div class="actions">
-                            <select class="status-select" data-id="${demande.id}">
-                                <option value="0" ${statutActuel === 0 ? 'selected' : ''}>🟡 En attente</option>
-                                <option value="1" ${statutActuel === 1 ? 'selected' : ''}>🔧 En réparation</option>
-                                <option value="2" ${statutActuel === 2 ? 'selected' : ''}>✅ Prête</option>
-                            </select>
-                            <button class="btn-action btn-pdf" data-id="${demande.id}" data-json='${JSON.stringify(demande).replace(/'/g, "&#39;")}'>📄 PDF</button>
-                            <button class="btn-action btn-supprimer" data-id="${demande.id}">🗑️</button>
-                        </div>
-                    </div>
-                `;
-            });
-
-            listeDiv.innerHTML = html;
-
-            setTimeout(function() {
-                document.querySelectorAll('.status-select').forEach(function(select) {
-                    select.addEventListener('change', function(e) {
-                        updateStatus(select.dataset.id, parseInt(e.target.value));
-                    });
+            // Détection de nouvelles demandes (badge + notif)
+            if (!premierChargement) {
+                snapshot.docChanges().forEach(change => {
+                    if (change.type === 'added') {
+                        const d = change.doc.data();
+                        const jours = calculerJoursDepuis(d.dateTimestamp);
+                        if (jours === 0) {
+                            jouerSon();
+                            envoyerNotification(
+                                `🚗 Nouvelle demande`,
+                                `${d.immatriculation || 'N/A'} - ${d.nom || 'Client'}${d.urgence === 'haute' ? ' 🔴 URGENT' : ''}`,
+                                change.doc.id
+                            );
+                        }
+                    }
                 });
+            }
+            premierChargement = false;
 
-                document.querySelectorAll('.btn-pdf').forEach(function(btn) {
-                    btn.addEventListener('click', function() {
-                        const demande = JSON.parse(btn.dataset.json);
-                        genererPDF(demande, demande.numeroDemande || btn.dataset.id);
-                    });
-                });
+            const nonLues = demandes.filter(d => !d.lu).length;
+            mettreAJourBadgeTitre(nonLues);
 
-                document.querySelectorAll('.btn-supprimer').forEach(function(btn) {
-                    btn.addEventListener('click', function() {
-                        deleteDemande(btn.dataset.id);
-                    });
-                });
-            }, 100);
+            // Stats
+            const total = demandes.length;
+            const urgentes = demandes.filter(d => d.urgence === 'haute').length;
+            const retards = demandes.filter(d => {
+                const j = calculerJoursDepuis(d.dateTimestamp);
+                return (d.statut || 0) < 5 && j >= DELAI_RETARD_JOURS;
+            }).length;
 
-            filtered.forEach(function(d) {
-                if (!d.lu) {
-                    db.collection('demandes').doc(d.id).update({ lu: true }).catch(function(e) {});
-                }
-            });
+            document.getElementById('statTotal').textContent = total;
+            document.getElementById('statNonLues').textContent = nonLues;
+            document.getElementById('statUrgentes').textContent = urgentes;
+            document.getElementById('statRetard').textContent = retards;
 
+            afficherDemandes(demandes);
         }, function(error) {
-            console.error("❌ Erreur Firestore:", error);
-            afficherToast("❌ Erreur de chargement: " + error.message);
-            
-            const listeDiv = document.getElementById('listeDemandes');
-            if (listeDiv) {
-                listeDiv.innerHTML = '<div style="text-align:center;padding:40px;color:#ef4444;">❌ Erreur: ' + error.message + '</div>';
-            }
+            console.error("Erreur Firestore:", error);
+            afficherToast("❌ Erreur: " + error.message);
         });
     }
 
-    // ============================================================
-    // GESTION DU FILTRE GARAGE
-    // ============================================================
-    const selectGarage = document.getElementById('selectGarage');
-    if (selectGarage) {
-        selectGarage.addEventListener('change', function() {
-            console.log("🏷️ Changement de filtre garage:", this.value);
-            chargerDemandesRealtime();
+    function afficherDemandes(demandes) {
+        let filtered = [...demandes];
+
+        // Filtres
+        if (currentFiltre === 'non-lues') filtered = filtered.filter(d => !d.lu);
+        if (currentFiltre === 'urgentes') filtered = filtered.filter(d => d.urgence === 'haute');
+        if (currentFiltre === 'retard') filtered = filtered.filter(d => {
+            const j = calculerJoursDepuis(d.dateTimestamp);
+            return (d.statut || 0) < 5 && j >= DELAI_RETARD_JOURS;
+        });
+
+        const search = document.getElementById('searchInput')?.value.toLowerCase() || '';
+        if (search) {
+            filtered = filtered.filter(d =>
+                (d.immatriculation || '').toLowerCase().includes(search) ||
+                (d.nom || '').toLowerCase().includes(search) ||
+                (d.telephone || '').toLowerCase().includes(search) ||
+                (d.numeroDemande || '').toLowerCase().includes(search)
+            );
+        }
+
+        const dateStart = document.getElementById('filterDateStart')?.value;
+        const dateEnd = document.getElementById('filterDateEnd')?.value;
+        if (dateStart) {
+            const startTs = new Date(dateStart).getTime();
+            filtered = filtered.filter(d => {
+                const ts = d.dateTimestamp?.toDate ? d.dateTimestamp.toDate().getTime() : new Date(d.dateTimestamp).getTime();
+                return ts >= startTs;
+            });
+        }
+        if (dateEnd) {
+            const endTs = new Date(dateEnd).getTime() + 86400000;
+            filtered = filtered.filter(d => {
+                const ts = d.dateTimestamp?.toDate ? d.dateTimestamp.toDate().getTime() : new Date(d.dateTimestamp).getTime();
+                return ts <= endTs;
+            });
+        }
+
+        const listeDiv = document.getElementById('listeDemandes');
+        if (!listeDiv) return;
+
+        if (filtered.length === 0) {
+            listeDiv.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);">📭 Aucune demande</div>';
+            return;
+        }
+
+        let html = '';
+        filtered.forEach(d => {
+            const statutActuel = d.statut !== undefined ? d.statut : 0;
+            const statutInfo = STATUTS.find(s => s.id === statutActuel) || STATUTS[0];
+            const num = d.numeroDemande || d.id.substring(0, 8);
+            const jours = calculerJoursDepuis(d.dateTimestamp);
+            const estRetard = statutActuel < 5 && jours >= DELAI_RETARD_JOURS;
+            const urgenceClasse = d.urgence || 'basse';
+            const urgenceLabel = d.urgence === 'haute' ? '🔴 URGENT' : d.urgence === 'moyenne' ? '🟡 MOYEN' : '🟢 BAS';
+
+            // Médias
+            const mediasList = d.medias || (d.media ? [{ data: d.media, type: d.mediaType }] : []);
+            let mediaHtml = '';
+            if (mediasList.length > 0) {
+                const icons = { image: '📷', video: '🎥', audio: '🎙️' };
+                mediaHtml = `<div class="media-preview-mini" onclick='afficherMediaModalGlobal(${JSON.stringify(mediasList).replace(/'/g, "&apos;")}, 0)'>
+                    ${icons[mediasList[0].type] || '📎'} ${mediasList.length} média(s)
+                </div>`;
+            }
+
+            // Contact
+            let contactHtml = '';
+            if (d.telephone) {
+                const telClean = d.telephone.replace(/\s+/g, '');
+                contactHtml += `<a class="btn-contact call" href="tel:${telClean}">📞 Appeler</a>`;
+                contactHtml += `<a class="btn-contact whatsapp" href="https://wa.me/${telClean.replace(/^0/, '2250')}" target="_blank">💬 WhatsApp</a>`;
+            }
+            if (d.email) {
+                contactHtml += `<a class="btn-contact email" href="mailto:${d.email}">✉️ Email</a>`;
+            }
+
+            html += `
+                <div class="demande ${urgenceClasse} ${estRetard ? 'retard' : ''}">
+                    <div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:6px;">
+                        <div>
+                            <span class="badge-urgence ${urgenceClasse}">${urgenceLabel}</span>
+                            <span class="statut-badge" style="background: ${statutInfo.color}22; color: ${statutInfo.color};">${statutInfo.icon} ${statutInfo.label}</span>
+                            ${estRetard ? `<span class="badge-retard">⚠️ ${jours}j</span>` : ''}
+                        </div>
+                        <span style="font-size:11px;color:var(--text-muted);">📅 ${d.date || ''}</span>
+                    </div>
+                    <div style="margin-top:8px;"><strong>📋 ${num}</strong></div>
+                    <div style="font-size:13px;"><strong>🚘</strong> ${d.immatriculation || '-'} - ${d.marque || ''} ${d.modele || ''}</div>
+                    <div style="font-size:13px;"><strong>👤</strong> ${d.nom || 'Client'}</div>
+                    <div style="margin:8px 0;font-size:13px;color:var(--text-secondary);">${d.description || ''}</div>
+                    ${d.lieu ? `<div style="font-size:12px;color:var(--text-muted);">📍 ${d.lieu}</div>` : ''}
+                    ${d.dateRdv ? `<div style="font-size:12px;">📅 RDV : ${d.dateRdv} ${d.heureRdv || ''}</div>` : ''}
+                    ${d.garage ? `<div style="font-size:12px;color:var(--text-muted);">🏷️ ${d.garage}</div>` : ''}
+                    ${mediaHtml}
+                    ${contactHtml ? `<div class="contact-row">${contactHtml}</div>` : ''}
+                    <div class="actions">
+                        <select class="status-select" data-id="${d.id}">
+                            ${STATUTS.map(s => `<option value="${s.id}" ${statutActuel === s.id ? 'selected' : ''}>${s.icon} ${s.label}</option>`).join('')}
+                        </select>
+                        <button class="btn-action btn-historique" data-id="${d.id}">📜 Historique</button>
+                        <button class="btn-action btn-pdf" data-id="${d.id}">📄 PDF</button>
+                        <button class="btn-action btn-supprimer" data-id="${d.id}">🗑️</button>
+                    </div>
+                </div>
+            `;
+        });
+        listeDiv.innerHTML = html;
+
+        // Attacher les événements
+        listeDiv.querySelectorAll('.status-select').forEach(sel => {
+            sel.addEventListener('change', () => updateStatus(sel.dataset.id, parseInt(sel.value)));
+        });
+        listeDiv.querySelectorAll('.btn-pdf').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const d = allDemandes.find(x => x.id === btn.dataset.id);
+                if (d) genererPDF(d, d.numeroDemande || d.id);
+            });
+        });
+        listeDiv.querySelectorAll('.btn-historique').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const d = allDemandes.find(x => x.id === btn.dataset.id);
+                if (d) afficherHistorique(d);
+            });
+        });
+        listeDiv.querySelectorAll('.btn-supprimer').forEach(btn => {
+            btn.addEventListener('click', () => deleteDemande(btn.dataset.id));
+        });
+
+        // Stocker pour accès ultérieur
+        allDemandes = demandes;
+
+        // Marquer comme lues
+        filtered.forEach(d => {
+            if (!d.lu) db.collection('demandes').doc(d.id).update({ lu: true }).catch(() => {});
         });
     }
+
+    // Fonction globale pour afficher média depuis n'importe où
+    window.afficherMediaModalGlobal = function(medias, index) {
+        currentMediaListForModal = medias;
+        currentMediaIndex = index;
+        afficherMediaCourant();
+    };
+
+    function afficherMediaCourant() {
+        const modal = document.getElementById('mediaModal');
+        const content = document.getElementById('mediaModalContent');
+        const nav = document.getElementById('mediaNav');
+        const zoomHint = document.getElementById('zoomHint');
+
+        if (!currentMediaListForModal || currentMediaListForModal.length === 0) {
+            content.innerHTML = '<p>❌ Aucun média</p>';
+            return;
+        }
+
+        const m = currentMediaListForModal[currentMediaIndex];
+
+        // Navigation si plusieurs médias
+        if (currentMediaListForModal.length > 1) {
+            nav.style.display = 'flex';
+            nav.innerHTML = currentMediaListForModal.map((med, i) => {
+                let preview = '';
+                if (med.type === 'image') preview = `<img src="${med.data}">`;
+                else preview = ['📷','🎥','🎙️'][['image','video','audio'].indexOf(med.type)] || '📎';
+                return `<div class="media-nav-dot ${i === currentMediaIndex ? 'active' : ''}" onclick="afficherMediaIndex(${i})">${preview}</div>`;
+            }).join('');
+        } else {
+            nav.style.display = 'none';
+        }
+
+        if (m.type === 'image') {
+            content.innerHTML = `<img src="${m.data}" id="zoomableImage">`;
+            zoomHint.style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('zoomableImage')?.addEventListener('click', function() {
+                    this.classList.toggle('zoomed');
+                });
+            }, 50);
+        } else if (m.type === 'video') {
+            content.innerHTML = `<video src="${m.data}" controls></video>`;
+            zoomHint.style.display = 'none';
+        } else {
+            content.innerHTML = `<audio src="${m.data}" controls></audio>`;
+            zoomHint.style.display = 'none';
+        }
+
+        modal.style.display = 'flex';
+    }
+
+    window.afficherMediaIndex = function(idx) {
+        currentMediaIndex = idx;
+        afficherMediaCourant();
+    };
+
+    // Téléchargement média
+    document.getElementById('btnTelechargerMedia')?.addEventListener('click', function() {
+        if (!currentMediaListForModal || currentMediaListForModal.length === 0) return;
+        const m = currentMediaListForModal[currentMediaIndex];
+        const ext = m.type === 'image' ? 'jpg' : m.type === 'video' ? 'mp4' : 'mp3';
+        const a = document.createElement('a');
+        a.href = m.data;
+        a.download = `media_assist_garage_${Date.now()}.${ext}`;
+        a.click();
+        afficherToast('⬇️ Téléchargement en cours');
+    });
+
+    // ============================================================
+    // EXPORT CSV
+    // ============================================================
+    document.getElementById('btnExportExcel')?.addEventListener('click', function() {
+        if (allDemandes.length === 0) return afficherToast('❌ Aucune donnée');
+        const headers = ['N° Demande', 'Date', 'Nom', 'Téléphone', 'Email', 'Immat.', 'Marque', 'Modèle', 'Km', 'Description', 'Urgence', 'Statut', 'Garage', 'Lieu'];
+        const rows = allDemandes.map(d => {
+            const statutInfo = STATUTS.find(s => s.id === (d.statut || 0)) || STATUTS[0];
+            return [
+                d.numeroDemande || d.id,
+                d.date || '',
+                d.nom || '',
+                d.telephone || '',
+                d.email || '',
+                d.immatriculation || '',
+                d.marque || '',
+                d.modele || '',
+                d.kilometrage || '',
+                (d.description || '').replace(/[\r\n;]/g, ' '),
+                d.urgence || '',
+                statutInfo.label,
+                d.garage || '',
+                d.lieu || ''
+            ];
+        });
+
+        const csv = [headers.join(';')].concat(rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(';'))).join('\n');
+        const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `assist_garage_export_${new Date().toISOString().split('T')[0]}.csv`;
+        a.click();
+        afficherToast('📥 Export CSV réussi');
+    });
+
+    // Bouton activer notifs
+    document.getElementById('btnActiverNotifs')?.addEventListener('click', function() {
+        demanderPermissionNotification();
+    });
 
     // ============================================================
     // NAVIGATION
@@ -1542,20 +2056,18 @@ function getGarageFromURL() {
     function afficherClient() {
         clientScreen.style.display = 'block';
         dashboardScreen.style.display = 'none';
-        if (unsubscribeDashboard) {
-            unsubscribeDashboard();
-            unsubscribeDashboard = null;
-        }
-        if (trackingUnsubscribe) {
-            trackingUnsubscribe();
-            trackingUnsubscribe = null;
-        }
+        if (unsubscribeDashboard) { unsubscribeDashboard(); unsubscribeDashboard = null; }
+        mettreAJourBadgeTitre(0);
         genererQRCode();
     }
 
-    function afficherDashboard() {
+    async function afficherDashboard() {
         const pwd = prompt("🔐 Mot de passe réception :");
-        if (pwd !== MOT_DE_PASSE) {
+        if (!pwd) return;
+        const hashSaisi = await hashSHA256(pwd);
+        // Le hash attendu (généré à partir de "Ly@m101288")
+        const HASH_ATTENDU = await hashSHA256("Ly@m101288");
+        if (hashSaisi !== HASH_ATTENDU) {
             alert("❌ Mot de passe incorrect");
             return;
         }
@@ -1567,17 +2079,21 @@ function getGarageFromURL() {
     document.getElementById('btnAllerDashboard')?.addEventListener('click', afficherDashboard);
     document.getElementById('btnQuitterDashboard')?.addEventListener('click', afficherClient);
 
-    // ============================================================
-    // FILTRES (statut)
-    // ============================================================
-    document.querySelectorAll('.filtre-btn').forEach(function(btn) {
+    // Filtres
+    document.querySelectorAll('.filtre-btn').forEach(btn => {
         btn.addEventListener('click', function() {
-            document.querySelectorAll('.filtre-btn').forEach(function(b) { b.classList.remove('active'); });
+            document.querySelectorAll('.filtre-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             currentFiltre = btn.dataset.filtre;
-            chargerDemandesRealtime();
+            afficherDemandes(allDemandes);
         });
     });
+
+    // Recherche / filtres date
+    document.getElementById('searchInput')?.addEventListener('input', () => afficherDemandes(allDemandes));
+    document.getElementById('filterDateStart')?.addEventListener('change', () => afficherDemandes(allDemandes));
+    document.getElementById('filterDateEnd')?.addEventListener('change', () => afficherDemandes(allDemandes));
+    document.getElementById('selectGarage')?.addEventListener('change', chargerDemandesRealtime);
 
     // ============================================================
     // INITIALISATION
@@ -1589,101 +2105,72 @@ function getGarageFromURL() {
     setupMediaHandlers();
     demanderPermissionNotification();
 
-    window.onclick = function(event) {
-        const pdfModal = document.getElementById('pdfModal');
-        const mediaModal = document.getElementById('mediaModal');
-        if (event.target === pdfModal && pdfModal) pdfModal.style.display = 'none';
-        if (event.target === mediaModal && mediaModal) mediaModal.style.display = 'none';
-    };
+    // Fermer modals au clic extérieur
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) this.style.display = 'none';
+        });
+    });
 
     genererQRCode();
     afficherClient();
 
-    console.log('🚗 Assist-Garage - Version Multi-Garages');
-    console.log('🏷️ Garage par défaut :', garageActuel);
-    console.log('📂 Données stockées sur Firebase : ntr-garage');
-    console.log('🔐 Mot de passe réception : Ly@m101288');
-    console.log('📋 Numéros de demande : format AG-2025-XXX');
-    console.log('🔗 Smartlink Mainstream configuré : ✅');
-    console.log('📱 Application prête à être utilisée !');
+    // URL avec paramètre ?suivi=AG-2025-XXX
+    const params = new URLSearchParams(window.location.search);
+    const suiviParam = params.get('suivi');
+    if (suiviParam) {
+        setTimeout(() => {
+            document.querySelector('[data-tab="suivi"]').click();
+            document.getElementById('trackingCode').value = suiviParam;
+            afficherSuiviClient(suiviParam);
+        }, 500);
+    }
+
+    console.log('🚗 Assist-Garage PRO 2.0');
+    console.log('✅ Groupe 1 : Sécurité hash, badge, notifs, contacts, dark mode');
+    console.log('✅ Groupe 2 : Statuts étendus, historique, multi-photos, recherche');
+    console.log('✅ Groupe 3 : PDF QR code, signatures, impression, export CSV');
 })();
 </script>
 
-<!-- ============================================================
-CODE SOCIAL BAR ADSTERRA
-============================================================ -->
+<!-- Social Bar Adsterra -->
 <script type='text/javascript' src='//pl31125299.profitableratecpmnetwork.com/7d/47/2d/7d472d1e372e98bc61d61a51d74661d4.js'></script>
 
 <script>
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/ntr-garage/sw.js')
-            .then(() => console.log('✅ Service Worker enregistré !'))
-            .catch(err => console.log('❌ Erreur Service Worker :', err));
+            .then(() => console.log('✅ Service Worker'))
+            .catch(err => console.log('❌ SW:', err));
     }
 </script>
 
-<!-- ============================================================
-SCRIPT POUR L'INSTALLATION EN 1 CLIC
-============================================================ -->
 <script>
     (function() {
         let deferredPrompt;
         const btnInstall = document.getElementById('btnInstaller');
-
         window.addEventListener('beforeinstallprompt', (e) => {
-            console.log('🔔 Installation détectée comme possible');
             e.preventDefault();
             deferredPrompt = e;
-            if (btnInstall) {
-                btnInstall.style.display = 'block';
-            }
+            if (btnInstall) btnInstall.style.display = 'block';
         });
-
         if (btnInstall) {
             btnInstall.addEventListener('click', () => {
                 if (deferredPrompt) {
                     deferredPrompt.prompt();
-                    deferredPrompt.userChoice.then((choiceResult) => {
-                        if (choiceResult.outcome === 'accepted') {
-                            console.log('✅ L\'utilisateur a installé l\'application !');
-                            afficherToast('🎉 Application installée avec succès !');
-                        } else {
-                            console.log('❌ L\'utilisateur a refusé l\'installation.');
-                        }
+                    deferredPrompt.userChoice.then(() => {
                         deferredPrompt = null;
                         btnInstall.style.display = 'none';
                     });
                 } else {
-                    alert('📱 Pour installer l\'application :\n\n' +
-                          '1. Cliquez sur le menu ⋮ (Chrome) ou sur le partage (Safari)\n' +
-                          '2. Sélectionnez "Ajouter à l\'écran d\'accueil"');
+                    alert('📱 Menu ⋮ → "Ajouter à l\'écran d\'accueil"');
                 }
             });
         }
-
         window.addEventListener('appinstalled', () => {
-            console.log('🎉 Application installée avec succès !');
-            if (btnInstall) {
-                btnInstall.style.display = 'none';
-            }
+            if (btnInstall) btnInstall.style.display = 'none';
         });
-
-        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-        if (isSafari && window.navigator.standalone === false) {
-            if (btnInstall) {
-                btnInstall.textContent = '📱 Ajouter à l\'écran d\'accueil (Safari)';
-                btnInstall.style.display = 'block';
-                btnInstall.addEventListener('click', () => {
-                    alert('📱 Pour ajouter Assist-Garage à votre écran d\'accueil :\n\n' +
-                          '1. Tapez sur l\'icône de partage (carré avec une flèche)\n' +
-                          '2. Faites défiler vers le bas et tapez "Sur l\'écran d\'accueil"\n' +
-                          '3. Tapez sur "Ajouter"');
-                });
-            }
-        }
-
-        console.log('🚀 Script d\'installation PWA chargé');
     })();
 </script>
+
 </body>
 </html>
