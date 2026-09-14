@@ -579,7 +579,6 @@
         .media-nav-dot.active { border-color: var(--accent); transform: scale(1.1); }
         .media-nav-dot img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* PAGINATION */
         .pagination {
             display: flex;
             justify-content: center;
@@ -607,7 +606,6 @@
             margin: 0 8px;
         }
 
-        /* BANNIÈRE NOUVELLES DEMANDES */
         .new-requests-banner {
             background: linear-gradient(135deg, #22c55e, #16a34a);
             color: white;
@@ -638,9 +636,6 @@
             to { transform: translateY(0); opacity: 1; }
         }
 
-        /* ============================================================
-        ÉCRAN DE CONNEXION
-        ============================================================ */
         #loginScreen {
             display: none;
             min-height: 100vh;
@@ -727,7 +722,7 @@
         <div class="logo">
             <h1>🚗 ASSIST-GARAGE</h1>
             <div class="subtitle">RÉPARATION · ENTRETIEN · DÉPANNAGE</div>
-            <span class="badge-free">📱 VERSION PRO 2.1</span>
+            <span class="badge-free">📱 VERSION PRO 2.2</span>
         </div>
 
         <div class="ad-banner" onclick="ouvrirSmartlink()">
@@ -906,7 +901,6 @@
             <button id="btnLogout" class="btn-secondary" style="padding: 4px 12px; font-size: 11px;">Déconnexion</button>
         </div>
 
-        <!-- Bannière nouvelles demandes -->
         <div id="newRequestsBanner" class="new-requests-banner">
             <span id="newRequestsText">🔔 Nouvelle(s) demande(s) !</span>
             <button onclick="marquerToutVu()">Voir</button>
@@ -953,7 +947,6 @@
 
         <div id="listeDemandes" style="max-height: 600px; overflow-y: auto;"></div>
 
-        <!-- Pagination -->
         <div class="pagination" id="paginationContainer"></div>
 
         <div style="margin-top: 20px; text-align: center;">
@@ -1141,7 +1134,6 @@ function calculerJoursDepuis(ts) {
     const clientGarageName = document.getElementById('clientGarageName');
     if (clientGarageName) clientGarageName.textContent = garageActuel;
 
-    // Autoriser le son dès qu'un clic est fait
     document.addEventListener('click', () => {
         if (!sonAutorise) {
             sonAutorise = true;
@@ -1236,6 +1228,10 @@ function calculerJoursDepuis(ts) {
             afficherEcran('client');
             if (unsubscribeDashboard) { unsubscribeDashboard(); unsubscribeDashboard = null; }
             if (trackingUnsubscribe) { trackingUnsubscribe(); trackingUnsubscribe = null; }
+            // Retirer le badge d'app quand déconnecté
+            if ('clearAppBadge' in navigator) {
+                navigator.clearAppBadge().catch(() => {});
+            }
         }
     });
 
@@ -1294,9 +1290,23 @@ function calculerJoursDepuis(ts) {
         } catch(e) { console.log('Erreur notification:', e.message); }
     }
 
+    // ============================================================
+    // MISE À JOUR BADGE (titre + icône app)
+    // ============================================================
     function mettreAJourBadgeTitre(nbNouvelles) {
         const titreBase = "Assist-Garage - Solution de Gestion Pro";
         document.title = nbNouvelles > 0 ? `(${nbNouvelles}) ${titreBase}` : titreBase;
+
+        // Badge sur l'icône de l'app (Chrome Android/Desktop PWA)
+        if ('setAppBadge' in navigator) {
+            if (nbNouvelles > 0) {
+                navigator.setAppBadge(nbNouvelles).catch(err => {
+                    console.log('Badge non supporté:', err.message);
+                });
+            } else {
+                navigator.clearAppBadge().catch(() => {});
+            }
+        }
     }
 
     // ============================================================
@@ -1608,7 +1618,7 @@ function calculerJoursDepuis(ts) {
     }
 
     // ============================================================
-    // SUIVI CLIENT (FONCTION CORRIGÉE)
+    // SUIVI CLIENT
     // ============================================================
     document.getElementById('btnTracker')?.addEventListener('click', function() {
         const code = document.getElementById('trackingCode').value.trim();
@@ -1630,13 +1640,9 @@ function calculerJoursDepuis(ts) {
         if (trackingError) trackingError.textContent = '🔍 Recherche en cours...';
         if (trackingInfo) trackingInfo.style.display = 'none';
 
-        console.log('🔍 Recherche du numéro:', numeroRecherche);
-
-        // Recherche par numeroDemande
         const query = db.collection('demandes').where('numeroDemande', '==', numeroRecherche);
         trackingUnsubscribe = query.onSnapshot(function(snapshot) {
             if (snapshot.empty) {
-                // 2ème essai : par ID du document
                 db.collection('demandes').doc(demandeId.trim()).get().then(doc => {
                     if (doc.exists) {
                         afficherDetailsSuivi({ id: doc.id, ...doc.data() });
@@ -1768,7 +1774,7 @@ function calculerJoursDepuis(ts) {
     }
 
     // ============================================================
-    // PDF (FONCTION CORRIGÉE - SANS TROP DE TABLEAUX)
+    // PDF
     // ============================================================
     function genererPDF(demande, id) {
         const pdfContent = document.getElementById('pdfContent');
@@ -1779,14 +1785,12 @@ function calculerJoursDepuis(ts) {
 
         pdfContent.innerHTML = `
             <div id="pdfInner" style="font-family: 'Georgia', 'Times New Roman', serif; max-width: 700px; margin: 0 auto; padding: 24px 30px; background: white; color: #1a1a1a; line-height: 1.5;">
-                <!-- En-tête -->
                 <div style="text-align: center; margin-bottom: 22px; padding-bottom: 14px; border-bottom: 2px solid #0f172a;">
                     <div style="font-size: 24px; font-weight: 300; letter-spacing: 5px; color: #0f172a;">ASSIST-GARAGE</div>
                     <div style="font-size: 11px; color: #64748b; letter-spacing: 3px; margin-top: 4px; text-transform: uppercase;">Fiche de Réception</div>
                     <div style="font-size: 9px; color: #94a3b8; margin-top: 6px; font-style: italic; letter-spacing: 1px;">Document confidentiel</div>
                 </div>
 
-                <!-- Numéro + Date -->
                 <div style="display: flex; justify-content: space-between; margin-bottom: 20px; padding: 12px 14px; background: #f8fafc; border-left: 4px solid #0f172a; font-size: 12px;">
                     <div>
                         <div style="font-size: 9px; color: #64748b; text-transform: uppercase; letter-spacing: 1px;">N° de dossier</div>
@@ -1798,7 +1802,6 @@ function calculerJoursDepuis(ts) {
                     </div>
                 </div>
 
-                <!-- VÉHICULE -->
                 <div style="font-size: 11px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin: 16px 0 10px 0; padding-bottom: 4px; border-bottom: 1px solid #cbd5e1;">
                     🚘 Véhicule
                 </div>
@@ -1808,7 +1811,6 @@ function calculerJoursDepuis(ts) {
                     <div style="margin-bottom: 4px;"><strong style="display: inline-block; min-width: 130px; color: #475569;">Kilométrage :</strong> <span style="color: #0f172a;">${demande.kilometrage || '-'} km</span></div>
                 </div>
 
-                <!-- CLIENT -->
                 <div style="font-size: 11px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin: 16px 0 10px 0; padding-bottom: 4px; border-bottom: 1px solid #cbd5e1;">
                     👤 Client
                 </div>
@@ -1818,7 +1820,6 @@ function calculerJoursDepuis(ts) {
                     ${demande.email ? `<div style="margin-bottom: 4px;"><strong style="display: inline-block; min-width: 130px; color: #475569;">Email :</strong> <span style="color: #0f172a;">${demande.email}</span></div>` : ''}
                 </div>
 
-                <!-- PANNE -->
                 <div style="font-size: 11px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin: 16px 0 10px 0; padding-bottom: 4px; border-bottom: 1px solid #cbd5e1;">
                     🔧 Description de la panne
                 </div>
@@ -1841,7 +1842,6 @@ function calculerJoursDepuis(ts) {
                     ${demande.diagnosticIA}
                 </div>` : ''}
 
-                <!-- SIGNATURES -->
                 <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #cbd5e1;">
                     <div style="display: flex; justify-content: space-between; gap: 30px;">
                         <div style="flex: 1;">
@@ -1855,7 +1855,6 @@ function calculerJoursDepuis(ts) {
                     </div>
                 </div>
 
-                <!-- QR CODE -->
                 <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; gap: 15px;">
                     <div id="pdfQRCode" style="flex-shrink: 0; width: 80px; height: 80px;"></div>
                     <div style="font-size: 10px; color: #64748b; line-height: 1.5;">
@@ -1865,14 +1864,12 @@ function calculerJoursDepuis(ts) {
                     </div>
                 </div>
 
-                <!-- Pied de page -->
                 <div style="text-align: center; margin-top: 20px; padding-top: 12px; border-top: 1px solid #e2e8f0;">
                     <div style="font-size: 9px; color: #94a3b8; letter-spacing: 2px;">ASSIST-GARAGE — SOLUTION DE GESTION POUR GARAGES</div>
                 </div>
             </div>
         `;
 
-        // QR code
         setTimeout(() => {
             const pdfQRDiv = document.getElementById('pdfQRCode');
             if (pdfQRDiv && typeof QRCode !== 'undefined') {
@@ -1883,7 +1880,7 @@ function calculerJoursDepuis(ts) {
 
         document.getElementById('pdfModal').style.display = 'flex';
 
-        // Télécharger PDF - MÉTHODE CORRIGÉE
+        // Télécharger PDF - Méthode fiable avec container visible mais transparent
         document.getElementById('btnGenererPDF').onclick = function() {
             const element = document.getElementById('pdfInner');
             if (!element || typeof html2pdf === 'undefined') {
@@ -1895,7 +1892,7 @@ function calculerJoursDepuis(ts) {
             btn.disabled = true;
             btn.textContent = '⏳ Génération...';
 
-            // Clone propre dans un container hors-écran
+            // Clone dans un container VISIBLE mais transparent (méthode la plus fiable)
             const clone = element.cloneNode(true);
             const wrapper = document.createElement('div');
             wrapper.style.position = 'fixed';
@@ -1903,8 +1900,10 @@ function calculerJoursDepuis(ts) {
             wrapper.style.left = '0';
             wrapper.style.width = '800px';
             wrapper.style.background = 'white';
-            wrapper.style.zIndex = '-9999';
+            wrapper.style.zIndex = '99999';
             wrapper.style.padding = '0';
+            wrapper.style.opacity = '0.01';
+            wrapper.style.pointerEvents = 'none';
             wrapper.appendChild(clone);
             document.body.appendChild(wrapper);
 
@@ -1931,13 +1930,15 @@ function calculerJoursDepuis(ts) {
 
             html2pdf().from(wrapper).set(opt).save()
                 .then(() => {
-                    document.body.removeChild(wrapper);
+                    setTimeout(() => {
+                        if (wrapper.parentNode) document.body.removeChild(wrapper);
+                    }, 100);
                     btn.disabled = false;
                     btn.textContent = '⬇️ Télécharger PDF';
                     afficherToast('📄 PDF téléchargé');
                 })
                 .catch((err) => {
-                    document.body.removeChild(wrapper);
+                    if (wrapper.parentNode) document.body.removeChild(wrapper);
                     btn.disabled = false;
                     btn.textContent = '⬇️ Télécharger PDF';
                     console.error('Erreur PDF:', err);
@@ -1945,7 +1946,6 @@ function calculerJoursDepuis(ts) {
                 });
         };
 
-        // Impression
         document.getElementById('btnImprimerPDF').onclick = function() {
             const content = document.getElementById('pdfInner').outerHTML;
             const printWindow = window.open('', '_blank');
@@ -1967,7 +1967,7 @@ function calculerJoursDepuis(ts) {
     }
 
     // ============================================================
-    // CHARGEMENT DASHBOARD + DÉTECTION NOUVELLES DEMANDES
+    // CHARGEMENT DASHBOARD
     // ============================================================
     function chargerDemandesRealtime() {
         if (unsubscribeDashboard) { unsubscribeDashboard(); unsubscribeDashboard = null; }
@@ -1983,16 +1983,13 @@ function calculerJoursDepuis(ts) {
             let demandes = [];
             snapshot.forEach(doc => demandes.push({ id: doc.id, ...doc.data() }));
 
-            // DÉTECTION DES NOUVELLES DEMANDES
             if (!premiereChargeEffectuee) {
-                // Premier chargement : on note les IDs existants sans sonner
                 snapshot.forEach(doc => {
                     nouvellesDemandesIds.add(doc.id);
                 });
                 premiereChargeEffectuee = true;
                 console.log('✅ Premier chargement :', demandes.length, 'demandes');
             } else {
-                // Chargements suivants : détection des nouvelles
                 const nouvelles = [];
                 snapshot.docChanges().forEach(change => {
                     if (change.type === 'added' && !nouvellesDemandesIds.has(change.doc.id)) {
@@ -2005,7 +2002,6 @@ function calculerJoursDepuis(ts) {
                     console.log('🔔 Nouvelles demandes détectées:', nouvelles.length);
                     jouerSon();
 
-                    // Notification navigateur
                     if (nouvelles.length === 1) {
                         const d = nouvelles[0];
                         envoyerNotification(
@@ -2021,7 +2017,6 @@ function calculerJoursDepuis(ts) {
                         );
                     }
 
-                    // Bannière visuelle
                     afficherBanniereNouvelles(nouvelles.length);
                 }
             }
@@ -2065,7 +2060,6 @@ function calculerJoursDepuis(ts) {
 
     window.marquerToutVu = function() {
         newRequestsBanner.classList.remove('visible');
-        // Scroll vers la liste
         document.getElementById('listeDemandes')?.scrollIntoView({ behavior: 'smooth' });
     };
 
@@ -2235,11 +2229,8 @@ function calculerJoursDepuis(ts) {
         }
 
         let html = '';
-
-        // Bouton précédent
         html += `<button class="page-btn" ${currentPage <= 1 ? 'disabled' : ''} onclick="changerPage(${currentPage - 1})">← Précédent</button>`;
 
-        // Pages (afficher max 5 boutons autour de la page actuelle)
         const startPage = Math.max(1, currentPage - 2);
         const endPage = Math.min(totalPages, currentPage + 2);
 
@@ -2257,10 +2248,7 @@ function calculerJoursDepuis(ts) {
             html += `<button class="page-btn" onclick="changerPage(${totalPages})">${totalPages}</button>`;
         }
 
-        // Bouton suivant
         html += `<button class="page-btn" ${currentPage >= totalPages ? 'disabled' : ''} onclick="changerPage(${currentPage + 1})">Suivant →</button>`;
-
-        // Info
         html += `<div class="page-info" style="width: 100%; text-align: center; margin-top: 8px;">Page ${currentPage} / ${totalPages} • ${filteredDemandes.length} demande(s)</div>`;
 
         container.innerHTML = html;
@@ -2435,7 +2423,6 @@ function calculerJoursDepuis(ts) {
         });
     });
 
-    // URL avec ?suivi=AG-2025-XXX
     const params = new URLSearchParams(window.location.search);
     const suiviParam = params.get('suivi');
     if (suiviParam) {
@@ -2447,11 +2434,9 @@ function calculerJoursDepuis(ts) {
         }, 500);
     }
 
-    console.log('🚗 Assist-Garage PRO 2.1 - Corrections');
-    console.log('✅ Suivi corrigé (règles Firestore)');
-    console.log('✅ Notifications + son + bannière visuelle');
-    console.log('✅ PDF refait sans tableaux');
-    console.log('✅ Pagination ajoutée');
+    console.log('🚗 Assist-Garage PRO 2.2');
+    console.log('✅ Badge app (setAppBadge) sur Chrome Android/Desktop');
+    console.log('✅ PDF corrigé avec container transparent');
 })();
 </script>
 
