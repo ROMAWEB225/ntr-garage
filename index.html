@@ -139,7 +139,6 @@
             background: var(--bg-card);
             color: var(--text-secondary);
             font-size: 13px;
-            transition: all 0.2s ease;
         }
         .btn-urgence button:hover { border-color: var(--accent); background: var(--bg-soft); }
         .urgence-selected { background: var(--accent) !important; color: white !important; border-color: var(--accent) !important; }
@@ -569,7 +568,7 @@
         }
         .zoom-hint { font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 8px; font-style: italic; }
 
-        .pdf-modal-content { max-width: 700px !important; }
+        .pdf-modal-content { max-width: 800px !important; }
 
         .media-nav { display: flex; gap: 6px; justify-content: center; margin-bottom: 12px; flex-wrap: wrap; }
         .media-nav-dot {
@@ -579,6 +578,65 @@
         }
         .media-nav-dot.active { border-color: var(--accent); transform: scale(1.1); }
         .media-nav-dot img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* PAGINATION */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .page-btn {
+            padding: 8px 14px;
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            font-size: 13px;
+            cursor: pointer;
+            min-width: 40px;
+        }
+        .page-btn:hover:not(:disabled) { border-color: var(--accent); background: var(--bg-soft); }
+        .page-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+        .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .page-info {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin: 0 8px;
+        }
+
+        /* BANNIÈRE NOUVELLES DEMANDES */
+        .new-requests-banner {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+            padding: 12px 18px;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            animation: slideDown 0.4s ease;
+        }
+        .new-requests-banner.visible { display: flex; }
+        .new-requests-banner button {
+            background: white;
+            color: #16a34a;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
 
         /* ============================================================
         ÉCRAN DE CONNEXION
@@ -602,48 +660,14 @@
             box-shadow: var(--shadow-lg);
             text-align: center;
         }
-        .login-box h1 {
-            font-size: 24px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 6px;
-        }
-        .login-box .sub {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-bottom: 30px;
-        }
-        .login-box .icon-lock {
-            font-size: 56px;
-            display: block;
-            margin-bottom: 20px;
-        }
-        .login-box input {
-            margin-bottom: 12px;
-            text-align: left;
-        }
-        .login-box .btn-primary {
-            margin-top: 8px;
-        }
-        .login-error {
-            color: var(--danger);
-            font-size: 13px;
-            margin-top: 12px;
-            min-height: 18px;
-            text-align: center;
-        }
-        .login-footer {
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid var(--border);
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-        .login-footer a {
-            color: var(--text-primary);
-            text-decoration: none;
-            font-weight: 500;
-        }
+        .login-box h1 { font-size: 24px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+        .login-box .sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 30px; }
+        .login-box .icon-lock { font-size: 56px; display: block; margin-bottom: 20px; }
+        .login-box input { margin-bottom: 12px; text-align: left; }
+        .login-box .btn-primary { margin-top: 8px; }
+        .login-error { color: var(--danger); font-size: 13px; margin-top: 12px; min-height: 18px; text-align: center; }
+        .login-footer { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 11px; color: var(--text-muted); }
+        .login-footer a { color: var(--text-primary); text-decoration: none; font-weight: 500; }
         .user-badge {
             display: flex;
             align-items: center;
@@ -655,10 +679,9 @@
             margin-bottom: 16px;
             font-size: 12px;
             color: var(--text-secondary);
+            flex-wrap: wrap;
         }
-        .user-badge strong {
-            color: var(--text-primary);
-        }
+        .user-badge strong { color: var(--text-primary); }
 
         @media (max-width: 560px) {
             body { padding: 16px; }
@@ -676,10 +699,8 @@
 </head>
 <body>
 
-<!-- ============================================================
-ÉCRAN DE CONNEXION (affiché au démarrage)
-============================================================ -->
-<div id="loginScreen" class="visible">
+<!-- ÉCRAN DE CONNEXION -->
+<div id="loginScreen">
     <div class="login-box">
         <span class="icon-lock">🔐</span>
         <h1>Assist-Garage</h1>
@@ -706,7 +727,7 @@
         <div class="logo">
             <h1>🚗 ASSIST-GARAGE</h1>
             <div class="subtitle">RÉPARATION · ENTRETIEN · DÉPANNAGE</div>
-            <span class="badge-free">📱 VERSION PRO 2.0</span>
+            <span class="badge-free">📱 VERSION PRO 2.1</span>
         </div>
 
         <div class="ad-banner" onclick="ouvrirSmartlink()">
@@ -885,6 +906,12 @@
             <button id="btnLogout" class="btn-secondary" style="padding: 4px 12px; font-size: 11px;">Déconnexion</button>
         </div>
 
+        <!-- Bannière nouvelles demandes -->
+        <div id="newRequestsBanner" class="new-requests-banner">
+            <span id="newRequestsText">🔔 Nouvelle(s) demande(s) !</span>
+            <button onclick="marquerToutVu()">Voir</button>
+        </div>
+
         <div class="garage-selector">
             <label for="selectGarage">🔧 Garage :</label>
             <select id="selectGarage">
@@ -925,6 +952,9 @@
         </div>
 
         <div id="listeDemandes" style="max-height: 600px; overflow-y: auto;"></div>
+
+        <!-- Pagination -->
+        <div class="pagination" id="paginationContainer"></div>
 
         <div style="margin-top: 20px; text-align: center;">
             <button id="btnQuitterDashboard" class="btn-secondary">⬅️ Retour à l'accueil</button>
@@ -983,6 +1013,7 @@
 // ============================================================
 const MAX_PHOTOS = 5;
 const DELAI_RETARD_JOURS = 3;
+const ITEMS_PER_PAGE = 10;
 
 const STATUTS = [
     { id: 0, label: 'Reçu', icon: '🟡', color: '#f59e0b', description: 'Demande enregistrée' },
@@ -1083,10 +1114,15 @@ function calculerJoursDepuis(ts) {
     let unsubscribeDashboard = null;
     let currentFiltre = "toutes";
     let allDemandes = [];
+    let filteredDemandes = [];
+    let currentPage = 1;
     let dernierSon = 0;
     let trackingUnsubscribe = null;
     let currentMediaIndex = 0;
     let currentMediaListForModal = [];
+    let nouvellesDemandesIds = new Set();
+    let premiereChargeEffectuee = false;
+    let sonAutorise = false;
 
     const loginScreen = document.getElementById('loginScreen');
     const clientScreen = document.getElementById('clientScreen');
@@ -1097,12 +1133,21 @@ function calculerJoursDepuis(ts) {
     const previewMediaDiv = document.getElementById('previewMedia');
     const fichierMedia = document.getElementById('fichierMedia');
     const descInput = document.getElementById('description');
+    const newRequestsBanner = document.getElementById('newRequestsBanner');
 
     const garageActuel = getGarageFromURL();
     console.log("🏷️ Garage actuel :", garageActuel);
 
     const clientGarageName = document.getElementById('clientGarageName');
     if (clientGarageName) clientGarageName.textContent = garageActuel;
+
+    // Autoriser le son dès qu'un clic est fait
+    document.addEventListener('click', () => {
+        if (!sonAutorise) {
+            sonAutorise = true;
+            console.log('🔊 Son autorisé');
+        }
+    }, { once: true });
 
     // ============================================================
     // GESTION DES ÉCRANS
@@ -1145,7 +1190,6 @@ function calculerJoursDepuis(ts) {
 
         try {
             await auth.signInWithEmailAndPassword(email, password);
-            // Le onAuthStateChanged va gérer la redirection
         } catch(err) {
             console.error("Erreur connexion:", err);
             let msg = '❌ Erreur de connexion';
@@ -1179,12 +1223,13 @@ function calculerJoursDepuis(ts) {
         }
     });
 
-    // Écouter les changements d'état d'authentification
     auth.onAuthStateChanged((user) => {
         if (user) {
             console.log("✅ Connecté :", user.email);
             document.getElementById('userEmail').textContent = user.email;
             afficherEcran('dashboard');
+            premiereChargeEffectuee = false;
+            nouvellesDemandesIds.clear();
             chargerDemandesRealtime();
         } else {
             console.log("🚪 Non connecté");
@@ -1198,6 +1243,7 @@ function calculerJoursDepuis(ts) {
     // NOTIFICATIONS
     // ============================================================
     function jouerSon() {
+        if (!sonAutorise) return;
         const now = Date.now();
         if (now - dernierSon > 2000) {
             dernierSon = now;
@@ -1207,13 +1253,13 @@ function calculerJoursDepuis(ts) {
                 const gain = ctx.createGain();
                 osc.connect(gain);
                 gain.connect(ctx.destination);
-                osc.frequency.value = 800;
+                osc.frequency.value = 880;
                 osc.type = 'sine';
-                gain.gain.setValueAtTime(0.3, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+                gain.gain.setValueAtTime(0.4, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
                 osc.start(ctx.currentTime);
-                osc.stop(ctx.currentTime + 0.3);
-            } catch(e) {}
+                osc.stop(ctx.currentTime + 0.4);
+            } catch(e) { console.log('Son bloqué:', e.message); }
         }
     }
 
@@ -1222,13 +1268,22 @@ function calculerJoursDepuis(ts) {
             Notification.requestPermission().then(permission => {
                 if (permission === 'granted') {
                     afficherToast('🔔 Notifications activées');
+                } else {
+                    afficherToast('⚠️ Notifications refusées');
                 }
             });
+        } else if (Notification.permission === 'granted') {
+            afficherToast('🔔 Notifications déjà activées');
+        } else {
+            afficherToast('⚠️ Notifications bloquées — vérifiez les paramètres');
         }
     }
 
     function envoyerNotification(titre, message, demandeId) {
-        if (!("Notification" in window) || Notification.permission !== "granted") return;
+        if (!("Notification" in window) || Notification.permission !== "granted") {
+            console.log('Notification non envoyée (permission non accordée)');
+            return;
+        }
         try {
             const notif = new Notification(titre, {
                 body: message,
@@ -1236,7 +1291,7 @@ function calculerJoursDepuis(ts) {
                 tag: demandeId
             });
             notif.onclick = () => { window.focus(); notif.close(); };
-        } catch(e) {}
+        } catch(e) { console.log('Erreur notification:', e.message); }
     }
 
     function mettreAJourBadgeTitre(nbNouvelles) {
@@ -1473,7 +1528,7 @@ function calculerJoursDepuis(ts) {
     }
 
     // ============================================================
-    // ENVOI DEMANDE (public, sans auth)
+    // ENVOI DEMANDE
     // ============================================================
     document.getElementById('btnEnvoyer')?.addEventListener('click', async function() {
         const nom = document.getElementById('clientNom')?.value.trim() || '';
@@ -1553,7 +1608,7 @@ function calculerJoursDepuis(ts) {
     }
 
     // ============================================================
-    // SUIVI CLIENT (public, sans auth)
+    // SUIVI CLIENT (FONCTION CORRIGÉE)
     // ============================================================
     document.getElementById('btnTracker')?.addEventListener('click', function() {
         const code = document.getElementById('trackingCode').value.trim();
@@ -1567,36 +1622,49 @@ function calculerJoursDepuis(ts) {
 
     function afficherSuiviClient(demandeId) {
         if (trackingUnsubscribe) { trackingUnsubscribe(); trackingUnsubscribe = null; }
+
+        const trackingError = document.getElementById('trackingError');
+        const trackingInfo = document.getElementById('trackingInfo');
         const numeroRecherche = demandeId.trim().toUpperCase();
+
+        if (trackingError) trackingError.textContent = '🔍 Recherche en cours...';
+        if (trackingInfo) trackingInfo.style.display = 'none';
+
+        console.log('🔍 Recherche du numéro:', numeroRecherche);
+
+        // Recherche par numeroDemande
         const query = db.collection('demandes').where('numeroDemande', '==', numeroRecherche);
         trackingUnsubscribe = query.onSnapshot(function(snapshot) {
-            const trackingError = document.getElementById('trackingError');
-            const trackingInfo = document.getElementById('trackingInfo');
-
             if (snapshot.empty) {
-                const docRef = db.collection('demandes').doc(demandeId);
-                docRef.get().then(doc => {
-                    if (doc.exists) afficherDetailsSuivi(doc.data(), doc.id);
-                    else {
-                        if (trackingError) trackingError.textContent = '❌ Numéro invalide';
+                // 2ème essai : par ID du document
+                db.collection('demandes').doc(demandeId.trim()).get().then(doc => {
+                    if (doc.exists) {
+                        afficherDetailsSuivi({ id: doc.id, ...doc.data() });
+                    } else {
+                        if (trackingError) trackingError.textContent = '❌ Aucune demande trouvée avec ce numéro';
                         if (trackingInfo) trackingInfo.style.display = 'none';
                     }
-                }).catch(() => {
-                    if (trackingError) trackingError.textContent = '❌ Numéro invalide';
-                    if (trackingInfo) trackingInfo.style.display = 'none';
+                }).catch(err => {
+                    console.error('Erreur recherche ID:', err);
+                    if (trackingError) trackingError.textContent = '❌ Erreur: ' + err.message;
                 });
                 return;
             }
             const doc = snapshot.docs[0];
-            afficherDetailsSuivi(doc.data(), doc.id);
-        }, (error) => {
+            afficherDetailsSuivi({ id: doc.id, ...doc.data() });
+        }, function(error) {
             console.error("Erreur suivi:", error);
-            const trackingError = document.getElementById('trackingError');
-            if (trackingError) trackingError.textContent = '❌ Erreur de recherche';
+            if (trackingError) {
+                if (error.code === 'permission-denied') {
+                    trackingError.textContent = '❌ Accès refusé — vérifiez les règles Firestore';
+                } else {
+                    trackingError.textContent = '❌ Erreur: ' + error.message;
+                }
+            }
         });
     }
 
-    function afficherDetailsSuivi(data, docId) {
+    function afficherDetailsSuivi(data) {
         const trackingError = document.getElementById('trackingError');
         const trackingInfo = document.getElementById('trackingInfo');
         const statut = data.statut !== undefined ? data.statut : 0;
@@ -1639,7 +1707,7 @@ function calculerJoursDepuis(ts) {
     }
 
     // ============================================================
-    // DASHBOARD (protégé par Auth)
+    // DASHBOARD
     // ============================================================
     async function updateStatus(demandeId, nouveauStatut) {
         try {
@@ -1700,102 +1768,96 @@ function calculerJoursDepuis(ts) {
     }
 
     // ============================================================
-    // PDF
+    // PDF (FONCTION CORRIGÉE - SANS TROP DE TABLEAUX)
     // ============================================================
     function genererPDF(demande, id) {
         const pdfContent = document.getElementById('pdfContent');
         const dateReception = demande.date || new Date().toLocaleString('fr-FR');
         const statutInfo = STATUTS.find(s => s.id === (demande.statut || 0)) || STATUTS[0];
         const trackingUrl = `${window.location.origin}${window.location.pathname}?suivi=${id}`;
+        const urgenceColor = demande.urgence === 'haute' ? '#ef4444' : demande.urgence === 'moyenne' ? '#f59e0b' : '#22c55e';
 
         pdfContent.innerHTML = `
-            <div style="font-family: 'Georgia', 'Times New Roman', serif; max-width: 700px; margin: 0 auto; padding: 20px; background: white; color: #0f172a;">
-                <div style="text-align: center; margin-bottom: 25px; border-bottom: 2px solid #0f172a; padding-bottom: 15px;">
-                    <div style="font-size: 26px; font-weight: 300; letter-spacing: 4px; color: #0f172a;">ASSIST-GARAGE</div>
-                    <div style="font-size: 11px; color: #64748b; letter-spacing: 2px; margin-top: 4px; text-transform: uppercase;">Fiche de réception</div>
-                    <div style="font-size: 10px; color: #94a3b8; margin-top: 6px; font-style: italic;">Document confidentiel</div>
+            <div id="pdfInner" style="font-family: 'Georgia', 'Times New Roman', serif; max-width: 700px; margin: 0 auto; padding: 24px 30px; background: white; color: #1a1a1a; line-height: 1.5;">
+                <!-- En-tête -->
+                <div style="text-align: center; margin-bottom: 22px; padding-bottom: 14px; border-bottom: 2px solid #0f172a;">
+                    <div style="font-size: 24px; font-weight: 300; letter-spacing: 5px; color: #0f172a;">ASSIST-GARAGE</div>
+                    <div style="font-size: 11px; color: #64748b; letter-spacing: 3px; margin-top: 4px; text-transform: uppercase;">Fiche de Réception</div>
+                    <div style="font-size: 9px; color: #94a3b8; margin-top: 6px; font-style: italic; letter-spacing: 1px;">Document confidentiel</div>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; margin-bottom: 20px; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f8fafc; font-size: 13px;">
+                <!-- Numéro + Date -->
+                <div style="display: flex; justify-content: space-between; margin-bottom: 20px; padding: 12px 14px; background: #f8fafc; border-left: 4px solid #0f172a; font-size: 12px;">
                     <div>
-                        <div style="font-size: 10px; color: #64748b; text-transform: uppercase;">N° de demande</div>
-                        <div style="color: #0f172a; font-weight: 600; font-size: 15px;">${id}</div>
+                        <div style="font-size: 9px; color: #64748b; text-transform: uppercase; letter-spacing: 1px;">N° de dossier</div>
+                        <div style="color: #0f172a; font-weight: 600; font-size: 14px; margin-top: 2px;">${id}</div>
                     </div>
                     <div style="text-align: right;">
-                        <div style="font-size: 10px; color: #64748b; text-transform: uppercase;">Date</div>
-                        <div style="color: #0f172a;">${dateReception}</div>
+                        <div style="font-size: 9px; color: #64748b; text-transform: uppercase; letter-spacing: 1px;">Date de réception</div>
+                        <div style="color: #0f172a; margin-top: 2px;">${dateReception}</div>
                     </div>
                 </div>
 
-                <div style="margin-bottom: 18px;">
-                    <div style="font-size: 11px; font-weight: 600; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; border-left: 3px solid #0f172a; padding-left: 10px;">Véhicule</div>
-                    <table style="width:100%; border-collapse: collapse; font-size: 12px;">
-                        <tr>
-                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc; width: 20%;"><strong>Immat.</strong></td>
-                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 30%;">${demande.immatriculation || '-'}</td>
-                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc; width: 20%;"><strong>Km</strong></td>
-                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 30%;">${demande.kilometrage || '-'}</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Marque</strong></td>
-                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0;">${demande.marque || '-'}</td>
-                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Modèle</strong></td>
-                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0;">${demande.modele || '-'}</td>
-                        </tr>
-                    </table>
+                <!-- VÉHICULE -->
+                <div style="font-size: 11px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin: 16px 0 10px 0; padding-bottom: 4px; border-bottom: 1px solid #cbd5e1;">
+                    🚘 Véhicule
+                </div>
+                <div style="font-size: 12px; margin-bottom: 6px;">
+                    <div style="margin-bottom: 4px;"><strong style="display: inline-block; min-width: 130px; color: #475569;">Immatriculation :</strong> <span style="color: #0f172a;">${demande.immatriculation || '-'}</span></div>
+                    <div style="margin-bottom: 4px;"><strong style="display: inline-block; min-width: 130px; color: #475569;">Marque / Modèle :</strong> <span style="color: #0f172a;">${demande.marque || '-'} ${demande.modele || ''}</span></div>
+                    <div style="margin-bottom: 4px;"><strong style="display: inline-block; min-width: 130px; color: #475569;">Kilométrage :</strong> <span style="color: #0f172a;">${demande.kilometrage || '-'} km</span></div>
                 </div>
 
-                <div style="margin-bottom: 18px;">
-                    <div style="font-size: 11px; font-weight: 600; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; border-left: 3px solid #0f172a; padding-left: 10px;">Client</div>
-                    <table style="width:100%; border-collapse: collapse; font-size: 12px;">
-                        <tr>
-                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc; width: 20%;"><strong>Nom</strong></td>
-                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 30%;">${demande.nom || '-'}</td>
-                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc; width: 20%;"><strong>Tél</strong></td>
-                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 30%;">${demande.telephone || '-'}</td>
-                        </tr>
-                        ${demande.email ? `<tr><td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Email</strong></td><td colspan="3" style="padding: 6px 8px; border: 1px solid #e2e8f0;">${demande.email}</td></tr>` : ''}
-                    </table>
+                <!-- CLIENT -->
+                <div style="font-size: 11px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin: 16px 0 10px 0; padding-bottom: 4px; border-bottom: 1px solid #cbd5e1;">
+                    👤 Client
+                </div>
+                <div style="font-size: 12px; margin-bottom: 6px;">
+                    <div style="margin-bottom: 4px;"><strong style="display: inline-block; min-width: 130px; color: #475569;">Nom :</strong> <span style="color: #0f172a;">${demande.nom || '-'}</span></div>
+                    <div style="margin-bottom: 4px;"><strong style="display: inline-block; min-width: 130px; color: #475569;">Téléphone :</strong> <span style="color: #0f172a;">${demande.telephone || '-'}</span></div>
+                    ${demande.email ? `<div style="margin-bottom: 4px;"><strong style="display: inline-block; min-width: 130px; color: #475569;">Email :</strong> <span style="color: #0f172a;">${demande.email}</span></div>` : ''}
                 </div>
 
-                <div style="margin-bottom: 18px;">
-                    <div style="font-size: 11px; font-weight: 600; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; border-left: 3px solid #0f172a; padding-left: 10px;">Panne déclarée</div>
-                    <div style="padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 12px; line-height: 1.5; background: #fef2f2; min-height: 40px;">
-                        ${demande.description || '-'}
-                    </div>
-                    <table style="width:100%; border-collapse: collapse; font-size: 12px; margin-top: 8px;">
-                        <tr>
-                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc; width: 25%;"><strong>Urgence</strong></td>
-                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 25%; color: ${demande.urgence === 'haute' ? '#ef4444' : demande.urgence === 'moyenne' ? '#f59e0b' : '#22c55e'}; font-weight: 600;">
-                                ${demande.urgence === 'haute' ? '🔴 Haute' : demande.urgence === 'moyenne' ? '🟡 Moyenne' : '🟢 Basse'}
-                            </td>
-                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc; width: 25%;"><strong>Statut</strong></td>
-                            <td style="padding: 6px 8px; border: 1px solid #e2e8f0; width: 25%;">${statutInfo.icon} ${statutInfo.label}</td>
-                        </tr>
-                        ${demande.lieu ? `<tr><td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Lieu</strong></td><td colspan="3" style="padding: 6px 8px; border: 1px solid #e2e8f0;">${demande.lieu}</td></tr>` : ''}
-                        ${demande.dateRdv ? `<tr><td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>RDV</strong></td><td colspan="3" style="padding: 6px 8px; border: 1px solid #e2e8f0;">${demande.dateRdv} ${demande.heureRdv || ''}</td></tr>` : ''}
-                        ${demande.diagnosticIA ? `<tr><td style="padding: 6px 8px; border: 1px solid #e2e8f0; background: #f8fafc;"><strong>Diagnostic IA</strong></td><td colspan="3" style="padding: 6px 8px; border: 1px solid #e2e8f0; font-style: italic; color: #64748b;">${demande.diagnosticIA}</td></tr>` : ''}
-                    </table>
+                <!-- PANNE -->
+                <div style="font-size: 11px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin: 16px 0 10px 0; padding-bottom: 4px; border-bottom: 1px solid #cbd5e1;">
+                    🔧 Description de la panne
+                </div>
+                <div style="padding: 10px 12px; border: 1px solid #fecaca; border-left: 4px solid ${urgenceColor}; border-radius: 4px; font-size: 12px; line-height: 1.5; background: #fef2f2; margin-bottom: 10px; color: #0f172a;">
+                    ${demande.description || '-'}
+                </div>
+                <div style="font-size: 12px; margin-bottom: 6px;">
+                    <div style="margin-bottom: 4px;"><strong style="display: inline-block; min-width: 130px; color: #475569;">Niveau d'urgence :</strong> <span style="color: ${urgenceColor}; font-weight: 700;">${demande.urgence === 'haute' ? '🔴 Haute' : demande.urgence === 'moyenne' ? '🟡 Moyenne' : '🟢 Basse'}</span></div>
+                    <div style="margin-bottom: 4px;"><strong style="display: inline-block; min-width: 130px; color: #475569;">Statut actuel :</strong> <span style="color: #0f172a;">${statutInfo.icon} ${statutInfo.label}</span></div>
+                    ${demande.lieu ? `<div style="margin-bottom: 4px;"><strong style="display: inline-block; min-width: 130px; color: #475569;">Lieu :</strong> <span style="color: #0f172a;">${demande.lieu}</span></div>` : ''}
+                    ${demande.dateRdv ? `<div style="margin-bottom: 4px;"><strong style="display: inline-block; min-width: 130px; color: #475569;">Rendez-vous :</strong> <span style="color: #0f172a;">${demande.dateRdv} ${demande.heureRdv || ''}</span></div>` : ''}
+                    ${demande.garage ? `<div style="margin-bottom: 4px;"><strong style="display: inline-block; min-width: 130px; color: #475569;">Garage :</strong> <span style="color: #0f172a;">${demande.garage}</span></div>` : ''}
                 </div>
 
-                ${demande.garage ? `
-                <div style="margin-bottom: 18px; padding: 10px; background: #f8fafc; border-radius: 6px; font-size: 12px;">
-                    <strong>Garage assigné :</strong> ${demande.garage}
+                ${demande.diagnosticIA ? `
+                <div style="font-size: 11px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin: 16px 0 10px 0; padding-bottom: 4px; border-bottom: 1px solid #cbd5e1;">
+                    🤖 Diagnostic IA
+                </div>
+                <div style="font-size: 12px; font-style: italic; color: #475569; padding: 8px 10px; background: #f8fafc; border-radius: 4px; margin-bottom: 10px;">
+                    ${demande.diagnosticIA}
                 </div>` : ''}
 
-                <div style="margin-top: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                    <div>
-                        <div style="font-size: 11px; color: #64748b; margin-bottom: 30px;">Signature du client</div>
-                        <div style="border-top: 1px solid #0f172a; padding-top: 4px; font-size: 10px; color: #94a3b8;">Lu et approuvé</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 11px; color: #64748b; margin-bottom: 30px;">Signature du garage</div>
-                        <div style="border-top: 1px solid #0f172a; padding-top: 4px; font-size: 10px; color: #94a3b8;">Cachet et signature</div>
+                <!-- SIGNATURES -->
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #cbd5e1;">
+                    <div style="display: flex; justify-content: space-between; gap: 30px;">
+                        <div style="flex: 1;">
+                            <div style="font-size: 11px; color: #64748b; margin-bottom: 40px;">Signature du client</div>
+                            <div style="border-top: 1px solid #0f172a; padding-top: 4px; font-size: 9px; color: #94a3b8; text-align: center;">Lu et approuvé</div>
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="font-size: 11px; color: #64748b; margin-bottom: 40px;">Signature du garage</div>
+                            <div style="border-top: 1px solid #0f172a; padding-top: 4px; font-size: 9px; color: #94a3b8; text-align: center;">Cachet et signature</div>
+                        </div>
                     </div>
                 </div>
 
+                <!-- QR CODE -->
                 <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; gap: 15px;">
-                    <div id="pdfQRCode" style="flex-shrink: 0;"></div>
+                    <div id="pdfQRCode" style="flex-shrink: 0; width: 80px; height: 80px;"></div>
                     <div style="font-size: 10px; color: #64748b; line-height: 1.5;">
                         <strong style="color: #0f172a; font-size: 11px;">📱 Suivi en ligne</strong><br>
                         Scannez ce QR code pour suivre l'avancement.<br>
@@ -1803,12 +1865,14 @@ function calculerJoursDepuis(ts) {
                     </div>
                 </div>
 
-                <div style="text-align: center; margin-top: 20px; padding-top: 15px; border-top: 1px solid #e2e8f0;">
-                    <div style="font-size: 10px; color: #94a3b8; letter-spacing: 1px;">ASSIST-GARAGE — Solution de gestion pour garages</div>
+                <!-- Pied de page -->
+                <div style="text-align: center; margin-top: 20px; padding-top: 12px; border-top: 1px solid #e2e8f0;">
+                    <div style="font-size: 9px; color: #94a3b8; letter-spacing: 2px;">ASSIST-GARAGE — SOLUTION DE GESTION POUR GARAGES</div>
                 </div>
             </div>
         `;
 
+        // QR code
         setTimeout(() => {
             const pdfQRDiv = document.getElementById('pdfQRCode');
             if (pdfQRDiv && typeof QRCode !== 'undefined') {
@@ -1819,35 +1883,91 @@ function calculerJoursDepuis(ts) {
 
         document.getElementById('pdfModal').style.display = 'flex';
 
+        // Télécharger PDF - MÉTHODE CORRIGÉE
         document.getElementById('btnGenererPDF').onclick = function() {
-            const element = document.getElementById('pdfContent');
-            if (typeof html2pdf !== 'undefined') {
-                html2pdf().from(element).set({
-                    margin: [12, 12, 12, 12],
-                    filename: `Fiche_${id}.pdf`,
-                    html2canvas: { scale: 2, useCORS: true, letterRendering: true },
-                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                    pagebreak: { mode: ['avoid-all'] }
-                }).save();
-                afficherToast("📄 PDF généré");
+            const element = document.getElementById('pdfInner');
+            if (!element || typeof html2pdf === 'undefined') {
+                afficherToast('❌ Erreur PDF');
+                return;
             }
+
+            const btn = this;
+            btn.disabled = true;
+            btn.textContent = '⏳ Génération...';
+
+            // Clone propre dans un container hors-écran
+            const clone = element.cloneNode(true);
+            const wrapper = document.createElement('div');
+            wrapper.style.position = 'fixed';
+            wrapper.style.top = '0';
+            wrapper.style.left = '0';
+            wrapper.style.width = '800px';
+            wrapper.style.background = 'white';
+            wrapper.style.zIndex = '-9999';
+            wrapper.style.padding = '0';
+            wrapper.appendChild(clone);
+            document.body.appendChild(wrapper);
+
+            const opt = {
+                margin: [10, 8, 10, 8],
+                filename: `Fiche_${id}.pdf`,
+                image: { type: 'jpeg', quality: 0.95 },
+                html2canvas: {
+                    scale: 2,
+                    useCORS: true,
+                    letterRendering: true,
+                    logging: false,
+                    scrollX: 0,
+                    scrollY: 0,
+                    windowWidth: 800,
+                    backgroundColor: '#ffffff'
+                },
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'portrait'
+                }
+            };
+
+            html2pdf().from(wrapper).set(opt).save()
+                .then(() => {
+                    document.body.removeChild(wrapper);
+                    btn.disabled = false;
+                    btn.textContent = '⬇️ Télécharger PDF';
+                    afficherToast('📄 PDF téléchargé');
+                })
+                .catch((err) => {
+                    document.body.removeChild(wrapper);
+                    btn.disabled = false;
+                    btn.textContent = '⬇️ Télécharger PDF';
+                    console.error('Erreur PDF:', err);
+                    afficherToast('❌ Erreur: ' + err.message);
+                });
         };
 
+        // Impression
         document.getElementById('btnImprimerPDF').onclick = function() {
+            const content = document.getElementById('pdfInner').outerHTML;
             const printWindow = window.open('', '_blank');
-            const content = document.getElementById('pdfContent').innerHTML;
+            if (!printWindow) {
+                afficherToast('❌ Autorisez les popups');
+                return;
+            }
             printWindow.document.write(`
                 <html><head><title>Fiche ${id}</title>
-                <style>body { font-family: 'Georgia', serif; padding: 20px; }</style>
+                <style>
+                    @page { margin: 10mm; }
+                    body { font-family: 'Georgia', serif; padding: 0; margin: 0; color: #1a1a1a; }
+                </style>
                 </head><body>${content}</body></html>
             `);
             printWindow.document.close();
-            setTimeout(() => printWindow.print(), 500);
+            setTimeout(() => printWindow.print(), 800);
         };
     }
 
     // ============================================================
-    // CHARGEMENT DASHBOARD
+    // CHARGEMENT DASHBOARD + DÉTECTION NOUVELLES DEMANDES
     // ============================================================
     function chargerDemandesRealtime() {
         if (unsubscribeDashboard) { unsubscribeDashboard(); unsubscribeDashboard = null; }
@@ -1859,29 +1979,52 @@ function calculerJoursDepuis(ts) {
         }
         query = query.orderBy('dateTimestamp', 'desc');
 
-        let premierChargement = true;
-
         unsubscribeDashboard = query.onSnapshot(function(snapshot) {
             let demandes = [];
             snapshot.forEach(doc => demandes.push({ id: doc.id, ...doc.data() }));
 
-            if (!premierChargement) {
+            // DÉTECTION DES NOUVELLES DEMANDES
+            if (!premiereChargeEffectuee) {
+                // Premier chargement : on note les IDs existants sans sonner
+                snapshot.forEach(doc => {
+                    nouvellesDemandesIds.add(doc.id);
+                });
+                premiereChargeEffectuee = true;
+                console.log('✅ Premier chargement :', demandes.length, 'demandes');
+            } else {
+                // Chargements suivants : détection des nouvelles
+                const nouvelles = [];
                 snapshot.docChanges().forEach(change => {
-                    if (change.type === 'added') {
-                        const d = change.doc.data();
-                        const jours = calculerJoursDepuis(d.dateTimestamp);
-                        if (jours === 0) {
-                            jouerSon();
-                            envoyerNotification(
-                                `🚗 Nouvelle demande`,
-                                `${d.immatriculation || 'N/A'} - ${d.nom || 'Client'}${d.urgence === 'haute' ? ' 🔴 URGENT' : ''}`,
-                                change.doc.id
-                            );
-                        }
+                    if (change.type === 'added' && !nouvellesDemandesIds.has(change.doc.id)) {
+                        nouvellesDemandesIds.add(change.doc.id);
+                        nouvelles.push(change.doc.data());
                     }
                 });
+
+                if (nouvelles.length > 0) {
+                    console.log('🔔 Nouvelles demandes détectées:', nouvelles.length);
+                    jouerSon();
+
+                    // Notification navigateur
+                    if (nouvelles.length === 1) {
+                        const d = nouvelles[0];
+                        envoyerNotification(
+                            `🚗 Nouvelle demande`,
+                            `${d.immatriculation || 'N/A'} - ${d.nom || 'Client'}${d.urgence === 'haute' ? ' 🔴 URGENT' : ''}`,
+                            'new-demande'
+                        );
+                    } else {
+                        envoyerNotification(
+                            `🚗 ${nouvelles.length} nouvelles demandes`,
+                            `Vous avez ${nouvelles.length} nouvelles demandes à traiter`,
+                            'new-multi'
+                        );
+                    }
+
+                    // Bannière visuelle
+                    afficherBanniereNouvelles(nouvelles.length);
+                }
             }
-            premierChargement = false;
 
             const nonLues = demandes.filter(d => !d.lu).length;
             mettreAJourBadgeTitre(nonLues);
@@ -1899,19 +2042,38 @@ function calculerJoursDepuis(ts) {
             document.getElementById('statRetard').textContent = retards;
 
             allDemandes = demandes;
-            afficherDemandes(demandes);
+            currentPage = 1;
+            appliquerFiltresEtAfficher();
         }, function(error) {
             console.error("Erreur Firestore:", error);
             if (error.code === 'permission-denied') {
-                afficherToast("❌ Accès refusé — reconnectez-vous");
+                afficherToast("❌ Accès refusé — vérifiez les règles Firestore");
             } else {
                 afficherToast("❌ Erreur: " + error.message);
             }
         });
     }
 
-    function afficherDemandes(demandes) {
-        let filtered = [...demandes];
+    function afficherBanniereNouvelles(count) {
+        if (!newRequestsBanner) return;
+        document.getElementById('newRequestsText').textContent = `🔔 ${count} nouvelle(s) demande(s) !`;
+        newRequestsBanner.classList.add('visible');
+        setTimeout(() => {
+            newRequestsBanner.classList.remove('visible');
+        }, 8000);
+    }
+
+    window.marquerToutVu = function() {
+        newRequestsBanner.classList.remove('visible');
+        // Scroll vers la liste
+        document.getElementById('listeDemandes')?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    // ============================================================
+    // AFFICHAGE + FILTRES + PAGINATION
+    // ============================================================
+    function appliquerFiltresEtAfficher() {
+        let filtered = [...allDemandes];
 
         if (currentFiltre === 'non-lues') filtered = filtered.filter(d => !d.lu);
         if (currentFiltre === 'urgentes') filtered = filtered.filter(d => d.urgence === 'haute');
@@ -1947,16 +2109,31 @@ function calculerJoursDepuis(ts) {
             });
         }
 
+        filteredDemandes = filtered;
+        afficherPage(currentPage);
+        afficherPagination();
+    }
+
+    function afficherPage(page) {
+        const totalPages = Math.ceil(filteredDemandes.length / ITEMS_PER_PAGE) || 1;
+        if (page < 1) page = 1;
+        if (page > totalPages) page = totalPages;
+        currentPage = page;
+
+        const start = (page - 1) * ITEMS_PER_PAGE;
+        const end = start + ITEMS_PER_PAGE;
+        const pageDemandes = filteredDemandes.slice(start, end);
+
         const listeDiv = document.getElementById('listeDemandes');
         if (!listeDiv) return;
 
-        if (filtered.length === 0) {
+        if (pageDemandes.length === 0) {
             listeDiv.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);">📭 Aucune demande</div>';
             return;
         }
 
         let html = '';
-        filtered.forEach(d => {
+        pageDemandes.forEach(d => {
             const statutActuel = d.statut !== undefined ? d.statut : 0;
             const statutInfo = STATUTS.find(s => s.id === statutActuel) || STATUTS[0];
             const num = d.numeroDemande || d.id.substring(0, 8);
@@ -2044,12 +2221,60 @@ function calculerJoursDepuis(ts) {
                 } catch(e) { console.error('Erreur parse media', e); }
             });
         });
-
-        filtered.forEach(d => {
-            if (!d.lu) db.collection('demandes').doc(d.id).update({ lu: true }).catch(() => {});
-        });
     }
 
+    function afficherPagination() {
+        const container = document.getElementById('paginationContainer');
+        if (!container) return;
+
+        const totalPages = Math.ceil(filteredDemandes.length / ITEMS_PER_PAGE) || 1;
+
+        if (totalPages <= 1) {
+            container.innerHTML = '';
+            return;
+        }
+
+        let html = '';
+
+        // Bouton précédent
+        html += `<button class="page-btn" ${currentPage <= 1 ? 'disabled' : ''} onclick="changerPage(${currentPage - 1})">← Précédent</button>`;
+
+        // Pages (afficher max 5 boutons autour de la page actuelle)
+        const startPage = Math.max(1, currentPage - 2);
+        const endPage = Math.min(totalPages, currentPage + 2);
+
+        if (startPage > 1) {
+            html += `<button class="page-btn" onclick="changerPage(1)">1</button>`;
+            if (startPage > 2) html += `<span class="page-info">…</span>`;
+        }
+
+        for (let i = startPage; i <= endPage; i++) {
+            html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="changerPage(${i})">${i}</button>`;
+        }
+
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) html += `<span class="page-info">…</span>`;
+            html += `<button class="page-btn" onclick="changerPage(${totalPages})">${totalPages}</button>`;
+        }
+
+        // Bouton suivant
+        html += `<button class="page-btn" ${currentPage >= totalPages ? 'disabled' : ''} onclick="changerPage(${currentPage + 1})">Suivant →</button>`;
+
+        // Info
+        html += `<div class="page-info" style="width: 100%; text-align: center; margin-top: 8px;">Page ${currentPage} / ${totalPages} • ${filteredDemandes.length} demande(s)</div>`;
+
+        container.innerHTML = html;
+    }
+
+    window.changerPage = function(page) {
+        afficherPage(page);
+        afficherPagination();
+        document.getElementById('listeDemandes')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    // ============================================================
+    // MEDIA MODAL
+    // ============================================================
     function afficherMediaCourant() {
         const modal = document.getElementById('mediaModal');
         const content = document.getElementById('mediaModalContent');
@@ -2153,9 +2378,9 @@ function calculerJoursDepuis(ts) {
     // NAVIGATION
     // ============================================================
     document.getElementById('btnAllerDashboard')?.addEventListener('click', function() {
-        // Si connecté, va au dashboard, sinon montre l'écran de login
         if (auth.currentUser) {
             afficherEcran('dashboard');
+            premiereChargeEffectuee = false;
             chargerDemandesRealtime();
         } else {
             afficherEcran('login');
@@ -2173,14 +2398,27 @@ function calculerJoursDepuis(ts) {
             document.querySelectorAll('.filtre-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             currentFiltre = btn.dataset.filtre;
-            afficherDemandes(allDemandes);
+            currentPage = 1;
+            appliquerFiltresEtAfficher();
         });
     });
 
-    document.getElementById('searchInput')?.addEventListener('input', () => afficherDemandes(allDemandes));
-    document.getElementById('filterDateStart')?.addEventListener('change', () => afficherDemandes(allDemandes));
-    document.getElementById('filterDateEnd')?.addEventListener('change', () => afficherDemandes(allDemandes));
-    document.getElementById('selectGarage')?.addEventListener('change', chargerDemandesRealtime);
+    document.getElementById('searchInput')?.addEventListener('input', () => {
+        currentPage = 1;
+        appliquerFiltresEtAfficher();
+    });
+    document.getElementById('filterDateStart')?.addEventListener('change', () => {
+        currentPage = 1;
+        appliquerFiltresEtAfficher();
+    });
+    document.getElementById('filterDateEnd')?.addEventListener('change', () => {
+        currentPage = 1;
+        appliquerFiltresEtAfficher();
+    });
+    document.getElementById('selectGarage')?.addEventListener('change', () => {
+        premiereChargeEffectuee = false;
+        chargerDemandesRealtime();
+    });
 
     // ============================================================
     // INITIALISATION
@@ -2190,7 +2428,6 @@ function calculerJoursDepuis(ts) {
     if (dateRdvElem) dateRdvElem.min = today;
 
     setupMediaHandlers();
-    demanderPermissionNotification();
 
     document.querySelectorAll('.modal').forEach(modal => {
         modal.addEventListener('click', function(e) {
@@ -2198,7 +2435,7 @@ function calculerJoursDepuis(ts) {
         });
     });
 
-    // URL avec paramètre ?suivi=AG-2025-XXX (accessible publiquement)
+    // URL avec ?suivi=AG-2025-XXX
     const params = new URLSearchParams(window.location.search);
     const suiviParam = params.get('suivi');
     if (suiviParam) {
@@ -2210,8 +2447,11 @@ function calculerJoursDepuis(ts) {
         }, 500);
     }
 
-    console.log('🚗 Assist-Garage PRO 2.0 - Firebase Auth');
-    console.log('🔐 Sécurité : Firebase Authentication (aucun mot de passe dans le code)');
+    console.log('🚗 Assist-Garage PRO 2.1 - Corrections');
+    console.log('✅ Suivi corrigé (règles Firestore)');
+    console.log('✅ Notifications + son + bannière visuelle');
+    console.log('✅ PDF refait sans tableaux');
+    console.log('✅ Pagination ajoutée');
 })();
 </script>
 
