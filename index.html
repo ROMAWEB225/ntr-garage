@@ -244,6 +244,30 @@
         }
         .btn-secondary:hover { background: var(--bg-soft); border-color: var(--accent); }
 
+        .btn-success {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-success:hover { background: #16a34a; }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 40px;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-danger:hover { background: #dc2626; }
+
         .btn-contact {
             display: inline-flex;
             align-items: center;
@@ -273,13 +297,13 @@
 
         .stats {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
             margin-bottom: 24px;
         }
-        .stat-card { background: var(--bg-soft); padding: 16px; border-radius: 20px; text-align: center; }
-        .stat-number { font-size: 28px; font-weight: 700; color: var(--text-primary); }
-        .stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+        .stat-card { background: var(--bg-soft); padding: 14px 8px; border-radius: 20px; text-align: center; }
+        .stat-number { font-size: 24px; font-weight: 700; color: var(--text-primary); }
+        .stat-label { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
 
         .filtres { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
         .filtre-btn {
@@ -357,6 +381,27 @@
             margin-left: 6px;
         }
 
+        .proforma-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+        .proforma-badge.en_attente { background: #fef3c7; color: #92400e; }
+        .proforma-badge.accepte { background: #d1fae5; color: #065f46; }
+        .proforma-badge.refuse { background: #fee2e2; color: #991b1b; }
+        .proforma-badge.negociation { background: #e0e7ff; color: #3730a3; }
+
+        @media (prefers-color-scheme: dark) {
+            .note-badge { background: #1e3a8a; color: #dbeafe; }
+            .proforma-badge.en_attente { background: #422006; color: #fcd34d; }
+            .proforma-badge.accepte { background: #064e3b; color: #a7f3d0; }
+            .proforma-badge.refuse { background: #7f1d1d; color: #fecaca; }
+            .proforma-badge.negociation { background: #312e81; color: #c7d2fe; }
+        }
+
         .status-select { padding: 6px 12px; border-radius: 40px; border: 1px solid var(--border); font-size: 12px; background: var(--bg-card); color: var(--text-primary); cursor: pointer; }
         .btn-action { background: var(--bg-soft); border: none; padding: 6px 14px; border-radius: 30px; font-size: 12px; cursor: pointer; color: var(--text-secondary); }
         .btn-action:hover { background: var(--border); }
@@ -375,10 +420,23 @@
         }
         .note-display strong { color: #92400e; }
 
+        .proforma-display {
+            background: #ecfdf5;
+            border-left: 4px solid var(--success);
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 12px;
+            color: #064e3b;
+            display: none;
+        }
+        .proforma-display strong { color: #065f46; }
+
         @media (prefers-color-scheme: dark) {
             .note-display { background: #422006; color: #fcd34d; }
             .note-display strong { color: #fbbf24; }
-            .note-badge { background: #1e3a8a; color: #dbeafe; }
+            .proforma-display { background: #064e3b; color: #a7f3d0; }
+            .proforma-display strong { color: #6ee7b7; }
         }
 
         .status-step { display: flex; align-items: center; margin: 12px 0; opacity: 0.4; padding: 8px; border-radius: 12px; }
@@ -556,8 +614,10 @@
         }
         .timeline-item .event { color: var(--text-primary); flex: 1; }
         .timeline-item.note-item { background: #fef3c7; margin: 4px -12px; padding: 8px 12px; }
+        .timeline-item.proforma-item { background: #ecfdf5; margin: 4px -12px; padding: 8px 12px; }
         @media (prefers-color-scheme: dark) {
             .timeline-item.note-item { background: #422006; color: #fcd34d; }
+            .timeline-item.proforma-item { background: #064e3b; color: #a7f3d0; }
         }
 
         .media-modal-content {
@@ -712,6 +772,201 @@
         }
         .user-badge strong { color: var(--text-primary); }
 
+        /* ============================================================
+        PROFORMA STYLES
+        ============================================================ */
+        .proforma-modal-content {
+            max-width: 700px !important;
+        }
+
+        .proforma-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 13px;
+        }
+
+        .proforma-table th {
+            text-align: left;
+            padding: 8px 6px;
+            border-bottom: 2px solid var(--border);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+        }
+
+        .proforma-table td {
+            padding: 6px 4px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        .proforma-table input {
+            margin: 0;
+            padding: 8px 10px;
+            font-size: 13px;
+        }
+
+        .proforma-table .prix-cell {
+            width: 130px;
+        }
+
+        .proforma-table .action-cell {
+            width: 40px;
+            text-align: center;
+        }
+
+        .btn-remove-line {
+            background: transparent;
+            border: none;
+            color: var(--danger);
+            font-size: 18px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+        .btn-remove-line:hover { background: #fee2e2; }
+
+        .proforma-totaux {
+            background: var(--bg-soft);
+            border-radius: 12px;
+            padding: 14px 18px;
+            margin-top: 12px;
+        }
+
+        .proforma-totaux .ligne {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            font-size: 13px;
+        }
+
+        .proforma-totaux .ligne.total {
+            font-size: 17px;
+            font-weight: 700;
+            padding-top: 10px;
+            margin-top: 8px;
+            border-top: 2px solid var(--border);
+            color: var(--text-primary);
+        }
+
+        .suggestions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 6px;
+            margin: 10px 0;
+        }
+
+        .suggestion-btn {
+            background: var(--bg-soft);
+            border: 1px solid var(--border);
+            padding: 8px 10px;
+            border-radius: 30px;
+            font-size: 11px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            text-align: left;
+            transition: all 0.2s;
+        }
+        .suggestion-btn:hover { border-color: var(--accent); background: var(--bg-card); color: var(--text-primary); }
+
+        .btn-add-line {
+            background: var(--bg-card);
+            border: 1px dashed var(--border);
+            padding: 10px;
+            border-radius: 12px;
+            width: 100%;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin: 6px 0;
+            transition: all 0.2s;
+        }
+        .btn-add-line:hover { border-color: var(--accent); color: var(--text-primary); background: var(--bg-soft); }
+
+        .proforma-statut-banner {
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            margin: 12px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .proforma-statut-banner.en_attente { background: #fef3c7; color: #92400e; }
+        .proforma-statut-banner.accepte { background: #d1fae5; color: #065f46; }
+        .proforma-statut-banner.refuse { background: #fee2e2; color: #991b1b; }
+        .proforma-statut-banner.negociation { background: #e0e7ff; color: #3730a3; }
+
+        @media (prefers-color-scheme: dark) {
+            .proforma-statut-banner.en_attente { background: #422006; color: #fcd34d; }
+            .proforma-statut-banner.accepte { background: #064e3b; color: #a7f3d0; }
+            .proforma-statut-banner.refuse { background: #7f1d1d; color: #fecaca; }
+            .proforma-statut-banner.negociation { background: #312e81; color: #c7d2fe; }
+        }
+
+        .statut-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .btn-statut {
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        .btn-statut.accepte { background: var(--success); color: white; }
+        .btn-statut.refuse { background: var(--danger); color: white; }
+        .btn-statut.negociation { background: #6366f1; color: white; }
+        .btn-statut:hover { transform: translateY(-1px); }
+
+        /* Garage config */
+        .garage-config-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-soft);
+            padding: 12px 16px;
+            border-radius: 16px;
+            margin-bottom: 16px;
+        }
+
+        .garage-logo-preview {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: var(--bg-card);
+            border: 2px dashed var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .garage-logo-preview img { width: 100%; height: 100%; object-fit: cover; }
+
+        .garage-config-info {
+            flex: 1;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        .garage-config-info strong {
+            color: var(--text-primary);
+            display: block;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
         @media (max-width: 560px) {
             body { padding: 16px; }
             .container, .dashboard-container { padding: 20px; }
@@ -723,6 +978,8 @@
             .garage-selector { flex-direction: column; align-items: stretch; }
             .garage-selector select { width: 100%; }
             .btn-media { min-height: 50px; font-size: 14px; }
+            .proforma-table { font-size: 12px; }
+            .proforma-table .prix-cell { width: 100px; }
         }
     </style>
 </head>
@@ -756,7 +1013,7 @@
         <div class="logo">
             <h1>🚗 ASSIST-GARAGE</h1>
             <div class="subtitle">RÉPARATION · ENTRETIEN · DÉPANNAGE</div>
-            <span class="badge-free">📱 VERSION PRO 2.4</span>
+            <span class="badge-free">📱 VERSION PRO 3.0</span>
         </div>
 
         <div class="ad-banner" onclick="ouvrirSmartlink()">
@@ -952,6 +1209,7 @@
                 <option value="Ivoiremotor">Ivoiremotor</option>
                 <option value="SamMotors">Sam Motors</option>
             </select>
+            <button id="btnConfigGarage" class="btn-secondary" style="padding: 6px 12px; font-size: 12px;">⚙️ Infos garage</button>
         </div>
 
         <div class="stats" id="stats">
@@ -959,6 +1217,7 @@
             <div class="stat-card"><div class="stat-number" id="statNonLues">0</div><div class="stat-label">🆕 Nouvelles</div></div>
             <div class="stat-card"><div class="stat-number" id="statUrgentes">0</div><div class="stat-label">Urgentes</div></div>
             <div class="stat-card"><div class="stat-number" id="statRetard">0</div><div class="stat-label">En retard</div></div>
+            <div class="stat-card"><div class="stat-number" id="statProforma">0</div><div class="stat-label">💰 Devis</div></div>
         </div>
 
         <div class="search-filters">
@@ -973,6 +1232,7 @@
             <button class="filtre-btn" data-filtre="urgentes">🔴 Urgentes</button>
             <button class="filtre-btn" data-filtre="retard">⚠️ En retard</button>
             <button class="filtre-btn" data-filtre="avec-notes">📝 Avec notes</button>
+            <button class="filtre-btn" data-filtre="proforma-attente">💰 Devis en attente</button>
         </div>
 
         <div style="margin-bottom: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
@@ -1008,7 +1268,7 @@
     </div>
 </div>
 
-<!-- Modal PDF -->
+<!-- Modal PDF Fiche -->
 <div id="pdfModal" class="modal">
     <div class="modal-content pdf-modal-content">
         <h3 style="margin-bottom: 16px; color: var(--text-primary);">📄 Fiche de réception</h3>
@@ -1017,6 +1277,20 @@
             <button id="btnGenererPDF" class="btn-primary" style="margin-top: 0; width: auto; padding: 12px 24px;">⬇️ Télécharger PDF</button>
             <button id="btnImprimerPDF" class="btn-secondary">🖨️ Imprimer</button>
             <button onclick="document.getElementById('pdfModal').style.display='none'" class="btn-secondary">Fermer</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal PDF Proforma -->
+<div id="pdfProformaModal" class="modal">
+    <div class="modal-content pdf-modal-content">
+        <h3 style="margin-bottom: 16px; color: var(--text-primary);">💰 Proforma / Devis</h3>
+        <div id="pdfProformaContent" style="background: white; border-radius: 8px; padding: 10px; max-height: 60vh; overflow-y: auto;"></div>
+        <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center;">
+            <button id="btnGenererPDFProforma" class="btn-primary" style="margin-top: 0; width: auto; padding: 12px 24px;">⬇️ Télécharger PDF</button>
+            <button id="btnEnvoyerProformaWhatsApp" class="btn-success">💬 Envoyer par WhatsApp</button>
+            <button id="btnImprimerPDFProforma" class="btn-secondary">🖨️ Imprimer</button>
+            <button onclick="document.getElementById('pdfProformaModal').style.display='none'" class="btn-secondary">Fermer</button>
         </div>
     </div>
 </div>
@@ -1032,7 +1306,7 @@
     </div>
 </div>
 
-<!-- Modal Commentaire Chef d'Atelier -->
+<!-- Modal Note Chef d'Atelier -->
 <div id="noteModal" class="modal">
     <div class="modal-content">
         <h3 style="margin-bottom: 16px; color: var(--text-primary);">📝 Note du chef d'atelier</h3>
@@ -1046,6 +1320,132 @@
             <button onclick="document.getElementById('noteModal').style.display='none'" class="btn-secondary">Fermer</button>
         </div>
         <div id="noteLastUpdate" style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 12px;"></div>
+    </div>
+</div>
+
+<!-- Modal Proforma (création/édition) -->
+<div id="proformaModal" class="modal">
+    <div class="modal-content proforma-modal-content">
+        <h3 style="margin-bottom: 8px; color: var(--text-primary);">💰 Créer / Modifier un proforma</h3>
+        <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 16px;">
+            Demande : <strong id="proformaDemandeNum">—</strong>
+        </div>
+
+        <!-- Statut banner -->
+        <div id="proformaStatutBanner" class="proforma-statut-banner en_attente" style="display:none;">
+            <span id="proformaStatutText">📋 En attente de réponse client</span>
+            <div class="statut-actions">
+                <button class="btn-statut accepte" onclick="changerStatutProforma('accepte')">✅ Bon pour accord</button>
+                <button class="btn-statut refuse" onclick="changerStatutProforma('refuse')">❌ Refusé</button>
+                <button class="btn-statut negociation" onclick="changerStatutProforma('negociation')">💬 Négociation</button>
+            </div>
+        </div>
+
+        <!-- Prestations fréquentes -->
+        <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin: 12px 0 6px 0;">
+            ⚡ Prestations rapides (cliquez pour ajouter)
+        </div>
+        <div class="suggestions-grid" id="suggestionsGrid">
+            <!-- Généré en JS -->
+        </div>
+
+        <!-- Tableau lignes -->
+        <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin: 16px 0 6px 0;">
+            📋 Lignes du devis
+        </div>
+        <table class="proforma-table">
+            <thead>
+                <tr>
+                    <th>Désignation</th>
+                    <th class="prix-cell">Prix (FCFA)</th>
+                    <th class="action-cell"></th>
+                </tr>
+            </thead>
+            <tbody id="proformaTableBody">
+                <!-- Lignes générées en JS -->
+            </tbody>
+        </table>
+        <button class="btn-add-line" onclick="ajouterLigneProforma()">+ Ajouter une ligne</button>
+
+        <!-- Remise -->
+        <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin: 16px 0 6px 0;">
+            💸 Remise (optionnelle)
+        </div>
+        <div class="row-2cols">
+            <select id="proformaRemiseType" onchange="recalculerTotaux()">
+                <option value="aucune">Aucune remise</option>
+                <option value="pourcent">Pourcentage (%)</option>
+                <option value="montant">Montant fixe (FCFA)</option>
+            </select>
+            <input type="number" id="proformaRemiseValeur" placeholder="Valeur" value="0" min="0" oninput="recalculerTotaux()">
+        </div>
+
+        <!-- Totaux -->
+        <div class="proforma-totaux">
+            <div class="ligne">
+                <span>Sous-total</span>
+                <span id="proformaSousTotal">0 FCFA</span>
+            </div>
+            <div class="ligne">
+                <span>Remise</span>
+                <span id="proformaMontantRemise">- 0 FCFA</span>
+            </div>
+            <div class="ligne total">
+                <span>TOTAL</span>
+                <span id="proformaTotal">0 FCFA</span>
+            </div>
+        </div>
+
+        <!-- Note client -->
+        <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin: 16px 0 6px 0;">
+            📝 Note / réponse client (optionnel)
+        </div>
+        <textarea id="proformaNoteClient" rows="2" placeholder="Ex: Client demande une réduction supplémentaire..." style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 12px; font-family: inherit; font-size: 13px; background: var(--bg-card); color: var(--text-primary); resize: vertical;"></textarea>
+
+        <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center;">
+            <button id="btnSaveProforma" class="btn-primary" style="margin-top: 0; width: auto; padding: 12px 24px;">💾 Enregistrer le proforma</button>
+            <button id="btnPreviewPDFProforma" class="btn-secondary">👁️ Aperçu PDF</button>
+            <button id="btnDeleteProforma" class="btn-secondary" style="color: var(--danger); border-color: var(--danger);">🗑️ Supprimer</button>
+            <button onclick="document.getElementById('proformaModal').style.display='none'" class="btn-secondary">Fermer</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Configuration Garage -->
+<div id="garageConfigModal" class="modal">
+    <div class="modal-content">
+        <h3 style="margin-bottom: 16px; color: var(--text-primary);">⚙️ Informations du garage</h3>
+        <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 16px;">
+            Ces informations apparaîtront en entête des proformas générés.
+        </div>
+
+        <div class="garage-config-header">
+            <div class="garage-logo-preview" id="garageLogoPreview">🏢</div>
+            <div class="garage-config-info">
+                <strong>Logo du garage</strong>
+                <div>Format carré recommandé (PNG, JPG). Max 500 KB.</div>
+                <button class="btn-secondary" style="margin-top: 6px; padding: 4px 12px; font-size: 11px;" onclick="document.getElementById('garageLogoInput').click()">📷 Choisir un logo</button>
+                <input type="file" id="garageLogoInput" accept="image/*" style="display:none">
+            </div>
+        </div>
+
+        <div class="section-title" style="margin-top: 8px;">Nom du garage</div>
+        <input type="text" id="garageConfigNom" placeholder="Ex: Garage Toure">
+
+        <div class="section-title">Téléphone</div>
+        <input type="tel" id="garageConfigTel" placeholder="Ex: +225 07 00 00 00 00">
+
+        <div class="section-title">Email</div>
+        <input type="email" id="garageConfigEmail" placeholder="Ex: contact@garage-toure.com">
+
+        <div class="section-title">Adresse</div>
+        <input type="text" id="garageConfigAdresse" placeholder="Ex: Abidjan, Cocody">
+
+        <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center;">
+            <button id="btnSaveGarageConfig" class="btn-primary" style="margin-top: 0; width: auto; padding: 12px 24px;">💾 Enregistrer</button>
+            <button id="btnSupprimerLogo" class="btn-secondary" style="color: var(--danger); border-color: var(--danger);">🗑️ Supprimer le logo</button>
+            <button onclick="document.getElementById('garageConfigModal').style.display='none'" class="btn-secondary">Fermer</button>
+        </div>
     </div>
 </div>
 
@@ -1064,6 +1464,17 @@ const MAX_PHOTOS = 5;
 const DELAI_RETARD_JOURS = 3;
 const ITEMS_PER_PAGE = 10;
 const MAX_DEMANDES_CHARGEES = 50;
+const DEVISE = 'FCFA';
+
+// Prestations fréquentes par défaut
+const PRESTATIONS_FREQUENTES = [
+    { designation: "Vidange huile + filtre", prix: 25000 },
+    { designation: "Plaquettes de frein", prix: 30000 },
+    { designation: "Recharge climatisation", prix: 20000 },
+    { designation: "Diagnostic électronique", prix: 15000 },
+    { designation: "Remplacement batterie", prix: 45000 },
+    { designation: "Courroie distribution", prix: 80000 }
+];
 
 const STATUTS = [
     { id: 0, label: 'Reçu', icon: '🟡', color: '#f59e0b', description: 'Demande enregistrée' },
@@ -1074,6 +1485,13 @@ const STATUTS = [
     { id: 5, label: 'Prête', icon: '✅', color: '#22c55e', description: 'Prêt à être récupéré' },
     { id: 6, label: 'Clôturée', icon: '🏁', color: '#64748b', description: 'Véhicule récupéré' }
 ];
+
+const PROFORMA_STATUTS = {
+    'en_attente': { label: '📋 En attente', class: 'en_attente' },
+    'accepte': { label: '✅ Accepté', class: 'accepte' },
+    'refuse': { label: '❌ Refusé', class: 'refuse' },
+    'negociation': { label: '💬 Négociation', class: 'negociation' }
+};
 
 // ============================================================
 // FONCTIONS GLOBALES
@@ -1133,6 +1551,10 @@ function calculerJoursDepuis(ts) {
     } catch(e) { return 0; }
 }
 
+function formatMontant(n) {
+    return new Intl.NumberFormat('fr-FR').format(Math.round(n || 0)) + ' ' + DEVISE;
+}
+
 // ============================================================
 // SCRIPT PRINCIPAL
 // ============================================================
@@ -1174,6 +1596,9 @@ function calculerJoursDepuis(ts) {
     let premiereChargeEffectuee = false;
     let sonAutorise = false;
     let currentDemandeNoteId = null;
+    let currentDemandeProformaId = null;
+    let proformaLignes = [];
+    let garageConfig = null; // { nom, tel, email, adresse, logo }
 
     const loginScreen = document.getElementById('loginScreen');
     const clientScreen = document.getElementById('clientScreen');
@@ -1198,6 +1623,33 @@ function calculerJoursDepuis(ts) {
             console.log('🔊 Son autorisé');
         }
     }, { once: true });
+
+    // ============================================================
+    // CONFIGURATION GARAGE (LocalStorage)
+    // ============================================================
+    function chargerGarageConfig() {
+        try {
+            const saved = localStorage.getItem('garage_config_' + garageActuel);
+            if (saved) {
+                garageConfig = JSON.parse(saved);
+                console.log('✅ Config garage chargée:', garageConfig.nom);
+            }
+        } catch(e) {
+            console.error('Erreur chargement config:', e);
+        }
+    }
+
+    function sauvegarderGarageConfig() {
+        if (!garageConfig) return;
+        try {
+            localStorage.setItem('garage_config_' + garageActuel, JSON.stringify(garageConfig));
+            console.log('💾 Config garage sauvegardée');
+        } catch(e) {
+            console.error('Erreur sauvegarde config:', e);
+        }
+    }
+
+    chargerGarageConfig();
 
     // ============================================================
     // GESTION DES ÉCRANS
@@ -1613,6 +2065,7 @@ function calculerJoursDepuis(ts) {
             numeroDemande,
             garage,
             note: null,
+            proforma: null,
             historique: [{
                 date: new Date(),
                 dateStr: new Date().toLocaleString('fr-FR'),
@@ -1796,12 +2249,15 @@ function calculerJoursDepuis(ts) {
         if (histo.length === 0) {
             content.innerHTML = '<p style="color:var(--text-muted);text-align:center;">Aucun historique</p>';
         } else {
-            content.innerHTML = '<div class="timeline">' + histo.map(h => `
-                <div class="timeline-item ${h.type === 'note' ? 'note-item' : ''}">
+            content.innerHTML = '<div class="timeline">' + histo.map(h => {
+                let cls = '';
+                if (h.type === 'note') cls = 'note-item';
+                if (h.type === 'proforma') cls = 'proforma-item';
+                return `<div class="timeline-item ${cls}">
                     <span class="time">${h.dateStr || formatDate(h.date)}</span>
                     <span class="event">${h.action || h.statutLabel || ''}</span>
-                </div>
-            `).join('') + '</div>';
+                </div>`;
+            }).join('') + '</div>';
         }
         modal.style.display = 'flex';
     }
@@ -1895,18 +2351,632 @@ function calculerJoursDepuis(ts) {
     });
 
     // ============================================================
-    // GÉNÉRATION DU QR CODE DE SUIVI
+    // PROFORMA - MODULE COMPLET
     // ============================================================
-    // Cette fonction génère un QR code en base64 (image PNG) à insérer dans le PDF
-    function genererQRCodeBase64(texte, callback) {
-        // Créer un canvas pour dessiner le QR
-        const canvas = document.createElement('canvas');
-        canvas.width = 200;
-        canvas.height = 200;
+    window.ouvrirProformaModal = function(demandeId) {
+        currentDemandeProformaId = demandeId;
+        const demande = allDemandes.find(d => d.id === demandeId);
+        if (!demande) return;
 
-        // Utiliser la lib QRCode pour dessiner sur le canvas
+        document.getElementById('proformaDemandeNum').textContent = demande.numeroDemande || demandeId;
+
+        // Charger les données existantes ou initialiser
+        if (demande.proforma && demande.proforma.lignes) {
+            proformaLignes = JSON.parse(JSON.stringify(demande.proforma.lignes));
+            document.getElementById('proformaRemiseType').value = demande.proforma.remise?.type || 'aucune';
+            document.getElementById('proformaRemiseValeur').value = demande.proforma.remise?.valeur || 0;
+            document.getElementById('proformaNoteClient').value = demande.proforma.noteClient || '';
+
+            // Afficher le bandeau de statut
+            const statut = demande.proforma.statut || 'en_attente';
+            afficherProformaStatut(statut);
+            document.getElementById('btnDeleteProforma').style.display = 'inline-block';
+        } else {
+            proformaLignes = [{ designation: '', prix: 0 }];
+            document.getElementById('proformaRemiseType').value = 'aucune';
+            document.getElementById('proformaRemiseValeur').value = 0;
+            document.getElementById('proformaNoteClient').value = '';
+            document.getElementById('proformaStatutBanner').style.display = 'none';
+            document.getElementById('btnDeleteProforma').style.display = 'none';
+        }
+
+        // Générer les suggestions
+        genererSuggestions();
+
+        // Afficher les lignes
+        afficherLignesProforma();
+        recalculerTotaux();
+
+        document.getElementById('proformaModal').style.display = 'flex';
+    };
+
+    function afficherProformaStatut(statut) {
+        const banner = document.getElementById('proformaStatutBanner');
+        const text = document.getElementById('proformaStatutText');
+        banner.className = 'proforma-statut-banner ' + statut;
+        banner.style.display = 'flex';
+        text.textContent = PROFORMA_STATUTS[statut]?.label || '📋 En attente';
+    }
+
+    function genererSuggestions() {
+        const grid = document.getElementById('suggestionsGrid');
+        grid.innerHTML = PRESTATIONS_FREQUENTES.map((p, i) =>
+            `<button class="suggestion-btn" onclick="ajouterPrestationRapide(${i})">+ ${p.designation} (${formatMontant(p.prix)})</button>`
+        ).join('');
+    }
+
+    window.ajouterPrestationRapide = function(index) {
+        const p = PRESTATIONS_FREQUENTES[index];
+        // Si la dernière ligne est vide, on la remplace
+        if (proformaLignes.length > 0 && !proformaLignes[proformaLignes.length - 1].designation && proformaLignes[proformaLignes.length - 1].prix === 0) {
+            proformaLignes[proformaLignes.length - 1] = { designation: p.designation, prix: p.prix };
+        } else {
+            proformaLignes.push({ designation: p.designation, prix: p.prix });
+        }
+        afficherLignesProforma();
+        recalculerTotaux();
+    };
+
+    window.ajouterLigneProforma = function() {
+        proformaLignes.push({ designation: '', prix: 0 });
+        afficherLignesProforma();
+    };
+
+    window.supprimerLigneProforma = function(index) {
+        proformaLignes.splice(index, 1);
+        if (proformaLignes.length === 0) {
+            proformaLignes.push({ designation: '', prix: 0 });
+        }
+        afficherLignesProforma();
+        recalculerTotaux();
+    };
+
+    window.majLigneProforma = function(index, champ, valeur) {
+        if (!proformaLignes[index]) return;
+        if (champ === 'prix') {
+            proformaLignes[index].prix = parseFloat(valeur) || 0;
+        } else {
+            proformaLignes[index].designation = valeur;
+        }
+        recalculerTotaux();
+    };
+
+    function afficherLignesProforma() {
+        const tbody = document.getElementById('proformaTableBody');
+        tbody.innerHTML = proformaLignes.map((l, i) => `
+            <tr>
+                <td><input type="text" value="${(l.designation || '').replace(/"/g, '&quot;')}" placeholder="Désignation" oninput="majLigneProforma(${i}, 'designation', this.value)"></td>
+                <td class="prix-cell"><input type="number" value="${l.prix || 0}" placeholder="0" min="0" oninput="majLigneProforma(${i}, 'prix', this.value)"></td>
+                <td class="action-cell"><button class="btn-remove-line" onclick="supprimerLigneProforma(${i})">×</button></td>
+            </tr>
+        `).join('');
+    }
+
+    window.recalculerTotaux = function() {
+        // Calcul du sous-total (uniquement les lignes avec désignation)
+        let sousTotal = 0;
+        proformaLignes.forEach(l => {
+            if (l.designation && l.designation.trim()) {
+                sousTotal += parseFloat(l.prix) || 0;
+            }
+        });
+
+        // Remise
+        const remiseType = document.getElementById('proformaRemiseType').value;
+        const remiseValeur = parseFloat(document.getElementById('proformaRemiseValeur').value) || 0;
+        let montantRemise = 0;
+
+        if (remiseType === 'pourcent') {
+            montantRemise = (sousTotal * remiseValeur) / 100;
+        } else if (remiseType === 'montant') {
+            montantRemise = remiseValeur;
+        }
+
+        // Sécurité : remise ne peut pas dépasser sous-total
+        if (montantRemise > sousTotal) montantRemise = sousTotal;
+
+        const total = sousTotal - montantRemise;
+
+        document.getElementById('proformaSousTotal').textContent = formatMontant(sousTotal);
+        document.getElementById('proformaMontantRemise').textContent = '- ' + formatMontant(montantRemise);
+        document.getElementById('proformaTotal').textContent = formatMontant(total);
+    };
+
+    window.changerStatutProforma = async function(nouveauStatut) {
+        if (!currentDemandeProformaId) return;
+
         try {
-            // On utilise une méthode alternative : créer un div temporaire + QRCode.js
+            const docRef = db.collection('demandes').doc(currentDemandeProformaId);
+            const doc = await docRef.get();
+            if (!doc.exists) return;
+            const data = doc.data();
+
+            if (!data.proforma) {
+                afficherToast('❌ Enregistrez d\'abord le proforma');
+                return;
+            }
+
+            const historique = data.historique || [];
+            historique.push({
+                date: new Date(),
+                dateStr: new Date().toLocaleString('fr-FR'),
+                type: 'proforma',
+                action: `💰 Proforma : ${PROFORMA_STATUTS[nouveauStatut]?.label || nouveauStatut}`
+            });
+
+            const proforma = { ...data.proforma, statut: nouveauStatut, dateReponse: new Date() };
+
+            await docRef.update({ proforma, historique });
+            afficherProformaStatut(nouveauStatut);
+            afficherToast('✅ Statut du proforma mis à jour');
+        } catch(err) {
+            afficherToast('❌ Erreur: ' + err.message);
+        }
+    };
+
+    document.getElementById('btnSaveProforma')?.addEventListener('click', async function() {
+        if (!currentDemandeProformaId) return;
+
+        // Filtrer les lignes vides
+        const lignesValides = proformaLignes.filter(l => l.designation && l.designation.trim());
+
+        if (lignesValides.length === 0) {
+            afficherToast('❌ Ajoutez au moins une ligne avec une désignation');
+            return;
+        }
+
+        try {
+            const docRef = db.collection('demandes').doc(currentDemandeProformaId);
+            const doc = await docRef.get();
+            if (!doc.exists) return;
+            const data = doc.data();
+
+            // Calculs
+            let sousTotal = 0;
+            lignesValides.forEach(l => sousTotal += parseFloat(l.prix) || 0);
+
+            const remiseType = document.getElementById('proformaRemiseType').value;
+            const remiseValeur = parseFloat(document.getElementById('proformaRemiseValeur').value) || 0;
+            let montantRemise = 0;
+            if (remiseType === 'pourcent') montantRemise = (sousTotal * remiseValeur) / 100;
+            else if (remiseType === 'montant') montantRemise = remiseValeur;
+            if (montantRemise > sousTotal) montantRemise = sousTotal;
+
+            const total = sousTotal - montantRemise;
+
+            // Construire le proforma
+            const ancienStatut = data.proforma?.statut;
+            const proforma = {
+                lignes: lignesValides,
+                remise: { type: remiseType, valeur: remiseValeur },
+                sousTotal: sousTotal,
+                montantRemise: montantRemise,
+                total: total,
+                statut: ancienStatut || 'en_attente',
+                dateCreation: data.proforma?.dateCreation || new Date(),
+                dateCreationStr: data.proforma?.dateCreationStr || new Date().toLocaleString('fr-FR'),
+                dateModification: new Date(),
+                dateModificationStr: new Date().toLocaleString('fr-FR'),
+                noteClient: document.getElementById('proformaNoteClient').value.trim() || ''
+            };
+
+            const historique = data.historique || [];
+            historique.push({
+                date: new Date(),
+                dateStr: new Date().toLocaleString('fr-FR'),
+                type: 'proforma',
+                action: `💰 Proforma ${ancienStatut ? 'modifié' : 'créé'} — Total : ${formatMontant(total)}`
+            });
+
+            await docRef.update({ proforma, historique });
+            afficherToast('💾 Proforma enregistré');
+            document.getElementById('proformaModal').style.display = 'none';
+        } catch(err) {
+            afficherToast('❌ Erreur: ' + err.message);
+        }
+    });
+
+    document.getElementById('btnDeleteProforma')?.addEventListener('click', async function() {
+        if (!currentDemandeProformaId) return;
+        if (!confirm('Supprimer ce proforma ?')) return;
+
+        try {
+            const docRef = db.collection('demandes').doc(currentDemandeProformaId);
+            const doc = await docRef.get();
+            if (!doc.exists) return;
+            const data = doc.data();
+            const historique = data.historique || [];
+            historique.push({
+                date: new Date(),
+                dateStr: new Date().toLocaleString('fr-FR'),
+                type: 'proforma',
+                action: '💰 Proforma supprimé'
+            });
+
+            await docRef.update({ proforma: null, historique });
+            afficherToast('🗑️ Proforma supprimé');
+            document.getElementById('proformaModal').style.display = 'none';
+        } catch(err) {
+            afficherToast('❌ Erreur: ' + err.message);
+        }
+    });
+
+    document.getElementById('btnPreviewPDFProforma')?.addEventListener('click', function() {
+        if (!currentDemandeProformaId) return;
+        const demande = allDemandes.find(d => d.id === currentDemandeProformaId);
+        if (!demande) return;
+
+        // Utiliser les données en cours d'édition
+        const lignesValides = proformaLignes.filter(l => l.designation && l.designation.trim());
+        if (lignesValides.length === 0) {
+            afficherToast('❌ Ajoutez au moins une ligne');
+            return;
+        }
+
+        let sousTotal = 0;
+        lignesValides.forEach(l => sousTotal += parseFloat(l.prix) || 0);
+        const remiseType = document.getElementById('proformaRemiseType').value;
+        const remiseValeur = parseFloat(document.getElementById('proformaRemiseValeur').value) || 0;
+        let montantRemise = 0;
+        if (remiseType === 'pourcent') montantRemise = (sousTotal * remiseValeur) / 100;
+        else if (remiseType === 'montant') montantRemise = remiseValeur;
+        if (montantRemise > sousTotal) montantRemise = sousTotal;
+
+        const proformaTemp = {
+            lignes: lignesValides,
+            remise: { type: remiseType, valeur: remiseValeur },
+            sousTotal,
+            montantRemise,
+            total: sousTotal - montantRemise,
+            statut: demande.proforma?.statut || 'en_attente',
+            dateCreationStr: new Date().toLocaleString('fr-FR'),
+            noteClient: document.getElementById('proformaNoteClient').value.trim() || ''
+        };
+
+        genererProformaPDF(demande, proformaTemp, 'preview');
+    });
+
+    // ============================================================
+    // GÉNÉRATION PDF PROFORMA
+    // ============================================================
+    function genererProformaPDF(demande, proforma, mode = 'preview') {
+        const id = demande.numeroDemande || demande.id;
+        const dateProforma = proforma.dateCreationStr || new Date().toLocaleString('fr-FR');
+        const garageNom = garageConfig?.nom || `Garage ${demande.garage || 'Standard'}`;
+        const garageTel = garageConfig?.tel || '';
+        const garageEmail = garageConfig?.email || '';
+        const garageAdresse = garageConfig?.adresse || '';
+        const garageLogo = garageConfig?.logo || '';
+
+        // Lignes du tableau
+        const lignesHtml = proforma.lignes.map(l => `
+            <tr>
+                <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; font-size: 12px; color: #0f172a;">${l.designation}</td>
+                <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; font-size: 12px; color: #0f172a; text-align: right; white-space: nowrap;">${formatMontant(l.prix)}</td>
+            </tr>
+        `).join('');
+
+        // Bloc entête garage
+        const enteteGarageHtml = garageLogo ? `
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
+                <img src="${garageLogo}" style="width: 70px; height: 70px; object-fit: contain; border-radius: 8px; background: #f8fafc; padding: 4px; border: 1px solid #e2e8f0;">
+                <div style="text-align: left;">
+                    <div style="font-size: 20px; font-weight: 700; color: #0f172a; letter-spacing: 1px;">${garageNom}</div>
+                    ${garageAdresse ? `<div style="font-size: 10px; color: #64748b; margin-top: 2px;">${garageAdresse}</div>` : ''}
+                    ${garageTel ? `<div style="font-size: 10px; color: #64748b;">Tél : ${garageTel}</div>` : ''}
+                    ${garageEmail ? `<div style="font-size: 10px; color: #64748b;">Email : ${garageEmail}</div>` : ''}
+                </div>
+            </div>
+        ` : `
+            <div style="text-align: center;">
+                <div style="font-size: 22px; font-weight: 700; color: #0f172a; letter-spacing: 2px;">${garageNom}</div>
+                ${garageAdresse ? `<div style="font-size: 10px; color: #64748b; margin-top: 2px;">${garageAdresse}</div>` : ''}
+                ${garageTel ? `<div style="font-size: 10px; color: #64748b;">Tél : ${garageTel}</div>` : ''}
+                ${garageEmail ? `<div style="font-size: 10px; color: #64748b;">Email : ${garageEmail}</div>` : ''}
+            </div>
+        `;
+
+        // Statut badge
+        const statutInfo = PROFORMA_STATUTS[proforma.statut] || PROFORMA_STATUTS.en_attente;
+        const statutColors = {
+            'en_attente': { bg: '#fef3c7', color: '#92400e' },
+            'accepte': { bg: '#d1fae5', color: '#065f46' },
+            'refuse': { bg: '#fee2e2', color: '#991b1b' },
+            'negociation': { bg: '#e0e7ff', color: '#3730a3' }
+        };
+        const sc = statutColors[proforma.statut] || statutColors.en_attente;
+
+        const html = `
+            <div id="proformaInner" style="font-family: 'Georgia', 'Times New Roman', serif; width: 780px; padding: 30px 40px; background: white; color: #1a1a1a; line-height: 1.5; box-sizing: border-box;">
+                <!-- Entête garage -->
+                <div style="padding-bottom: 15px; border-bottom: 2px solid #0f172a; margin-bottom: 20px;">
+                    ${enteteGarageHtml}
+                </div>
+
+                <!-- Titre + Numéro -->
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <div style="font-size: 22px; font-weight: 700; color: #0f172a; letter-spacing: 3px;">DEVIS / PROFORMA</div>
+                    <div style="font-size: 11px; color: #64748b; margin-top: 4px;">N° ${id}</div>
+                </div>
+
+                <!-- Infos client -->
+                <div style="display: flex; justify-content: space-between; margin-bottom: 20px; padding: 14px 18px; background: #f8fafc; border-left: 4px solid #0f172a; font-size: 12px;">
+                    <div>
+                        <div style="font-size: 9px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Client</div>
+                        <div style="color: #0f172a; font-weight: 600; font-size: 14px;">${demande.nom || '-'}</div>
+                        ${demande.telephone ? `<div style="color: #64748b; font-size: 11px; margin-top: 2px;">📞 ${demande.telephone}</div>` : ''}
+                        ${demande.email ? `<div style="color: #64748b; font-size: 11px;">✉️ ${demande.email}</div>` : ''}
+                    </div>
+                    <div style="text-align: right;">
+                        <div style="font-size: 9px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Véhicule</div>
+                        <div style="color: #0f172a; font-weight: 600;">${demande.immatriculation || '-'}</div>
+                        ${demande.marque ? `<div style="color: #64748b; font-size: 11px; margin-top: 2px;">${demande.marque} ${demande.modele || ''}</div>` : ''}
+                    </div>
+                </div>
+
+                <!-- Tableau prestations -->
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+                    <thead>
+                        <tr style="background: #0f172a;">
+                            <th style="padding: 10px 12px; text-align: left; font-size: 11px; color: white; text-transform: uppercase; letter-spacing: 1px;">Désignation</th>
+                            <th style="padding: 10px 12px; text-align: right; font-size: 11px; color: white; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap;">Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${lignesHtml}
+                    </tbody>
+                </table>
+
+                <!-- Totaux -->
+                <div style="margin-left: auto; width: 320px; font-size: 13px;">
+                    <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #e2e8f0;">
+                        <span style="color: #64748b;">Sous-total</span>
+                        <span style="color: #0f172a;">${formatMontant(proforma.sousTotal)}</span>
+                    </div>
+                    ${proforma.montantRemise > 0 ? `
+                    <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #e2e8f0;">
+                        <span style="color: #64748b;">Remise ${proforma.remise.type === 'pourcent' ? '(' + proforma.remise.valeur + '%)' : ''}</span>
+                        <span style="color: #ef4444;">- ${formatMontant(proforma.montantRemise)}</span>
+                    </div>` : ''}
+                    <div style="display: flex; justify-content: space-between; padding: 10px 0; margin-top: 6px; border-top: 2px solid #0f172a;">
+                        <span style="color: #0f172a; font-weight: 700; font-size: 15px;">TOTAL</span>
+                        <span style="color: #0f172a; font-weight: 700; font-size: 15px;">${formatMontant(proforma.total)}</span>
+                    </div>
+                </div>
+
+                <!-- Note client -->
+                ${proforma.noteClient ? `
+                <div style="margin-top: 20px; padding: 12px 14px; background: #f8fafc; border-left: 3px solid #94a3b8; border-radius: 4px; font-size: 11px; color: #475569;">
+                    <strong style="color: #0f172a;">Note :</strong> ${proforma.noteClient}
+                </div>` : ''}
+
+                <!-- Statut -->
+                <div style="margin-top: 20px; padding: 12px 16px; border-radius: 8px; background: ${sc.bg}; color: ${sc.color}; font-size: 12px; font-weight: 600; text-align: center;">
+                    Statut : ${statutInfo.label}
+                </div>
+
+                <!-- Zone signature client -->
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #cbd5e1;">
+                    <div style="display: flex; justify-content: space-between; gap: 40px;">
+                        <div style="flex: 1;">
+                            <div style="font-size: 12px; color: #64748b; margin-bottom: 45px;">Décision du client</div>
+                            <div style="border-top: 1px solid #0f172a; padding-top: 4px; font-size: 10px; color: #94a3b8; text-align: center;">Signature et date</div>
+                        </div>
+                        <div style="flex: 1;">
+                            <div style="font-size: 12px; color: #64748b; margin-bottom: 12px;">Case à cocher :</div>
+                            <div style="font-size: 11px; color: #0f172a; line-height: 1.8;">
+                                <div>☐ ✅ Bon pour accord</div>
+                                <div>☐ ❌ Refusé</div>
+                                <div>☐ 💬 À négocier</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mentions -->
+                <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #e2e8f0; font-size: 9px; color: #94a3b8; text-align: center; line-height: 1.6;">
+                    Ce devis est valable 30 jours à compter de sa date d'émission.<br>
+                    Document généré automatiquement par Assist-Garage — ${garageNom}
+                </div>
+            </div>
+        `;
+
+        if (mode === 'preview') {
+            document.getElementById('pdfProformaContent').innerHTML = html;
+            document.getElementById('pdfProformaModal').style.display = 'flex';
+
+            document.getElementById('btnGenererPDFProforma').onclick = () => telechargerProformaPDF(html, id);
+            document.getElementById('btnImprimerPDFProforma').onclick = () => imprimerProformaPDF(html, id);
+            document.getElementById('btnEnvoyerProformaWhatsApp').onclick = () => envoyerProformaWhatsApp(demande, proforma, id);
+        }
+    }
+
+    async function telechargerProformaPDF(html, id) {
+        const btn = document.getElementById('btnGenererPDFProforma');
+        btn.disabled = true;
+        btn.textContent = '⏳ Génération...';
+        afficherToast('⏳ Création du PDF...');
+
+        try {
+            const html2canvas = window.html2canvas;
+            const jspdfModule = window.jspdf;
+            const jsPDF = jspdfModule ? jspdfModule.jsPDF : window.jsPDF;
+
+            if (!html2canvas || !jsPDF) throw new Error('Bibliothèques non chargées');
+
+            const container = document.createElement('div');
+            container.style.position = 'fixed';
+            container.style.top = '0';
+            container.style.left = '0';
+            container.style.width = '820px';
+            container.style.background = 'white';
+            container.style.zIndex = '99999';
+            container.style.opacity = '1';
+            container.style.pointerEvents = 'none';
+            container.innerHTML = html;
+            document.body.appendChild(container);
+
+            await new Promise(r => setTimeout(r, 400));
+
+            const canvas = await html2canvas(container, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#ffffff',
+                logging: false,
+                windowWidth: 820,
+                scrollX: 0,
+                scrollY: 0
+            });
+
+            if (container.parentNode) document.body.removeChild(container);
+
+            const imgData = canvas.toDataURL('image/jpeg', 0.95);
+            const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const imgWidth = pdfWidth - 20;
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+            let heightLeft = imgHeight;
+            let position = 10;
+            let page = 1;
+
+            pdf.addImage(imgData, 'JPEG', 10, position, imgWidth, imgHeight);
+            heightLeft -= (pdfHeight - 20);
+
+            while (heightLeft > 0) {
+                page++;
+                position = -(page - 1) * (pdfHeight - 20) + 10;
+                pdf.addPage();
+                pdf.addImage(imgData, 'JPEG', 10, position, imgWidth, imgHeight);
+                heightLeft -= (pdfHeight - 20);
+            }
+
+            pdf.save(`Proforma_${id}.pdf`);
+            btn.disabled = false;
+            btn.textContent = '⬇️ Télécharger PDF';
+            afficherToast('📄 PDF proforma téléchargé !');
+        } catch(err) {
+            console.error('Erreur PDF proforma:', err);
+            btn.disabled = false;
+            btn.textContent = '⬇️ Télécharger PDF';
+            afficherToast('❌ Erreur: ' + err.message);
+        }
+    }
+
+    function imprimerProformaPDF(html, id) {
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) {
+            afficherToast('❌ Autorisez les popups');
+            return;
+        }
+        printWindow.document.write(`
+            <html><head><title>Proforma ${id}</title>
+            <style>
+                @page { size: A4; margin: 10mm; }
+                body { font-family: 'Georgia', serif; padding: 0; margin: 0; color: #1a1a1a; }
+            </style>
+            </head><body>${html}</body></html>
+        `);
+        printWindow.document.close();
+        setTimeout(() => printWindow.print(), 800);
+    }
+
+    function envoyerProformaWhatsApp(demande, proforma, id) {
+        if (!demande.telephone) {
+            afficherToast('❌ Pas de téléphone pour ce client');
+            return;
+        }
+
+        const telClean = demande.telephone.replace(/\s+/g, '').replace(/^0/, '2250');
+        const garageNom = garageConfig?.nom || 'votre garage';
+
+        const message = `Bonjour ${demande.nom || ''},\n\nVoici le devis pour votre véhicule ${demande.immatriculation || ''} :\n\n📋 N° ${id}\n💰 Total : ${formatMontant(proforma.total)}\n\n📎 Le PDF du devis va être téléchargé sur votre appareil. Veuillez le joindre à cette conversation.\n\nMerci de nous confirmer votre accord (✅ Bon pour accord / ❌ Refusé / 💬 À négocier).\n\nCordialement,\n${garageNom}`;
+
+        // Télécharger d'abord le PDF
+        const html = document.getElementById('pdfProformaContent').innerHTML;
+        telechargerProformaPDF(html, id);
+
+        // Puis ouvrir WhatsApp après un délai
+        setTimeout(() => {
+            const url = `https://wa.me/${telClean}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+            afficherToast('📎 N\'oubliez pas de joindre le PDF téléchargé');
+        }, 1500);
+    }
+
+    // ============================================================
+    // CONFIGURATION GARAGE (MODAL)
+    // ============================================================
+    document.getElementById('btnConfigGarage')?.addEventListener('click', function() {
+        const nom = garageConfig?.nom || '';
+        const tel = garageConfig?.tel || '';
+        const email = garageConfig?.email || '';
+        const adresse = garageConfig?.adresse || '';
+        const logo = garageConfig?.logo || '';
+
+        document.getElementById('garageConfigNom').value = nom;
+        document.getElementById('garageConfigTel').value = tel;
+        document.getElementById('garageConfigEmail').value = email;
+        document.getElementById('garageConfigAdresse').value = adresse;
+
+        const preview = document.getElementById('garageLogoPreview');
+        if (logo) {
+            preview.innerHTML = `<img src="${logo}" alt="Logo">`;
+        } else {
+            preview.innerHTML = '🏢';
+        }
+
+        document.getElementById('garageConfigModal').style.display = 'flex';
+    });
+
+    document.getElementById('garageLogoInput')?.addEventListener('change', async function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        if (file.size > 500 * 1024) {
+            afficherToast('❌ Logo trop lourd (max 500 KB)');
+            return;
+        }
+
+        const data = await readFileAsDataURL(file);
+        document.getElementById('garageLogoPreview').innerHTML = `<img src="${data}" alt="Logo">`;
+        document.getElementById('garageLogoPreview').dataset.logo = data;
+        afficherToast('✅ Logo chargé');
+    });
+
+    document.getElementById('btnSaveGarageConfig')?.addEventListener('click', function() {
+        const previewLogo = document.getElementById('garageLogoPreview').dataset.logo;
+
+        garageConfig = {
+            nom: document.getElementById('garageConfigNom').value.trim(),
+            tel: document.getElementById('garageConfigTel').value.trim(),
+            email: document.getElementById('garageConfigEmail').value.trim(),
+            adresse: document.getElementById('garageConfigAdresse').value.trim(),
+            logo: previewLogo || (garageConfig?.logo || '')
+        };
+
+        sauvegarderGarageConfig();
+        afficherToast('💾 Informations garage sauvegardées');
+        document.getElementById('garageConfigModal').style.display = 'none';
+    });
+
+    document.getElementById('btnSupprimerLogo')?.addEventListener('click', function() {
+        if (!confirm('Supprimer le logo du garage ?')) return;
+        if (garageConfig) {
+            garageConfig.logo = '';
+            sauvegarderGarageConfig();
+        }
+        document.getElementById('garageLogoPreview').innerHTML = '🏢';
+        delete document.getElementById('garageLogoPreview').dataset.logo;
+        afficherToast('🗑️ Logo supprimé');
+    });
+
+    // ============================================================
+    // PDF FICHE RÉCEPTION (avec QR code)
+    // ============================================================
+    function genererQRCodeBase64(texte, callback) {
+        try {
             const tempDiv = document.createElement('div');
             tempDiv.style.position = 'fixed';
             tempDiv.style.left = '-9999px';
@@ -1921,7 +2991,6 @@ function calculerJoursDepuis(ts) {
                 correctLevel: QRCode.CorrectLevel.M
             });
 
-            // Attendre que le QR soit dessiné
             setTimeout(() => {
                 const canvasQR = tempDiv.querySelector('canvas');
                 const imgQR = tempDiv.querySelector('img');
@@ -1945,14 +3014,10 @@ function calculerJoursDepuis(ts) {
         }
     }
 
-    // ============================================================
-    // PDF - MÉTHODE JSPDF DIRECTE AVEC QR CODE
-    // ============================================================
     function buildPdfHtml(demande, id, qrImageBase64) {
         const dateReception = demande.date || new Date().toLocaleString('fr-FR');
         const statutInfo = STATUTS.find(s => s.id === (demande.statut || 0)) || STATUTS[0];
         const urgenceColor = demande.urgence === 'haute' ? '#ef4444' : demande.urgence === 'moyenne' ? '#f59e0b' : '#22c55e';
-        const trackingUrl = `${window.location.origin}${window.location.pathname}?suivi=${id}`;
 
         const qrBlockHtml = qrImageBase64 ? `
             <div style="margin-top: 25px; padding-top: 18px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; gap: 18px;">
@@ -2055,29 +3120,23 @@ function calculerJoursDepuis(ts) {
         const pdfContent = document.getElementById('pdfContent');
         const trackingUrl = `${window.location.origin}${window.location.pathname}?suivi=${id}`;
 
-        // D'abord, générer le QR code
         afficherToast('⏳ Préparation du PDF...');
 
         genererQRCodeBase64(trackingUrl, (qrBase64) => {
-            // Afficher l'aperçu dans le modal
             pdfContent.innerHTML = buildPdfHtml(demande, id, qrBase64);
             document.getElementById('pdfModal').style.display = 'flex';
 
-            // Téléchargement
             document.getElementById('btnGenererPDF').onclick = async function() {
                 const btn = this;
                 btn.disabled = true;
                 btn.textContent = '⏳ Génération...';
-                afficherToast('⏳ Création du PDF...');
 
                 try {
                     const html2canvas = window.html2canvas;
                     const jspdfModule = window.jspdf;
                     const jsPDF = jspdfModule ? jspdfModule.jsPDF : window.jsPDF;
 
-                    if (!html2canvas || !jsPDF) {
-                        throw new Error('Bibliothèques PDF non chargées');
-                    }
+                    if (!html2canvas || !jsPDF) throw new Error('Bibliothèques PDF non chargées');
 
                     const container = document.createElement('div');
                     container.style.position = 'fixed';
@@ -2106,11 +3165,7 @@ function calculerJoursDepuis(ts) {
                     if (container.parentNode) document.body.removeChild(container);
 
                     const imgData = canvas.toDataURL('image/jpeg', 0.95);
-                    const pdf = new jsPDF({
-                        orientation: 'portrait',
-                        unit: 'mm',
-                        format: 'a4'
-                    });
+                    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
 
                     const pdfWidth = pdf.internal.pageSize.getWidth();
                     const pdfHeight = pdf.internal.pageSize.getHeight();
@@ -2133,11 +3188,9 @@ function calculerJoursDepuis(ts) {
                     }
 
                     pdf.save(`Fiche_${id}.pdf`);
-
                     btn.disabled = false;
                     btn.textContent = '⬇️ Télécharger PDF';
-                    afficherToast('📄 PDF téléchargé avec succès !');
-
+                    afficherToast('📄 PDF téléchargé !');
                 } catch(err) {
                     console.error('Erreur PDF:', err);
                     btn.disabled = false;
@@ -2146,7 +3199,6 @@ function calculerJoursDepuis(ts) {
                 }
             };
 
-            // Impression
             document.getElementById('btnImprimerPDF').onclick = function() {
                 const content = buildPdfHtml(demande, id, qrBase64);
                 const printWindow = window.open('', '_blank');
@@ -2175,7 +3227,6 @@ function calculerJoursDepuis(ts) {
         if (unsubscribeDashboard) { unsubscribeDashboard(); unsubscribeDashboard = null; }
 
         const garageFiltre = document.getElementById('selectGarage')?.value || 'tous';
-
         let query = db.collection('demandes').limit(MAX_DEMANDES_CHARGEES);
 
         if (garageFiltre !== 'tous') {
@@ -2193,9 +3244,7 @@ function calculerJoursDepuis(ts) {
             });
 
             if (!premiereChargeEffectuee) {
-                snapshot.forEach(doc => {
-                    nouvellesDemandesIds.add(doc.id);
-                });
+                snapshot.forEach(doc => { nouvellesDemandesIds.add(doc.id); });
                 premiereChargeEffectuee = true;
                 console.log('✅ Premier chargement :', demandes.length, 'demandes');
             } else {
@@ -2209,7 +3258,6 @@ function calculerJoursDepuis(ts) {
 
                 if (nouvelles.length > 0) {
                     jouerSon();
-
                     if (nouvelles.length === 1) {
                         const d = nouvelles[0];
                         envoyerNotification(
@@ -2224,7 +3272,6 @@ function calculerJoursDepuis(ts) {
                             'new-multi'
                         );
                     }
-
                     afficherBanniereNouvelles(nouvelles.length);
                 }
             }
@@ -2238,11 +3285,13 @@ function calculerJoursDepuis(ts) {
                 const j = calculerJoursDepuis(d.dateTimestamp);
                 return (d.statut || 0) < 5 && j >= DELAI_RETARD_JOURS;
             }).length;
+            const proformas = demandes.filter(d => d.proforma && d.proforma.statut === 'en_attente').length;
 
             document.getElementById('statTotal').textContent = total;
             document.getElementById('statNonLues').textContent = nonLues;
             document.getElementById('statUrgentes').textContent = urgentes;
             document.getElementById('statRetard').textContent = retards;
+            document.getElementById('statProforma').textContent = proformas;
 
             allDemandes = demandes;
             currentPage = 1;
@@ -2261,9 +3310,7 @@ function calculerJoursDepuis(ts) {
         if (!newRequestsBanner) return;
         document.getElementById('newRequestsText').textContent = `🔔 ${count} nouvelle(s) demande(s) !`;
         newRequestsBanner.classList.add('visible');
-        setTimeout(() => {
-            newRequestsBanner.classList.remove('visible');
-        }, 8000);
+        setTimeout(() => { newRequestsBanner.classList.remove('visible'); }, 8000);
     }
 
     window.marquerToutVu = function() {
@@ -2284,6 +3331,7 @@ function calculerJoursDepuis(ts) {
             return (d.statut || 0) < 5 && j >= DELAI_RETARD_JOURS;
         });
         if (currentFiltre === 'avec-notes') filtered = filtered.filter(d => d.note && d.note.text);
+        if (currentFiltre === 'proforma-attente') filtered = filtered.filter(d => d.proforma && d.proforma.statut === 'en_attente');
 
         const search = document.getElementById('searchInput')?.value.toLowerCase() || '';
         if (search) {
@@ -2345,6 +3393,8 @@ function calculerJoursDepuis(ts) {
             const urgenceClasse = d.urgence || 'basse';
             const urgenceLabel = d.urgence === 'haute' ? '🔴 URGENT' : d.urgence === 'moyenne' ? '🟡 MOYEN' : '🟢 BAS';
             const hasNote = d.note && d.note.text;
+            const hasProforma = d.proforma && d.proforma.lignes && d.proforma.lignes.length > 0;
+            const proformaStatut = d.proforma?.statut || 'en_attente';
 
             const mediasList = d.medias || (d.media ? [{ data: d.media, type: d.mediaType }] : []);
             let mediaHtml = '';
@@ -2373,6 +3423,7 @@ function calculerJoursDepuis(ts) {
                             <span class="statut-badge" style="background: ${statutInfo.color}22; color: ${statutInfo.color};">${statutInfo.icon} ${statutInfo.label}</span>
                             ${estRetard ? `<span class="badge-retard">⚠️ ${jours}j</span>` : ''}
                             ${hasNote ? `<span class="note-badge">📝 Note</span>` : ''}
+                            ${hasProforma ? `<span class="proforma-badge ${proformaStatut}">💰 ${PROFORMA_STATUTS[proformaStatut]?.label || 'Proforma'}</span>` : ''}
                         </div>
                         <span style="font-size:11px;color:var(--text-muted);">📅 ${d.date || ''}</span>
                     </div>
@@ -2381,6 +3432,7 @@ function calculerJoursDepuis(ts) {
                     <div style="font-size:13px;"><strong>👤</strong> ${d.nom || 'Client'}</div>
                     <div style="margin:8px 0;font-size:13px;color:var(--text-secondary);">${d.description || ''}</div>
                     ${hasNote ? `<div class="note-display" style="display:block;"><strong>📝 Note chef d'atelier :</strong> ${d.note.text}</div>` : ''}
+                    ${hasProforma ? `<div class="proforma-display" style="display:block;"><strong>💰 Proforma :</strong> Total ${formatMontant(d.proforma.total)} — ${PROFORMA_STATUTS[proformaStatut]?.label || ''}</div>` : ''}
                     ${d.lieu ? `<div style="font-size:12px;color:var(--text-muted);">📍 ${d.lieu}</div>` : ''}
                     ${d.dateRdv ? `<div style="font-size:12px;">📅 RDV : ${d.dateRdv} ${d.heureRdv || ''}</div>` : ''}
                     ${d.garage ? `<div style="font-size:12px;color:var(--text-muted);">🏷️ ${d.garage}</div>` : ''}
@@ -2390,8 +3442,9 @@ function calculerJoursDepuis(ts) {
                         <select class="status-select" data-id="${d.id}">
                             ${STATUTS.map(s => `<option value="${s.id}" ${statutActuel === s.id ? 'selected' : ''}>${s.icon} ${s.label}</option>`).join('')}
                         </select>
+                        <button class="btn-action btn-proforma" data-id="${d.id}" style="${hasProforma ? 'background: #d1fae5; color: #065f46;' : 'background: #ecfdf5; color: #047857;'}">💰 Proforma</button>
                         <button class="btn-action btn-note" data-id="${d.id}" style="${hasNote ? 'background: #dbeafe; color: #1e40af;' : ''}">📝 Note</button>
-                        <button class="btn-action btn-historique" data-id="${d.id}">📜 Historique</button>
+                        <button class="btn-action btn-historique" data-id="${d.id}">📜</button>
                         <button class="btn-action btn-pdf" data-id="${d.id}">📄 PDF</button>
                         <button class="btn-action btn-supprimer" data-id="${d.id}">🗑️</button>
                     </div>
@@ -2408,6 +3461,9 @@ function calculerJoursDepuis(ts) {
                 const d = allDemandes.find(x => x.id === btn.dataset.id);
                 if (d) genererPDF(d, d.numeroDemande || d.id);
             });
+        });
+        listeDiv.querySelectorAll('.btn-proforma').forEach(btn => {
+            btn.addEventListener('click', () => ouvrirProformaModal(btn.dataset.id));
         });
         listeDiv.querySelectorAll('.btn-note').forEach(btn => {
             btn.addEventListener('click', () => ouvrirNoteModal(btn.dataset.id));
@@ -2438,11 +3494,7 @@ function calculerJoursDepuis(ts) {
         if (!container) return;
 
         const totalPages = Math.ceil(filteredDemandes.length / ITEMS_PER_PAGE) || 1;
-
-        if (totalPages <= 1) {
-            container.innerHTML = '';
-            return;
-        }
+        if (totalPages <= 1) { container.innerHTML = ''; return; }
 
         let html = '';
         html += `<button class="page-btn" ${currentPage <= 1 ? 'disabled' : ''} onclick="changerPage(${currentPage - 1})">← Précédent</button>`;
@@ -2454,16 +3506,13 @@ function calculerJoursDepuis(ts) {
             html += `<button class="page-btn" onclick="changerPage(1)">1</button>`;
             if (startPage > 2) html += `<span class="page-info">…</span>`;
         }
-
         for (let i = startPage; i <= endPage; i++) {
             html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="changerPage(${i})">${i}</button>`;
         }
-
         if (endPage < totalPages) {
             if (endPage < totalPages - 1) html += `<span class="page-info">…</span>`;
             html += `<button class="page-btn" onclick="changerPage(${totalPages})">${totalPages}</button>`;
         }
-
         html += `<button class="page-btn" ${currentPage >= totalPages ? 'disabled' : ''} onclick="changerPage(${currentPage + 1})">Suivant →</button>`;
         html += `<div class="page-info" style="width: 100%; text-align: center; margin-top: 8px;">Page ${currentPage} / ${totalPages} • ${filteredDemandes.length} demande(s)</div>`;
 
@@ -2544,7 +3593,7 @@ function calculerJoursDepuis(ts) {
     // ============================================================
     document.getElementById('btnExportExcel')?.addEventListener('click', function() {
         if (allDemandes.length === 0) return afficherToast('❌ Aucune donnée');
-        const headers = ['N° Demande', 'Date', 'Nom', 'Téléphone', 'Email', 'Immat.', 'Marque', 'Modèle', 'Km', 'Description', 'Urgence', 'Statut', 'Garage', 'Lieu', 'Note'];
+        const headers = ['N° Demande', 'Date', 'Nom', 'Téléphone', 'Email', 'Immat.', 'Marque', 'Modèle', 'Km', 'Description', 'Urgence', 'Statut', 'Garage', 'Lieu', 'Note', 'Proforma Total', 'Proforma Statut'];
         const rows = allDemandes.map(d => {
             const statutInfo = STATUTS.find(s => s.id === (d.statut || 0)) || STATUTS[0];
             return [
@@ -2562,7 +3611,9 @@ function calculerJoursDepuis(ts) {
                 statutInfo.label,
                 d.garage || '',
                 d.lieu || '',
-                (d.note?.text || '').replace(/[\r\n;]/g, ' ')
+                (d.note?.text || '').replace(/[\r\n;]/g, ' '),
+                d.proforma?.total || '',
+                d.proforma?.statut || ''
             ];
         });
 
@@ -2651,9 +3702,11 @@ function calculerJoursDepuis(ts) {
         }, 500);
     }
 
-    console.log('🚗 Assist-Garage PRO 2.4');
-    console.log('✅ QR code de suivi dans le PDF');
-    console.log('✅ Compteur "Nouvelles" (ex Non traitées)');
+    console.log('🚗 Assist-Garage PRO 3.0 — Module Proforma');
+    console.log('✅ QR code dans le PDF');
+    console.log('✅ Proforma avec lignes + remise + PDF');
+    console.log('✅ Personnalisation garage (nom + logo + contact)');
+    console.log('✅ WhatsApp avec message pré-rempli');
 })();
 </script>
 
