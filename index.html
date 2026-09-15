@@ -756,7 +756,7 @@
         <div class="logo">
             <h1>🚗 ASSIST-GARAGE</h1>
             <div class="subtitle">RÉPARATION · ENTRETIEN · DÉPANNAGE</div>
-            <span class="badge-free">📱 VERSION PRO 2.3</span>
+            <span class="badge-free">📱 VERSION PRO 2.4</span>
         </div>
 
         <div class="ad-banner" onclick="ouvrirSmartlink()">
@@ -956,7 +956,7 @@
 
         <div class="stats" id="stats">
             <div class="stat-card"><div class="stat-number" id="statTotal">0</div><div class="stat-label">Total</div></div>
-            <div class="stat-card"><div class="stat-number" id="statNonLues">0</div><div class="stat-label">Non traitées</div></div>
+            <div class="stat-card"><div class="stat-number" id="statNonLues">0</div><div class="stat-label">🆕 Nouvelles</div></div>
             <div class="stat-card"><div class="stat-number" id="statUrgentes">0</div><div class="stat-label">Urgentes</div></div>
             <div class="stat-card"><div class="stat-number" id="statRetard">0</div><div class="stat-label">En retard</div></div>
         </div>
@@ -969,7 +969,7 @@
 
         <div class="filtres">
             <button class="filtre-btn active" data-filtre="toutes">📋 Toutes</button>
-            <button class="filtre-btn" data-filtre="non-lues">🆕 Non traitées</button>
+            <button class="filtre-btn" data-filtre="non-lues">🆕 Nouvelles</button>
             <button class="filtre-btn" data-filtre="urgentes">🔴 Urgentes</button>
             <button class="filtre-btn" data-filtre="retard">⚠️ En retard</button>
             <button class="filtre-btn" data-filtre="avec-notes">📝 Avec notes</button>
@@ -1063,7 +1063,7 @@
 const MAX_PHOTOS = 5;
 const DELAI_RETARD_JOURS = 3;
 const ITEMS_PER_PAGE = 10;
-const MAX_DEMANDES_CHARGEES = 50; // ⚠️ Limite pour éviter la coupure Firestore
+const MAX_DEMANDES_CHARGEES = 50;
 
 const STATUTS = [
     { id: 0, label: 'Reçu', icon: '🟡', color: '#f59e0b', description: 'Demande enregistrée' },
@@ -1895,12 +1895,80 @@ function calculerJoursDepuis(ts) {
     });
 
     // ============================================================
-    // PDF - MÉTHODE JSPDF DIRECTE (FIABLE À 100%)
+    // GÉNÉRATION DU QR CODE DE SUIVI
     // ============================================================
-    function buildPdfHtml(demande, id) {
+    // Cette fonction génère un QR code en base64 (image PNG) à insérer dans le PDF
+    function genererQRCodeBase64(texte, callback) {
+        // Créer un canvas pour dessiner le QR
+        const canvas = document.createElement('canvas');
+        canvas.width = 200;
+        canvas.height = 200;
+
+        // Utiliser la lib QRCode pour dessiner sur le canvas
+        try {
+            // On utilise une méthode alternative : créer un div temporaire + QRCode.js
+            const tempDiv = document.createElement('div');
+            tempDiv.style.position = 'fixed';
+            tempDiv.style.left = '-9999px';
+            document.body.appendChild(tempDiv);
+
+            new QRCode(tempDiv, {
+                text: texte,
+                width: 200,
+                height: 200,
+                colorDark: "#0f172a",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.M
+            });
+
+            // Attendre que le QR soit dessiné
+            setTimeout(() => {
+                const canvasQR = tempDiv.querySelector('canvas');
+                const imgQR = tempDiv.querySelector('img');
+
+                if (canvasQR) {
+                    const dataUrl = canvasQR.toDataURL('image/png');
+                    document.body.removeChild(tempDiv);
+                    callback(dataUrl);
+                } else if (imgQR && imgQR.src) {
+                    const dataUrl = imgQR.src;
+                    document.body.removeChild(tempDiv);
+                    callback(dataUrl);
+                } else {
+                    document.body.removeChild(tempDiv);
+                    callback(null);
+                }
+            }, 150);
+        } catch(e) {
+            console.error('Erreur génération QR:', e);
+            callback(null);
+        }
+    }
+
+    // ============================================================
+    // PDF - MÉTHODE JSPDF DIRECTE AVEC QR CODE
+    // ============================================================
+    function buildPdfHtml(demande, id, qrImageBase64) {
         const dateReception = demande.date || new Date().toLocaleString('fr-FR');
         const statutInfo = STATUTS.find(s => s.id === (demande.statut || 0)) || STATUTS[0];
         const urgenceColor = demande.urgence === 'haute' ? '#ef4444' : demande.urgence === 'moyenne' ? '#f59e0b' : '#22c55e';
+        const trackingUrl = `${window.location.origin}${window.location.pathname}?suivi=${id}`;
+
+        const qrBlockHtml = qrImageBase64 ? `
+            <div style="margin-top: 25px; padding-top: 18px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; gap: 18px;">
+                <div style="flex-shrink: 0; width: 100px; height: 100px; background: white; padding: 4px; border: 1px solid #cbd5e1; border-radius: 4px;">
+                    <img src="${qrImageBase64}" style="width: 100%; height: 100%; display: block;" alt="QR Code suivi">
+                </div>
+                <div style="font-size: 11px; color: #475569; line-height: 1.6;">
+                    <strong style="color: #0f172a; font-size: 13px; display: block; margin-bottom: 4px;">📱 Suivi en ligne</strong>
+                    Scannez ce QR code avec votre téléphone pour suivre<br>
+                    l'avancement de votre véhicule en temps réel.<br>
+                    <span style="font-size: 10px; color: #94a3b8; margin-top: 4px; display: block;">
+                        N° de suivi : <strong style="color: #0f172a;">${id}</strong>
+                    </span>
+                </div>
+            </div>
+        ` : '';
 
         return `
             <div style="font-family: 'Georgia', 'Times New Roman', serif; width: 780px; padding: 30px 40px; background: white; color: #1a1a1a; line-height: 1.5; box-sizing: border-box;">
@@ -1974,6 +2042,8 @@ function calculerJoursDepuis(ts) {
                     </div>
                 </div>
 
+                ${qrBlockHtml}
+
                 <div style="text-align: center; margin-top: 25px; padding-top: 15px; border-top: 1px solid #e2e8f0;">
                     <div style="font-size: 9px; color: #94a3b8; letter-spacing: 2px;">ASSIST-GARAGE — SOLUTION DE GESTION POUR GARAGES</div>
                 </div>
@@ -1981,132 +2051,131 @@ function calculerJoursDepuis(ts) {
         `;
     }
 
-    function genererPDF(demande, id) {
+    async function genererPDF(demande, id) {
         const pdfContent = document.getElementById('pdfContent');
-        pdfContent.innerHTML = buildPdfHtml(demande, id);
-        document.getElementById('pdfModal').style.display = 'flex';
+        const trackingUrl = `${window.location.origin}${window.location.pathname}?suivi=${id}`;
 
-        // === TÉLÉCHARGEMENT PDF - MÉTHODE JSPDF DIRECTE ===
-        document.getElementById('btnGenererPDF').onclick = async function() {
-            const btn = this;
-            btn.disabled = true;
-            btn.textContent = '⏳ Génération...';
-            afficherToast('⏳ Création du PDF en cours...');
+        // D'abord, générer le QR code
+        afficherToast('⏳ Préparation du PDF...');
 
-            try {
-                // Récupérer les librairies globales
-                const html2canvas = window.html2canvas;
-                const jspdfModule = window.jspdf;
-                const jsPDF = jspdfModule ? jspdfModule.jsPDF : window.jsPDF;
+        genererQRCodeBase64(trackingUrl, (qrBase64) => {
+            // Afficher l'aperçu dans le modal
+            pdfContent.innerHTML = buildPdfHtml(demande, id, qrBase64);
+            document.getElementById('pdfModal').style.display = 'flex';
 
-                if (!html2canvas || !jsPDF) {
-                    throw new Error('Bibliothèques PDF non chargées');
-                }
+            // Téléchargement
+            document.getElementById('btnGenererPDF').onclick = async function() {
+                const btn = this;
+                btn.disabled = true;
+                btn.textContent = '⏳ Génération...';
+                afficherToast('⏳ Création du PDF...');
 
-                // Créer un container propre et visible
-                const container = document.createElement('div');
-                container.style.position = 'fixed';
-                container.style.top = '0';
-                container.style.left = '0';
-                container.style.width = '820px';
-                container.style.background = 'white';
-                container.style.zIndex = '99999';
-                container.style.opacity = '1';
-                container.style.pointerEvents = 'none';
-                container.innerHTML = buildPdfHtml(demande, id);
-                document.body.appendChild(container);
+                try {
+                    const html2canvas = window.html2canvas;
+                    const jspdfModule = window.jspdf;
+                    const jsPDF = jspdfModule ? jspdfModule.jsPDF : window.jsPDF;
 
-                // Attendre le rendu
-                await new Promise(r => setTimeout(r, 300));
+                    if (!html2canvas || !jsPDF) {
+                        throw new Error('Bibliothèques PDF non chargées');
+                    }
 
-                // Capture
-                const canvas = await html2canvas(container, {
-                    scale: 2,
-                    useCORS: true,
-                    backgroundColor: '#ffffff',
-                    logging: false,
-                    windowWidth: 820,
-                    scrollX: 0,
-                    scrollY: 0
-                });
+                    const container = document.createElement('div');
+                    container.style.position = 'fixed';
+                    container.style.top = '0';
+                    container.style.left = '0';
+                    container.style.width = '820px';
+                    container.style.background = 'white';
+                    container.style.zIndex = '99999';
+                    container.style.opacity = '1';
+                    container.style.pointerEvents = 'none';
+                    container.innerHTML = buildPdfHtml(demande, id, qrBase64);
+                    document.body.appendChild(container);
 
-                // Retirer le container
-                if (container.parentNode) document.body.removeChild(container);
+                    await new Promise(r => setTimeout(r, 400));
 
-                // Créer le PDF
-                const imgData = canvas.toDataURL('image/jpeg', 0.95);
-                const pdf = new jsPDF({
-                    orientation: 'portrait',
-                    unit: 'mm',
-                    format: 'a4'
-                });
+                    const canvas = await html2canvas(container, {
+                        scale: 2,
+                        useCORS: true,
+                        backgroundColor: '#ffffff',
+                        logging: false,
+                        windowWidth: 820,
+                        scrollX: 0,
+                        scrollY: 0
+                    });
 
-                const pdfWidth = pdf.internal.pageSize.getWidth();
-                const pdfHeight = pdf.internal.pageSize.getHeight();
-                const imgWidth = pdfWidth - 20; // Marges 10mm de chaque côté
-                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                    if (container.parentNode) document.body.removeChild(container);
 
-                let heightLeft = imgHeight;
-                let position = 10; // Marge top
-                let page = 1;
+                    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                    const pdf = new jsPDF({
+                        orientation: 'portrait',
+                        unit: 'mm',
+                        format: 'a4'
+                    });
 
-                pdf.addImage(imgData, 'JPEG', 10, position, imgWidth, imgHeight);
-                heightLeft -= (pdfHeight - 20);
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = pdf.internal.pageSize.getHeight();
+                    const imgWidth = pdfWidth - 20;
+                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-                // Ajouter pages supplémentaires si nécessaire
-                while (heightLeft > 0) {
-                    page++;
-                    position = -(page - 1) * (pdfHeight - 20) + 10;
-                    pdf.addPage();
+                    let heightLeft = imgHeight;
+                    let position = 10;
+                    let page = 1;
+
                     pdf.addImage(imgData, 'JPEG', 10, position, imgWidth, imgHeight);
                     heightLeft -= (pdfHeight - 20);
+
+                    while (heightLeft > 0) {
+                        page++;
+                        position = -(page - 1) * (pdfHeight - 20) + 10;
+                        pdf.addPage();
+                        pdf.addImage(imgData, 'JPEG', 10, position, imgWidth, imgHeight);
+                        heightLeft -= (pdfHeight - 20);
+                    }
+
+                    pdf.save(`Fiche_${id}.pdf`);
+
+                    btn.disabled = false;
+                    btn.textContent = '⬇️ Télécharger PDF';
+                    afficherToast('📄 PDF téléchargé avec succès !');
+
+                } catch(err) {
+                    console.error('Erreur PDF:', err);
+                    btn.disabled = false;
+                    btn.textContent = '⬇️ Télécharger PDF';
+                    afficherToast('❌ Erreur: ' + err.message);
                 }
+            };
 
-                // Sauvegarder
-                pdf.save(`Fiche_${id}.pdf`);
-
-                btn.disabled = false;
-                btn.textContent = '⬇️ Télécharger PDF';
-                afficherToast('📄 PDF téléchargé avec succès !');
-
-            } catch(err) {
-                console.error('Erreur PDF:', err);
-                btn.disabled = false;
-                btn.textContent = '⬇️ Télécharger PDF';
-                afficherToast('❌ Erreur: ' + err.message);
-            }
-        };
-
-        // === IMPRESSION ===
-        document.getElementById('btnImprimerPDF').onclick = function() {
-            const content = buildPdfHtml(demande, id);
-            const printWindow = window.open('', '_blank');
-            if (!printWindow) {
-                afficherToast('❌ Autorisez les popups');
-                return;
-            }
-            printWindow.document.write(`
-                <html><head><title>Fiche ${id}</title>
-                <style>
-                    @page { size: A4; margin: 10mm; }
-                    body { font-family: 'Georgia', serif; padding: 0; margin: 0; color: #1a1a1a; }
-                </style>
-                </head><body>${content}</body></html>
-            `);
-            printWindow.document.close();
-            setTimeout(() => printWindow.print(), 800);
-        };
+            // Impression
+            document.getElementById('btnImprimerPDF').onclick = function() {
+                const content = buildPdfHtml(demande, id, qrBase64);
+                const printWindow = window.open('', '_blank');
+                if (!printWindow) {
+                    afficherToast('❌ Autorisez les popups');
+                    return;
+                }
+                printWindow.document.write(`
+                    <html><head><title>Fiche ${id}</title>
+                    <style>
+                        @page { size: A4; margin: 10mm; }
+                        body { font-family: 'Georgia', serif; padding: 0; margin: 0; color: #1a1a1a; }
+                    </style>
+                    </head><body>${content}</body></html>
+                `);
+                printWindow.document.close();
+                setTimeout(() => printWindow.print(), 800);
+            };
+        });
     }
 
     // ============================================================
-    // CHARGEMENT DASHBOARD (avec limite pour éviter la coupure)
+    // CHARGEMENT DASHBOARD
     // ============================================================
     function chargerDemandesRealtime() {
         if (unsubscribeDashboard) { unsubscribeDashboard(); unsubscribeDashboard = null; }
 
         const garageFiltre = document.getElementById('selectGarage')?.value || 'tous';
 
-        // ⚠️ Limite à 50 pour éviter la coupure du canal Firestore
         let query = db.collection('demandes').limit(MAX_DEMANDES_CHARGEES);
 
         if (garageFiltre !== 'tous') {
@@ -2117,7 +2186,6 @@ function calculerJoursDepuis(ts) {
             let demandes = [];
             snapshot.forEach(doc => demandes.push({ id: doc.id, ...doc.data() }));
 
-            // Tri côté client (plus fiable que orderBy + where)
             demandes.sort((a, b) => {
                 const ta = a.dateTimestamp?.toDate ? a.dateTimestamp.toDate().getTime() : new Date(a.dateTimestamp).getTime();
                 const tb = b.dateTimestamp?.toDate ? b.dateTimestamp.toDate().getTime() : new Date(b.dateTimestamp).getTime();
@@ -2583,10 +2651,9 @@ function calculerJoursDepuis(ts) {
         }, 500);
     }
 
-    console.log('🚗 Assist-Garage PRO 2.3');
-    console.log('✅ PDF avec jsPDF direct (fiable)');
-    console.log('✅ Notes chef d\'atelier');
-    console.log('✅ Limite 50 demandes (anti-coupure)');
+    console.log('🚗 Assist-Garage PRO 2.4');
+    console.log('✅ QR code de suivi dans le PDF');
+    console.log('✅ Compteur "Nouvelles" (ex Non traitées)');
 })();
 </script>
 
