@@ -6,7 +6,8 @@
     <title>Assist-Garage - Solution de Gestion Pro</title>
     <meta name="theme-color" content="#0f172a">
     <link rel="manifest" href="/ntr-garage/site.webmanifest">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <style>
         :root {
@@ -345,11 +346,40 @@
             margin: 4px 0;
         }
 
+        .note-badge {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 3px 10px;
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
         .status-select { padding: 6px 12px; border-radius: 40px; border: 1px solid var(--border); font-size: 12px; background: var(--bg-card); color: var(--text-primary); cursor: pointer; }
         .btn-action { background: var(--bg-soft); border: none; padding: 6px 14px; border-radius: 30px; font-size: 12px; cursor: pointer; color: var(--text-secondary); }
         .btn-action:hover { background: var(--border); }
         .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center; }
         .contact-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+
+        .note-display {
+            background: #fef3c7;
+            border-left: 4px solid var(--warning);
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 12px;
+            color: #78350f;
+            display: none;
+        }
+        .note-display strong { color: #92400e; }
+
+        @media (prefers-color-scheme: dark) {
+            .note-display { background: #422006; color: #fcd34d; }
+            .note-display strong { color: #fbbf24; }
+            .note-badge { background: #1e3a8a; color: #dbeafe; }
+        }
 
         .status-step { display: flex; align-items: center; margin: 12px 0; opacity: 0.4; padding: 8px; border-radius: 12px; }
         .status-step.active { opacity: 1; background: var(--bg-soft); }
@@ -507,7 +537,7 @@
             padding: 12px;
             background: var(--bg-soft);
             border-radius: 12px;
-            max-height: 200px;
+            max-height: 300px;
             overflow-y: auto;
         }
         .timeline-item {
@@ -525,6 +555,10 @@
             min-width: 110px;
         }
         .timeline-item .event { color: var(--text-primary); flex: 1; }
+        .timeline-item.note-item { background: #fef3c7; margin: 4px -12px; padding: 8px 12px; }
+        @media (prefers-color-scheme: dark) {
+            .timeline-item.note-item { background: #422006; color: #fcd34d; }
+        }
 
         .media-modal-content {
             max-width: 95vw !important;
@@ -722,7 +756,7 @@
         <div class="logo">
             <h1>🚗 ASSIST-GARAGE</h1>
             <div class="subtitle">RÉPARATION · ENTRETIEN · DÉPANNAGE</div>
-            <span class="badge-free">📱 VERSION PRO 2.2</span>
+            <span class="badge-free">📱 VERSION PRO 2.3</span>
         </div>
 
         <div class="ad-banner" onclick="ouvrirSmartlink()">
@@ -938,11 +972,16 @@
             <button class="filtre-btn" data-filtre="non-lues">🆕 Non traitées</button>
             <button class="filtre-btn" data-filtre="urgentes">🔴 Urgentes</button>
             <button class="filtre-btn" data-filtre="retard">⚠️ En retard</button>
+            <button class="filtre-btn" data-filtre="avec-notes">📝 Avec notes</button>
         </div>
 
         <div style="margin-bottom: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
             <button id="btnExportExcel" class="btn-secondary" style="flex:1;">📥 Exporter CSV</button>
             <button id="btnActiverNotifs" class="btn-secondary" style="flex:1;">🔔 Activer notifications</button>
+        </div>
+
+        <div style="margin-bottom: 12px; padding: 10px 14px; background: #eff6ff; border-left: 3px solid #3b82f6; border-radius: 8px; font-size: 11px; color: #1e40af;">
+            💡 <strong>Info :</strong> Affichage limité à 50 demandes pour éviter les coupures. Utilisez les filtres pour affiner.
         </div>
 
         <div id="listeDemandes" style="max-height: 600px; overflow-y: auto;"></div>
@@ -973,7 +1012,7 @@
 <div id="pdfModal" class="modal">
     <div class="modal-content pdf-modal-content">
         <h3 style="margin-bottom: 16px; color: var(--text-primary);">📄 Fiche de réception</h3>
-        <div id="pdfContent"></div>
+        <div id="pdfContent" style="background: white; border-radius: 8px; padding: 10px; max-height: 60vh; overflow-y: auto;"></div>
         <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center;">
             <button id="btnGenererPDF" class="btn-primary" style="margin-top: 0; width: auto; padding: 12px 24px;">⬇️ Télécharger PDF</button>
             <button id="btnImprimerPDF" class="btn-secondary">🖨️ Imprimer</button>
@@ -993,6 +1032,23 @@
     </div>
 </div>
 
+<!-- Modal Commentaire Chef d'Atelier -->
+<div id="noteModal" class="modal">
+    <div class="modal-content">
+        <h3 style="margin-bottom: 16px; color: var(--text-primary);">📝 Note du chef d'atelier</h3>
+        <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">
+            Note interne — Visible uniquement par le garage (non incluse dans le PDF client)
+        </div>
+        <textarea id="noteText" rows="6" placeholder="Ex: Le client doit rappeler avant 15h, commande pièce chez fournisseur X..." style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 12px; font-family: inherit; font-size: 14px; background: var(--bg-card); color: var(--text-primary); resize: vertical;"></textarea>
+        <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center;">
+            <button id="btnSaveNote" class="btn-primary" style="margin-top: 0; width: auto; padding: 12px 24px;">💾 Enregistrer</button>
+            <button id="btnDeleteNote" class="btn-secondary" style="color: var(--danger); border-color: var(--danger);">🗑️ Effacer la note</button>
+            <button onclick="document.getElementById('noteModal').style.display='none'" class="btn-secondary">Fermer</button>
+        </div>
+        <div id="noteLastUpdate" style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 12px;"></div>
+    </div>
+</div>
+
 <div id="toast" class="toast"></div>
 
 <!-- Firebase SDK -->
@@ -1007,6 +1063,7 @@
 const MAX_PHOTOS = 5;
 const DELAI_RETARD_JOURS = 3;
 const ITEMS_PER_PAGE = 10;
+const MAX_DEMANDES_CHARGEES = 50; // ⚠️ Limite pour éviter la coupure Firestore
 
 const STATUTS = [
     { id: 0, label: 'Reçu', icon: '🟡', color: '#f59e0b', description: 'Demande enregistrée' },
@@ -1116,6 +1173,7 @@ function calculerJoursDepuis(ts) {
     let nouvellesDemandesIds = new Set();
     let premiereChargeEffectuee = false;
     let sonAutorise = false;
+    let currentDemandeNoteId = null;
 
     const loginScreen = document.getElementById('loginScreen');
     const clientScreen = document.getElementById('clientScreen');
@@ -1228,7 +1286,6 @@ function calculerJoursDepuis(ts) {
             afficherEcran('client');
             if (unsubscribeDashboard) { unsubscribeDashboard(); unsubscribeDashboard = null; }
             if (trackingUnsubscribe) { trackingUnsubscribe(); trackingUnsubscribe = null; }
-            // Retirer le badge d'app quand déconnecté
             if ('clearAppBadge' in navigator) {
                 navigator.clearAppBadge().catch(() => {});
             }
@@ -1255,7 +1312,7 @@ function calculerJoursDepuis(ts) {
                 gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
                 osc.start(ctx.currentTime);
                 osc.stop(ctx.currentTime + 0.4);
-            } catch(e) { console.log('Son bloqué:', e.message); }
+            } catch(e) {}
         }
     }
 
@@ -1276,10 +1333,7 @@ function calculerJoursDepuis(ts) {
     }
 
     function envoyerNotification(titre, message, demandeId) {
-        if (!("Notification" in window) || Notification.permission !== "granted") {
-            console.log('Notification non envoyée (permission non accordée)');
-            return;
-        }
+        if (!("Notification" in window) || Notification.permission !== "granted") return;
         try {
             const notif = new Notification(titre, {
                 body: message,
@@ -1287,31 +1341,22 @@ function calculerJoursDepuis(ts) {
                 tag: demandeId
             });
             notif.onclick = () => { window.focus(); notif.close(); };
-        } catch(e) { console.log('Erreur notification:', e.message); }
+        } catch(e) {}
     }
 
-    // ============================================================
-    // MISE À JOUR BADGE (titre + icône app)
-    // ============================================================
     function mettreAJourBadgeTitre(nbNouvelles) {
         const titreBase = "Assist-Garage - Solution de Gestion Pro";
         document.title = nbNouvelles > 0 ? `(${nbNouvelles}) ${titreBase}` : titreBase;
 
-        // Badge sur l'icône de l'app (Chrome Android/Desktop PWA)
         if ('setAppBadge' in navigator) {
             if (nbNouvelles > 0) {
-                navigator.setAppBadge(nbNouvelles).catch(err => {
-                    console.log('Badge non supporté:', err.message);
-                });
+                navigator.setAppBadge(nbNouvelles).catch(() => {});
             } else {
                 navigator.clearAppBadge().catch(() => {});
             }
         }
     }
 
-    // ============================================================
-    // ANALYSE IA
-    // ============================================================
     if (descInput) {
         descInput.addEventListener('input', function(e) {
             if (e.target.value.length > 10) {
@@ -1323,9 +1368,6 @@ function calculerJoursDepuis(ts) {
         });
     }
 
-    // ============================================================
-    // TABS
-    // ============================================================
     document.querySelectorAll('.tab').forEach(tab => {
         tab.addEventListener('click', function() {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -1336,9 +1378,6 @@ function calculerJoursDepuis(ts) {
         });
     });
 
-    // ============================================================
-    // URGENCE
-    // ============================================================
     const urgenceBtns = document.querySelectorAll('[data-urgence]');
     urgenceBtns.forEach(btn => {
         btn.addEventListener('click', function() {
@@ -1349,9 +1388,6 @@ function calculerJoursDepuis(ts) {
     });
     document.querySelector('[data-urgence="basse"]')?.classList.add('urgence-selected');
 
-    // ============================================================
-    // QR CODE
-    // ============================================================
     function genererQRCode() {
         const url = window.location.href;
         const urlElem = document.getElementById('currentUrl');
@@ -1401,7 +1437,7 @@ function calculerJoursDepuis(ts) {
     });
 
     // ============================================================
-    // MÉDIAS MULTIPLES
+    // MÉDIAS
     // ============================================================
     function setupMediaHandlers() {
         const btnPhoto = document.getElementById('btnPhoto');
@@ -1463,9 +1499,7 @@ function calculerJoursDepuis(ts) {
                             const data = await readFileAsDataURL(file);
                             mediaList.push({ data, type: 'audio' });
                         }
-                    } catch(err) {
-                        console.error("Erreur fichier:", err);
-                    }
+                    } catch(err) {}
                 }
                 fichierMedia.value = '';
                 afficherMediaPreview();
@@ -1578,6 +1612,7 @@ function calculerJoursDepuis(ts) {
             diagnosticIA: analyserPanne(document.getElementById('description')?.value || ''),
             numeroDemande,
             garage,
+            note: null,
             historique: [{
                 date: new Date(),
                 dateStr: new Date().toLocaleString('fr-FR'),
@@ -1651,7 +1686,6 @@ function calculerJoursDepuis(ts) {
                         if (trackingInfo) trackingInfo.style.display = 'none';
                     }
                 }).catch(err => {
-                    console.error('Erreur recherche ID:', err);
                     if (trackingError) trackingError.textContent = '❌ Erreur: ' + err.message;
                 });
                 return;
@@ -1659,7 +1693,6 @@ function calculerJoursDepuis(ts) {
             const doc = snapshot.docs[0];
             afficherDetailsSuivi({ id: doc.id, ...doc.data() });
         }, function(error) {
-            console.error("Erreur suivi:", error);
             if (trackingError) {
                 if (error.code === 'permission-denied') {
                     trackingError.textContent = '❌ Accès refusé — vérifiez les règles Firestore';
@@ -1713,7 +1746,7 @@ function calculerJoursDepuis(ts) {
     }
 
     // ============================================================
-    // DASHBOARD
+    // DASHBOARD - UPDATE/DELETE
     // ============================================================
     async function updateStatus(demandeId, nouveauStatut) {
         try {
@@ -1764,7 +1797,7 @@ function calculerJoursDepuis(ts) {
             content.innerHTML = '<p style="color:var(--text-muted);text-align:center;">Aucun historique</p>';
         } else {
             content.innerHTML = '<div class="timeline">' + histo.map(h => `
-                <div class="timeline-item">
+                <div class="timeline-item ${h.type === 'note' ? 'note-item' : ''}">
                     <span class="time">${h.dateStr || formatDate(h.date)}</span>
                     <span class="event">${h.action || h.statutLabel || ''}</span>
                 </div>
@@ -1774,27 +1807,113 @@ function calculerJoursDepuis(ts) {
     }
 
     // ============================================================
-    // PDF
+    // NOTE CHEF D'ATELIER
     // ============================================================
-    function genererPDF(demande, id) {
-        const pdfContent = document.getElementById('pdfContent');
+    window.ouvrirNoteModal = function(demandeId) {
+        currentDemandeNoteId = demandeId;
+        const demande = allDemandes.find(d => d.id === demandeId);
+        const noteText = document.getElementById('noteText');
+        const noteLastUpdate = document.getElementById('noteLastUpdate');
+        const btnDeleteNote = document.getElementById('btnDeleteNote');
+
+        noteText.value = demande?.note?.text || '';
+        if (demande?.note?.dateStr) {
+            noteLastUpdate.textContent = '🕐 Modifiée le ' + demande.note.dateStr;
+        } else {
+            noteLastUpdate.textContent = '';
+        }
+        btnDeleteNote.style.display = demande?.note?.text ? 'inline-block' : 'none';
+
+        document.getElementById('noteModal').style.display = 'flex';
+        setTimeout(() => noteText.focus(), 300);
+    };
+
+    document.getElementById('btnSaveNote')?.addEventListener('click', async function() {
+        if (!currentDemandeNoteId) return;
+        const text = document.getElementById('noteText').value.trim();
+
+        try {
+            const docRef = db.collection('demandes').doc(currentDemandeNoteId);
+            const doc = await docRef.get();
+            if (!doc.exists) return;
+            const data = doc.data();
+            const historique = data.historique || [];
+
+            let note = null;
+            if (text) {
+                note = {
+                    text: text,
+                    date: new Date(),
+                    dateStr: new Date().toLocaleString('fr-FR')
+                };
+                historique.push({
+                    date: new Date(),
+                    dateStr: new Date().toLocaleString('fr-FR'),
+                    type: 'note',
+                    action: '📝 Note ajoutée : ' + (text.length > 60 ? text.substring(0, 60) + '...' : text)
+                });
+            } else {
+                historique.push({
+                    date: new Date(),
+                    dateStr: new Date().toLocaleString('fr-FR'),
+                    type: 'note',
+                    action: '📝 Note supprimée'
+                });
+            }
+
+            await docRef.update({ note: note, historique });
+            afficherToast(text ? '💾 Note enregistrée' : '🗑️ Note supprimée');
+            document.getElementById('noteModal').style.display = 'none';
+        } catch(err) {
+            afficherToast('❌ Erreur: ' + err.message);
+        }
+    });
+
+    document.getElementById('btnDeleteNote')?.addEventListener('click', async function() {
+        if (!currentDemandeNoteId) return;
+        if (!confirm('Effacer la note du chef d\'atelier ?')) return;
+
+        try {
+            const docRef = db.collection('demandes').doc(currentDemandeNoteId);
+            const doc = await docRef.get();
+            if (!doc.exists) return;
+            const data = doc.data();
+            const historique = data.historique || [];
+            historique.push({
+                date: new Date(),
+                dateStr: new Date().toLocaleString('fr-FR'),
+                type: 'note',
+                action: '📝 Note supprimée'
+            });
+
+            await docRef.update({ note: null, historique });
+            afficherToast('🗑️ Note supprimée');
+            document.getElementById('noteModal').style.display = 'none';
+        } catch(err) {
+            afficherToast('❌ Erreur: ' + err.message);
+        }
+    });
+
+    // ============================================================
+    // PDF - MÉTHODE JSPDF DIRECTE (FIABLE À 100%)
+    // ============================================================
+    function buildPdfHtml(demande, id) {
         const dateReception = demande.date || new Date().toLocaleString('fr-FR');
         const statutInfo = STATUTS.find(s => s.id === (demande.statut || 0)) || STATUTS[0];
-        const trackingUrl = `${window.location.origin}${window.location.pathname}?suivi=${id}`;
         const urgenceColor = demande.urgence === 'haute' ? '#ef4444' : demande.urgence === 'moyenne' ? '#f59e0b' : '#22c55e';
 
-        pdfContent.innerHTML = `
-            <div id="pdfInner" style="font-family: 'Georgia', 'Times New Roman', serif; max-width: 700px; margin: 0 auto; padding: 24px 30px; background: white; color: #1a1a1a; line-height: 1.5;">
-                <div style="text-align: center; margin-bottom: 22px; padding-bottom: 14px; border-bottom: 2px solid #0f172a;">
-                    <div style="font-size: 24px; font-weight: 300; letter-spacing: 5px; color: #0f172a;">ASSIST-GARAGE</div>
-                    <div style="font-size: 11px; color: #64748b; letter-spacing: 3px; margin-top: 4px; text-transform: uppercase;">Fiche de Réception</div>
+        return `
+            <div style="font-family: 'Georgia', 'Times New Roman', serif; width: 780px; padding: 30px 40px; background: white; color: #1a1a1a; line-height: 1.5; box-sizing: border-box;">
+                <div style="text-align: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid #0f172a;">
+                    <div style="font-size: 26px; font-weight: 300; letter-spacing: 5px; color: #0f172a;">ASSIST-GARAGE</div>
+                    <div style="font-size: 11px; color: #64748b; letter-spacing: 3px; margin-top: 6px; text-transform: uppercase;">Fiche de Réception</div>
                     <div style="font-size: 9px; color: #94a3b8; margin-top: 6px; font-style: italic; letter-spacing: 1px;">Document confidentiel</div>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; margin-bottom: 20px; padding: 12px 14px; background: #f8fafc; border-left: 4px solid #0f172a; font-size: 12px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 22px; padding: 14px 18px; background: #f8fafc; border-left: 4px solid #0f172a; font-size: 12px;">
                     <div>
                         <div style="font-size: 9px; color: #64748b; text-transform: uppercase; letter-spacing: 1px;">N° de dossier</div>
-                        <div style="color: #0f172a; font-weight: 600; font-size: 14px; margin-top: 2px;">${id}</div>
+                        <div style="color: #0f172a; font-weight: 600; font-size: 15px; margin-top: 2px;">${id}</div>
                     </div>
                     <div style="text-align: right;">
                         <div style="font-size: 9px; color: #64748b; text-transform: uppercase; letter-spacing: 1px;">Date de réception</div>
@@ -1802,152 +1921,165 @@ function calculerJoursDepuis(ts) {
                     </div>
                 </div>
 
-                <div style="font-size: 11px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin: 16px 0 10px 0; padding-bottom: 4px; border-bottom: 1px solid #cbd5e1;">
+                <div style="font-size: 12px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin: 18px 0 12px 0; padding-bottom: 4px; border-bottom: 1px solid #cbd5e1;">
                     🚘 Véhicule
                 </div>
-                <div style="font-size: 12px; margin-bottom: 6px;">
-                    <div style="margin-bottom: 4px;"><strong style="display: inline-block; min-width: 130px; color: #475569;">Immatriculation :</strong> <span style="color: #0f172a;">${demande.immatriculation || '-'}</span></div>
-                    <div style="margin-bottom: 4px;"><strong style="display: inline-block; min-width: 130px; color: #475569;">Marque / Modèle :</strong> <span style="color: #0f172a;">${demande.marque || '-'} ${demande.modele || ''}</span></div>
-                    <div style="margin-bottom: 4px;"><strong style="display: inline-block; min-width: 130px; color: #475569;">Kilométrage :</strong> <span style="color: #0f172a;">${demande.kilometrage || '-'} km</span></div>
+                <div style="font-size: 13px;">
+                    <div style="margin-bottom: 6px;"><strong style="display: inline-block; min-width: 150px; color: #475569;">Immatriculation :</strong> <span style="color: #0f172a;">${demande.immatriculation || '-'}</span></div>
+                    <div style="margin-bottom: 6px;"><strong style="display: inline-block; min-width: 150px; color: #475569;">Marque / Modèle :</strong> <span style="color: #0f172a;">${demande.marque || '-'} ${demande.modele || ''}</span></div>
+                    <div style="margin-bottom: 6px;"><strong style="display: inline-block; min-width: 150px; color: #475569;">Kilométrage :</strong> <span style="color: #0f172a;">${demande.kilometrage || '-'} km</span></div>
                 </div>
 
-                <div style="font-size: 11px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin: 16px 0 10px 0; padding-bottom: 4px; border-bottom: 1px solid #cbd5e1;">
+                <div style="font-size: 12px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin: 18px 0 12px 0; padding-bottom: 4px; border-bottom: 1px solid #cbd5e1;">
                     👤 Client
                 </div>
-                <div style="font-size: 12px; margin-bottom: 6px;">
-                    <div style="margin-bottom: 4px;"><strong style="display: inline-block; min-width: 130px; color: #475569;">Nom :</strong> <span style="color: #0f172a;">${demande.nom || '-'}</span></div>
-                    <div style="margin-bottom: 4px;"><strong style="display: inline-block; min-width: 130px; color: #475569;">Téléphone :</strong> <span style="color: #0f172a;">${demande.telephone || '-'}</span></div>
-                    ${demande.email ? `<div style="margin-bottom: 4px;"><strong style="display: inline-block; min-width: 130px; color: #475569;">Email :</strong> <span style="color: #0f172a;">${demande.email}</span></div>` : ''}
+                <div style="font-size: 13px;">
+                    <div style="margin-bottom: 6px;"><strong style="display: inline-block; min-width: 150px; color: #475569;">Nom :</strong> <span style="color: #0f172a;">${demande.nom || '-'}</span></div>
+                    <div style="margin-bottom: 6px;"><strong style="display: inline-block; min-width: 150px; color: #475569;">Téléphone :</strong> <span style="color: #0f172a;">${demande.telephone || '-'}</span></div>
+                    ${demande.email ? `<div style="margin-bottom: 6px;"><strong style="display: inline-block; min-width: 150px; color: #475569;">Email :</strong> <span style="color: #0f172a;">${demande.email}</span></div>` : ''}
                 </div>
 
-                <div style="font-size: 11px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin: 16px 0 10px 0; padding-bottom: 4px; border-bottom: 1px solid #cbd5e1;">
+                <div style="font-size: 12px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin: 18px 0 12px 0; padding-bottom: 4px; border-bottom: 1px solid #cbd5e1;">
                     🔧 Description de la panne
                 </div>
-                <div style="padding: 10px 12px; border: 1px solid #fecaca; border-left: 4px solid ${urgenceColor}; border-radius: 4px; font-size: 12px; line-height: 1.5; background: #fef2f2; margin-bottom: 10px; color: #0f172a;">
+                <div style="padding: 12px 14px; border: 1px solid #fecaca; border-left: 4px solid ${urgenceColor}; border-radius: 4px; font-size: 13px; line-height: 1.5; background: #fef2f2; margin-bottom: 12px; color: #0f172a;">
                     ${demande.description || '-'}
                 </div>
-                <div style="font-size: 12px; margin-bottom: 6px;">
-                    <div style="margin-bottom: 4px;"><strong style="display: inline-block; min-width: 130px; color: #475569;">Niveau d'urgence :</strong> <span style="color: ${urgenceColor}; font-weight: 700;">${demande.urgence === 'haute' ? '🔴 Haute' : demande.urgence === 'moyenne' ? '🟡 Moyenne' : '🟢 Basse'}</span></div>
-                    <div style="margin-bottom: 4px;"><strong style="display: inline-block; min-width: 130px; color: #475569;">Statut actuel :</strong> <span style="color: #0f172a;">${statutInfo.icon} ${statutInfo.label}</span></div>
-                    ${demande.lieu ? `<div style="margin-bottom: 4px;"><strong style="display: inline-block; min-width: 130px; color: #475569;">Lieu :</strong> <span style="color: #0f172a;">${demande.lieu}</span></div>` : ''}
-                    ${demande.dateRdv ? `<div style="margin-bottom: 4px;"><strong style="display: inline-block; min-width: 130px; color: #475569;">Rendez-vous :</strong> <span style="color: #0f172a;">${demande.dateRdv} ${demande.heureRdv || ''}</span></div>` : ''}
-                    ${demande.garage ? `<div style="margin-bottom: 4px;"><strong style="display: inline-block; min-width: 130px; color: #475569;">Garage :</strong> <span style="color: #0f172a;">${demande.garage}</span></div>` : ''}
+                <div style="font-size: 13px;">
+                    <div style="margin-bottom: 6px;"><strong style="display: inline-block; min-width: 150px; color: #475569;">Niveau d'urgence :</strong> <span style="color: ${urgenceColor}; font-weight: 700;">${demande.urgence === 'haute' ? '🔴 Haute' : demande.urgence === 'moyenne' ? '🟡 Moyenne' : '🟢 Basse'}</span></div>
+                    <div style="margin-bottom: 6px;"><strong style="display: inline-block; min-width: 150px; color: #475569;">Statut actuel :</strong> <span style="color: #0f172a;">${statutInfo.icon} ${statutInfo.label}</span></div>
+                    ${demande.lieu ? `<div style="margin-bottom: 6px;"><strong style="display: inline-block; min-width: 150px; color: #475569;">Lieu :</strong> <span style="color: #0f172a;">${demande.lieu}</span></div>` : ''}
+                    ${demande.dateRdv ? `<div style="margin-bottom: 6px;"><strong style="display: inline-block; min-width: 150px; color: #475569;">Rendez-vous :</strong> <span style="color: #0f172a;">${demande.dateRdv} ${demande.heureRdv || ''}</span></div>` : ''}
+                    ${demande.garage ? `<div style="margin-bottom: 6px;"><strong style="display: inline-block; min-width: 150px; color: #475569;">Garage :</strong> <span style="color: #0f172a;">${demande.garage}</span></div>` : ''}
                 </div>
 
                 ${demande.diagnosticIA ? `
-                <div style="font-size: 11px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin: 16px 0 10px 0; padding-bottom: 4px; border-bottom: 1px solid #cbd5e1;">
+                <div style="font-size: 12px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin: 18px 0 12px 0; padding-bottom: 4px; border-bottom: 1px solid #cbd5e1;">
                     🤖 Diagnostic IA
                 </div>
-                <div style="font-size: 12px; font-style: italic; color: #475569; padding: 8px 10px; background: #f8fafc; border-radius: 4px; margin-bottom: 10px;">
+                <div style="font-size: 13px; font-style: italic; color: #475569; padding: 10px 12px; background: #f8fafc; border-radius: 4px; margin-bottom: 12px;">
                     ${demande.diagnosticIA}
                 </div>` : ''}
 
-                <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #cbd5e1;">
-                    <div style="display: flex; justify-content: space-between; gap: 30px;">
+                <div style="margin-top: 35px; padding-top: 25px; border-top: 1px solid #cbd5e1;">
+                    <div style="display: flex; justify-content: space-between; gap: 40px;">
                         <div style="flex: 1;">
-                            <div style="font-size: 11px; color: #64748b; margin-bottom: 40px;">Signature du client</div>
-                            <div style="border-top: 1px solid #0f172a; padding-top: 4px; font-size: 9px; color: #94a3b8; text-align: center;">Lu et approuvé</div>
+                            <div style="font-size: 12px; color: #64748b; margin-bottom: 45px;">Signature du client</div>
+                            <div style="border-top: 1px solid #0f172a; padding-top: 4px; font-size: 10px; color: #94a3b8; text-align: center;">Lu et approuvé</div>
                         </div>
                         <div style="flex: 1;">
-                            <div style="font-size: 11px; color: #64748b; margin-bottom: 40px;">Signature du garage</div>
-                            <div style="border-top: 1px solid #0f172a; padding-top: 4px; font-size: 9px; color: #94a3b8; text-align: center;">Cachet et signature</div>
+                            <div style="font-size: 12px; color: #64748b; margin-bottom: 45px;">Signature du garage</div>
+                            <div style="border-top: 1px solid #0f172a; padding-top: 4px; font-size: 10px; color: #94a3b8; text-align: center;">Cachet et signature</div>
                         </div>
                     </div>
                 </div>
 
-                <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #e2e8f0; display: flex; align-items: center; gap: 15px;">
-                    <div id="pdfQRCode" style="flex-shrink: 0; width: 80px; height: 80px;"></div>
-                    <div style="font-size: 10px; color: #64748b; line-height: 1.5;">
-                        <strong style="color: #0f172a; font-size: 11px;">📱 Suivi en ligne</strong><br>
-                        Scannez ce QR code pour suivre l'avancement.<br>
-                        <span style="font-size: 9px; color: #94a3b8;">${window.location.hostname}</span>
-                    </div>
-                </div>
-
-                <div style="text-align: center; margin-top: 20px; padding-top: 12px; border-top: 1px solid #e2e8f0;">
+                <div style="text-align: center; margin-top: 25px; padding-top: 15px; border-top: 1px solid #e2e8f0;">
                     <div style="font-size: 9px; color: #94a3b8; letter-spacing: 2px;">ASSIST-GARAGE — SOLUTION DE GESTION POUR GARAGES</div>
                 </div>
             </div>
         `;
+    }
 
-        setTimeout(() => {
-            const pdfQRDiv = document.getElementById('pdfQRCode');
-            if (pdfQRDiv && typeof QRCode !== 'undefined') {
-                pdfQRDiv.innerHTML = '';
-                new QRCode(pdfQRDiv, { text: trackingUrl, width: 80, height: 80, colorDark: "#0f172a", colorLight: "#ffffff" });
-            }
-        }, 100);
-
+    function genererPDF(demande, id) {
+        const pdfContent = document.getElementById('pdfContent');
+        pdfContent.innerHTML = buildPdfHtml(demande, id);
         document.getElementById('pdfModal').style.display = 'flex';
 
-        // Télécharger PDF - Méthode fiable avec container visible mais transparent
-        document.getElementById('btnGenererPDF').onclick = function() {
-            const element = document.getElementById('pdfInner');
-            if (!element || typeof html2pdf === 'undefined') {
-                afficherToast('❌ Erreur PDF');
-                return;
-            }
-
+        // === TÉLÉCHARGEMENT PDF - MÉTHODE JSPDF DIRECTE ===
+        document.getElementById('btnGenererPDF').onclick = async function() {
             const btn = this;
             btn.disabled = true;
             btn.textContent = '⏳ Génération...';
+            afficherToast('⏳ Création du PDF en cours...');
 
-            // Clone dans un container VISIBLE mais transparent (méthode la plus fiable)
-            const clone = element.cloneNode(true);
-            const wrapper = document.createElement('div');
-            wrapper.style.position = 'fixed';
-            wrapper.style.top = '0';
-            wrapper.style.left = '0';
-            wrapper.style.width = '800px';
-            wrapper.style.background = 'white';
-            wrapper.style.zIndex = '99999';
-            wrapper.style.padding = '0';
-            wrapper.style.opacity = '0.01';
-            wrapper.style.pointerEvents = 'none';
-            wrapper.appendChild(clone);
-            document.body.appendChild(wrapper);
+            try {
+                // Récupérer les librairies globales
+                const html2canvas = window.html2canvas;
+                const jspdfModule = window.jspdf;
+                const jsPDF = jspdfModule ? jspdfModule.jsPDF : window.jsPDF;
 
-            const opt = {
-                margin: [10, 8, 10, 8],
-                filename: `Fiche_${id}.pdf`,
-                image: { type: 'jpeg', quality: 0.95 },
-                html2canvas: {
+                if (!html2canvas || !jsPDF) {
+                    throw new Error('Bibliothèques PDF non chargées');
+                }
+
+                // Créer un container propre et visible
+                const container = document.createElement('div');
+                container.style.position = 'fixed';
+                container.style.top = '0';
+                container.style.left = '0';
+                container.style.width = '820px';
+                container.style.background = 'white';
+                container.style.zIndex = '99999';
+                container.style.opacity = '1';
+                container.style.pointerEvents = 'none';
+                container.innerHTML = buildPdfHtml(demande, id);
+                document.body.appendChild(container);
+
+                // Attendre le rendu
+                await new Promise(r => setTimeout(r, 300));
+
+                // Capture
+                const canvas = await html2canvas(container, {
                     scale: 2,
                     useCORS: true,
-                    letterRendering: true,
+                    backgroundColor: '#ffffff',
                     logging: false,
+                    windowWidth: 820,
                     scrollX: 0,
-                    scrollY: 0,
-                    windowWidth: 800,
-                    backgroundColor: '#ffffff'
-                },
-                jsPDF: {
-                    unit: 'mm',
-                    format: 'a4',
-                    orientation: 'portrait'
-                }
-            };
-
-            html2pdf().from(wrapper).set(opt).save()
-                .then(() => {
-                    setTimeout(() => {
-                        if (wrapper.parentNode) document.body.removeChild(wrapper);
-                    }, 100);
-                    btn.disabled = false;
-                    btn.textContent = '⬇️ Télécharger PDF';
-                    afficherToast('📄 PDF téléchargé');
-                })
-                .catch((err) => {
-                    if (wrapper.parentNode) document.body.removeChild(wrapper);
-                    btn.disabled = false;
-                    btn.textContent = '⬇️ Télécharger PDF';
-                    console.error('Erreur PDF:', err);
-                    afficherToast('❌ Erreur: ' + err.message);
+                    scrollY: 0
                 });
+
+                // Retirer le container
+                if (container.parentNode) document.body.removeChild(container);
+
+                // Créer le PDF
+                const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = pdf.internal.pageSize.getHeight();
+                const imgWidth = pdfWidth - 20; // Marges 10mm de chaque côté
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+                let heightLeft = imgHeight;
+                let position = 10; // Marge top
+                let page = 1;
+
+                pdf.addImage(imgData, 'JPEG', 10, position, imgWidth, imgHeight);
+                heightLeft -= (pdfHeight - 20);
+
+                // Ajouter pages supplémentaires si nécessaire
+                while (heightLeft > 0) {
+                    page++;
+                    position = -(page - 1) * (pdfHeight - 20) + 10;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'JPEG', 10, position, imgWidth, imgHeight);
+                    heightLeft -= (pdfHeight - 20);
+                }
+
+                // Sauvegarder
+                pdf.save(`Fiche_${id}.pdf`);
+
+                btn.disabled = false;
+                btn.textContent = '⬇️ Télécharger PDF';
+                afficherToast('📄 PDF téléchargé avec succès !');
+
+            } catch(err) {
+                console.error('Erreur PDF:', err);
+                btn.disabled = false;
+                btn.textContent = '⬇️ Télécharger PDF';
+                afficherToast('❌ Erreur: ' + err.message);
+            }
         };
 
+        // === IMPRESSION ===
         document.getElementById('btnImprimerPDF').onclick = function() {
-            const content = document.getElementById('pdfInner').outerHTML;
+            const content = buildPdfHtml(demande, id);
             const printWindow = window.open('', '_blank');
             if (!printWindow) {
                 afficherToast('❌ Autorisez les popups');
@@ -1956,7 +2088,7 @@ function calculerJoursDepuis(ts) {
             printWindow.document.write(`
                 <html><head><title>Fiche ${id}</title>
                 <style>
-                    @page { margin: 10mm; }
+                    @page { size: A4; margin: 10mm; }
                     body { font-family: 'Georgia', serif; padding: 0; margin: 0; color: #1a1a1a; }
                 </style>
                 </head><body>${content}</body></html>
@@ -1967,21 +2099,30 @@ function calculerJoursDepuis(ts) {
     }
 
     // ============================================================
-    // CHARGEMENT DASHBOARD
+    // CHARGEMENT DASHBOARD (avec limite pour éviter la coupure)
     // ============================================================
     function chargerDemandesRealtime() {
         if (unsubscribeDashboard) { unsubscribeDashboard(); unsubscribeDashboard = null; }
 
         const garageFiltre = document.getElementById('selectGarage')?.value || 'tous';
-        let query = db.collection('demandes');
+
+        // ⚠️ Limite à 50 pour éviter la coupure du canal Firestore
+        let query = db.collection('demandes').limit(MAX_DEMANDES_CHARGEES);
+
         if (garageFiltre !== 'tous') {
-            query = query.where('garage', '==', garageFiltre);
+            query = query.where('garage', '==', garageFiltre).limit(MAX_DEMANDES_CHARGEES);
         }
-        query = query.orderBy('dateTimestamp', 'desc');
 
         unsubscribeDashboard = query.onSnapshot(function(snapshot) {
             let demandes = [];
             snapshot.forEach(doc => demandes.push({ id: doc.id, ...doc.data() }));
+
+            // Tri côté client (plus fiable que orderBy + where)
+            demandes.sort((a, b) => {
+                const ta = a.dateTimestamp?.toDate ? a.dateTimestamp.toDate().getTime() : new Date(a.dateTimestamp).getTime();
+                const tb = b.dateTimestamp?.toDate ? b.dateTimestamp.toDate().getTime() : new Date(b.dateTimestamp).getTime();
+                return tb - ta;
+            });
 
             if (!premiereChargeEffectuee) {
                 snapshot.forEach(doc => {
@@ -1999,7 +2140,6 @@ function calculerJoursDepuis(ts) {
                 });
 
                 if (nouvelles.length > 0) {
-                    console.log('🔔 Nouvelles demandes détectées:', nouvelles.length);
                     jouerSon();
 
                     if (nouvelles.length === 1) {
@@ -2040,7 +2180,7 @@ function calculerJoursDepuis(ts) {
             currentPage = 1;
             appliquerFiltresEtAfficher();
         }, function(error) {
-            console.error("Erreur Firestore:", error);
+            console.error("❌ Erreur Firestore:", error);
             if (error.code === 'permission-denied') {
                 afficherToast("❌ Accès refusé — vérifiez les règles Firestore");
             } else {
@@ -2075,6 +2215,7 @@ function calculerJoursDepuis(ts) {
             const j = calculerJoursDepuis(d.dateTimestamp);
             return (d.statut || 0) < 5 && j >= DELAI_RETARD_JOURS;
         });
+        if (currentFiltre === 'avec-notes') filtered = filtered.filter(d => d.note && d.note.text);
 
         const search = document.getElementById('searchInput')?.value.toLowerCase() || '';
         if (search) {
@@ -2135,6 +2276,7 @@ function calculerJoursDepuis(ts) {
             const estRetard = statutActuel < 5 && jours >= DELAI_RETARD_JOURS;
             const urgenceClasse = d.urgence || 'basse';
             const urgenceLabel = d.urgence === 'haute' ? '🔴 URGENT' : d.urgence === 'moyenne' ? '🟡 MOYEN' : '🟢 BAS';
+            const hasNote = d.note && d.note.text;
 
             const mediasList = d.medias || (d.media ? [{ data: d.media, type: d.mediaType }] : []);
             let mediaHtml = '';
@@ -2162,6 +2304,7 @@ function calculerJoursDepuis(ts) {
                             <span class="badge-urgence ${urgenceClasse}">${urgenceLabel}</span>
                             <span class="statut-badge" style="background: ${statutInfo.color}22; color: ${statutInfo.color};">${statutInfo.icon} ${statutInfo.label}</span>
                             ${estRetard ? `<span class="badge-retard">⚠️ ${jours}j</span>` : ''}
+                            ${hasNote ? `<span class="note-badge">📝 Note</span>` : ''}
                         </div>
                         <span style="font-size:11px;color:var(--text-muted);">📅 ${d.date || ''}</span>
                     </div>
@@ -2169,6 +2312,7 @@ function calculerJoursDepuis(ts) {
                     <div style="font-size:13px;"><strong>🚘</strong> ${d.immatriculation || '-'} - ${d.marque || ''} ${d.modele || ''}</div>
                     <div style="font-size:13px;"><strong>👤</strong> ${d.nom || 'Client'}</div>
                     <div style="margin:8px 0;font-size:13px;color:var(--text-secondary);">${d.description || ''}</div>
+                    ${hasNote ? `<div class="note-display" style="display:block;"><strong>📝 Note chef d'atelier :</strong> ${d.note.text}</div>` : ''}
                     ${d.lieu ? `<div style="font-size:12px;color:var(--text-muted);">📍 ${d.lieu}</div>` : ''}
                     ${d.dateRdv ? `<div style="font-size:12px;">📅 RDV : ${d.dateRdv} ${d.heureRdv || ''}</div>` : ''}
                     ${d.garage ? `<div style="font-size:12px;color:var(--text-muted);">🏷️ ${d.garage}</div>` : ''}
@@ -2178,6 +2322,7 @@ function calculerJoursDepuis(ts) {
                         <select class="status-select" data-id="${d.id}">
                             ${STATUTS.map(s => `<option value="${s.id}" ${statutActuel === s.id ? 'selected' : ''}>${s.icon} ${s.label}</option>`).join('')}
                         </select>
+                        <button class="btn-action btn-note" data-id="${d.id}" style="${hasNote ? 'background: #dbeafe; color: #1e40af;' : ''}">📝 Note</button>
                         <button class="btn-action btn-historique" data-id="${d.id}">📜 Historique</button>
                         <button class="btn-action btn-pdf" data-id="${d.id}">📄 PDF</button>
                         <button class="btn-action btn-supprimer" data-id="${d.id}">🗑️</button>
@@ -2196,6 +2341,9 @@ function calculerJoursDepuis(ts) {
                 if (d) genererPDF(d, d.numeroDemande || d.id);
             });
         });
+        listeDiv.querySelectorAll('.btn-note').forEach(btn => {
+            btn.addEventListener('click', () => ouvrirNoteModal(btn.dataset.id));
+        });
         listeDiv.querySelectorAll('.btn-historique').forEach(btn => {
             btn.addEventListener('click', () => {
                 const d = allDemandes.find(x => x.id === btn.dataset.id);
@@ -2212,7 +2360,7 @@ function calculerJoursDepuis(ts) {
                     currentMediaListForModal = medias;
                     currentMediaIndex = 0;
                     afficherMediaCourant();
-                } catch(e) { console.error('Erreur parse media', e); }
+                } catch(e) {}
             });
         });
     }
@@ -2328,7 +2476,7 @@ function calculerJoursDepuis(ts) {
     // ============================================================
     document.getElementById('btnExportExcel')?.addEventListener('click', function() {
         if (allDemandes.length === 0) return afficherToast('❌ Aucune donnée');
-        const headers = ['N° Demande', 'Date', 'Nom', 'Téléphone', 'Email', 'Immat.', 'Marque', 'Modèle', 'Km', 'Description', 'Urgence', 'Statut', 'Garage', 'Lieu'];
+        const headers = ['N° Demande', 'Date', 'Nom', 'Téléphone', 'Email', 'Immat.', 'Marque', 'Modèle', 'Km', 'Description', 'Urgence', 'Statut', 'Garage', 'Lieu', 'Note'];
         const rows = allDemandes.map(d => {
             const statutInfo = STATUTS.find(s => s.id === (d.statut || 0)) || STATUTS[0];
             return [
@@ -2345,7 +2493,8 @@ function calculerJoursDepuis(ts) {
                 d.urgence || '',
                 statutInfo.label,
                 d.garage || '',
-                d.lieu || ''
+                d.lieu || '',
+                (d.note?.text || '').replace(/[\r\n;]/g, ' ')
             ];
         });
 
@@ -2434,9 +2583,10 @@ function calculerJoursDepuis(ts) {
         }, 500);
     }
 
-    console.log('🚗 Assist-Garage PRO 2.2');
-    console.log('✅ Badge app (setAppBadge) sur Chrome Android/Desktop');
-    console.log('✅ PDF corrigé avec container transparent');
+    console.log('🚗 Assist-Garage PRO 2.3');
+    console.log('✅ PDF avec jsPDF direct (fiable)');
+    console.log('✅ Notes chef d\'atelier');
+    console.log('✅ Limite 50 demandes (anti-coupure)');
 })();
 </script>
 
