@@ -1490,9 +1490,9 @@
                 <span>Montant HT</span>
                 <span id="proformaSousTotal">0 FCFA</span>
             </div>
-            <div class="ligne tva" id="ligneTVA" style="display:none;">
-                <span>TVA 18%</span>
-                <span id="proformaTVA">0 FCFA</span>
+           <div class="ligne tva" id="ligneTVA" style="display:none;">
+             <span>TVA 18%</span>
+             <span id="proformaMontantTVA">0 FCFA</span>
             </div>
             <div class="ligne total" id="ligneTotalHT">
                 <span>TOTAL À PAYER</span>
@@ -2654,13 +2654,14 @@ function formatMontant(n) {
         const ligneTotalHT = document.getElementById('ligneTotalHT');
         const ligneTotalTTC = document.getElementById('ligneTotalTTC');
 
-        if (tvaActive) {
-            ligneTVA.style.display = 'flex';
-            document.getElementById('proformaTVA').textContent = formatMontant(montantTVA);
-            ligneTotalHT.style.display = 'none';
-            ligneTotalTTC.style.display = 'flex';
-            document.getElementById('proformaTotalTTC').textContent = formatMontant(totalTTC);
-        } else {
+       if (tvaActive) {
+    ligneTVA.style.display = 'flex';
+    document.getElementById('proformaMontantTVA').textContent = formatMontant(montantTVA);
+    ligneTotalHT.style.display = 'none';
+    ligneTotalTTC.style.display = 'flex';
+    document.getElementById('proformaTotalTTC').textContent = formatMontant(totalTTC);
+
+    } else {
             ligneTVA.style.display = 'none';
             ligneTotalHT.style.display = 'flex';
             document.getElementById('proformaTotalHT').textContent = formatMontant(sousTotalHT);
