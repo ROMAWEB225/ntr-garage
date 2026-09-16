@@ -323,7 +323,10 @@
             border-radius: 20px;
             padding: 18px;
             margin-bottom: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
         }
+        .demande:hover { border-color: var(--accent); }
         .demande.haute { border-left: 3px solid var(--danger); }
         .demande.moyenne { border-left: 3px solid var(--warning); }
         .demande.basse { border-left: 3px solid var(--success); }
@@ -776,24 +779,25 @@
         PROFORMA STYLES
         ============================================================ */
         .proforma-modal-content {
-            max-width: 700px !important;
+            max-width: 900px !important;
         }
 
         .proforma-table {
             width: 100%;
             border-collapse: collapse;
             margin: 12px 0;
-            font-size: 13px;
+            font-size: 12px;
         }
 
         .proforma-table th {
             text-align: left;
             padding: 8px 6px;
             border-bottom: 2px solid var(--border);
-            font-size: 11px;
+            font-size: 10px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             color: var(--text-secondary);
+            white-space: nowrap;
         }
 
         .proforma-table td {
@@ -804,17 +808,25 @@
 
         .proforma-table input {
             margin: 0;
-            padding: 8px 10px;
-            font-size: 13px;
+            padding: 6px 8px;
+            font-size: 12px;
+            min-width: 0;
         }
 
-        .proforma-table .prix-cell {
-            width: 130px;
-        }
+        .proforma-table .col-produit { width: 18%; }
+        .proforma-table .col-description { width: 25%; }
+        .proforma-table .col-qte { width: 8%; }
+        .proforma-table .col-pu { width: 14%; }
+        .proforma-table .col-remise { width: 10%; }
+        .proforma-table .col-ht { width: 15%; }
+        .proforma-table .col-action { width: 5%; }
 
-        .proforma-table .action-cell {
-            width: 40px;
-            text-align: center;
+        .proforma-table .ht-cell {
+            text-align: right;
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+            padding: 6px 8px;
         }
 
         .btn-remove-line {
@@ -823,24 +835,109 @@
             color: var(--danger);
             font-size: 18px;
             cursor: pointer;
-            padding: 4px 8px;
+            padding: 4px 6px;
             border-radius: 6px;
             transition: background 0.2s;
         }
         .btn-remove-line:hover { background: #fee2e2; }
+
+        /* TVA Switch */
+        .tva-switch-container {
+            background: linear-gradient(135deg, var(--bg-soft), var(--bg-hover));
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin: 16px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .tva-switch-label {
+            font-size: 13px;
+            color: var(--text-primary);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tva-switch-label small {
+            font-size: 11px;
+            color: var(--text-secondary);
+            font-weight: 400;
+            display: block;
+            margin-top: 2px;
+        }
+
+        .tva-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+            flex-shrink: 0;
+        }
+
+        .tva-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+            margin: 0;
+        }
+
+        .tva-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--border);
+            transition: .3s;
+            border-radius: 34px;
+        }
+
+        .tva-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        .tva-switch input:checked + .tva-slider {
+            background-color: var(--success);
+        }
+
+        .tva-switch input:checked + .tva-slider:before {
+            transform: translateX(24px);
+        }
 
         .proforma-totaux {
             background: var(--bg-soft);
             border-radius: 12px;
             padding: 14px 18px;
             margin-top: 12px;
+            max-width: 380px;
+            margin-left: auto;
         }
 
         .proforma-totaux .ligne {
             display: flex;
             justify-content: space-between;
-            padding: 4px 0;
+            padding: 5px 0;
             font-size: 13px;
+        }
+
+        .proforma-totaux .ligne.tva {
+            color: var(--text-secondary);
+            font-size: 12px;
         }
 
         .proforma-totaux .ligne.total {
@@ -852,9 +949,14 @@
             color: var(--text-primary);
         }
 
+        .proforma-totaux .ligne.ttc {
+            color: var(--success);
+            font-size: 20px;
+        }
+
         .suggestions-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 6px;
             margin: 10px 0;
         }
@@ -929,7 +1031,6 @@
         .btn-statut.negociation { background: #6366f1; color: white; }
         .btn-statut:hover { transform: translateY(-1px); }
 
-        /* Garage config */
         .garage-config-header {
             display: flex;
             align-items: center;
@@ -978,8 +1079,8 @@
             .garage-selector { flex-direction: column; align-items: stretch; }
             .garage-selector select { width: 100%; }
             .btn-media { min-height: 50px; font-size: 14px; }
-            .proforma-table { font-size: 12px; }
-            .proforma-table .prix-cell { width: 100px; }
+            .proforma-table { font-size: 11px; }
+            .proforma-table input { padding: 5px 6px; font-size: 11px; }
         }
     </style>
 </head>
@@ -1013,7 +1114,7 @@
         <div class="logo">
             <h1>🚗 ASSIST-GARAGE</h1>
             <div class="subtitle">RÉPARATION · ENTRETIEN · DÉPANNAGE</div>
-            <span class="badge-free">📱 VERSION PRO 3.0</span>
+            <span class="badge-free">📱 VERSION PRO 3.1</span>
         </div>
 
         <div class="ad-banner" onclick="ouvrirSmartlink()">
@@ -1241,7 +1342,7 @@
         </div>
 
         <div style="margin-bottom: 12px; padding: 10px 14px; background: #eff6ff; border-left: 3px solid #3b82f6; border-radius: 8px; font-size: 11px; color: #1e40af;">
-            💡 <strong>Info :</strong> Affichage limité à 50 demandes pour éviter les coupures. Utilisez les filtres pour affiner.
+            💡 <strong>Info :</strong> Affichage limité à 50 demandes pour éviter les coupures. <strong>Cliquez sur une carte</strong> pour la marquer comme lue.
         </div>
 
         <div id="listeDemandes" style="max-height: 600px; overflow-y: auto;"></div>
@@ -1345,54 +1446,61 @@
         <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin: 12px 0 6px 0;">
             ⚡ Prestations rapides (cliquez pour ajouter)
         </div>
-        <div class="suggestions-grid" id="suggestionsGrid">
-            <!-- Généré en JS -->
-        </div>
+        <div class="suggestions-grid" id="suggestionsGrid"></div>
 
         <!-- Tableau lignes -->
         <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin: 16px 0 6px 0;">
             📋 Lignes du devis
         </div>
-        <table class="proforma-table">
-            <thead>
-                <tr>
-                    <th>Désignation</th>
-                    <th class="prix-cell">Prix (FCFA)</th>
-                    <th class="action-cell"></th>
-                </tr>
-            </thead>
-            <tbody id="proformaTableBody">
-                <!-- Lignes générées en JS -->
-            </tbody>
-        </table>
+        <div style="overflow-x: auto;">
+            <table class="proforma-table">
+                <thead>
+                    <tr>
+                        <th class="col-produit">Produit</th>
+                        <th class="col-description">Description</th>
+                        <th class="col-qte">Qté</th>
+                        <th class="col-pu">Prix unit.</th>
+                        <th class="col-remise">Remise %</th>
+                        <th class="col-ht">HT</th>
+                        <th class="col-action"></th>
+                    </tr>
+                </thead>
+                <tbody id="proformaTableBody"></tbody>
+            </table>
+        </div>
         <button class="btn-add-line" onclick="ajouterLigneProforma()">+ Ajouter une ligne</button>
 
-        <!-- Remise -->
-        <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin: 16px 0 6px 0;">
-            💸 Remise (optionnelle)
-        </div>
-        <div class="row-2cols">
-            <select id="proformaRemiseType" onchange="recalculerTotaux()">
-                <option value="aucune">Aucune remise</option>
-                <option value="pourcent">Pourcentage (%)</option>
-                <option value="montant">Montant fixe (FCFA)</option>
-            </select>
-            <input type="number" id="proformaRemiseValeur" placeholder="Valeur" value="0" min="0" oninput="recalculerTotaux()">
+        <!-- TVA Switch -->
+        <div class="tva-switch-container">
+            <div class="tva-switch-label">
+                <span>
+                    💼 Appliquer la TVA (18%)
+                    <small>Désactivé : prix tout compris (particulier)<br>Activé : HT + TVA + TTC (entreprise)</small>
+                </span>
+            </div>
+            <label class="tva-switch">
+                <input type="checkbox" id="proformaTVA" onchange="recalculerTotaux()">
+                <span class="tva-slider"></span>
+            </label>
         </div>
 
         <!-- Totaux -->
         <div class="proforma-totaux">
             <div class="ligne">
-                <span>Sous-total</span>
+                <span>Montant HT</span>
                 <span id="proformaSousTotal">0 FCFA</span>
             </div>
-            <div class="ligne">
-                <span>Remise</span>
-                <span id="proformaMontantRemise">- 0 FCFA</span>
+            <div class="ligne tva" id="ligneTVA" style="display:none;">
+                <span>TVA 18%</span>
+                <span id="proformaTVA">0 FCFA</span>
             </div>
-            <div class="ligne total">
-                <span>TOTAL</span>
-                <span id="proformaTotal">0 FCFA</span>
+            <div class="ligne total" id="ligneTotalHT">
+                <span>TOTAL À PAYER</span>
+                <span id="proformaTotalHT">0 FCFA</span>
+            </div>
+            <div class="ligne total ttc" id="ligneTotalTTC" style="display:none;">
+                <span>TOTAL TTC</span>
+                <span id="proformaTotalTTC">0 FCFA</span>
             </div>
         </div>
 
@@ -1465,15 +1573,16 @@ const DELAI_RETARD_JOURS = 3;
 const ITEMS_PER_PAGE = 10;
 const MAX_DEMANDES_CHARGEES = 50;
 const DEVISE = 'FCFA';
+const TAUX_TVA = 18; // %
 
 // Prestations fréquentes par défaut
 const PRESTATIONS_FREQUENTES = [
-    { designation: "Vidange huile + filtre", prix: 25000 },
-    { designation: "Plaquettes de frein", prix: 30000 },
-    { designation: "Recharge climatisation", prix: 20000 },
-    { designation: "Diagnostic électronique", prix: 15000 },
-    { designation: "Remplacement batterie", prix: 45000 },
-    { designation: "Courroie distribution", prix: 80000 }
+    { produit: "Vidange", description: "Huile 5W40 + filtre à huile", prix: 25000 },
+    { produit: "Freinage", description: "Plaquettes de frein avant", prix: 30000 },
+    { produit: "Climatisation", description: "Recharge gaz R134a", prix: 20000 },
+    { produit: "Diagnostic", description: "Diagnostic électronique complet", prix: 15000 },
+    { produit: "Batterie", description: "Remplacement batterie 12V", prix: 45000 },
+    { produit: "Distribution", description: "Courroie de distribution", prix: 80000 }
 ];
 
 const STATUTS = [
@@ -1598,7 +1707,8 @@ function formatMontant(n) {
     let currentDemandeNoteId = null;
     let currentDemandeProformaId = null;
     let proformaLignes = [];
-    let garageConfig = null; // { nom, tel, email, adresse, logo }
+    let garageConfig = null;
+    let demandesMarqueesLues = new Set(); // Cache local pour éviter les duplicatas
 
     const loginScreen = document.getElementById('loginScreen');
     const clientScreen = document.getElementById('clientScreen');
@@ -1625,7 +1735,7 @@ function formatMontant(n) {
     }, { once: true });
 
     // ============================================================
-    // CONFIGURATION GARAGE (LocalStorage)
+    // CONFIGURATION GARAGE
     // ============================================================
     function chargerGarageConfig() {
         try {
@@ -1643,7 +1753,6 @@ function formatMontant(n) {
         if (!garageConfig) return;
         try {
             localStorage.setItem('garage_config_' + garageActuel, JSON.stringify(garageConfig));
-            console.log('💾 Config garage sauvegardée');
         } catch(e) {
             console.error('Erreur sauvegarde config:', e);
         }
@@ -2242,6 +2351,29 @@ function formatMontant(n) {
         }
     }
 
+    // ============================================================
+    // MARQUER COMME LUE (au clic sur la carte)
+    // ============================================================
+    async function marquerCommeLue(demandeId) {
+        // Éviter les appels multiples pour la même demande
+        if (demandesMarqueesLues.has(demandeId)) return;
+
+        const demande = allDemandes.find(d => d.id === demandeId);
+        if (!demande || demande.lu) {
+            demandesMarqueesLues.add(demandeId);
+            return;
+        }
+
+        demandesMarqueesLues.add(demandeId);
+
+        try {
+            await db.collection('demandes').doc(demandeId).update({ lu: true });
+            console.log('👁️ Demande marquée lue :', demandeId);
+        } catch(err) {
+            console.error('Erreur marquage lu:', err);
+        }
+    }
+
     function afficherHistorique(demande) {
         const modal = document.getElementById('historiqueModal');
         const content = document.getElementById('historiqueContent');
@@ -2351,7 +2483,7 @@ function formatMontant(n) {
     });
 
     // ============================================================
-    // PROFORMA - MODULE COMPLET
+    // PROFORMA - MODULE (v2 - nouvelles colonnes + TVA)
     // ============================================================
     window.ouvrirProformaModal = function(demandeId) {
         currentDemandeProformaId = demandeId;
@@ -2362,28 +2494,43 @@ function formatMontant(n) {
 
         // Charger les données existantes ou initialiser
         if (demande.proforma && demande.proforma.lignes) {
-            proformaLignes = JSON.parse(JSON.stringify(demande.proforma.lignes));
-            document.getElementById('proformaRemiseType').value = demande.proforma.remise?.type || 'aucune';
-            document.getElementById('proformaRemiseValeur').value = demande.proforma.remise?.valeur || 0;
+            // Compatibilité : convertir l'ancien format vers le nouveau
+            proformaLignes = demande.proforma.lignes.map(l => {
+                if (l.produit !== undefined || l.qte !== undefined) {
+                    // Déjà au nouveau format
+                    return {
+                        produit: l.produit || '',
+                        description: l.description || '',
+                        qte: l.qte || 1,
+                        prix: l.prix || 0,
+                        remise: l.remise || 0
+                    };
+                } else {
+                    // Ancien format : { designation, prix }
+                    return {
+                        produit: '',
+                        description: l.designation || '',
+                        qte: 1,
+                        prix: l.prix || 0,
+                        remise: 0
+                    };
+                }
+            });
             document.getElementById('proformaNoteClient').value = demande.proforma.noteClient || '';
+            document.getElementById('proformaTVA').checked = demande.proforma.tvaActive || false;
 
-            // Afficher le bandeau de statut
             const statut = demande.proforma.statut || 'en_attente';
             afficherProformaStatut(statut);
             document.getElementById('btnDeleteProforma').style.display = 'inline-block';
         } else {
-            proformaLignes = [{ designation: '', prix: 0 }];
-            document.getElementById('proformaRemiseType').value = 'aucune';
-            document.getElementById('proformaRemiseValeur').value = 0;
+            proformaLignes = [{ produit: '', description: '', qte: 1, prix: 0, remise: 0 }];
             document.getElementById('proformaNoteClient').value = '';
+            document.getElementById('proformaTVA').checked = false;
             document.getElementById('proformaStatutBanner').style.display = 'none';
             document.getElementById('btnDeleteProforma').style.display = 'none';
         }
 
-        // Générer les suggestions
         genererSuggestions();
-
-        // Afficher les lignes
         afficherLignesProforma();
         recalculerTotaux();
 
@@ -2401,31 +2548,44 @@ function formatMontant(n) {
     function genererSuggestions() {
         const grid = document.getElementById('suggestionsGrid');
         grid.innerHTML = PRESTATIONS_FREQUENTES.map((p, i) =>
-            `<button class="suggestion-btn" onclick="ajouterPrestationRapide(${i})">+ ${p.designation} (${formatMontant(p.prix)})</button>`
+            `<button class="suggestion-btn" onclick="ajouterPrestationRapide(${i})">+ ${p.produit} — ${p.description} (${formatMontant(p.prix)})</button>`
         ).join('');
     }
 
     window.ajouterPrestationRapide = function(index) {
         const p = PRESTATIONS_FREQUENTES[index];
         // Si la dernière ligne est vide, on la remplace
-        if (proformaLignes.length > 0 && !proformaLignes[proformaLignes.length - 1].designation && proformaLignes[proformaLignes.length - 1].prix === 0) {
-            proformaLignes[proformaLignes.length - 1] = { designation: p.designation, prix: p.prix };
+        const last = proformaLignes[proformaLignes.length - 1];
+        if (last && !last.produit && !last.description && last.prix === 0) {
+            proformaLignes[proformaLignes.length - 1] = {
+                produit: p.produit,
+                description: p.description,
+                qte: 1,
+                prix: p.prix,
+                remise: 0
+            };
         } else {
-            proformaLignes.push({ designation: p.designation, prix: p.prix });
+            proformaLignes.push({
+                produit: p.produit,
+                description: p.description,
+                qte: 1,
+                prix: p.prix,
+                remise: 0
+            });
         }
         afficherLignesProforma();
         recalculerTotaux();
     };
 
     window.ajouterLigneProforma = function() {
-        proformaLignes.push({ designation: '', prix: 0 });
+        proformaLignes.push({ produit: '', description: '', qte: 1, prix: 0, remise: 0 });
         afficherLignesProforma();
     };
 
     window.supprimerLigneProforma = function(index) {
         proformaLignes.splice(index, 1);
         if (proformaLignes.length === 0) {
-            proformaLignes.push({ designation: '', prix: 0 });
+            proformaLignes.push({ produit: '', description: '', qte: 1, prix: 0, remise: 0 });
         }
         afficherLignesProforma();
         recalculerTotaux();
@@ -2433,53 +2593,79 @@ function formatMontant(n) {
 
     window.majLigneProforma = function(index, champ, valeur) {
         if (!proformaLignes[index]) return;
-        if (champ === 'prix') {
-            proformaLignes[index].prix = parseFloat(valeur) || 0;
+        if (champ === 'prix' || champ === 'qte' || champ === 'remise') {
+            proformaLignes[index][champ] = parseFloat(valeur) || 0;
         } else {
-            proformaLignes[index].designation = valeur;
+            proformaLignes[index][champ] = valeur;
         }
+        // Mise à jour du HT de la ligne
+        const ligne = proformaLignes[index];
+        const htLigne = calculerHTLigne(ligne);
+        const htCell = document.getElementById(`ht-ligne-${index}`);
+        if (htCell) htCell.textContent = formatMontant(htLigne);
         recalculerTotaux();
     };
 
+    function calculerHTLigne(ligne) {
+        const qte = parseFloat(ligne.qte) || 1;
+        const prix = parseFloat(ligne.prix) || 0;
+        const remise = parseFloat(ligne.remise) || 0;
+        const brut = qte * prix;
+        const montantRemise = (brut * remise) / 100;
+        return brut - montantRemise;
+    }
+
     function afficherLignesProforma() {
         const tbody = document.getElementById('proformaTableBody');
-        tbody.innerHTML = proformaLignes.map((l, i) => `
-            <tr>
-                <td><input type="text" value="${(l.designation || '').replace(/"/g, '&quot;')}" placeholder="Désignation" oninput="majLigneProforma(${i}, 'designation', this.value)"></td>
-                <td class="prix-cell"><input type="number" value="${l.prix || 0}" placeholder="0" min="0" oninput="majLigneProforma(${i}, 'prix', this.value)"></td>
-                <td class="action-cell"><button class="btn-remove-line" onclick="supprimerLigneProforma(${i})">×</button></td>
-            </tr>
-        `).join('');
+        tbody.innerHTML = proformaLignes.map((l, i) => {
+            const htLigne = calculerHTLigne(l);
+            return `
+                <tr>
+                    <td><input type="text" value="${(l.produit || '').replace(/"/g, '&quot;')}" placeholder="Ex: Vidange" oninput="majLigneProforma(${i}, 'produit', this.value)"></td>
+                    <td><input type="text" value="${(l.description || '').replace(/"/g, '&quot;')}" placeholder="Détails" oninput="majLigneProforma(${i}, 'description', this.value)"></td>
+                    <td><input type="number" value="${l.qte || 1}" min="1" step="1" oninput="majLigneProforma(${i}, 'qte', this.value)"></td>
+                    <td><input type="number" value="${l.prix || 0}" min="0" step="500" oninput="majLigneProforma(${i}, 'prix', this.value)"></td>
+                    <td><input type="number" value="${l.remise || 0}" min="0" max="100" step="1" oninput="majLigneProforma(${i}, 'remise', this.value)"></td>
+                    <td class="ht-cell" id="ht-ligne-${i}">${formatMontant(htLigne)}</td>
+                    <td class="action-cell"><button class="btn-remove-line" onclick="supprimerLigneProforma(${i})">×</button></td>
+                </tr>
+            `;
+        }).join('');
     }
 
     window.recalculerTotaux = function() {
-        // Calcul du sous-total (uniquement les lignes avec désignation)
-        let sousTotal = 0;
+        // Calcul du montant HT total
+        let sousTotalHT = 0;
         proformaLignes.forEach(l => {
-            if (l.designation && l.designation.trim()) {
-                sousTotal += parseFloat(l.prix) || 0;
+            if (l.produit && l.produit.trim() || l.description && l.description.trim()) {
+                sousTotalHT += calculerHTLigne(l);
             }
         });
 
-        // Remise
-        const remiseType = document.getElementById('proformaRemiseType').value;
-        const remiseValeur = parseFloat(document.getElementById('proformaRemiseValeur').value) || 0;
-        let montantRemise = 0;
+        // TVA
+        const tvaActive = document.getElementById('proformaTVA').checked;
+        const montantTVA = tvaActive ? (sousTotalHT * TAUX_TVA) / 100 : 0;
+        const totalTTC = sousTotalHT + montantTVA;
 
-        if (remiseType === 'pourcent') {
-            montantRemise = (sousTotal * remiseValeur) / 100;
-        } else if (remiseType === 'montant') {
-            montantRemise = remiseValeur;
+        // Affichage
+        document.getElementById('proformaSousTotal').textContent = formatMontant(sousTotalHT);
+
+        const ligneTVA = document.getElementById('ligneTVA');
+        const ligneTotalHT = document.getElementById('ligneTotalHT');
+        const ligneTotalTTC = document.getElementById('ligneTotalTTC');
+
+        if (tvaActive) {
+            ligneTVA.style.display = 'flex';
+            document.getElementById('proformaTVA').textContent = formatMontant(montantTVA);
+            ligneTotalHT.style.display = 'none';
+            ligneTotalTTC.style.display = 'flex';
+            document.getElementById('proformaTotalTTC').textContent = formatMontant(totalTTC);
+        } else {
+            ligneTVA.style.display = 'none';
+            ligneTotalHT.style.display = 'flex';
+            document.getElementById('proformaTotalHT').textContent = formatMontant(sousTotalHT);
+            ligneTotalTTC.style.display = 'none';
         }
-
-        // Sécurité : remise ne peut pas dépasser sous-total
-        if (montantRemise > sousTotal) montantRemise = sousTotal;
-
-        const total = sousTotal - montantRemise;
-
-        document.getElementById('proformaSousTotal').textContent = formatMontant(sousTotal);
-        document.getElementById('proformaMontantRemise').textContent = '- ' + formatMontant(montantRemise);
-        document.getElementById('proformaTotal').textContent = formatMontant(total);
     };
 
     window.changerStatutProforma = async function(nouveauStatut) {
@@ -2518,10 +2704,12 @@ function formatMontant(n) {
         if (!currentDemandeProformaId) return;
 
         // Filtrer les lignes vides
-        const lignesValides = proformaLignes.filter(l => l.designation && l.designation.trim());
+        const lignesValides = proformaLignes.filter(l =>
+            (l.produit && l.produit.trim()) || (l.description && l.description.trim())
+        );
 
         if (lignesValides.length === 0) {
-            afficherToast('❌ Ajoutez au moins une ligne avec une désignation');
+            afficherToast('❌ Ajoutez au moins une ligne avec un produit ou une description');
             return;
         }
 
@@ -2532,26 +2720,25 @@ function formatMontant(n) {
             const data = doc.data();
 
             // Calculs
-            let sousTotal = 0;
-            lignesValides.forEach(l => sousTotal += parseFloat(l.prix) || 0);
+            let sousTotalHT = 0;
+            lignesValides.forEach(l => { sousTotalHT += calculerHTLigne(l); });
 
-            const remiseType = document.getElementById('proformaRemiseType').value;
-            const remiseValeur = parseFloat(document.getElementById('proformaRemiseValeur').value) || 0;
-            let montantRemise = 0;
-            if (remiseType === 'pourcent') montantRemise = (sousTotal * remiseValeur) / 100;
-            else if (remiseType === 'montant') montantRemise = remiseValeur;
-            if (montantRemise > sousTotal) montantRemise = sousTotal;
+            const tvaActive = document.getElementById('proformaTVA').checked;
+            const montantTVA = tvaActive ? (sousTotalHT * TAUX_TVA) / 100 : 0;
+            const totalTTC = sousTotalHT + montantTVA;
 
-            const total = sousTotal - montantRemise;
-
-            // Construire le proforma
             const ancienStatut = data.proforma?.statut;
             const proforma = {
                 lignes: lignesValides,
-                remise: { type: remiseType, valeur: remiseValeur },
-                sousTotal: sousTotal,
-                montantRemise: montantRemise,
-                total: total,
+                tvaActive: tvaActive,
+                tauxTVA: TAUX_TVA,
+                sousTotalHT: sousTotalHT,
+                montantTVA: montantTVA,
+                totalTTC: totalTTC,
+                // Compat avec l'ancien format (pour ne rien casser)
+                sousTotal: sousTotalHT,
+                montantRemise: 0,
+                total: tvaActive ? totalTTC : sousTotalHT,
                 statut: ancienStatut || 'en_attente',
                 dateCreation: data.proforma?.dateCreation || new Date(),
                 dateCreationStr: data.proforma?.dateCreationStr || new Date().toLocaleString('fr-FR'),
@@ -2565,7 +2752,7 @@ function formatMontant(n) {
                 date: new Date(),
                 dateStr: new Date().toLocaleString('fr-FR'),
                 type: 'proforma',
-                action: `💰 Proforma ${ancienStatut ? 'modifié' : 'créé'} — Total : ${formatMontant(total)}`
+                action: `💰 Proforma ${ancienStatut ? 'modifié' : 'créé'} — Total ${tvaActive ? 'TTC' : 'à payer'} : ${formatMontant(tvaActive ? totalTTC : sousTotalHT)}`
             });
 
             await docRef.update({ proforma, historique });
@@ -2606,28 +2793,29 @@ function formatMontant(n) {
         const demande = allDemandes.find(d => d.id === currentDemandeProformaId);
         if (!demande) return;
 
-        // Utiliser les données en cours d'édition
-        const lignesValides = proformaLignes.filter(l => l.designation && l.designation.trim());
+        const lignesValides = proformaLignes.filter(l =>
+            (l.produit && l.produit.trim()) || (l.description && l.description.trim())
+        );
         if (lignesValides.length === 0) {
             afficherToast('❌ Ajoutez au moins une ligne');
             return;
         }
 
-        let sousTotal = 0;
-        lignesValides.forEach(l => sousTotal += parseFloat(l.prix) || 0);
-        const remiseType = document.getElementById('proformaRemiseType').value;
-        const remiseValeur = parseFloat(document.getElementById('proformaRemiseValeur').value) || 0;
-        let montantRemise = 0;
-        if (remiseType === 'pourcent') montantRemise = (sousTotal * remiseValeur) / 100;
-        else if (remiseType === 'montant') montantRemise = remiseValeur;
-        if (montantRemise > sousTotal) montantRemise = sousTotal;
+        let sousTotalHT = 0;
+        lignesValides.forEach(l => { sousTotalHT += calculerHTLigne(l); });
+        const tvaActive = document.getElementById('proformaTVA').checked;
+        const montantTVA = tvaActive ? (sousTotalHT * TAUX_TVA) / 100 : 0;
+        const totalTTC = sousTotalHT + montantTVA;
 
         const proformaTemp = {
             lignes: lignesValides,
-            remise: { type: remiseType, valeur: remiseValeur },
-            sousTotal,
-            montantRemise,
-            total: sousTotal - montantRemise,
+            tvaActive: tvaActive,
+            tauxTVA: TAUX_TVA,
+            sousTotalHT: sousTotalHT,
+            montantTVA: montantTVA,
+            totalTTC: totalTTC,
+            sousTotal: sousTotalHT,
+            total: tvaActive ? totalTTC : sousTotalHT,
             statut: demande.proforma?.statut || 'en_attente',
             dateCreationStr: new Date().toLocaleString('fr-FR'),
             noteClient: document.getElementById('proformaNoteClient').value.trim() || ''
@@ -2637,11 +2825,10 @@ function formatMontant(n) {
     });
 
     // ============================================================
-    // GÉNÉRATION PDF PROFORMA
+    // GÉNÉRATION PDF PROFORMA (v2 - nouvelles colonnes + TVA)
     // ============================================================
     function genererProformaPDF(demande, proforma, mode = 'preview') {
         const id = demande.numeroDemande || demande.id;
-        const dateProforma = proforma.dateCreationStr || new Date().toLocaleString('fr-FR');
         const garageNom = garageConfig?.nom || `Garage ${demande.garage || 'Standard'}`;
         const garageTel = garageConfig?.tel || '';
         const garageEmail = garageConfig?.email || '';
@@ -2649,14 +2836,21 @@ function formatMontant(n) {
         const garageLogo = garageConfig?.logo || '';
 
         // Lignes du tableau
-        const lignesHtml = proforma.lignes.map(l => `
-            <tr>
-                <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; font-size: 12px; color: #0f172a;">${l.designation}</td>
-                <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; font-size: 12px; color: #0f172a; text-align: right; white-space: nowrap;">${formatMontant(l.prix)}</td>
-            </tr>
-        `).join('');
+        const lignesHtml = proforma.lignes.map(l => {
+            const htLigne = calculerHTLigne(l);
+            return `
+                <tr>
+                    <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; font-size: 11px; color: #0f172a; font-weight: 600;">${l.produit || '-'}</td>
+                    <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; font-size: 11px; color: #475569;">${l.description || '-'}</td>
+                    <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; font-size: 11px; color: #0f172a; text-align: center;">${l.qte || 1}</td>
+                    <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; font-size: 11px; color: #0f172a; text-align: right; white-space: nowrap;">${formatMontant(l.prix)}</td>
+                    <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; font-size: 11px; color: #64748b; text-align: center;">${l.remise || 0}%</td>
+                    <td style="padding: 8px 10px; border-bottom: 1px solid #e2e8f0; font-size: 11px; color: #0f172a; text-align: right; white-space: nowrap; font-weight: 600;">${formatMontant(htLigne)}</td>
+                </tr>
+            `;
+        }).join('');
 
-        // Bloc entête garage
+        // Entête garage
         const enteteGarageHtml = garageLogo ? `
             <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
                 <img src="${garageLogo}" style="width: 70px; height: 70px; object-fit: contain; border-radius: 8px; background: #f8fafc; padding: 4px; border: 1px solid #e2e8f0;">
@@ -2676,7 +2870,32 @@ function formatMontant(n) {
             </div>
         `;
 
-        // Statut badge
+        // Totaux HT/TVA/TTC
+        const totauxHtml = proforma.tvaActive ? `
+            <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #e2e8f0;">
+                <span style="color: #64748b; font-size: 12px;">Montant HT</span>
+                <span style="color: #0f172a; font-size: 12px;">${formatMontant(proforma.sousTotalHT)}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #e2e8f0;">
+                <span style="color: #64748b; font-size: 12px;">TVA ${proforma.tauxTVA}%</span>
+                <span style="color: #0f172a; font-size: 12px;">${formatMontant(proforma.montantTVA)}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; margin-top: 6px; border-top: 2px solid #0f172a;">
+                <span style="color: #0f172a; font-weight: 700; font-size: 15px;">TOTAL TTC</span>
+                <span style="color: #0f172a; font-weight: 700; font-size: 15px;">${formatMontant(proforma.totalTTC)}</span>
+            </div>
+        ` : `
+            <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #e2e8f0;">
+                <span style="color: #64748b; font-size: 12px;">Montant HT</span>
+                <span style="color: #0f172a; font-size: 12px;">${formatMontant(proforma.sousTotalHT)}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; margin-top: 6px; border-top: 2px solid #0f172a;">
+                <span style="color: #0f172a; font-weight: 700; font-size: 15px;">TOTAL À PAYER</span>
+                <span style="color: #0f172a; font-weight: 700; font-size: 15px;">${formatMontant(proforma.sousTotalHT)}</span>
+            </div>
+        `;
+
+        // Statut
         const statutInfo = PROFORMA_STATUTS[proforma.statut] || PROFORMA_STATUTS.en_attente;
         const statutColors = {
             'en_attente': { bg: '#fef3c7', color: '#92400e' },
@@ -2688,18 +2907,15 @@ function formatMontant(n) {
 
         const html = `
             <div id="proformaInner" style="font-family: 'Georgia', 'Times New Roman', serif; width: 780px; padding: 30px 40px; background: white; color: #1a1a1a; line-height: 1.5; box-sizing: border-box;">
-                <!-- Entête garage -->
                 <div style="padding-bottom: 15px; border-bottom: 2px solid #0f172a; margin-bottom: 20px;">
                     ${enteteGarageHtml}
                 </div>
 
-                <!-- Titre + Numéro -->
                 <div style="text-align: center; margin-bottom: 20px;">
                     <div style="font-size: 22px; font-weight: 700; color: #0f172a; letter-spacing: 3px;">DEVIS / PROFORMA</div>
-                    <div style="font-size: 11px; color: #64748b; margin-top: 4px;">N° ${id}</div>
+                    <div style="font-size: 11px; color: #64748b; margin-top: 4px;">N° ${id} — ${proforma.dateCreationStr || new Date().toLocaleString('fr-FR')}</div>
                 </div>
 
-                <!-- Infos client -->
                 <div style="display: flex; justify-content: space-between; margin-bottom: 20px; padding: 14px 18px; background: #f8fafc; border-left: 4px solid #0f172a; font-size: 12px;">
                     <div>
                         <div style="font-size: 9px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Client</div>
@@ -2714,12 +2930,15 @@ function formatMontant(n) {
                     </div>
                 </div>
 
-                <!-- Tableau prestations -->
                 <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
                     <thead>
                         <tr style="background: #0f172a;">
-                            <th style="padding: 10px 12px; text-align: left; font-size: 11px; color: white; text-transform: uppercase; letter-spacing: 1px;">Désignation</th>
-                            <th style="padding: 10px 12px; text-align: right; font-size: 11px; color: white; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap;">Montant</th>
+                            <th style="padding: 10px 10px; text-align: left; font-size: 10px; color: white; text-transform: uppercase; letter-spacing: 0.5px;">Produit</th>
+                            <th style="padding: 10px 10px; text-align: left; font-size: 10px; color: white; text-transform: uppercase; letter-spacing: 0.5px;">Description</th>
+                            <th style="padding: 10px 10px; text-align: center; font-size: 10px; color: white; text-transform: uppercase; letter-spacing: 0.5px; width: 40px;">Qté</th>
+                            <th style="padding: 10px 10px; text-align: right; font-size: 10px; color: white; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap;">Prix unit.</th>
+                            <th style="padding: 10px 10px; text-align: center; font-size: 10px; color: white; text-transform: uppercase; letter-spacing: 0.5px; width: 50px;">Remise</th>
+                            <th style="padding: 10px 10px; text-align: right; font-size: 10px; color: white; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap;">HT</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -2727,35 +2946,19 @@ function formatMontant(n) {
                     </tbody>
                 </table>
 
-                <!-- Totaux -->
                 <div style="margin-left: auto; width: 320px; font-size: 13px;">
-                    <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #e2e8f0;">
-                        <span style="color: #64748b;">Sous-total</span>
-                        <span style="color: #0f172a;">${formatMontant(proforma.sousTotal)}</span>
-                    </div>
-                    ${proforma.montantRemise > 0 ? `
-                    <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #e2e8f0;">
-                        <span style="color: #64748b;">Remise ${proforma.remise.type === 'pourcent' ? '(' + proforma.remise.valeur + '%)' : ''}</span>
-                        <span style="color: #ef4444;">- ${formatMontant(proforma.montantRemise)}</span>
-                    </div>` : ''}
-                    <div style="display: flex; justify-content: space-between; padding: 10px 0; margin-top: 6px; border-top: 2px solid #0f172a;">
-                        <span style="color: #0f172a; font-weight: 700; font-size: 15px;">TOTAL</span>
-                        <span style="color: #0f172a; font-weight: 700; font-size: 15px;">${formatMontant(proforma.total)}</span>
-                    </div>
+                    ${totauxHtml}
                 </div>
 
-                <!-- Note client -->
                 ${proforma.noteClient ? `
                 <div style="margin-top: 20px; padding: 12px 14px; background: #f8fafc; border-left: 3px solid #94a3b8; border-radius: 4px; font-size: 11px; color: #475569;">
                     <strong style="color: #0f172a;">Note :</strong> ${proforma.noteClient}
                 </div>` : ''}
 
-                <!-- Statut -->
                 <div style="margin-top: 20px; padding: 12px 16px; border-radius: 8px; background: ${sc.bg}; color: ${sc.color}; font-size: 12px; font-weight: 600; text-align: center;">
                     Statut : ${statutInfo.label}
                 </div>
 
-                <!-- Zone signature client -->
                 <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #cbd5e1;">
                     <div style="display: flex; justify-content: space-between; gap: 40px;">
                         <div style="flex: 1;">
@@ -2773,7 +2976,6 @@ function formatMontant(n) {
                     </div>
                 </div>
 
-                <!-- Mentions -->
                 <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #e2e8f0; font-size: 9px; color: #94a3b8; text-align: center; line-height: 1.6;">
                     Ce devis est valable 30 jours à compter de sa date d'émission.<br>
                     Document généré automatiquement par Assist-Garage — ${garageNom}
@@ -2891,14 +3093,13 @@ function formatMontant(n) {
 
         const telClean = demande.telephone.replace(/\s+/g, '').replace(/^0/, '2250');
         const garageNom = garageConfig?.nom || 'votre garage';
+        const totalAffiche = proforma.tvaActive ? formatMontant(proforma.totalTTC) + ' TTC' : formatMontant(proforma.sousTotalHT);
 
-        const message = `Bonjour ${demande.nom || ''},\n\nVoici le devis pour votre véhicule ${demande.immatriculation || ''} :\n\n📋 N° ${id}\n💰 Total : ${formatMontant(proforma.total)}\n\n📎 Le PDF du devis va être téléchargé sur votre appareil. Veuillez le joindre à cette conversation.\n\nMerci de nous confirmer votre accord (✅ Bon pour accord / ❌ Refusé / 💬 À négocier).\n\nCordialement,\n${garageNom}`;
+        const message = `Bonjour ${demande.nom || ''},\n\nVoici le devis pour votre véhicule ${demande.immatriculation || ''} :\n\n📋 N° ${id}\n💰 Total : ${totalAffiche}\n\n📎 Le PDF du devis va être téléchargé sur votre appareil. Veuillez le joindre à cette conversation.\n\nMerci de nous confirmer votre accord (✅ Bon pour accord / ❌ Refusé / 💬 À négocier).\n\nCordialement,\n${garageNom}`;
 
-        // Télécharger d'abord le PDF
         const html = document.getElementById('pdfProformaContent').innerHTML;
         telechargerProformaPDF(html, id);
 
-        // Puis ouvrir WhatsApp après un délai
         setTimeout(() => {
             const url = `https://wa.me/${telClean}?text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
@@ -3395,12 +3596,13 @@ function formatMontant(n) {
             const hasNote = d.note && d.note.text;
             const hasProforma = d.proforma && d.proforma.lignes && d.proforma.lignes.length > 0;
             const proformaStatut = d.proforma?.statut || 'en_attente';
+            const totalProforma = d.proforma?.totalTTC || d.proforma?.total || 0;
 
             const mediasList = d.medias || (d.media ? [{ data: d.media, type: d.mediaType }] : []);
             let mediaHtml = '';
             if (mediasList.length > 0) {
                 const icons = { image: '📷', video: '🎥', audio: '🎙️' };
-                mediaHtml = `<div class="media-preview-mini" data-media='${JSON.stringify(mediasList).replace(/'/g, "&#39;")}'>
+                mediaHtml = `<div class="media-preview-mini" data-media='${JSON.stringify(mediasList).replace(/'/g, "&#39;")}' onclick="event.stopPropagation();">
                     ${icons[mediasList[0].type] || '📎'} ${mediasList.length} média(s)
                 </div>`;
             }
@@ -3408,15 +3610,15 @@ function formatMontant(n) {
             let contactHtml = '';
             if (d.telephone) {
                 const telClean = d.telephone.replace(/\s+/g, '');
-                contactHtml += `<a class="btn-contact call" href="tel:${telClean}">📞 Appeler</a>`;
-                contactHtml += `<a class="btn-contact whatsapp" href="https://wa.me/${telClean.replace(/^0/, '2250')}" target="_blank">💬 WhatsApp</a>`;
+                contactHtml += `<a class="btn-contact call" href="tel:${telClean}" onclick="event.stopPropagation();">📞 Appeler</a>`;
+                contactHtml += `<a class="btn-contact whatsapp" href="https://wa.me/${telClean.replace(/^0/, '2250')}" target="_blank" onclick="event.stopPropagation();">💬 WhatsApp</a>`;
             }
             if (d.email) {
-                contactHtml += `<a class="btn-contact email" href="mailto:${d.email}">✉️ Email</a>`;
+                contactHtml += `<a class="btn-contact email" href="mailto:${d.email}" onclick="event.stopPropagation();">✉️ Email</a>`;
             }
 
             html += `
-                <div class="demande ${urgenceClasse} ${estRetard ? 'retard' : ''}">
+                <div class="demande ${urgenceClasse} ${estRetard ? 'retard' : ''}" data-id="${d.id}">
                     <div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:6px;">
                         <div>
                             <span class="badge-urgence ${urgenceClasse}">${urgenceLabel}</span>
@@ -3432,13 +3634,13 @@ function formatMontant(n) {
                     <div style="font-size:13px;"><strong>👤</strong> ${d.nom || 'Client'}</div>
                     <div style="margin:8px 0;font-size:13px;color:var(--text-secondary);">${d.description || ''}</div>
                     ${hasNote ? `<div class="note-display" style="display:block;"><strong>📝 Note chef d'atelier :</strong> ${d.note.text}</div>` : ''}
-                    ${hasProforma ? `<div class="proforma-display" style="display:block;"><strong>💰 Proforma :</strong> Total ${formatMontant(d.proforma.total)} — ${PROFORMA_STATUTS[proformaStatut]?.label || ''}</div>` : ''}
+                    ${hasProforma ? `<div class="proforma-display" style="display:block;"><strong>💰 Proforma :</strong> ${formatMontant(totalProforma)} — ${PROFORMA_STATUTS[proformaStatut]?.label || ''}</div>` : ''}
                     ${d.lieu ? `<div style="font-size:12px;color:var(--text-muted);">📍 ${d.lieu}</div>` : ''}
                     ${d.dateRdv ? `<div style="font-size:12px;">📅 RDV : ${d.dateRdv} ${d.heureRdv || ''}</div>` : ''}
                     ${d.garage ? `<div style="font-size:12px;color:var(--text-muted);">🏷️ ${d.garage}</div>` : ''}
                     ${mediaHtml}
                     ${contactHtml ? `<div class="contact-row">${contactHtml}</div>` : ''}
-                    <div class="actions">
+                    <div class="actions" onclick="event.stopPropagation();">
                         <select class="status-select" data-id="${d.id}">
                             ${STATUTS.map(s => `<option value="${s.id}" ${statutActuel === s.id ? 'selected' : ''}>${s.icon} ${s.label}</option>`).join('')}
                         </select>
@@ -3452,6 +3654,25 @@ function formatMontant(n) {
             `;
         });
         listeDiv.innerHTML = html;
+
+        // Marquer comme lue au clic sur la carte
+        listeDiv.querySelectorAll('.demande').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Ne déclenche pas si on a cliqué sur un élément interactif
+                if (e.target.closest('button, select, a, input, .media-preview-mini')) return;
+                const demandeId = this.dataset.id;
+                marquerCommeLue(demandeId);
+                // Mettre à jour visuellement
+                const demande = allDemandes.find(d => d.id === demandeId);
+                if (demande && !demande.lu) {
+                    demande.lu = true;
+                    // Recalculer le compteur non lues
+                    const nonLues = allDemandes.filter(x => !x.lu).length;
+                    mettreAJourBadgeTitre(nonLues);
+                    document.getElementById('statNonLues').textContent = nonLues;
+                }
+            });
+        });
 
         listeDiv.querySelectorAll('.status-select').forEach(sel => {
             sel.addEventListener('change', () => updateStatus(sel.dataset.id, parseInt(sel.value)));
@@ -3702,11 +3923,10 @@ function formatMontant(n) {
         }, 500);
     }
 
-    console.log('🚗 Assist-Garage PRO 3.0 — Module Proforma');
-    console.log('✅ QR code dans le PDF');
-    console.log('✅ Proforma avec lignes + remise + PDF');
-    console.log('✅ Personnalisation garage (nom + logo + contact)');
-    console.log('✅ WhatsApp avec message pré-rempli');
+    console.log('🚗 Assist-Garage PRO 3.1 — Proforma v2 + Bug fixes');
+    console.log('✅ Proforma : Produit, Description, Qté, Prix unit., Remise %, HT');
+    console.log('✅ TVA 18% activable (avec/sans)');
+    console.log('✅ Bug "Nouvelle" corrigé (clic sur carte = lue)');
 })();
 </script>
 
