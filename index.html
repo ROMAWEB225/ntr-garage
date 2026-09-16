@@ -775,9 +775,6 @@
         }
         .user-badge strong { color: var(--text-primary); }
 
-        /* ============================================================
-        PROFORMA STYLES
-        ============================================================ */
         .proforma-modal-content {
             max-width: 900px !important;
         }
@@ -841,7 +838,6 @@
         }
         .btn-remove-line:hover { background: #fee2e2; }
 
-        /* TVA Switch */
         .tva-switch-container {
             background: linear-gradient(135deg, var(--bg-soft), var(--bg-hover));
             border: 1px solid var(--border);
@@ -1114,7 +1110,7 @@
         <div class="logo">
             <h1>🚗 ASSIST-GARAGE</h1>
             <div class="subtitle">RÉPARATION · ENTRETIEN · DÉPANNAGE</div>
-            <span class="badge-free">📱 VERSION PRO 3.1</span>
+            <span class="badge-free">📱 VERSION PRO 3.2</span>
         </div>
 
         <div class="ad-banner" onclick="ouvrirSmartlink()">
@@ -1424,7 +1420,7 @@
     </div>
 </div>
 
-<!-- Modal Proforma (création/édition) -->
+<!-- Modal Proforma -->
 <div id="proformaModal" class="modal">
     <div class="modal-content proforma-modal-content">
         <h3 style="margin-bottom: 8px; color: var(--text-primary);">💰 Créer / Modifier un proforma</h3>
@@ -1432,7 +1428,6 @@
             Demande : <strong id="proformaDemandeNum">—</strong>
         </div>
 
-        <!-- Statut banner -->
         <div id="proformaStatutBanner" class="proforma-statut-banner en_attente" style="display:none;">
             <span id="proformaStatutText">📋 En attente de réponse client</span>
             <div class="statut-actions">
@@ -1442,13 +1437,11 @@
             </div>
         </div>
 
-        <!-- Prestations fréquentes -->
         <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin: 12px 0 6px 0;">
             ⚡ Prestations rapides (cliquez pour ajouter)
         </div>
         <div class="suggestions-grid" id="suggestionsGrid"></div>
 
-        <!-- Tableau lignes -->
         <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin: 16px 0 6px 0;">
             📋 Lignes du devis
         </div>
@@ -1470,7 +1463,6 @@
         </div>
         <button class="btn-add-line" onclick="ajouterLigneProforma()">+ Ajouter une ligne</button>
 
-        <!-- TVA Switch -->
         <div class="tva-switch-container">
             <div class="tva-switch-label">
                 <span>
@@ -1479,20 +1471,19 @@
                 </span>
             </div>
             <label class="tva-switch">
-                <input type="checkbox" id="proformaTVA" onchange="recalculerTotaux()">
+                <input type="checkbox" id="proformaTVACheckbox" onchange="recalculerTotaux()">
                 <span class="tva-slider"></span>
             </label>
         </div>
 
-        <!-- Totaux -->
         <div class="proforma-totaux">
             <div class="ligne">
                 <span>Montant HT</span>
                 <span id="proformaSousTotal">0 FCFA</span>
             </div>
-           <div class="ligne tva" id="ligneTVA" style="display:none;">
-             <span>TVA 18%</span>
-             <span id="proformaMontantTVA">0 FCFA</span>
+            <div class="ligne tva" id="ligneTVA" style="display:none;">
+                <span>TVA 18%</span>
+                <span id="proformaMontantTVA">0 FCFA</span>
             </div>
             <div class="ligne total" id="ligneTotalHT">
                 <span>TOTAL À PAYER</span>
@@ -1504,7 +1495,6 @@
             </div>
         </div>
 
-        <!-- Note client -->
         <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin: 16px 0 6px 0;">
             📝 Note / réponse client (optionnel)
         </div>
@@ -1573,9 +1563,8 @@ const DELAI_RETARD_JOURS = 3;
 const ITEMS_PER_PAGE = 10;
 const MAX_DEMANDES_CHARGEES = 50;
 const DEVISE = 'FCFA';
-const TAUX_TVA = 18; // %
+const TAUX_TVA = 18;
 
-// Prestations fréquentes par défaut
 const PRESTATIONS_FREQUENTES = [
     { produit: "Vidange", description: "Huile 5W40 + filtre à huile", prix: 25000 },
     { produit: "Freinage", description: "Plaquettes de frein avant", prix: 30000 },
@@ -1664,6 +1653,14 @@ function formatMontant(n) {
     return new Intl.NumberFormat('fr-FR').format(Math.round(n || 0)) + ' ' + DEVISE;
 }
 
+// Vérifie si les libs PDF sont dispo
+function sontLibsDispo() {
+    const html2canvas = window.html2canvas;
+    const jspdfModule = window.jspdf;
+    const jsPDF = jspdfModule ? jspdfModule.jsPDF : window.jsPDF;
+    return !!(html2canvas && jsPDF);
+}
+
 // ============================================================
 // SCRIPT PRINCIPAL
 // ============================================================
@@ -1708,7 +1705,7 @@ function formatMontant(n) {
     let currentDemandeProformaId = null;
     let proformaLignes = [];
     let garageConfig = null;
-    let demandesMarqueesLues = new Set(); // Cache local pour éviter les duplicatas
+    let demandesMarqueesLues = new Set();
 
     const loginScreen = document.getElementById('loginScreen');
     const clientScreen = document.getElementById('clientScreen');
@@ -1733,6 +1730,15 @@ function formatMontant(n) {
             console.log('🔊 Son autorisé');
         }
     }, { once: true });
+
+    // Vérif libs au démarrage
+    setTimeout(() => {
+        if (sontLibsDispo()) {
+            console.log('✅ Bibliothèques PDF chargées');
+        } else {
+            console.warn('⚠️ Bibliothèques PDF NON chargées (peut-être un bloqueur)');
+        }
+    }, 2000);
 
     // ============================================================
     // CONFIGURATION GARAGE
@@ -2351,11 +2357,7 @@ function formatMontant(n) {
         }
     }
 
-    // ============================================================
-    // MARQUER COMME LUE (au clic sur la carte)
-    // ============================================================
     async function marquerCommeLue(demandeId) {
-        // Éviter les appels multiples pour la même demande
         if (demandesMarqueesLues.has(demandeId)) return;
 
         const demande = allDemandes.find(d => d.id === demandeId);
@@ -2368,7 +2370,6 @@ function formatMontant(n) {
 
         try {
             await db.collection('demandes').doc(demandeId).update({ lu: true });
-            console.log('👁️ Demande marquée lue :', demandeId);
         } catch(err) {
             console.error('Erreur marquage lu:', err);
         }
@@ -2438,14 +2439,14 @@ function formatMontant(n) {
                     date: new Date(),
                     dateStr: new Date().toLocaleString('fr-FR'),
                     type: 'note',
-                    action: '📝 Note ajoutée : ' + (text.length > 60 ? text.substring(0, 60) + '...' : text)
+                    action: 'Note ajoutée : ' + (text.length > 60 ? text.substring(0, 60) + '...' : text)
                 });
             } else {
                 historique.push({
                     date: new Date(),
                     dateStr: new Date().toLocaleString('fr-FR'),
                     type: 'note',
-                    action: '📝 Note supprimée'
+                    action: 'Note supprimée'
                 });
             }
 
@@ -2471,7 +2472,7 @@ function formatMontant(n) {
                 date: new Date(),
                 dateStr: new Date().toLocaleString('fr-FR'),
                 type: 'note',
-                action: '📝 Note supprimée'
+                action: 'Note supprimée'
             });
 
             await docRef.update({ note: null, historique });
@@ -2483,7 +2484,7 @@ function formatMontant(n) {
     });
 
     // ============================================================
-    // PROFORMA - MODULE (v2 - nouvelles colonnes + TVA)
+    // PROFORMA
     // ============================================================
     window.ouvrirProformaModal = function(demandeId) {
         currentDemandeProformaId = demandeId;
@@ -2492,12 +2493,9 @@ function formatMontant(n) {
 
         document.getElementById('proformaDemandeNum').textContent = demande.numeroDemande || demandeId;
 
-        // Charger les données existantes ou initialiser
         if (demande.proforma && demande.proforma.lignes) {
-            // Compatibilité : convertir l'ancien format vers le nouveau
             proformaLignes = demande.proforma.lignes.map(l => {
                 if (l.produit !== undefined || l.qte !== undefined) {
-                    // Déjà au nouveau format
                     return {
                         produit: l.produit || '',
                         description: l.description || '',
@@ -2506,7 +2504,6 @@ function formatMontant(n) {
                         remise: l.remise || 0
                     };
                 } else {
-                    // Ancien format : { designation, prix }
                     return {
                         produit: '',
                         description: l.designation || '',
@@ -2517,7 +2514,7 @@ function formatMontant(n) {
                 }
             });
             document.getElementById('proformaNoteClient').value = demande.proforma.noteClient || '';
-            document.getElementById('proformaTVA').checked = demande.proforma.tvaActive || false;
+            document.getElementById('proformaTVACheckbox').checked = demande.proforma.tvaActive || false;
 
             const statut = demande.proforma.statut || 'en_attente';
             afficherProformaStatut(statut);
@@ -2525,7 +2522,7 @@ function formatMontant(n) {
         } else {
             proformaLignes = [{ produit: '', description: '', qte: 1, prix: 0, remise: 0 }];
             document.getElementById('proformaNoteClient').value = '';
-            document.getElementById('proformaTVA').checked = false;
+            document.getElementById('proformaTVACheckbox').checked = false;
             document.getElementById('proformaStatutBanner').style.display = 'none';
             document.getElementById('btnDeleteProforma').style.display = 'none';
         }
@@ -2554,7 +2551,6 @@ function formatMontant(n) {
 
     window.ajouterPrestationRapide = function(index) {
         const p = PRESTATIONS_FREQUENTES[index];
-        // Si la dernière ligne est vide, on la remplace
         const last = proformaLignes[proformaLignes.length - 1];
         if (last && !last.produit && !last.description && last.prix === 0) {
             proformaLignes[proformaLignes.length - 1] = {
@@ -2598,7 +2594,6 @@ function formatMontant(n) {
         } else {
             proformaLignes[index][champ] = valeur;
         }
-        // Mise à jour du HT de la ligne
         const ligne = proformaLignes[index];
         const htLigne = calculerHTLigne(ligne);
         const htCell = document.getElementById(`ht-ligne-${index}`);
@@ -2634,34 +2629,30 @@ function formatMontant(n) {
     }
 
     window.recalculerTotaux = function() {
-        // Calcul du montant HT total
         let sousTotalHT = 0;
         proformaLignes.forEach(l => {
-            if (l.produit && l.produit.trim() || l.description && l.description.trim()) {
+            if ((l.produit && l.produit.trim()) || (l.description && l.description.trim())) {
                 sousTotalHT += calculerHTLigne(l);
             }
         });
 
-        // TVA
-        const tvaActive = document.getElementById('proformaTVA').checked;
+        const tvaActive = document.getElementById('proformaTVACheckbox').checked;
         const montantTVA = tvaActive ? (sousTotalHT * TAUX_TVA) / 100 : 0;
         const totalTTC = sousTotalHT + montantTVA;
 
-        // Affichage
         document.getElementById('proformaSousTotal').textContent = formatMontant(sousTotalHT);
 
         const ligneTVA = document.getElementById('ligneTVA');
         const ligneTotalHT = document.getElementById('ligneTotalHT');
         const ligneTotalTTC = document.getElementById('ligneTotalTTC');
 
-       if (tvaActive) {
-    ligneTVA.style.display = 'flex';
-    document.getElementById('proformaMontantTVA').textContent = formatMontant(montantTVA);
-    ligneTotalHT.style.display = 'none';
-    ligneTotalTTC.style.display = 'flex';
-    document.getElementById('proformaTotalTTC').textContent = formatMontant(totalTTC);
-
-    } else {
+        if (tvaActive) {
+            ligneTVA.style.display = 'flex';
+            document.getElementById('proformaMontantTVA').textContent = formatMontant(montantTVA);
+            ligneTotalHT.style.display = 'none';
+            ligneTotalTTC.style.display = 'flex';
+            document.getElementById('proformaTotalTTC').textContent = formatMontant(totalTTC);
+        } else {
             ligneTVA.style.display = 'none';
             ligneTotalHT.style.display = 'flex';
             document.getElementById('proformaTotalHT').textContent = formatMontant(sousTotalHT);
@@ -2688,7 +2679,7 @@ function formatMontant(n) {
                 date: new Date(),
                 dateStr: new Date().toLocaleString('fr-FR'),
                 type: 'proforma',
-                action: `💰 Proforma : ${PROFORMA_STATUTS[nouveauStatut]?.label || nouveauStatut}`
+                action: `Proforma : ${PROFORMA_STATUTS[nouveauStatut]?.label || nouveauStatut}`
             });
 
             const proforma = { ...data.proforma, statut: nouveauStatut, dateReponse: new Date() };
@@ -2704,7 +2695,6 @@ function formatMontant(n) {
     document.getElementById('btnSaveProforma')?.addEventListener('click', async function() {
         if (!currentDemandeProformaId) return;
 
-        // Filtrer les lignes vides
         const lignesValides = proformaLignes.filter(l =>
             (l.produit && l.produit.trim()) || (l.description && l.description.trim())
         );
@@ -2720,11 +2710,10 @@ function formatMontant(n) {
             if (!doc.exists) return;
             const data = doc.data();
 
-            // Calculs
             let sousTotalHT = 0;
             lignesValides.forEach(l => { sousTotalHT += calculerHTLigne(l); });
 
-            const tvaActive = document.getElementById('proformaTVA').checked;
+            const tvaActive = document.getElementById('proformaTVACheckbox').checked;
             const montantTVA = tvaActive ? (sousTotalHT * TAUX_TVA) / 100 : 0;
             const totalTTC = sousTotalHT + montantTVA;
 
@@ -2736,7 +2725,6 @@ function formatMontant(n) {
                 sousTotalHT: sousTotalHT,
                 montantTVA: montantTVA,
                 totalTTC: totalTTC,
-                // Compat avec l'ancien format (pour ne rien casser)
                 sousTotal: sousTotalHT,
                 montantRemise: 0,
                 total: tvaActive ? totalTTC : sousTotalHT,
@@ -2753,7 +2741,7 @@ function formatMontant(n) {
                 date: new Date(),
                 dateStr: new Date().toLocaleString('fr-FR'),
                 type: 'proforma',
-                action: `💰 Proforma ${ancienStatut ? 'modifié' : 'créé'} — Total ${tvaActive ? 'TTC' : 'à payer'} : ${formatMontant(tvaActive ? totalTTC : sousTotalHT)}`
+                action: `Proforma ${ancienStatut ? 'modifié' : 'créé'} — Total ${tvaActive ? 'TTC' : 'à payer'} : ${formatMontant(tvaActive ? totalTTC : sousTotalHT)}`
             });
 
             await docRef.update({ proforma, historique });
@@ -2778,7 +2766,7 @@ function formatMontant(n) {
                 date: new Date(),
                 dateStr: new Date().toLocaleString('fr-FR'),
                 type: 'proforma',
-                action: '💰 Proforma supprimé'
+                action: 'Proforma supprimé'
             });
 
             await docRef.update({ proforma: null, historique });
@@ -2804,7 +2792,7 @@ function formatMontant(n) {
 
         let sousTotalHT = 0;
         lignesValides.forEach(l => { sousTotalHT += calculerHTLigne(l); });
-        const tvaActive = document.getElementById('proformaTVA').checked;
+        const tvaActive = document.getElementById('proformaTVACheckbox').checked;
         const montantTVA = tvaActive ? (sousTotalHT * TAUX_TVA) / 100 : 0;
         const totalTTC = sousTotalHT + montantTVA;
 
@@ -2826,7 +2814,7 @@ function formatMontant(n) {
     });
 
     // ============================================================
-    // GÉNÉRATION PDF PROFORMA (v2 - nouvelles colonnes + TVA)
+    // GÉNÉRATION PDF PROFORMA
     // ============================================================
     function genererProformaPDF(demande, proforma, mode = 'preview') {
         const id = demande.numeroDemande || demande.id;
@@ -2836,7 +2824,6 @@ function formatMontant(n) {
         const garageAdresse = garageConfig?.adresse || '';
         const garageLogo = garageConfig?.logo || '';
 
-        // Lignes du tableau
         const lignesHtml = proforma.lignes.map(l => {
             const htLigne = calculerHTLigne(l);
             return `
@@ -2851,7 +2838,6 @@ function formatMontant(n) {
             `;
         }).join('');
 
-        // Entête garage
         const enteteGarageHtml = garageLogo ? `
             <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
                 <img src="${garageLogo}" style="width: 70px; height: 70px; object-fit: contain; border-radius: 8px; background: #f8fafc; padding: 4px; border: 1px solid #e2e8f0;">
@@ -2871,7 +2857,6 @@ function formatMontant(n) {
             </div>
         `;
 
-        // Totaux HT/TVA/TTC
         const totauxHtml = proforma.tvaActive ? `
             <div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #e2e8f0;">
                 <span style="color: #64748b; font-size: 12px;">Montant HT</span>
@@ -2896,7 +2881,6 @@ function formatMontant(n) {
             </div>
         `;
 
-        // Statut
         const statutInfo = PROFORMA_STATUTS[proforma.statut] || PROFORMA_STATUTS.en_attente;
         const statutColors = {
             'en_attente': { bg: '#fef3c7', color: '#92400e' },
@@ -2921,8 +2905,8 @@ function formatMontant(n) {
                     <div>
                         <div style="font-size: 9px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Client</div>
                         <div style="color: #0f172a; font-weight: 600; font-size: 14px;">${demande.nom || '-'}</div>
-                        ${demande.telephone ? `<div style="color: #64748b; font-size: 11px; margin-top: 2px;">📞 ${demande.telephone}</div>` : ''}
-                        ${demande.email ? `<div style="color: #64748b; font-size: 11px;">✉️ ${demande.email}</div>` : ''}
+                        ${demande.telephone ? `<div style="color: #64748b; font-size: 11px; margin-top: 2px;">Tél : ${demande.telephone}</div>` : ''}
+                        ${demande.email ? `<div style="color: #64748b; font-size: 11px;">Email : ${demande.email}</div>` : ''}
                     </div>
                     <div style="text-align: right;">
                         <div style="font-size: 9px; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Véhicule</div>
@@ -2969,9 +2953,9 @@ function formatMontant(n) {
                         <div style="flex: 1;">
                             <div style="font-size: 12px; color: #64748b; margin-bottom: 12px;">Case à cocher :</div>
                             <div style="font-size: 11px; color: #0f172a; line-height: 1.8;">
-                                <div>☐ ✅ Bon pour accord</div>
-                                <div>☐ ❌ Refusé</div>
-                                <div>☐ 💬 À négocier</div>
+                                <div>☐ Bon pour accord</div>
+                                <div>☐ Refusé</div>
+                                <div>☐ À négocier</div>
                             </div>
                         </div>
                     </div>
@@ -2994,8 +2978,20 @@ function formatMontant(n) {
         }
     }
 
+    // ============================================================
+    // TÉLÉCHARGEMENT PDF AVEC PLAN B AUTOMATIQUE
+    // ============================================================
     async function telechargerProformaPDF(html, id) {
         const btn = document.getElementById('btnGenererPDFProforma');
+
+        // Vérifier si les libs sont dispo
+        if (!sontLibsDispo()) {
+            afficherToast('⚠️ Librairies PDF indisponibles → impression manuelle');
+            // PLAN B : ouvrir une fenêtre d'impression
+            imprimerProformaPDF(html, id);
+            return;
+        }
+
         btn.disabled = true;
         btn.textContent = '⏳ Génération...';
         afficherToast('⏳ Création du PDF...');
@@ -3004,8 +3000,6 @@ function formatMontant(n) {
             const html2canvas = window.html2canvas;
             const jspdfModule = window.jspdf;
             const jsPDF = jspdfModule ? jspdfModule.jsPDF : window.jsPDF;
-
-            if (!html2canvas || !jsPDF) throw new Error('Bibliothèques non chargées');
 
             const container = document.createElement('div');
             container.style.position = 'fixed';
@@ -3064,14 +3058,16 @@ function formatMontant(n) {
             console.error('Erreur PDF proforma:', err);
             btn.disabled = false;
             btn.textContent = '⬇️ Télécharger PDF';
-            afficherToast('❌ Erreur: ' + err.message);
+            afficherToast('⚠️ Erreur → ouverture impression manuelle');
+            // PLAN B automatique
+            imprimerProformaPDF(html, id);
         }
     }
 
     function imprimerProformaPDF(html, id) {
         const printWindow = window.open('', '_blank');
         if (!printWindow) {
-            afficherToast('❌ Autorisez les popups');
+            afficherToast('❌ Autorisez les popups pour imprimer/sauvegarder');
             return;
         }
         printWindow.document.write(`
@@ -3079,13 +3075,23 @@ function formatMontant(n) {
             <style>
                 @page { size: A4; margin: 10mm; }
                 body { font-family: 'Georgia', serif; padding: 0; margin: 0; color: #1a1a1a; }
+                @media print { .no-print { display: none; } }
+                .print-banner { background: #fef3c7; color: #92400e; padding: 12px 16px; margin-bottom: 20px; border-radius: 8px; font-size: 13px; text-align: center; border-left: 4px solid #f59e0b; }
             </style>
-            </head><body>${html}</body></html>
+            </head><body>
+            <div class="print-banner no-print">
+                <strong>Astuce :</strong> Dans la boîte d'impression, choisissez <strong>"Enregistrer en PDF"</strong> comme destination pour télécharger le fichier.
+            </div>
+            ${html}
+            </body></html>
         `);
         printWindow.document.close();
         setTimeout(() => printWindow.print(), 800);
     }
 
+    // ============================================================
+    // WHATSAPP (MESSAGE PROPRE, SANS EMOJI CASSÉ)
+    // ============================================================
     function envoyerProformaWhatsApp(demande, proforma, id) {
         if (!demande.telephone) {
             afficherToast('❌ Pas de téléphone pour ce client');
@@ -3094,17 +3100,37 @@ function formatMontant(n) {
 
         const telClean = demande.telephone.replace(/\s+/g, '').replace(/^0/, '2250');
         const garageNom = garageConfig?.nom || 'votre garage';
-        const totalAffiche = proforma.tvaActive ? formatMontant(proforma.totalTTC) + ' TTC' : formatMontant(proforma.sousTotalHT);
+        const totalAffiche = proforma.tvaActive
+            ? formatMontant(proforma.totalTTC) + ' TTC'
+            : formatMontant(proforma.sousTotalHT);
 
-        const message = `Bonjour ${demande.nom || ''},\n\nVoici le devis pour votre véhicule ${demande.immatriculation || ''} :\n\n📋 N° ${id}\n💰 Total : ${totalAffiche}\n\n📎 Le PDF du devis va être téléchargé sur votre appareil. Veuillez le joindre à cette conversation.\n\nMerci de nous confirmer votre accord (✅ Bon pour accord / ❌ Refusé / 💬 À négocier).\n\nCordialement,\n${garageNom}`;
+        // Message sans emoji cassé - texte propre
+        const message = `Bonjour ${demande.nom || ''},
 
+Voici le devis pour votre véhicule ${demande.immatriculation || ''}.
+
+Numéro : ${id}
+Total : ${totalAffiche}
+
+Je joins le PDF détaillé à ce message.
+
+Merci de me confirmer votre choix :
+- Bon pour accord
+- Refusé
+- À négocier
+
+Cordialement,
+${garageNom}`;
+
+        // Télécharger d'abord le PDF (ou fallback)
         const html = document.getElementById('pdfProformaContent').innerHTML;
         telechargerProformaPDF(html, id);
 
+        // Puis ouvrir WhatsApp après un délai
         setTimeout(() => {
             const url = `https://wa.me/${telClean}?text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
-            afficherToast('📎 N\'oubliez pas de joindre le PDF téléchargé');
+            afficherToast('📎 Cliquez sur "Joindre" dans WhatsApp pour ajouter le PDF');
         }, 1500);
     }
 
@@ -3175,7 +3201,7 @@ function formatMontant(n) {
     });
 
     // ============================================================
-    // PDF FICHE RÉCEPTION (avec QR code)
+    // PDF FICHE RÉCEPTION
     // ============================================================
     function genererQRCodeBase64(texte, callback) {
         try {
@@ -3330,6 +3356,14 @@ function formatMontant(n) {
 
             document.getElementById('btnGenererPDF').onclick = async function() {
                 const btn = this;
+
+                if (!sontLibsDispo()) {
+                    afficherToast('⚠️ Librairies PDF indisponibles → impression manuelle');
+                    const html = buildPdfHtml(demande, id, qrBase64);
+                    imprimerFichePDF(html, id);
+                    return;
+                }
+
                 btn.disabled = true;
                 btn.textContent = '⏳ Génération...';
 
@@ -3337,8 +3371,6 @@ function formatMontant(n) {
                     const html2canvas = window.html2canvas;
                     const jspdfModule = window.jspdf;
                     const jsPDF = jspdfModule ? jspdfModule.jsPDF : window.jsPDF;
-
-                    if (!html2canvas || !jsPDF) throw new Error('Bibliothèques PDF non chargées');
 
                     const container = document.createElement('div');
                     container.style.position = 'fixed';
@@ -3397,29 +3429,42 @@ function formatMontant(n) {
                     console.error('Erreur PDF:', err);
                     btn.disabled = false;
                     btn.textContent = '⬇️ Télécharger PDF';
-                    afficherToast('❌ Erreur: ' + err.message);
+                    afficherToast('⚠️ Erreur → impression manuelle');
+                    const html = buildPdfHtml(demande, id, qrBase64);
+                    imprimerFichePDF(html, id);
                 }
             };
 
             document.getElementById('btnImprimerPDF').onclick = function() {
                 const content = buildPdfHtml(demande, id, qrBase64);
-                const printWindow = window.open('', '_blank');
-                if (!printWindow) {
-                    afficherToast('❌ Autorisez les popups');
-                    return;
-                }
-                printWindow.document.write(`
-                    <html><head><title>Fiche ${id}</title>
-                    <style>
-                        @page { size: A4; margin: 10mm; }
-                        body { font-family: 'Georgia', serif; padding: 0; margin: 0; color: #1a1a1a; }
-                    </style>
-                    </head><body>${content}</body></html>
-                `);
-                printWindow.document.close();
-                setTimeout(() => printWindow.print(), 800);
+                imprimerFichePDF(content, id);
             };
         });
+    }
+
+    function imprimerFichePDF(html, id) {
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) {
+            afficherToast('❌ Autorisez les popups');
+            return;
+        }
+        printWindow.document.write(`
+            <html><head><title>Fiche ${id}</title>
+            <style>
+                @page { size: A4; margin: 10mm; }
+                body { font-family: 'Georgia', serif; padding: 0; margin: 0; color: #1a1a1a; }
+                @media print { .no-print { display: none; } }
+                .print-banner { background: #fef3c7; color: #92400e; padding: 12px 16px; margin-bottom: 20px; border-radius: 8px; font-size: 13px; text-align: center; border-left: 4px solid #f59e0b; }
+            </style>
+            </head><body>
+            <div class="print-banner no-print">
+                <strong>Astuce :</strong> Dans la boîte d'impression, choisissez <strong>"Enregistrer en PDF"</strong> comme destination.
+            </div>
+            ${html}
+            </body></html>
+        `);
+        printWindow.document.close();
+        setTimeout(() => printWindow.print(), 800);
     }
 
     // ============================================================
@@ -3463,13 +3508,13 @@ function formatMontant(n) {
                     if (nouvelles.length === 1) {
                         const d = nouvelles[0];
                         envoyerNotification(
-                            `🚗 Nouvelle demande`,
-                            `${d.immatriculation || 'N/A'} - ${d.nom || 'Client'}${d.urgence === 'haute' ? ' 🔴 URGENT' : ''}`,
+                            `Nouvelle demande`,
+                            `${d.immatriculation || 'N/A'} - ${d.nom || 'Client'}${d.urgence === 'haute' ? ' (URGENT)' : ''}`,
                             'new-demande'
                         );
                     } else {
                         envoyerNotification(
-                            `🚗 ${nouvelles.length} nouvelles demandes`,
+                            `${nouvelles.length} nouvelles demandes`,
                             `Vous avez ${nouvelles.length} nouvelles demandes à traiter`,
                             'new-multi'
                         );
@@ -3510,7 +3555,7 @@ function formatMontant(n) {
 
     function afficherBanniereNouvelles(count) {
         if (!newRequestsBanner) return;
-        document.getElementById('newRequestsText').textContent = `🔔 ${count} nouvelle(s) demande(s) !`;
+        document.getElementById('newRequestsText').textContent = `${count} nouvelle(s) demande(s) !`;
         newRequestsBanner.classList.add('visible');
         setTimeout(() => { newRequestsBanner.classList.remove('visible'); }, 8000);
     }
@@ -3581,7 +3626,7 @@ function formatMontant(n) {
         if (!listeDiv) return;
 
         if (pageDemandes.length === 0) {
-            listeDiv.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);">📭 Aucune demande</div>';
+            listeDiv.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);">Aucune demande</div>';
             return;
         }
 
@@ -3593,7 +3638,7 @@ function formatMontant(n) {
             const jours = calculerJoursDepuis(d.dateTimestamp);
             const estRetard = statutActuel < 5 && jours >= DELAI_RETARD_JOURS;
             const urgenceClasse = d.urgence || 'basse';
-            const urgenceLabel = d.urgence === 'haute' ? '🔴 URGENT' : d.urgence === 'moyenne' ? '🟡 MOYEN' : '🟢 BAS';
+            const urgenceLabel = d.urgence === 'haute' ? 'URGENT' : d.urgence === 'moyenne' ? 'MOYEN' : 'BAS';
             const hasNote = d.note && d.note.text;
             const hasProforma = d.proforma && d.proforma.lignes && d.proforma.lignes.length > 0;
             const proformaStatut = d.proforma?.statut || 'en_attente';
@@ -3624,50 +3669,46 @@ function formatMontant(n) {
                         <div>
                             <span class="badge-urgence ${urgenceClasse}">${urgenceLabel}</span>
                             <span class="statut-badge" style="background: ${statutInfo.color}22; color: ${statutInfo.color};">${statutInfo.icon} ${statutInfo.label}</span>
-                            ${estRetard ? `<span class="badge-retard">⚠️ ${jours}j</span>` : ''}
-                            ${hasNote ? `<span class="note-badge">📝 Note</span>` : ''}
-                            ${hasProforma ? `<span class="proforma-badge ${proformaStatut}">💰 ${PROFORMA_STATUTS[proformaStatut]?.label || 'Proforma'}</span>` : ''}
+                            ${estRetard ? `<span class="badge-retard">${jours}j</span>` : ''}
+                            ${hasNote ? `<span class="note-badge">Note</span>` : ''}
+                            ${hasProforma ? `<span class="proforma-badge ${proformaStatut}">${PROFORMA_STATUTS[proformaStatut]?.label || 'Proforma'}</span>` : ''}
                         </div>
-                        <span style="font-size:11px;color:var(--text-muted);">📅 ${d.date || ''}</span>
+                        <span style="font-size:11px;color:var(--text-muted);">${d.date || ''}</span>
                     </div>
-                    <div style="margin-top:8px;"><strong>📋 ${num}</strong></div>
-                    <div style="font-size:13px;"><strong>🚘</strong> ${d.immatriculation || '-'} - ${d.marque || ''} ${d.modele || ''}</div>
-                    <div style="font-size:13px;"><strong>👤</strong> ${d.nom || 'Client'}</div>
+                    <div style="margin-top:8px;"><strong>N° ${num}</strong></div>
+                    <div style="font-size:13px;"><strong>Véhicule :</strong> ${d.immatriculation || '-'} - ${d.marque || ''} ${d.modele || ''}</div>
+                    <div style="font-size:13px;"><strong>Client :</strong> ${d.nom || 'Client'}</div>
                     <div style="margin:8px 0;font-size:13px;color:var(--text-secondary);">${d.description || ''}</div>
-                    ${hasNote ? `<div class="note-display" style="display:block;"><strong>📝 Note chef d'atelier :</strong> ${d.note.text}</div>` : ''}
-                    ${hasProforma ? `<div class="proforma-display" style="display:block;"><strong>💰 Proforma :</strong> ${formatMontant(totalProforma)} — ${PROFORMA_STATUTS[proformaStatut]?.label || ''}</div>` : ''}
-                    ${d.lieu ? `<div style="font-size:12px;color:var(--text-muted);">📍 ${d.lieu}</div>` : ''}
-                    ${d.dateRdv ? `<div style="font-size:12px;">📅 RDV : ${d.dateRdv} ${d.heureRdv || ''}</div>` : ''}
-                    ${d.garage ? `<div style="font-size:12px;color:var(--text-muted);">🏷️ ${d.garage}</div>` : ''}
+                    ${hasNote ? `<div class="note-display" style="display:block;"><strong>Note chef d'atelier :</strong> ${d.note.text}</div>` : ''}
+                    ${hasProforma ? `<div class="proforma-display" style="display:block;"><strong>Proforma :</strong> ${formatMontant(totalProforma)} - ${PROFORMA_STATUTS[proformaStatut]?.label || ''}</div>` : ''}
+                    ${d.lieu ? `<div style="font-size:12px;color:var(--text-muted);">Lieu : ${d.lieu}</div>` : ''}
+                    ${d.dateRdv ? `<div style="font-size:12px;">RDV : ${d.dateRdv} ${d.heureRdv || ''}</div>` : ''}
+                    ${d.garage ? `<div style="font-size:12px;color:var(--text-muted);">Garage : ${d.garage}</div>` : ''}
                     ${mediaHtml}
                     ${contactHtml ? `<div class="contact-row">${contactHtml}</div>` : ''}
                     <div class="actions" onclick="event.stopPropagation();">
                         <select class="status-select" data-id="${d.id}">
                             ${STATUTS.map(s => `<option value="${s.id}" ${statutActuel === s.id ? 'selected' : ''}>${s.icon} ${s.label}</option>`).join('')}
                         </select>
-                        <button class="btn-action btn-proforma" data-id="${d.id}" style="${hasProforma ? 'background: #d1fae5; color: #065f46;' : 'background: #ecfdf5; color: #047857;'}">💰 Proforma</button>
-                        <button class="btn-action btn-note" data-id="${d.id}" style="${hasNote ? 'background: #dbeafe; color: #1e40af;' : ''}">📝 Note</button>
-                        <button class="btn-action btn-historique" data-id="${d.id}">📜</button>
-                        <button class="btn-action btn-pdf" data-id="${d.id}">📄 PDF</button>
-                        <button class="btn-action btn-supprimer" data-id="${d.id}">🗑️</button>
+                        <button class="btn-action btn-proforma" data-id="${d.id}" style="${hasProforma ? 'background: #d1fae5; color: #065f46;' : 'background: #ecfdf5; color: #047857;'}">Proforma</button>
+                        <button class="btn-action btn-note" data-id="${d.id}" style="${hasNote ? 'background: #dbeafe; color: #1e40af;' : ''}">Note</button>
+                        <button class="btn-action btn-historique" data-id="${d.id}">Histo.</button>
+                        <button class="btn-action btn-pdf" data-id="${d.id}">PDF</button>
+                        <button class="btn-action btn-supprimer" data-id="${d.id}">Suppr.</button>
                     </div>
                 </div>
             `;
         });
         listeDiv.innerHTML = html;
 
-        // Marquer comme lue au clic sur la carte
         listeDiv.querySelectorAll('.demande').forEach(card => {
             card.addEventListener('click', function(e) {
-                // Ne déclenche pas si on a cliqué sur un élément interactif
                 if (e.target.closest('button, select, a, input, .media-preview-mini')) return;
                 const demandeId = this.dataset.id;
                 marquerCommeLue(demandeId);
-                // Mettre à jour visuellement
                 const demande = allDemandes.find(d => d.id === demandeId);
                 if (demande && !demande.lu) {
                     demande.lu = true;
-                    // Recalculer le compteur non lues
                     const nonLues = allDemandes.filter(x => !x.lu).length;
                     mettreAJourBadgeTitre(nonLues);
                     document.getElementById('statNonLues').textContent = nonLues;
@@ -3719,7 +3760,7 @@ function formatMontant(n) {
         if (totalPages <= 1) { container.innerHTML = ''; return; }
 
         let html = '';
-        html += `<button class="page-btn" ${currentPage <= 1 ? 'disabled' : ''} onclick="changerPage(${currentPage - 1})">← Précédent</button>`;
+        html += `<button class="page-btn" ${currentPage <= 1 ? 'disabled' : ''} onclick="changerPage(${currentPage - 1})">Précédent</button>`;
 
         const startPage = Math.max(1, currentPage - 2);
         const endPage = Math.min(totalPages, currentPage + 2);
@@ -3735,7 +3776,7 @@ function formatMontant(n) {
             if (endPage < totalPages - 1) html += `<span class="page-info">…</span>`;
             html += `<button class="page-btn" onclick="changerPage(${totalPages})">${totalPages}</button>`;
         }
-        html += `<button class="page-btn" ${currentPage >= totalPages ? 'disabled' : ''} onclick="changerPage(${currentPage + 1})">Suivant →</button>`;
+        html += `<button class="page-btn" ${currentPage >= totalPages ? 'disabled' : ''} onclick="changerPage(${currentPage + 1})">Suivant</button>`;
         html += `<div class="page-info" style="width: 100%; text-align: center; margin-top: 8px;">Page ${currentPage} / ${totalPages} • ${filteredDemandes.length} demande(s)</div>`;
 
         container.innerHTML = html;
@@ -3757,7 +3798,7 @@ function formatMontant(n) {
         const zoomHint = document.getElementById('zoomHint');
 
         if (!currentMediaListForModal || currentMediaListForModal.length === 0) {
-            content.innerHTML = '<p>❌ Aucun média</p>';
+            content.innerHTML = '<p>Aucun média</p>';
             return;
         }
 
@@ -3807,14 +3848,14 @@ function formatMontant(n) {
         a.href = m.data;
         a.download = `media_assist_garage_${Date.now()}.${ext}`;
         a.click();
-        afficherToast('⬇️ Téléchargement en cours');
+        afficherToast('Téléchargement en cours');
     });
 
     // ============================================================
     // EXPORT CSV
     // ============================================================
     document.getElementById('btnExportExcel')?.addEventListener('click', function() {
-        if (allDemandes.length === 0) return afficherToast('❌ Aucune donnée');
+        if (allDemandes.length === 0) return afficherToast('Aucune donnée');
         const headers = ['N° Demande', 'Date', 'Nom', 'Téléphone', 'Email', 'Immat.', 'Marque', 'Modèle', 'Km', 'Description', 'Urgence', 'Statut', 'Garage', 'Lieu', 'Note', 'Proforma Total', 'Proforma Statut'];
         const rows = allDemandes.map(d => {
             const statutInfo = STATUTS.find(s => s.id === (d.statut || 0)) || STATUTS[0];
@@ -3845,7 +3886,7 @@ function formatMontant(n) {
         a.href = URL.createObjectURL(blob);
         a.download = `assist_garage_export_${new Date().toISOString().split('T')[0]}.csv`;
         a.click();
-        afficherToast('📥 Export CSV réussi');
+        afficherToast('Export CSV réussi');
     });
 
     document.getElementById('btnActiverNotifs')?.addEventListener('click', function() {
@@ -3924,10 +3965,10 @@ function formatMontant(n) {
         }, 500);
     }
 
-    console.log('🚗 Assist-Garage PRO 3.1 — Proforma v2 + Bug fixes');
-    console.log('✅ Proforma : Produit, Description, Qté, Prix unit., Remise %, HT');
-    console.log('✅ TVA 18% activable (avec/sans)');
-    console.log('✅ Bug "Nouvelle" corrigé (clic sur carte = lue)');
+    console.log('Assist-Garage PRO 3.2');
+    console.log('✅ Plan B PDF automatique (marche même avec bloqueur)');
+    console.log('✅ Message WhatsApp propre sans emoji cassé');
+    console.log('✅ TVA affichée correctement');
 })();
 </script>
 
@@ -3960,7 +4001,7 @@ function formatMontant(n) {
                         btnInstall.style.display = 'none';
                     });
                 } else {
-                    alert('📱 Menu ⋮ → "Ajouter à l\'écran d\'accueil"');
+                    alert('Menu → "Ajouter à l\'écran d\'accueil"');
                 }
             });
         }
