@@ -256,18 +256,6 @@
         }
         .btn-success:hover { background: #16a34a; }
 
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 40px;
-            font-size: 13px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        .btn-danger:hover { background: #dc2626; }
-
         .btn-contact {
             display: inline-flex;
             align-items: center;
@@ -299,11 +287,119 @@
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 10px;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
         }
         .stat-card { background: var(--bg-soft); padding: 14px 8px; border-radius: 20px; text-align: center; }
         .stat-number { font-size: 24px; font-weight: 700; color: var(--text-primary); }
         .stat-label { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+
+        /* ============================================================
+        MINI COMPTABILITÉ
+        ============================================================ */
+        .compta-container {
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+            border: 1px solid #a7f3d0;
+            border-radius: 20px;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .compta-container {
+                background: linear-gradient(135deg, #064e3b22, #065f4622);
+                border-color: #065f46;
+            }
+        }
+
+        .compta-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .compta-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #065f46;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .compta-title { color: #6ee7b7; }
+        }
+
+        .compta-period-select {
+            padding: 6px 12px;
+            border-radius: 30px;
+            border: 1px solid #a7f3d0;
+            background: white;
+            font-size: 12px;
+            font-weight: 500;
+            color: #065f46;
+            cursor: pointer;
+            width: auto;
+            margin: 0;
+            min-height: 32px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .compta-period-select {
+                background: var(--bg-card);
+                border-color: #065f46;
+                color: #6ee7b7;
+            }
+        }
+
+        .compta-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .compta-stat {
+            text-align: center;
+            padding: 8px 6px;
+            background: white;
+            border-radius: 14px;
+            border: 1px solid #d1fae5;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .compta-stat {
+                background: var(--bg-card);
+                border-color: #065f46;
+            }
+        }
+
+        .compta-stat-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #065f46;
+            line-height: 1.2;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .compta-stat-value { color: #6ee7b7; }
+        }
+
+        .compta-stat-label {
+            font-size: 10px;
+            color: #059669;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .compta-stat-label { color: #34d399; }
+        }
 
         .filtres { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
         .filtre-btn {
@@ -442,28 +538,393 @@
             .proforma-display strong { color: #6ee7b7; }
         }
 
-        .status-step { display: flex; align-items: center; margin: 12px 0; opacity: 0.4; padding: 8px; border-radius: 12px; }
-        .status-step.active { opacity: 1; background: var(--bg-soft); }
-        .status-step.completed { opacity: 1; }
-        .status-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--bg-soft);
-            border-radius: 60px;
+        /* ============================================================
+        NOUVELLE INTERFACE SUIVI CLIENT (v3.3)
+        ============================================================ */
+        .suivi-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            background: linear-gradient(135deg, var(--bg-soft), var(--bg-hover));
+            border-radius: 20px;
+            margin: 16px 0;
+            border: 1px solid var(--border);
+        }
+
+        .suivi-header-logo {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: white;
+            border: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            margin-right: 14px;
+            font-size: 28px;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .suivi-header-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .suivi-header-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .suivi-header-info h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .suivi-header-info .contact-info {
+            font-size: 11px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* Carte véhicule premium */
+        .vehicle-card-premium {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 16px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.25);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .vehicle-card-premium {
+                background: linear-gradient(135deg, #1e293b, #334155);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            }
+        }
+
+        .vehicle-card-premium::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15), transparent 70%);
+            pointer-events: none;
+        }
+
+        .vehicle-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .vehicle-card-label {
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+
+        .vehicle-card-immat {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: white;
+            font-family: 'Courier New', monospace;
+        }
+
+        .vehicle-card-numero {
+            font-size: 11px;
+            color: #94a3b8;
+            text-align: right;
+            letter-spacing: 1px;
+        }
+
+        .vehicle-card-numero strong {
+            color: white;
+            font-size: 13px;
+            display: block;
+            margin-top: 2px;
+        }
+
+        .vehicle-card-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            position: relative;
+            z-index: 1;
+        }
+
+        .vehicle-card-marque {
+            font-size: 13px;
+            color: #cbd5e1;
+        }
+
+        .vehicle-card-marque strong {
+            color: white;
+            font-size: 15px;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .vehicle-card-km {
+            text-align: right;
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        .vehicle-card-km strong {
+            color: white;
+            font-size: 14px;
+            display: block;
+        }
+
+        /* Message adaptatif selon statut */
+        .suivi-message {
+            background: linear-gradient(135deg, #dbeafe, #eff6ff);
+            border-left: 4px solid #3b82f6;
+            border-radius: 16px;
+            padding: 14px 16px;
+            margin: 16px 0;
+            font-size: 13px;
+            color: #1e40af;
+            line-height: 1.5;
+            display: flex;
+            align-items: start;
+            gap: 10px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .suivi-message {
+                background: linear-gradient(135deg, #1e3a8a33, #1e40af22);
+                color: #dbeafe;
+            }
+        }
+
+        .suivi-message .suivi-message-icon {
+            font-size: 22px;
             flex-shrink: 0;
         }
-        .status-step.active .status-icon { background: var(--accent); color: white; }
-        .status-step.completed .status-icon { background: var(--success); color: white; }
-        .status-step small { color: var(--text-secondary); font-size: 11px; }
 
-        .progress-bar { background: var(--bg-soft); border-radius: 60px; height: 6px; margin: 24px 0; overflow: hidden; }
+        /* Timeline verticale animée */
+        .timeline-v {
+            position: relative;
+            padding-left: 40px;
+            margin: 20px 0;
+        }
+
+        .timeline-v::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 12px;
+            bottom: 12px;
+            width: 2px;
+            background: var(--border);
+            border-radius: 2px;
+        }
+
+        .timeline-v-progress {
+            position: absolute;
+            left: 15px;
+            top: 12px;
+            width: 2px;
+            background: linear-gradient(180deg, var(--success), var(--info));
+            border-radius: 2px;
+            transition: height 0.5s ease;
+            z-index: 1;
+        }
+
+        .timeline-v-step {
+            position: relative;
+            padding: 8px 0 16px 0;
+            opacity: 0.5;
+            transition: opacity 0.3s ease;
+        }
+
+        .timeline-v-step.completed,
+        .timeline-v-step.active {
+            opacity: 1;
+        }
+
+        .timeline-v-step::before {
+            content: '';
+            position: absolute;
+            left: -32px;
+            top: 12px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 3px solid var(--border);
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-v-step.completed::before {
+            background: var(--success);
+            border-color: var(--success);
+            box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.15);
+        }
+
+        .timeline-v-step.active::before {
+            background: var(--info);
+            border-color: var(--info);
+            animation: pulse-dot 1.5s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(59, 130, 246, 0);
+            }
+        }
+
+        .timeline-v-step .step-icon {
+            position: absolute;
+            left: -37px;
+            top: 8px;
+            font-size: 14px;
+            z-index: 3;
+            width: 28px;
+            text-align: center;
+        }
+
+        .timeline-v-step .step-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 3px;
+        }
+
+        .timeline-v-step.completed .step-title,
+        .timeline-v-step.active .step-title {
+            color: var(--text-primary);
+        }
+
+        .timeline-v-step .step-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .timeline-v-step .step-time {
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            font-style: italic;
+        }
+
+        /* Estimation délai */
+        .suivi-delai {
+            background: linear-gradient(135deg, #fef3c7, #fef9e7);
+            border: 1px solid #fcd34d;
+            border-radius: 14px;
+            padding: 12px 16px;
+            margin: 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            color: #92400e;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .suivi-delai {
+                background: linear-gradient(135deg, #422006, #78350f);
+                color: #fcd34d;
+                border-color: #78350f;
+            }
+        }
+
+        .suivi-delai strong {
+            color: #78350f;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .suivi-delai strong { color: #fde68a; }
+        }
+
+        /* Bouton contact garage */
+        .suivi-contact {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 20px 0 8px 0;
+        }
+
+        .suivi-contact a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px;
+            border-radius: 16px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .suivi-contact a.appel {
+            background: #eff6ff;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
+        }
+
+        .suivi-contact a.appel:hover {
+            background: #dbeafe;
+            transform: translateY(-2px);
+        }
+
+        .suivi-contact a.whatsapp {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .suivi-contact a.whatsapp:hover {
+            background: #bbf7d0;
+            transform: translateY(-2px);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .suivi-contact a.appel {
+                background: #1e3a8a33;
+                color: #dbeafe;
+                border-color: #1e40af;
+            }
+            .suivi-contact a.appel:hover { background: #1e3a8a66; }
+            .suivi-contact a.whatsapp {
+                background: #064e3b33;
+                color: #a7f3d0;
+                border-color: #065f46;
+            }
+            .suivi-contact a.whatsapp:hover { background: #064e3b66; }
+        }
+
+        .status-step-legacy { display: none; }
+
+        .progress-bar { background: var(--bg-soft); border-radius: 60px; height: 6px; margin: 24px 0; overflow: hidden; display: none; }
         .progress-fill { background: var(--accent); width: 0%; height: 100%; transition: width 0.3s ease; }
-        .vehicle-info { background: var(--bg-soft); border-radius: 20px; padding: 16px; margin: 16px 0; text-align: left; }
+        .vehicle-info { background: var(--bg-soft); border-radius: 20px; padding: 16px; margin: 16px 0; text-align: left; display: none; }
         .vehicle-info p { margin: 6px 0; font-size: 13px; }
 
         .toast {
@@ -1069,6 +1530,7 @@
             .container, .dashboard-container { padding: 20px; }
             .row-2cols { grid-template-columns: 1fr; }
             .stats { grid-template-columns: repeat(2, 1fr); }
+            .compta-stats { grid-template-columns: 1fr; gap: 8px; }
             .btn-urgence { flex-direction: column; }
             .ad-banner { flex-wrap: wrap; justify-content: center; text-align: center; }
             .ad-banner .ad-cta { width: 100%; text-align: center; }
@@ -1077,6 +1539,8 @@
             .btn-media { min-height: 50px; font-size: 14px; }
             .proforma-table { font-size: 11px; }
             .proforma-table input { padding: 5px 6px; font-size: 11px; }
+            .vehicle-card-immat { font-size: 20px; }
+            .suivi-contact { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -1110,7 +1574,7 @@
         <div class="logo">
             <h1>🚗 ASSIST-GARAGE</h1>
             <div class="subtitle">RÉPARATION · ENTRETIEN · DÉPANNAGE</div>
-            <span class="badge-free">📱 VERSION PRO 3.2</span>
+            <span class="badge-free">📱 VERSION PRO 3.3</span>
         </div>
 
         <div class="ad-banner" onclick="ouvrirSmartlink()">
@@ -1223,18 +1687,38 @@
             </div>
         </div>
 
-        <!-- Tab: Suivi -->
+        <!-- Tab: Suivi (NOUVELLE INTERFACE) -->
         <div id="tab-suivi" class="tab-content">
             <div class="section-title">🔍 Suivi de votre véhicule</div>
             <input type="text" id="trackingCode" placeholder="Entrez votre numéro (ex: AG-2025-001)">
             <button id="btnTracker" class="btn-primary">🔎 Suivre mon véhicule</button>
             <div id="trackingError" style="color: var(--danger); font-size: 13px; margin-top: 10px; text-align: center;"></div>
 
-            <div id="trackingInfo" style="display: none; margin-top: 24px;">
-                <div id="trackingVehicleInfo" class="vehicle-info"></div>
-                <div class="progress-bar"><div id="trackingProgressFill" class="progress-fill"></div></div>
-                <div id="trackingSteps"></div>
+            <div id="trackingInfo" style="display: none; margin-top: 12px;">
+                <!-- En-tête garage (généré dynamiquement) -->
+                <div id="suiviHeaderGarage"></div>
+
+                <!-- Carte véhicule premium (généré dynamiquement) -->
+                <div id="suiviVehicleCard"></div>
+
+                <!-- Message adaptatif (généré dynamiquement) -->
+                <div id="suiviMessage"></div>
+
+                <!-- Estimation délai (généré dynamiquement) -->
+                <div id="suiviDelai"></div>
+
+                <!-- Timeline verticale -->
+                <div id="trackingSteps" class="timeline-v"></div>
+
+                <!-- Dernière mise à jour -->
                 <div id="trackingLastUpdate" style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 16px;"></div>
+
+                <!-- Boutons contact -->
+                <div id="suiviContact" class="suivi-contact"></div>
+
+                <!-- Champs cachés pour compatibilité -->
+                <div style="display:none;" id="trackingVehicleInfo" class="vehicle-info"></div>
+                <div style="display:none;" class="progress-bar"><div id="trackingProgressFill" class="progress-fill"></div></div>
             </div>
 
             <div class="ad-banner" style="margin-top: 20px;" onclick="ouvrirSmartlink()">
@@ -1317,6 +1801,34 @@
             <div class="stat-card"><div class="stat-number" id="statProforma">0</div><div class="stat-label">💰 Devis</div></div>
         </div>
 
+        <!-- COMPTABILITÉ MINI -->
+        <div class="compta-container">
+            <div class="compta-header">
+                <div class="compta-title">📊 Comptabilité proforma</div>
+                <select id="comptaPeriod" class="compta-period-select" onchange="majComptabilite()">
+                    <option value="tout">Tout</option>
+                    <option value="annee">Cette année</option>
+                    <option value="mois" selected>Ce mois-ci</option>
+                    <option value="semaine">Cette semaine</option>
+                    <option value="jour">Aujourd'hui</option>
+                </select>
+            </div>
+            <div class="compta-stats">
+                <div class="compta-stat">
+                    <div class="compta-stat-value" id="comptaValides">0</div>
+                    <div class="compta-stat-label">Validés</div>
+                </div>
+                <div class="compta-stat">
+                    <div class="compta-stat-value" id="comptaCA">0 F</div>
+                    <div class="compta-stat-label">CA validé</div>
+                </div>
+                <div class="compta-stat">
+                    <div class="compta-stat-value" id="comptaEnAttente">0</div>
+                    <div class="compta-stat-label">En attente</div>
+                </div>
+            </div>
+        </div>
+
         <div class="search-filters">
             <input type="text" id="searchInput" placeholder="🔍 Rechercher (immat, nom, n°, tel)">
             <input type="date" id="filterDateStart" placeholder="Du" title="Date de début">
@@ -1338,7 +1850,7 @@
         </div>
 
         <div style="margin-bottom: 12px; padding: 10px 14px; background: #eff6ff; border-left: 3px solid #3b82f6; border-radius: 8px; font-size: 11px; color: #1e40af;">
-            💡 <strong>Info :</strong> Affichage limité à 50 demandes pour éviter les coupures. <strong>Cliquez sur une carte</strong> pour la marquer comme lue.
+            💡 <strong>Info :</strong> Affichage limité à 50 demandes. <strong>Cliquez sur une carte</strong> pour la marquer comme lue.
         </div>
 
         <div id="listeDemandes" style="max-height: 600px; overflow-y: auto;"></div>
@@ -1408,12 +1920,12 @@
     <div class="modal-content">
         <h3 style="margin-bottom: 16px; color: var(--text-primary);">📝 Note du chef d'atelier</h3>
         <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">
-            Note interne — Visible uniquement par le garage (non incluse dans le PDF client)
+            Note interne — Visible uniquement par le garage
         </div>
-        <textarea id="noteText" rows="6" placeholder="Ex: Le client doit rappeler avant 15h, commande pièce chez fournisseur X..." style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 12px; font-family: inherit; font-size: 14px; background: var(--bg-card); color: var(--text-primary); resize: vertical;"></textarea>
+        <textarea id="noteText" rows="6" placeholder="Ex: Le client doit rappeler avant 15h..." style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 12px; font-family: inherit; font-size: 14px; background: var(--bg-card); color: var(--text-primary); resize: vertical;"></textarea>
         <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center;">
             <button id="btnSaveNote" class="btn-primary" style="margin-top: 0; width: auto; padding: 12px 24px;">💾 Enregistrer</button>
-            <button id="btnDeleteNote" class="btn-secondary" style="color: var(--danger); border-color: var(--danger);">🗑️ Effacer la note</button>
+            <button id="btnDeleteNote" class="btn-secondary" style="color: var(--danger); border-color: var(--danger);">🗑️ Effacer</button>
             <button onclick="document.getElementById('noteModal').style.display='none'" class="btn-secondary">Fermer</button>
         </div>
         <div id="noteLastUpdate" style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 12px;"></div>
@@ -1438,7 +1950,7 @@
         </div>
 
         <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin: 12px 0 6px 0;">
-            ⚡ Prestations rapides (cliquez pour ajouter)
+            ⚡ Prestations rapides
         </div>
         <div class="suggestions-grid" id="suggestionsGrid"></div>
 
@@ -1467,7 +1979,7 @@
             <div class="tva-switch-label">
                 <span>
                     💼 Appliquer la TVA (18%)
-                    <small>Désactivé : prix tout compris (particulier)<br>Activé : HT + TVA + TTC (entreprise)</small>
+                    <small>Désactivé : prix tout compris · Activé : HT + TVA + TTC</small>
                 </span>
             </div>
             <label class="tva-switch">
@@ -1498,10 +2010,10 @@
         <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin: 16px 0 6px 0;">
             📝 Note / réponse client (optionnel)
         </div>
-        <textarea id="proformaNoteClient" rows="2" placeholder="Ex: Client demande une réduction supplémentaire..." style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 12px; font-family: inherit; font-size: 13px; background: var(--bg-card); color: var(--text-primary); resize: vertical;"></textarea>
+        <textarea id="proformaNoteClient" rows="2" placeholder="Ex: Client demande une réduction..." style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 12px; font-family: inherit; font-size: 13px; background: var(--bg-card); color: var(--text-primary); resize: vertical;"></textarea>
 
         <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center;">
-            <button id="btnSaveProforma" class="btn-primary" style="margin-top: 0; width: auto; padding: 12px 24px;">💾 Enregistrer le proforma</button>
+            <button id="btnSaveProforma" class="btn-primary" style="margin-top: 0; width: auto; padding: 12px 24px;">💾 Enregistrer</button>
             <button id="btnPreviewPDFProforma" class="btn-secondary">👁️ Aperçu PDF</button>
             <button id="btnDeleteProforma" class="btn-secondary" style="color: var(--danger); border-color: var(--danger);">🗑️ Supprimer</button>
             <button onclick="document.getElementById('proformaModal').style.display='none'" class="btn-secondary">Fermer</button>
@@ -1514,7 +2026,7 @@
     <div class="modal-content">
         <h3 style="margin-bottom: 16px; color: var(--text-primary);">⚙️ Informations du garage</h3>
         <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 16px;">
-            Ces informations apparaîtront en entête des proformas générés.
+            Ces informations apparaîtront sur les proformas et dans le suivi client.
         </div>
 
         <div class="garage-config-header">
@@ -1522,7 +2034,7 @@
             <div class="garage-config-info">
                 <strong>Logo du garage</strong>
                 <div>Format carré recommandé (PNG, JPG). Max 500 KB.</div>
-                <button class="btn-secondary" style="margin-top: 6px; padding: 4px 12px; font-size: 11px;" onclick="document.getElementById('garageLogoInput').click()">📷 Choisir un logo</button>
+                <button class="btn-secondary" style="margin-top: 6px; padding: 4px 12px; font-size: 11px;" onclick="document.getElementById('garageLogoInput').click()">📷 Choisir</button>
                 <input type="file" id="garageLogoInput" accept="image/*" style="display:none">
             </div>
         </div>
@@ -1534,10 +2046,16 @@
         <input type="tel" id="garageConfigTel" placeholder="Ex: +225 07 00 00 00 00">
 
         <div class="section-title">Email</div>
-        <input type="email" id="garageConfigEmail" placeholder="Ex: contact@garage-toure.com">
+        <input type="email" id="garageConfigEmail" placeholder="Ex: contact@garage.com">
 
         <div class="section-title">Adresse</div>
         <input type="text" id="garageConfigAdresse" placeholder="Ex: Abidjan, Cocody">
+
+        <div class="section-title">⏱️ Délai estimé (affiché au client)</div>
+        <input type="text" id="garageConfigDelai" placeholder="Ex: 2 à 3 jours ouvrables">
+
+        <div class="section-title">💬 Message personnalisé (optionnel)</div>
+        <textarea id="garageConfigMessage" rows="2" placeholder="Ex: Merci de votre confiance. Pour toute question, contactez-nous." style="width:100%;padding:10px;border:1px solid var(--border);border-radius:12px;font-family:inherit;font-size:13px;background:var(--bg-card);color:var(--text-primary);"></textarea>
 
         <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center;">
             <button id="btnSaveGarageConfig" class="btn-primary" style="margin-top: 0; width: auto; padding: 12px 24px;">💾 Enregistrer</button>
@@ -1583,6 +2101,17 @@ const STATUTS = [
     { id: 5, label: 'Prête', icon: '✅', color: '#22c55e', description: 'Prêt à être récupéré' },
     { id: 6, label: 'Clôturée', icon: '🏁', color: '#64748b', description: 'Véhicule récupéré' }
 ];
+
+// Messages adaptatifs selon statut (nouveauté v3.3)
+const MESSAGES_STATUT = {
+    0: { icon: '✅', text: "Votre demande est bien enregistrée. Notre équipe va l'examiner dans les plus brefs délais." },
+    1: { icon: '🔍', text: "Nos techniciens analysent votre véhicule pour établir un diagnostic précis." },
+    2: { icon: '📋', text: "Un devis vous a été transmis. Nous attendons votre accord pour poursuivre." },
+    3: { icon: '📦', text: "Nous avons commandé les pièces nécessaires. La réparation débutera dès leur réception." },
+    4: { icon: '🛠️', text: "Votre véhicule est entre les mains de nos techniciens. Les travaux sont en cours." },
+    5: { icon: '🎉', text: "Bonne nouvelle ! Votre véhicule est prêt à être récupéré. Merci de votre confiance." },
+    6: { icon: '🏁', text: "Véhicule récupéré. Merci de votre confiance, à bientôt !" }
+};
 
 const PROFORMA_STATUTS = {
     'en_attente': { label: '📋 En attente', class: 'en_attente' },
@@ -1653,12 +2182,41 @@ function formatMontant(n) {
     return new Intl.NumberFormat('fr-FR').format(Math.round(n || 0)) + ' ' + DEVISE;
 }
 
-// Vérifie si les libs PDF sont dispo
+function formatMontantCourt(n) {
+    const val = Math.round(n || 0);
+    if (val >= 1000000) return (val / 1000000).toFixed(1) + 'M F';
+    if (val >= 1000) return Math.round(val / 1000) + 'k F';
+    return val + ' F';
+}
+
 function sontLibsDispo() {
     const html2canvas = window.html2canvas;
     const jspdfModule = window.jspdf;
     const jsPDF = jspdfModule ? jspdfModule.jsPDF : window.jsPDF;
     return !!(html2canvas && jsPDF);
+}
+
+// Helper : obtenir le début d'une période
+function getPeriodeStart(periode) {
+    const now = new Date();
+    switch(periode) {
+        case 'jour':
+            return new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+        case 'semaine': {
+            const d = new Date(now);
+            const jour = d.getDay() || 7; // Lundi = 1
+            d.setDate(d.getDate() - jour + 1);
+            d.setHours(0, 0, 0, 0);
+            return d.getTime();
+        }
+        case 'mois':
+            return new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+        case 'annee':
+            return new Date(now.getFullYear(), 0, 1).getTime();
+        case 'tout':
+        default:
+            return 0;
+    }
 }
 
 // ============================================================
@@ -1731,12 +2289,11 @@ function sontLibsDispo() {
         }
     }, { once: true });
 
-    // Vérif libs au démarrage
     setTimeout(() => {
         if (sontLibsDispo()) {
             console.log('✅ Bibliothèques PDF chargées');
         } else {
-            console.warn('⚠️ Bibliothèques PDF NON chargées (peut-être un bloqueur)');
+            console.warn('⚠️ Bibliothèques PDF NON chargées');
         }
     }, 2000);
 
@@ -1813,7 +2370,7 @@ function sontLibsDispo() {
             if (err.code === 'auth/user-not-found') msg = '❌ Aucun compte avec cet email';
             else if (err.code === 'auth/wrong-password') msg = '❌ Mot de passe incorrect';
             else if (err.code === 'auth/invalid-email') msg = '❌ Email invalide';
-            else if (err.code === 'auth/too-many-requests') msg = '⏳ Trop de tentatives, réessayez plus tard';
+            else if (err.code === 'auth/too-many-requests') msg = '⏳ Trop de tentatives';
             else if (err.code === 'auth/invalid-credential') msg = '❌ Identifiants incorrects';
             loginError.textContent = msg;
         } finally {
@@ -1895,7 +2452,7 @@ function sontLibsDispo() {
         } else if (Notification.permission === 'granted') {
             afficherToast('🔔 Notifications déjà activées');
         } else {
-            afficherToast('⚠️ Notifications bloquées — vérifiez les paramètres');
+            afficherToast('⚠️ Notifications bloquées');
         }
     }
 
@@ -2221,7 +2778,7 @@ function sontLibsDispo() {
     }
 
     // ============================================================
-    // SUIVI CLIENT
+    // SUIVI CLIENT - NOUVELLE INTERFACE v3.3
     // ============================================================
     document.getElementById('btnTracker')?.addEventListener('click', function() {
         const code = document.getElementById('trackingCode').value.trim();
@@ -2250,7 +2807,7 @@ function sontLibsDispo() {
                     if (doc.exists) {
                         afficherDetailsSuivi({ id: doc.id, ...doc.data() });
                     } else {
-                        if (trackingError) trackingError.textContent = '❌ Aucune demande trouvée avec ce numéro';
+                        if (trackingError) trackingError.textContent = '❌ Aucune demande trouvée';
                         if (trackingInfo) trackingInfo.style.display = 'none';
                     }
                 }).catch(err => {
@@ -2263,7 +2820,7 @@ function sontLibsDispo() {
         }, function(error) {
             if (trackingError) {
                 if (error.code === 'permission-denied') {
-                    trackingError.textContent = '❌ Accès refusé — vérifiez les règles Firestore';
+                    trackingError.textContent = '❌ Accès refusé';
                 } else {
                     trackingError.textContent = '❌ Erreur: ' + error.message;
                 }
@@ -2279,6 +2836,152 @@ function sontLibsDispo() {
         if (trackingError) trackingError.textContent = '';
         if (trackingInfo) trackingInfo.style.display = 'block';
 
+        // === 1. EN-TÊTE GARAGE ===
+        const suiviHeader = document.getElementById('suiviHeaderGarage');
+        if (suiviHeader) {
+            const logoHtml = garageConfig?.logo
+                ? `<img src="${garageConfig.logo}" alt="Logo">`
+                : '🏢';
+            const nom = garageConfig?.nom || `Garage ${data.garage || 'Standard'}`;
+            const tel = garageConfig?.tel || '';
+            const email = garageConfig?.email || '';
+
+            suiviHeader.innerHTML = `
+                <div class="suivi-header">
+                    <div class="suivi-header-logo">${logoHtml}</div>
+                    <div class="suivi-header-info">
+                        <h3>${nom}</h3>
+                        <div class="contact-info">
+                            ${tel ? `📞 ${tel}<br>` : ''}
+                            ${email ? `✉️ ${email}` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // === 2. CARTE VÉHICULE PREMIUM ===
+        const vehicleCard = document.getElementById('suiviVehicleCard');
+        if (vehicleCard) {
+            vehicleCard.innerHTML = `
+                <div class="vehicle-card-premium">
+                    <div class="vehicle-card-top">
+                        <div>
+                            <div class="vehicle-card-label">Immatriculation</div>
+                            <div class="vehicle-card-immat">${data.immatriculation || '-'}</div>
+                        </div>
+                        <div class="vehicle-card-numero">
+                            Dossier
+                            <strong>${data.numeroDemande || data.id.substring(0, 8)}</strong>
+                        </div>
+                    </div>
+                    <div class="vehicle-card-bottom">
+                        <div class="vehicle-card-marque">
+                            <strong>${data.marque || 'Véhicule'} ${data.modele || ''}</strong>
+                            ${data.lieu ? `📍 ${data.lieu}` : ''}
+                        </div>
+                        <div class="vehicle-card-km">
+                            Kilométrage
+                            <strong>${data.kilometrage ? data.kilometrage + ' km' : '-'}</strong>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // === 3. MESSAGE ADAPTATIF ===
+        const suiviMessageDiv = document.getElementById('suiviMessage');
+        if (suiviMessageDiv) {
+            const msg = MESSAGES_STATUT[statut] || MESSAGES_STATUT[0];
+            const customMsg = garageConfig?.message ? `<br><br><em style="opacity:0.8;">${garageConfig.message}</em>` : '';
+            suiviMessageDiv.innerHTML = `
+                <div class="suivi-message">
+                    <span class="suivi-message-icon">${msg.icon}</span>
+                    <div>${msg.text}${customMsg}</div>
+                </div>
+            `;
+        }
+
+        // === 4. ESTIMATION DÉLAI ===
+        const suiviDelaiDiv = document.getElementById('suiviDelai');
+        if (suiviDelaiDiv) {
+            const delai = garageConfig?.delai || 'Délai communiqué prochainement';
+            // Masquer le délai si statut Prête ou Clôturée
+            if (statut >= 5) {
+                suiviDelaiDiv.innerHTML = '';
+            } else {
+                suiviDelaiDiv.innerHTML = `
+                    <div class="suivi-delai">
+                        <span style="font-size: 22px;">⏱️</span>
+                        <div>
+                            <strong>Délai estimé</strong><br>
+                            ${delai}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // === 5. TIMELINE VERTICALE ANIMÉE ===
+        const trackingSteps = document.getElementById('trackingSteps');
+        if (trackingSteps) {
+            // Calcul de la position du remplissage progressif
+            const progressPercent = statut / (STATUTS.length - 1);
+            // On met une barre de progression qui grandit
+            const timelineHeight = STATUTS.length * 70; // Hauteur approx par étape
+
+            let stepsHtml = `<div class="timeline-v-progress" style="height: ${progressPercent * 100}%; max-height: calc(100% - 24px);"></div>`;
+
+            STATUTS.forEach(s => {
+                let cls = '';
+                if (s.id < statut) cls = 'completed';
+                else if (s.id === statut) cls = 'active';
+
+                // Récupérer la date du changement de statut depuis l'historique
+                let dateChangement = '';
+                if (s.id <= statut && data.historique) {
+                    const h = data.historique.find(x => x.statut === s.id);
+                    if (h && h.dateStr) dateChangement = h.dateStr;
+                }
+                if (s.id === 0 && data.date && !dateChangement) dateChangement = data.date;
+
+                stepsHtml += `
+                    <div class="timeline-v-step ${cls}">
+                        <span class="step-icon">${s.icon}</span>
+                        <div class="step-title">${s.label}</div>
+                        <div class="step-desc">${s.description}</div>
+                        ${dateChangement ? `<div class="step-time">📅 ${dateChangement}</div>` : ''}
+                    </div>
+                `;
+            });
+
+            trackingSteps.innerHTML = stepsHtml;
+        }
+
+        // === 6. DERNIÈRE MISE À JOUR ===
+        const lastUpdateSpan = document.getElementById('trackingLastUpdate');
+        if (lastUpdateSpan) {
+            const lastUpdate = data.dateStatut ? formatDate(data.dateStatut) : data.date || '';
+            lastUpdateSpan.textContent = '🕐 Dernière mise à jour : ' + lastUpdate;
+        }
+
+        // === 7. BOUTONS CONTACT GARAGE ===
+        const suiviContact = document.getElementById('suiviContact');
+        if (suiviContact) {
+            const tel = garageConfig?.tel || '';
+            const telClean = tel.replace(/\s+/g, '');
+
+            if (telClean) {
+                suiviContact.innerHTML = `
+                    <a href="tel:${telClean}" class="appel">📞 Appeler le garage</a>
+                    <a href="https://wa.me/${telClean.replace(/^\+/, '').replace(/^0/, '2250')}" target="_blank" class="whatsapp">💬 WhatsApp</a>
+                `;
+            } else {
+                suiviContact.innerHTML = '';
+            }
+        }
+
+        // Compatibilité anciens éléments (cachés)
         const vehicleInfo = document.getElementById('trackingVehicleInfo');
         if (vehicleInfo) {
             vehicleInfo.innerHTML = `
@@ -2286,30 +2989,7 @@ function sontLibsDispo() {
                 <p><strong>👤 Client :</strong> ${data.nom || '-'}</p>
                 <p><strong>🔧 Panne :</strong> ${data.description || 'Non renseignée'}</p>
                 ${data.numeroDemande ? `<p><strong>📋 N° :</strong> ${data.numeroDemande}</p>` : ''}
-                ${data.garage ? `<p><strong>🏷️ Garage :</strong> ${data.garage}</p>` : ''}
             `;
-        }
-
-        const progressFill = document.getElementById('trackingProgressFill');
-        if (progressFill) {
-            const progress = ((statut + 1) / STATUTS.length) * 100;
-            progressFill.style.width = progress + '%';
-        }
-
-        let stepsHtml = '';
-        STATUTS.forEach(s => {
-            let cls = '';
-            if (s.id < statut) cls = 'completed';
-            else if (s.id === statut) cls = 'active';
-            stepsHtml += `<div class="status-step ${cls}"><div class="status-icon">${s.icon}</div><div><strong>${s.label}</strong><br><small>${s.description}</small></div></div>`;
-        });
-        const trackingSteps = document.getElementById('trackingSteps');
-        if (trackingSteps) trackingSteps.innerHTML = stepsHtml;
-
-        const lastUpdateSpan = document.getElementById('trackingLastUpdate');
-        if (lastUpdateSpan) {
-            const lastUpdate = data.dateStatut ? formatDate(data.dateStatut) : data.date || '';
-            lastUpdateSpan.textContent = '🕐 Dernière mise à jour : ' + lastUpdate;
         }
     }
 
@@ -2348,7 +3028,7 @@ function sontLibsDispo() {
         const doc = await db.collection('demandes').doc(demandeId).get();
         if (!doc.exists) return;
         const data = doc.data();
-        const confirmation = prompt(`⚠️ Pour confirmer la suppression, tapez le numéro :\n${data.numeroDemande || demandeId}`);
+        const confirmation = prompt(`⚠️ Tapez le numéro pour supprimer :\n${data.numeroDemande || demandeId}`);
         if (confirmation && confirmation.trim().toUpperCase() === (data.numeroDemande || demandeId).toUpperCase()) {
             await db.collection('demandes').doc(demandeId).delete();
             afficherToast('🗑️ Demande supprimée');
@@ -2394,6 +3074,47 @@ function sontLibsDispo() {
         }
         modal.style.display = 'flex';
     }
+
+    // ============================================================
+    // COMPTABILITÉ MINI (NOUVEAU v3.3)
+    // ============================================================
+    window.majComptabilite = function() {
+        const periode = document.getElementById('comptaPeriod').value;
+        const startTs = getPeriodeStart(periode);
+
+        let valides = 0;
+        let ca = 0;
+        let enAttente = 0;
+
+        allDemandes.forEach(d => {
+            if (!d.proforma || !d.proforma.lignes) return;
+
+            // Récupérer le timestamp du proforma (date de création ou modification)
+            let tsProforma = 0;
+            if (d.proforma.dateModification) {
+                tsProforma = d.proforma.dateModification.toDate ? d.proforma.dateModification.toDate().getTime() : new Date(d.proforma.dateModification).getTime();
+            } else if (d.proforma.dateCreation) {
+                tsProforma = d.proforma.dateCreation.toDate ? d.proforma.dateCreation.toDate().getTime() : new Date(d.proforma.dateCreation).getTime();
+            } else {
+                // Fallback : date de la demande
+                tsProforma = d.dateTimestamp?.toDate ? d.dateTimestamp.toDate().getTime() : new Date(d.dateTimestamp).getTime();
+            }
+
+            // Filtrer par période
+            if (tsProforma < startTs) return;
+
+            if (d.proforma.statut === 'accepte') {
+                valides++;
+                ca += d.proforma.totalTTC || d.proforma.total || 0;
+            } else if (d.proforma.statut === 'en_attente') {
+                enAttente++;
+            }
+        });
+
+        document.getElementById('comptaValides').textContent = valides;
+        document.getElementById('comptaCA').textContent = formatMontantCourt(ca);
+        document.getElementById('comptaEnAttente').textContent = enAttente;
+    };
 
     // ============================================================
     // NOTE CHEF D'ATELIER
@@ -2460,7 +3181,7 @@ function sontLibsDispo() {
 
     document.getElementById('btnDeleteNote')?.addEventListener('click', async function() {
         if (!currentDemandeNoteId) return;
-        if (!confirm('Effacer la note du chef d\'atelier ?')) return;
+        if (!confirm('Effacer la note ?')) return;
 
         try {
             const docRef = db.collection('demandes').doc(currentDemandeNoteId);
@@ -2484,7 +3205,7 @@ function sontLibsDispo() {
     });
 
     // ============================================================
-    // PROFORMA
+    // PROFORMA (reste identique à v3.2)
     // ============================================================
     window.ouvrirProformaModal = function(demandeId) {
         currentDemandeProformaId = demandeId;
@@ -2682,7 +3403,7 @@ function sontLibsDispo() {
                 action: `Proforma : ${PROFORMA_STATUTS[nouveauStatut]?.label || nouveauStatut}`
             });
 
-            const proforma = { ...data.proforma, statut: nouveauStatut, dateReponse: new Date() };
+            const proforma = { ...data.proforma, statut: nouveauStatut, dateReponse: new Date(), dateModification: new Date() };
 
             await docRef.update({ proforma, historique });
             afficherProformaStatut(nouveauStatut);
@@ -2700,7 +3421,7 @@ function sontLibsDispo() {
         );
 
         if (lignesValides.length === 0) {
-            afficherToast('❌ Ajoutez au moins une ligne avec un produit ou une description');
+            afficherToast('❌ Ajoutez au moins une ligne');
             return;
         }
 
@@ -2814,7 +3535,7 @@ function sontLibsDispo() {
     });
 
     // ============================================================
-    // GÉNÉRATION PDF PROFORMA
+    // PDF PROFORMA
     // ============================================================
     function genererProformaPDF(demande, proforma, mode = 'preview') {
         const id = demande.numeroDemande || demande.id;
@@ -2978,16 +3699,11 @@ function sontLibsDispo() {
         }
     }
 
-    // ============================================================
-    // TÉLÉCHARGEMENT PDF AVEC PLAN B AUTOMATIQUE
-    // ============================================================
     async function telechargerProformaPDF(html, id) {
         const btn = document.getElementById('btnGenererPDFProforma');
 
-        // Vérifier si les libs sont dispo
         if (!sontLibsDispo()) {
             afficherToast('⚠️ Librairies PDF indisponibles → impression manuelle');
-            // PLAN B : ouvrir une fenêtre d'impression
             imprimerProformaPDF(html, id);
             return;
         }
@@ -3058,8 +3774,7 @@ function sontLibsDispo() {
             console.error('Erreur PDF proforma:', err);
             btn.disabled = false;
             btn.textContent = '⬇️ Télécharger PDF';
-            afficherToast('⚠️ Erreur → ouverture impression manuelle');
-            // PLAN B automatique
+            afficherToast('⚠️ Erreur → impression manuelle');
             imprimerProformaPDF(html, id);
         }
     }
@@ -3067,7 +3782,7 @@ function sontLibsDispo() {
     function imprimerProformaPDF(html, id) {
         const printWindow = window.open('', '_blank');
         if (!printWindow) {
-            afficherToast('❌ Autorisez les popups pour imprimer/sauvegarder');
+            afficherToast('❌ Autorisez les popups');
             return;
         }
         printWindow.document.write(`
@@ -3080,7 +3795,7 @@ function sontLibsDispo() {
             </style>
             </head><body>
             <div class="print-banner no-print">
-                <strong>Astuce :</strong> Dans la boîte d'impression, choisissez <strong>"Enregistrer en PDF"</strong> comme destination pour télécharger le fichier.
+                <strong>Astuce :</strong> Choisissez <strong>"Enregistrer en PDF"</strong> comme destination.
             </div>
             ${html}
             </body></html>
@@ -3089,12 +3804,9 @@ function sontLibsDispo() {
         setTimeout(() => printWindow.print(), 800);
     }
 
-    // ============================================================
-    // WHATSAPP (MESSAGE PROPRE, SANS EMOJI CASSÉ)
-    // ============================================================
     function envoyerProformaWhatsApp(demande, proforma, id) {
         if (!demande.telephone) {
-            afficherToast('❌ Pas de téléphone pour ce client');
+            afficherToast('❌ Pas de téléphone');
             return;
         }
 
@@ -3104,7 +3816,6 @@ function sontLibsDispo() {
             ? formatMontant(proforma.totalTTC) + ' TTC'
             : formatMontant(proforma.sousTotalHT);
 
-        // Message sans emoji cassé - texte propre
         const message = `Bonjour ${demande.nom || ''},
 
 Voici le devis pour votre véhicule ${demande.immatriculation || ''}.
@@ -3122,11 +3833,9 @@ Merci de me confirmer votre choix :
 Cordialement,
 ${garageNom}`;
 
-        // Télécharger d'abord le PDF (ou fallback)
         const html = document.getElementById('pdfProformaContent').innerHTML;
         telechargerProformaPDF(html, id);
 
-        // Puis ouvrir WhatsApp après un délai
         setTimeout(() => {
             const url = `https://wa.me/${telClean}?text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
@@ -3135,23 +3844,19 @@ ${garageNom}`;
     }
 
     // ============================================================
-    // CONFIGURATION GARAGE (MODAL)
+    // CONFIGURATION GARAGE
     // ============================================================
     document.getElementById('btnConfigGarage')?.addEventListener('click', function() {
-        const nom = garageConfig?.nom || '';
-        const tel = garageConfig?.tel || '';
-        const email = garageConfig?.email || '';
-        const adresse = garageConfig?.adresse || '';
-        const logo = garageConfig?.logo || '';
-
-        document.getElementById('garageConfigNom').value = nom;
-        document.getElementById('garageConfigTel').value = tel;
-        document.getElementById('garageConfigEmail').value = email;
-        document.getElementById('garageConfigAdresse').value = adresse;
+        document.getElementById('garageConfigNom').value = garageConfig?.nom || '';
+        document.getElementById('garageConfigTel').value = garageConfig?.tel || '';
+        document.getElementById('garageConfigEmail').value = garageConfig?.email || '';
+        document.getElementById('garageConfigAdresse').value = garageConfig?.adresse || '';
+        document.getElementById('garageConfigDelai').value = garageConfig?.delai || '';
+        document.getElementById('garageConfigMessage').value = garageConfig?.message || '';
 
         const preview = document.getElementById('garageLogoPreview');
-        if (logo) {
-            preview.innerHTML = `<img src="${logo}" alt="Logo">`;
+        if (garageConfig?.logo) {
+            preview.innerHTML = `<img src="${garageConfig.logo}" alt="Logo">`;
         } else {
             preview.innerHTML = '🏢';
         }
@@ -3181,6 +3886,8 @@ ${garageNom}`;
             tel: document.getElementById('garageConfigTel').value.trim(),
             email: document.getElementById('garageConfigEmail').value.trim(),
             adresse: document.getElementById('garageConfigAdresse').value.trim(),
+            delai: document.getElementById('garageConfigDelai').value.trim(),
+            message: document.getElementById('garageConfigMessage').value.trim(),
             logo: previewLogo || (garageConfig?.logo || '')
         };
 
@@ -3190,7 +3897,7 @@ ${garageNom}`;
     });
 
     document.getElementById('btnSupprimerLogo')?.addEventListener('click', function() {
-        if (!confirm('Supprimer le logo du garage ?')) return;
+        if (!confirm('Supprimer le logo ?')) return;
         if (garageConfig) {
             garageConfig.logo = '';
             sauvegarderGarageConfig();
@@ -3201,7 +3908,7 @@ ${garageNom}`;
     });
 
     // ============================================================
-    // PDF FICHE RÉCEPTION
+    // PDF FICHE RÉCEPTION (reste identique)
     // ============================================================
     function genererQRCodeBase64(texte, callback) {
         try {
@@ -3358,9 +4065,8 @@ ${garageNom}`;
                 const btn = this;
 
                 if (!sontLibsDispo()) {
-                    afficherToast('⚠️ Librairies PDF indisponibles → impression manuelle');
-                    const html = buildPdfHtml(demande, id, qrBase64);
-                    imprimerFichePDF(html, id);
+                    afficherToast('⚠️ Impression manuelle');
+                    imprimerFichePDF(buildPdfHtml(demande, id, qrBase64), id);
                     return;
                 }
 
@@ -3429,15 +4135,13 @@ ${garageNom}`;
                     console.error('Erreur PDF:', err);
                     btn.disabled = false;
                     btn.textContent = '⬇️ Télécharger PDF';
-                    afficherToast('⚠️ Erreur → impression manuelle');
-                    const html = buildPdfHtml(demande, id, qrBase64);
-                    imprimerFichePDF(html, id);
+                    afficherToast('⚠️ Impression manuelle');
+                    imprimerFichePDF(buildPdfHtml(demande, id, qrBase64), id);
                 }
             };
 
             document.getElementById('btnImprimerPDF').onclick = function() {
-                const content = buildPdfHtml(demande, id, qrBase64);
-                imprimerFichePDF(content, id);
+                imprimerFichePDF(buildPdfHtml(demande, id, qrBase64), id);
             };
         });
     }
@@ -3458,7 +4162,7 @@ ${garageNom}`;
             </style>
             </head><body>
             <div class="print-banner no-print">
-                <strong>Astuce :</strong> Dans la boîte d'impression, choisissez <strong>"Enregistrer en PDF"</strong> comme destination.
+                <strong>Astuce :</strong> Choisissez <strong>"Enregistrer en PDF"</strong> comme destination.
             </div>
             ${html}
             </body></html>
@@ -3493,7 +4197,7 @@ ${garageNom}`;
             if (!premiereChargeEffectuee) {
                 snapshot.forEach(doc => { nouvellesDemandesIds.add(doc.id); });
                 premiereChargeEffectuee = true;
-                console.log('✅ Premier chargement :', demandes.length, 'demandes');
+                console.log('✅ Premier chargement :', demandes.length);
             } else {
                 const nouvelles = [];
                 snapshot.docChanges().forEach(change => {
@@ -3515,7 +4219,7 @@ ${garageNom}`;
                     } else {
                         envoyerNotification(
                             `${nouvelles.length} nouvelles demandes`,
-                            `Vous avez ${nouvelles.length} nouvelles demandes à traiter`,
+                            `Vous avez ${nouvelles.length} nouvelles demandes`,
                             'new-multi'
                         );
                     }
@@ -3543,10 +4247,11 @@ ${garageNom}`;
             allDemandes = demandes;
             currentPage = 1;
             appliquerFiltresEtAfficher();
+            majComptabilite(); // NOUVEAU : calcul des stats financières
         }, function(error) {
             console.error("❌ Erreur Firestore:", error);
             if (error.code === 'permission-denied') {
-                afficherToast("❌ Accès refusé — vérifiez les règles Firestore");
+                afficherToast("❌ Accès refusé");
             } else {
                 afficherToast("❌ Erreur: " + error.message);
             }
@@ -3965,10 +4670,9 @@ ${garageNom}`;
         }, 500);
     }
 
-    console.log('Assist-Garage PRO 3.2');
-    console.log('✅ Plan B PDF automatique (marche même avec bloqueur)');
-    console.log('✅ Message WhatsApp propre sans emoji cassé');
-    console.log('✅ TVA affichée correctement');
+    console.log('Assist-Garage PRO 3.3');
+    console.log('✅ Mini-comptabilité proforma validés');
+    console.log('✅ Interface suivi client refondue');
 })();
 </script>
 
