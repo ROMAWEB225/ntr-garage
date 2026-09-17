@@ -2184,11 +2184,9 @@ function formatMontant(n) {
 
 function formatMontantCourt(n) {
     const val = Math.round(n || 0);
-    if (val >= 1000000) return (val / 1000000).toFixed(1) + 'M F';
-    if (val >= 1000) return Math.round(val / 1000) + 'k F';
-    return val + ' F';
+    if (val >= 1000000) return (val / 1000000).toFixed(1).replace('.', ',') + ' M FCFA';
+    return new Intl.NumberFormat('fr-FR').format(val) + ' FCFA';
 }
-
 function sontLibsDispo() {
     const html2canvas = window.html2canvas;
     const jspdfModule = window.jspdf;
