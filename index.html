@@ -64,9 +64,6 @@
             box-shadow: var(--shadow);
         }
 
-        /* ============================================================
-        NOUVEL EN-TÊTE PRO (v3.4)
-        ============================================================ */
         .brand-header {
             display: flex;
             align-items: center;
@@ -156,7 +153,6 @@
             }
         }
 
-        /* Ancien style .logo conservé pour compatibilité PDF */
         .logo { text-align: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
         .logo h1 { font-size: 22px; font-weight: 600; color: var(--text-primary); }
         .logo .subtitle { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
@@ -295,17 +291,6 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-        }
-
-        .media-thumb .thumb-badge {
-            position: absolute;
-            bottom: 4px;
-            left: 4px;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            font-size: 9px;
-            padding: 2px 6px;
-            border-radius: 4px;
         }
 
         .media-thumb .thumb-delete {
@@ -626,8 +611,20 @@
         .proforma-badge.refuse { background: #fee2e2; color: #991b1b; }
         .proforma-badge.negociation { background: #e0e7ff; color: #3730a3; }
 
+        .passage-badge {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 3px 10px;
+            border-radius: 30px;
+            font-size: 10px;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+
         @media (prefers-color-scheme: dark) {
             .note-badge { background: #1e3a8a; color: #dbeafe; }
+            .passage-badge { background: #1e3a8a; color: #dbeafe; }
             .proforma-badge.en_attente { background: #422006; color: #fcd34d; }
             .proforma-badge.accepte { background: #064e3b; color: #a7f3d0; }
             .proforma-badge.refuse { background: #7f1d1d; color: #fecaca; }
@@ -672,7 +669,7 @@
         }
 
         /* ============================================================
-        INTERFACE SUIVI CLIENT (v3.3)
+        INTERFACE SUIVI CLIENT
         ============================================================ */
         .suivi-header {
             display: flex;
@@ -697,6 +694,9 @@
             font-size: 28px;
             flex-shrink: 0;
             overflow: hidden;
+            font-family: Georgia, serif;
+            color: var(--accent);
+            font-weight: 700;
         }
 
         .suivi-header-logo img {
@@ -1037,6 +1037,188 @@
             .suivi-contact a.whatsapp:hover { background: #064e3b66; }
         }
 
+        /* ============================================================
+        BLOC RETOUR RÉCUPÉRATION (NOUVEAU v3.5)
+        ============================================================ */
+        .recuperation-block {
+            background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
+            border: 2px solid #a7f3d0;
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .recuperation-block {
+                background: linear-gradient(135deg, #064e3b33, #065f4622);
+                border-color: #065f46;
+            }
+        }
+
+        .recuperation-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .recuperation-icon {
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+
+        .recuperation-title {
+            flex: 1;
+        }
+
+        .recuperation-title h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #065f46;
+            margin-bottom: 2px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .recuperation-title h3 { color: #6ee7b7; }
+        }
+
+        .recuperation-title p {
+            font-size: 12px;
+            color: #059669;
+            line-height: 1.4;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .recuperation-title p { color: #34d399; }
+        }
+
+        .recuperation-form {
+            background: white;
+            border-radius: 14px;
+            padding: 14px;
+            margin-top: 12px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .recuperation-form {
+                background: var(--bg-card);
+            }
+        }
+
+        .creneaux-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin: 10px 0;
+        }
+
+        .creneau-btn {
+            background: var(--bg-soft);
+            border: 2px solid var(--border);
+            padding: 10px 6px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .creneau-btn:hover {
+            border-color: var(--success);
+            background: #f0fdf4;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .creneau-btn:hover {
+                background: #064e3b33;
+            }
+        }
+
+        .creneau-btn.selected {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .recuperation-confirmee {
+            background: white;
+            border-radius: 14px;
+            padding: 16px;
+            margin-top: 12px;
+            text-align: center;
+            border: 2px solid var(--success);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .recuperation-confirmee {
+                background: var(--bg-card);
+            }
+        }
+
+        .recuperation-confirmee .check-icon {
+            font-size: 40px;
+            margin-bottom: 8px;
+        }
+
+        .recuperation-confirmee h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #065f46;
+            margin-bottom: 4px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .recuperation-confirmee h4 { color: #6ee7b7; }
+        }
+
+        .recuperation-confirmee .details {
+            font-size: 13px;
+            color: #059669;
+            margin: 8px 0;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .recuperation-confirmee .details { color: #34d399; }
+        }
+
+        .recuperation-confirmee .btn-modifier {
+            background: transparent;
+            border: 1px solid var(--success);
+            color: var(--success);
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+
+        .recuperation-confirmee .btn-modifier:hover {
+            background: rgba(34, 197, 94, 0.1);
+        }
+
+        .recuperation-message-client {
+            background: #fef3c7;
+            border-left: 3px solid #f59e0b;
+            padding: 10px 12px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-size: 12px;
+            color: #78350f;
+            font-style: italic;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .recuperation-message-client {
+                background: #422006;
+                color: #fcd34d;
+            }
+        }
+
         .progress-bar { background: var(--bg-soft); border-radius: 60px; height: 6px; margin: 24px 0; overflow: hidden; display: none; }
         .progress-fill { background: var(--accent); width: 0%; height: 100%; transition: width 0.3s ease; }
         .vehicle-info { background: var(--bg-soft); border-radius: 20px; padding: 16px; margin: 16px 0; text-align: left; display: none; }
@@ -1194,9 +1376,11 @@
         .timeline-item .event { color: var(--text-primary); flex: 1; }
         .timeline-item.note-item { background: #fef3c7; margin: 4px -12px; padding: 8px 12px; }
         .timeline-item.proforma-item { background: #ecfdf5; margin: 4px -12px; padding: 8px 12px; }
+        .timeline-item.passage-item { background: #dbeafe; margin: 4px -12px; padding: 8px 12px; }
         @media (prefers-color-scheme: dark) {
             .timeline-item.note-item { background: #422006; color: #fcd34d; }
             .timeline-item.proforma-item { background: #064e3b; color: #a7f3d0; }
+            .timeline-item.passage-item { background: #1e3a8a; color: #dbeafe; }
         }
 
         .media-modal-content {
@@ -1328,7 +1512,7 @@
             box-shadow: var(--shadow-lg);
             text-align: center;
         }
-        .login-box h1 { font-size: 24px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
+        .login-box h1 { font-size: 24px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; font-family: Georgia, serif; letter-spacing: 1px; }
         .login-box .sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 30px; }
         .login-box .icon-lock { font-size: 56px; display: block; margin-bottom: 20px; }
         .login-box input { margin-bottom: 12px; text-align: left; }
@@ -1658,6 +1842,7 @@
             .suivi-contact { grid-template-columns: 1fr; }
             .brand-monogram { width: 44px; height: 44px; font-size: 17px; }
             .brand-text h1 { font-size: 17px; }
+            .creneaux-grid { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
@@ -1820,6 +2005,7 @@
                 <div id="suiviMessage"></div>
                 <div id="suiviDelai"></div>
                 <div id="trackingSteps" class="timeline-v"></div>
+                <div id="suiviRecuperation"></div>
                 <div id="trackingLastUpdate" style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 16px;"></div>
                 <div id="suiviContact" class="suivi-contact"></div>
                 <div style="display:none;" id="trackingVehicleInfo" class="vehicle-info"></div>
@@ -1951,6 +2137,7 @@
             <button class="filtre-btn" data-filtre="retard">En retard</button>
             <button class="filtre-btn" data-filtre="avec-notes">Avec notes</button>
             <button class="filtre-btn" data-filtre="proforma-attente">Devis en attente</button>
+            <button class="filtre-btn" data-filtre="passage-aujourdhui">Passages aujourd'hui</button>
         </div>
 
         <div style="margin-bottom: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
@@ -2192,6 +2379,16 @@ const MAX_DEMANDES_CHARGEES = 50;
 const DEVISE = 'FCFA';
 const TAUX_TVA = 18;
 
+// Statuts à partir desquels le client peut signaler sa venue
+const STATUTS_AVEC_RECUPERATION = [2, 3, 4, 5, 6]; // Devis envoyé, Pièces, Réparation, Prête, Clôturée
+
+const CRENEAUX = [
+    { id: '08-10', label: '08h-10h' },
+    { id: '10-12', label: '10h-12h' },
+    { id: '14-16', label: '14h-16h' },
+    { id: '16-18', label: '16h-18h' }
+];
+
 const PRESTATIONS_FREQUENTES = [
     { produit: "Vidange", description: "Huile 5W40 + filtre à huile", prix: 25000 },
     { produit: "Freinage", description: "Plaquettes de frein avant", prix: 30000 },
@@ -2214,7 +2411,7 @@ const STATUTS = [
 const MESSAGES_STATUT = {
     0: { icon: '✅', text: "Votre demande est bien enregistrée. Notre équipe va l'examiner dans les plus brefs délais." },
     1: { icon: '🔍', text: "Nos techniciens analysent votre véhicule pour établir un diagnostic précis." },
-    2: { icon: '📋', text: "Un devis vous a été transmis. Nous attendons votre accord pour poursuivre." },
+    2: { icon: '📋', text: "Un devis vous a été transmis. Si vous ne souhaitez pas donner suite, vous pouvez venir récupérer votre véhicule en nous indiquant un créneau ci-dessous." },
     3: { icon: '📦', text: "Nous avons commandé les pièces nécessaires. La réparation débutera dès leur réception." },
     4: { icon: '🛠️', text: "Votre véhicule est entre les mains de nos techniciens. Les travaux sont en cours." },
     5: { icon: '🎉', text: "Bonne nouvelle ! Votre véhicule est prêt à être récupéré. Merci de votre confiance." },
@@ -2276,6 +2473,14 @@ function formatDate(ts) {
         const date = ts.toDate ? ts.toDate() : new Date(ts);
         return date.toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' });
     } catch(e) { return ''; }
+}
+
+function formatDateCourte(dateStr) {
+    if (!dateStr) return '';
+    try {
+        const d = new Date(dateStr);
+        return d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+    } catch(e) { return dateStr; }
 }
 
 function calculerJoursDepuis(ts) {
@@ -2370,6 +2575,8 @@ function getPeriodeStart(periode) {
     let proformaLignes = [];
     let garageConfig = null;
     let demandesMarqueesLues = new Set();
+    let currentTrackingDemande = null; // Pour stocker la demande en cours de suivi
+    let currentCreneauSelectionne = null;
 
     const loginScreen = document.getElementById('loginScreen');
     const clientScreen = document.getElementById('clientScreen');
@@ -2842,6 +3049,7 @@ function getPeriodeStart(periode) {
             garage,
             note: null,
             proforma: null,
+            recuperation: null,
             historique: [{
                 date: new Date(),
                 dateStr: new Date().toLocaleString('fr-FR'),
@@ -2909,7 +3117,8 @@ function getPeriodeStart(periode) {
             if (snapshot.empty) {
                 db.collection('demandes').doc(demandeId.trim()).get().then(doc => {
                     if (doc.exists) {
-                        afficherDetailsSuivi({ id: doc.id, ...doc.data() });
+                        currentTrackingDemande = { id: doc.id, ...doc.data() };
+                        afficherDetailsSuivi(currentTrackingDemande);
                     } else {
                         if (trackingError) trackingError.textContent = 'Aucune demande trouvée';
                         if (trackingInfo) trackingInfo.style.display = 'none';
@@ -2920,7 +3129,8 @@ function getPeriodeStart(periode) {
                 return;
             }
             const doc = snapshot.docs[0];
-            afficherDetailsSuivi({ id: doc.id, ...doc.data() });
+            currentTrackingDemande = { id: doc.id, ...doc.data() };
+            afficherDetailsSuivi(currentTrackingDemande);
         }, function(error) {
             if (trackingError) {
                 if (error.code === 'permission-denied') {
@@ -3052,6 +3262,9 @@ function getPeriodeStart(periode) {
             trackingSteps.innerHTML = stepsHtml;
         }
 
+        // NOUVEAU : bloc de récupération
+        afficherBlocRecuperation(data, statut);
+
         const lastUpdateSpan = document.getElementById('trackingLastUpdate');
         if (lastUpdateSpan) {
             const lastUpdate = data.dateStatut ? formatDate(data.dateStatut) : data.date || '';
@@ -3081,6 +3294,218 @@ function getPeriodeStart(periode) {
                 <p><strong>Panne :</strong> ${data.description || 'Non renseignée'}</p>
                 ${data.numeroDemande ? `<p><strong>N° :</strong> ${data.numeroDemande}</p>` : ''}
             `;
+        }
+    }
+
+    // ============================================================
+    // BLOC DE RÉCUPÉRATION (NOUVEAU v3.5)
+    // ============================================================
+    function afficherBlocRecuperation(data, statut) {
+        const container = document.getElementById('suiviRecuperation');
+        if (!container) return;
+
+        // Afficher le bloc seulement à partir du statut "Devis envoyé"
+        if (!STATUTS_AVEC_RECUPERATION.includes(statut)) {
+            container.innerHTML = '';
+            return;
+        }
+
+        const recup = data.recuperation;
+
+        // Cas 1 : le client a déjà confirmé un créneau
+        if (recup && recup.dateConfirmation) {
+            const jourAffiche = recup.jourLibre ? recup.jourLibre : formatDateCourte(recup.jour);
+            const creneauAffiche = recup.creneauLabel || (recup.heureLibre ? recup.heureLibre : '');
+            const messageClient = recup.message ? `<div class="recuperation-message-client">"${recup.message}"</div>` : '';
+
+            container.innerHTML = `
+                <div class="recuperation-block">
+                    <div class="recuperation-header">
+                        <div class="recuperation-icon">📅</div>
+                        <div class="recuperation-title">
+                            <h3>Passage enregistré</h3>
+                            <p>Votre venue a bien été transmise au garage</p>
+                        </div>
+                    </div>
+                    <div class="recuperation-confirmee">
+                        <div class="check-icon">✅</div>
+                        <h4>Nous vous attendons</h4>
+                        <div class="details">
+                            ${jourAffiche ? `<strong>${jourAffiche}</strong>` : ''}<br>
+                            ${creneauAffiche ? `${creneauAffiche}` : ''}
+                        </div>
+                        ${messageClient}
+                        <button class="btn-modifier" onclick="window.modifierRecuperation()">Modifier</button>
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
+        // Cas 2 : formulaire de sélection
+        const dateAujourdhui = new Date().toISOString().split('T')[0];
+        const dateMax = new Date();
+        dateMax.setDate(dateMax.getDate() + 60);
+        const dateMaxStr = dateMax.toISOString().split('T')[0];
+
+        let creneauxHtml = '';
+        CRENEAUX.forEach(c => {
+            creneauxHtml += `<button class="creneau-btn" data-creneau="${c.id}" data-label="${c.label}" onclick="window.selectionnerCreneau(this)">${c.label}</button>`;
+        });
+
+        container.innerHTML = `
+            <div class="recuperation-block">
+                <div class="recuperation-header">
+                    <div class="recuperation-icon">📅</div>
+                    <div class="recuperation-title">
+                        <h3>Quand passerez-vous ?</h3>
+                        <p>Indiquez votre créneau pour que nous préparions votre véhicule.</p>
+                    </div>
+                </div>
+
+                <div class="recuperation-form">
+                    <label style="font-size: 12px; font-weight: 600; color: var(--text-primary); display: block; margin-bottom: 6px;">
+                        Choisissez un jour
+                    </label>
+                    <input type="date" id="recupJour" min="${dateAujourdhui}" max="${dateMaxStr}">
+
+                    <label style="font-size: 12px; font-weight: 600; color: var(--text-primary); display: block; margin: 14px 0 6px 0;">
+                        Choisissez un créneau
+                    </label>
+                    <div class="creneaux-grid" id="recupCreneaux">
+                        ${creneauxHtml}
+                    </div>
+
+                    <label style="font-size: 12px; font-weight: 600; color: var(--text-primary); display: block; margin: 14px 0 6px 0;">
+                        Un jour ou une heure précis ? <span style="font-weight: 400; color: var(--text-muted);">(optionnel)</span>
+                    </label>
+                    <input type="text" id="recupHeureLibre" placeholder="Ex: Samedi matin vers 10h" maxlength="100">
+
+                    <label style="font-size: 12px; font-weight: 600; color: var(--text-primary); display: block; margin: 14px 0 6px 0;">
+                        Un petit message pour le garage ? <span style="font-weight: 400; color: var(--text-muted);">(optionnel)</span>
+                    </label>
+                    <textarea id="recupMessage" rows="2" placeholder="Ex: Je viendrai avec un ami pour repartir à deux voitures..." maxlength="200" style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 12px; font-family: inherit; font-size: 13px; background: var(--bg-card); color: var(--text-primary); resize: vertical;"></textarea>
+
+                    <button id="btnConfirmerRecup" class="btn-primary" style="margin-top: 14px;">Confirmer ma venue</button>
+                </div>
+            </div>
+        `;
+
+        // Reset de la sélection
+        currentCreneauSelectionne = null;
+
+        // Bind du bouton
+        setTimeout(() => {
+            document.getElementById('btnConfirmerRecup')?.addEventListener('click', confirmerRecuperation);
+        }, 50);
+    }
+
+    window.selectionnerCreneau = function(btn) {
+        const grid = document.getElementById('recupCreneaux');
+        grid.querySelectorAll('.creneau-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        currentCreneauSelectionne = {
+            id: btn.dataset.creneau,
+            label: btn.dataset.label
+        };
+    };
+
+    window.modifierRecuperation = async function() {
+        if (!currentTrackingDemande) return;
+        if (!confirm('Modifier votre créneau de passage ?')) return;
+
+        try {
+            const docRef = db.collection('demandes').doc(currentTrackingDemande.id);
+            const doc = await docRef.get();
+            if (!doc.exists) return;
+
+            const data = doc.data();
+            const historique = data.historique || [];
+            historique.push({
+                date: new Date(),
+                dateStr: new Date().toLocaleString('fr-FR'),
+                type: 'passage',
+                action: 'Passage modifié par le client'
+            });
+
+            await docRef.update({ recuperation: null, historique });
+            afficherToast('Vous pouvez choisir un nouveau créneau');
+        } catch(err) {
+            afficherToast('Erreur: ' + err.message);
+        }
+    };
+
+    async function confirmerRecuperation() {
+        if (!currentTrackingDemande) {
+            afficherToast('Demande introuvable');
+            return;
+        }
+
+        const jour = document.getElementById('recupJour')?.value || '';
+        const heureLibre = document.getElementById('recupHeureLibre')?.value.trim() || '';
+        const message = document.getElementById('recupMessage')?.value.trim() || '';
+
+        if (!jour && !heureLibre) {
+            afficherToast('Veuillez indiquer un jour ou une heure');
+            return;
+        }
+
+        if (!jour && !currentCreneauSelectionne && !heureLibre) {
+            afficherToast('Veuillez choisir un jour et un créneau');
+            return;
+        }
+
+        const btn = document.getElementById('btnConfirmerRecup');
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = 'Enregistrement...';
+        }
+
+        try {
+            const docRef = db.collection('demandes').doc(currentTrackingDemande.id);
+            const doc = await docRef.get();
+            if (!doc.exists) throw new Error('Demande introuvable');
+
+            const data = doc.data();
+            const historique = data.historique || [];
+
+            const recuperation = {
+                jour: jour || null,
+                jourLibre: !jour && heureLibre ? heureLibre : null,
+                creneau: currentCreneauSelectionne?.id || null,
+                creneauLabel: currentCreneauSelectionne?.label || null,
+                heureLibre: heureLibre || null,
+                message: message || null,
+                dateConfirmation: new Date(),
+                dateConfirmationStr: new Date().toLocaleString('fr-FR')
+            };
+
+            // Construire un texte d'historique propre
+            let texteHisto = 'Passage confirmé par le client';
+            if (jour && currentCreneauSelectionne) {
+                texteHisto += ` — ${formatDateCourte(jour)} à ${currentCreneauSelectionne.label}`;
+            } else if (jour) {
+                texteHisto += ` — ${formatDateCourte(jour)}`;
+            } else if (heureLibre) {
+                texteHisto += ` — "${heureLibre}"`;
+            }
+
+            historique.push({
+                date: new Date(),
+                dateStr: new Date().toLocaleString('fr-FR'),
+                type: 'passage',
+                action: texteHisto
+            });
+
+            await docRef.update({ recuperation, historique });
+            afficherToast('Passage enregistré ! Le garage est prévenu');
+        } catch(err) {
+            console.error('Erreur confirmation:', err);
+            afficherToast('Erreur: ' + err.message);
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = 'Confirmer ma venue';
+            }
         }
     }
 
@@ -3157,6 +3582,7 @@ function getPeriodeStart(periode) {
                 let cls = '';
                 if (h.type === 'note') cls = 'note-item';
                 if (h.type === 'proforma') cls = 'proforma-item';
+                if (h.type === 'passage') cls = 'passage-item';
                 return `<div class="timeline-item ${cls}">
                     <span class="time">${h.dateStr || formatDate(h.date)}</span>
                     <span class="event">${h.action || h.statutLabel || ''}</span>
@@ -4358,6 +4784,40 @@ ${garageNom}`;
         document.getElementById('listeDemandes')?.scrollIntoView({ behavior: 'smooth' });
     };
 
+    // Vérifie si un passage est prévu aujourd'hui
+    function estPassageAujourdhui(recup) {
+        if (!recup || !recup.dateConfirmation) return false;
+
+        // Si le client a saisi une heure libre et pas de jour précis, on l'affiche
+        if (recup.jourLibre && !recup.jour) return true;
+
+        if (!recup.jour) return false;
+
+        const aujourdhui = new Date().toISOString().split('T')[0];
+        return recup.jour === aujourdhui;
+    }
+
+    // Formate l'affichage du passage pour le badge
+    function formatPassageBadge(recup) {
+        if (!recup) return '';
+
+        if (recup.jourLibre && !recup.jour) {
+            return `Passage : ${recup.jourLibre}`;
+        }
+
+        const jourAffiche = recup.jour ? formatDateCourte(recup.jour) : '';
+        const creneauAffiche = recup.creneauLabel || (recup.heureLibre || '');
+
+        if (jourAffiche && creneauAffiche) {
+            return `Passage : ${jourAffiche} à ${creneauAffiche}`;
+        } else if (jourAffiche) {
+            return `Passage : ${jourAffiche}`;
+        } else if (creneauAffiche) {
+            return `Passage : ${creneauAffiche}`;
+        }
+        return 'Passage prévu';
+    }
+
     // ============================================================
     // AFFICHAGE + FILTRES + PAGINATION
     // ============================================================
@@ -4372,6 +4832,7 @@ ${garageNom}`;
         });
         if (currentFiltre === 'avec-notes') filtered = filtered.filter(d => d.note && d.note.text);
         if (currentFiltre === 'proforma-attente') filtered = filtered.filter(d => d.proforma && d.proforma.statut === 'en_attente');
+        if (currentFiltre === 'passage-aujourdhui') filtered = filtered.filter(d => estPassageAujourdhui(d.recuperation));
 
         const search = document.getElementById('searchInput')?.value.toLowerCase() || '';
         if (search) {
@@ -4436,6 +4897,8 @@ ${garageNom}`;
             const hasProforma = d.proforma && d.proforma.lignes && d.proforma.lignes.length > 0;
             const proformaStatut = d.proforma?.statut || 'en_attente';
             const totalProforma = d.proforma?.totalTTC || d.proforma?.total || 0;
+            const hasPassage = d.recuperation && d.recuperation.dateConfirmation;
+            const passageAujourdhui = estPassageAujourdhui(d.recuperation);
 
             const mediasList = d.medias || (d.media ? [{ data: d.media, type: d.mediaType }] : []);
             let mediaHtml = '';
@@ -4483,7 +4946,8 @@ ${garageNom}`;
                     <div style="margin:8px 0;font-size:13px;color:var(--text-secondary);">${d.description || ''}</div>
                     ${hasNote ? `<div class="note-display" style="display:block;"><strong>Note chef d'atelier :</strong> ${d.note.text}</div>` : ''}
                     ${hasProforma ? `<div class="proforma-display" style="display:block;"><strong>Proforma :</strong> ${formatMontant(totalProforma)} — ${PROFORMA_STATUTS[proformaStatut]?.label || ''}</div>` : ''}
-                    ${d.lieu ? `<div style="font-size:12px;color:var(--text-muted);">Lieu : ${d.lieu}</div>` : ''}
+                    ${hasPassage ? `<div class="passage-badge" style="${passageAujourdhui ? 'background: var(--danger); color: white; animation: blink 1.5s infinite;' : ''}">${formatPassageBadge(d.recuperation)}</div>` : ''}
+                    ${d.lieu ? `<div style="font-size:12px;color:var(--text-muted);margin-top:6px;">Lieu : ${d.lieu}</div>` : ''}
                     ${d.dateRdv ? `<div style="font-size:12px;">RDV : ${d.dateRdv} ${d.heureRdv || ''}</div>` : ''}
                     ${d.garage ? `<div style="font-size:12px;color:var(--text-muted);">Garage : ${d.garage}</div>` : ''}
                     ${mediaHtml}
@@ -4658,9 +5122,12 @@ ${garageNom}`;
     // ============================================================
     document.getElementById('btnExportExcel')?.addEventListener('click', function() {
         if (allDemandes.length === 0) return afficherToast('Aucune donnée');
-        const headers = ['N° Demande', 'Date', 'Nom', 'Téléphone', 'Email', 'Immat.', 'Marque', 'Modèle', 'Km', 'Description', 'Urgence', 'Statut', 'Garage', 'Lieu', 'Note', 'Proforma Total', 'Proforma Statut'];
+        const headers = ['N° Demande', 'Date', 'Nom', 'Téléphone', 'Email', 'Immat.', 'Marque', 'Modèle', 'Km', 'Description', 'Urgence', 'Statut', 'Garage', 'Lieu', 'Note', 'Proforma Total', 'Proforma Statut', 'Passage prévu'];
         const rows = allDemandes.map(d => {
             const statutInfo = STATUTS.find(s => s.id === (d.statut || 0)) || STATUTS[0];
+            const passage = d.recuperation && d.recuperation.dateConfirmation
+                ? formatPassageBadge(d.recuperation)
+                : '';
             return [
                 d.numeroDemande || d.id,
                 d.date || '',
@@ -4678,7 +5145,8 @@ ${garageNom}`;
                 d.lieu || '',
                 (d.note?.text || '').replace(/[\r\n;]/g, ' '),
                 d.proforma?.total || '',
-                d.proforma?.statut || ''
+                d.proforma?.statut || '',
+                passage
             ];
         });
 
@@ -4767,7 +5235,7 @@ ${garageNom}`;
         }, 500);
     }
 
-    console.log('Assist-Garage PRO 3.4 — Design v1');
+    console.log('Assist-Garage PRO 3.5 — Module récupération');
 })();
 </script>
 
