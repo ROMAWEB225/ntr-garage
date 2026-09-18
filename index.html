@@ -64,6 +64,99 @@
             box-shadow: var(--shadow);
         }
 
+        /* ============================================================
+        NOUVEL EN-TÊTE PRO (v3.4)
+        ============================================================ */
+        .brand-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand-monogram {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: var(--accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            flex-shrink: 0;
+            font-family: Georgia, 'Times New Roman', serif;
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .brand-monogram {
+                background: var(--bg-soft);
+                color: var(--text-primary);
+                border: 1px solid var(--border);
+                box-shadow: none;
+            }
+        }
+
+        .brand-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .brand-text h1 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: 1.5px;
+            font-family: Georgia, 'Times New Roman', serif;
+            line-height: 1.2;
+        }
+
+        .brand-text .tagline {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 3px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-weight: 500;
+        }
+
+        .brand-divider {
+            width: 24px;
+            height: 2px;
+            background: var(--accent);
+            border-radius: 2px;
+            margin-top: 6px;
+            opacity: 0.5;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .brand-divider { background: var(--text-muted); }
+        }
+
+        .badge-reception {
+            background: var(--accent);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .badge-reception {
+                background: var(--bg-soft);
+                color: var(--text-primary);
+                border: 1px solid var(--border);
+            }
+        }
+
+        /* Ancien style .logo conservé pour compatibilité PDF */
         .logo { text-align: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
         .logo h1 { font-size: 22px; font-weight: 600; color: var(--text-primary); }
         .logo .subtitle { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
@@ -140,9 +233,25 @@
             background: var(--bg-card);
             color: var(--text-secondary);
             font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
         }
         .btn-urgence button:hover { border-color: var(--accent); background: var(--bg-soft); }
         .urgence-selected { background: var(--accent) !important; color: white !important; border-color: var(--accent) !important; }
+
+        .pastille-urgence {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        .pastille-urgence.basse { background: var(--success); }
+        .pastille-urgence.moyenne { background: var(--warning); }
+        .pastille-urgence.haute { background: var(--danger); }
 
         .media-buttons { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
         .btn-media {
@@ -259,8 +368,8 @@
         .btn-contact {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            padding: 6px 12px;
+            gap: 6px;
+            padding: 7px 14px;
             border-radius: 30px;
             font-size: 12px;
             font-weight: 500;
@@ -269,10 +378,15 @@
             cursor: pointer;
             text-decoration: none;
             color: var(--text-secondary);
+            transition: all 0.2s ease;
         }
+        .btn-contact:hover { transform: translateY(-1px); }
         .btn-contact.call { color: var(--info); border-color: var(--info); }
+        .btn-contact.call:hover { background: rgba(59, 130, 246, 0.08); }
         .btn-contact.whatsapp { color: #25D366; border-color: #25D366; }
+        .btn-contact.whatsapp:hover { background: rgba(37, 211, 102, 0.08); }
         .btn-contact.email { color: var(--warning); border-color: var(--warning); }
+        .btn-contact.email:hover { background: rgba(245, 158, 11, 0.08); }
 
         .qr-section {
             background: var(--bg-soft);
@@ -293,9 +407,6 @@
         .stat-number { font-size: 24px; font-weight: 700; color: var(--text-primary); }
         .stat-label { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
 
-        /* ============================================================
-        MINI COMPTABILITÉ
-        ============================================================ */
         .compta-container {
             background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
             border: 1px solid #a7f3d0;
@@ -379,10 +490,11 @@
         }
 
         .compta-stat-value {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 700;
             color: #065f46;
             line-height: 1.2;
+            word-break: break-word;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -433,16 +545,27 @@
         }
 
         .badge-urgence {
-            display: inline-block;
-            padding: 2px 10px;
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 10px;
             border-radius: 30px;
             font-size: 10px;
             font-weight: 600;
             margin-bottom: 10px;
+            gap: 5px;
+        }
+        .badge-urgence::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
         }
         .badge-urgence.haute { background: #fef2f2; color: var(--danger); }
+        .badge-urgence.haute::before { background: var(--danger); }
         .badge-urgence.moyenne { background: #fffbeb; color: var(--warning); }
+        .badge-urgence.moyenne::before { background: var(--warning); }
         .badge-urgence.basse { background: #f0fdf4; color: var(--success); }
+        .badge-urgence.basse::before { background: var(--success); }
 
         .badge-retard {
             display: inline-block;
@@ -461,12 +584,22 @@
         }
 
         .statut-badge {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
             padding: 3px 10px;
             border-radius: 30px;
             font-size: 10px;
             font-weight: 600;
             margin: 4px 0;
+            gap: 5px;
+        }
+        .statut-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+            opacity: 0.7;
         }
 
         .note-badge {
@@ -539,7 +672,7 @@
         }
 
         /* ============================================================
-        NOUVELLE INTERFACE SUIVI CLIENT (v3.3)
+        INTERFACE SUIVI CLIENT (v3.3)
         ============================================================ */
         .suivi-header {
             display: flex;
@@ -593,7 +726,6 @@
             line-height: 1.4;
         }
 
-        /* Carte véhicule premium */
         .vehicle-card-premium {
             background: linear-gradient(135deg, #0f172a, #1e293b);
             color: white;
@@ -694,7 +826,6 @@
             display: block;
         }
 
-        /* Message adaptatif selon statut */
         .suivi-message {
             background: linear-gradient(135deg, #dbeafe, #eff6ff);
             border-left: 4px solid #3b82f6;
@@ -721,7 +852,6 @@
             flex-shrink: 0;
         }
 
-        /* Timeline verticale animée */
         .timeline-v {
             position: relative;
             padding-left: 40px;
@@ -789,12 +919,8 @@
         }
 
         @keyframes pulse-dot {
-            0%, 100% {
-                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5);
-            }
-            50% {
-                box-shadow: 0 0 0 8px rgba(59, 130, 246, 0);
-            }
+            0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.5); }
+            50% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
         }
 
         .timeline-v-step .step-icon {
@@ -814,11 +940,6 @@
             margin-bottom: 3px;
         }
 
-        .timeline-v-step.completed .step-title,
-        .timeline-v-step.active .step-title {
-            color: var(--text-primary);
-        }
-
         .timeline-v-step .step-desc {
             font-size: 12px;
             color: var(--text-secondary);
@@ -832,7 +953,6 @@
             font-style: italic;
         }
 
-        /* Estimation délai */
         .suivi-delai {
             background: linear-gradient(135deg, #fef3c7, #fef9e7);
             border: 1px solid #fcd34d;
@@ -854,15 +974,12 @@
             }
         }
 
-        .suivi-delai strong {
-            color: #78350f;
-        }
+        .suivi-delai strong { color: #78350f; }
 
         @media (prefers-color-scheme: dark) {
             .suivi-delai strong { color: #fde68a; }
         }
 
-        /* Bouton contact garage */
         .suivi-contact {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -919,8 +1036,6 @@
             }
             .suivi-contact a.whatsapp:hover { background: #064e3b66; }
         }
-
-        .status-step-legacy { display: none; }
 
         .progress-bar { background: var(--bg-soft); border-radius: 60px; height: 6px; margin: 24px 0; overflow: hidden; display: none; }
         .progress-fill { background: var(--accent); width: 0%; height: 100%; transition: width 0.3s ease; }
@@ -1541,6 +1656,8 @@
             .proforma-table input { padding: 5px 6px; font-size: 11px; }
             .vehicle-card-immat { font-size: 20px; }
             .suivi-contact { grid-template-columns: 1fr; }
+            .brand-monogram { width: 44px; height: 44px; font-size: 17px; }
+            .brand-text h1 { font-size: 17px; }
         }
     </style>
 </head>
@@ -1556,8 +1673,8 @@
         <input type="email" id="loginEmail" placeholder="Adresse email" autocomplete="username">
         <input type="password" id="loginPassword" placeholder="Mot de passe" autocomplete="current-password">
 
-        <button id="btnLogin" class="btn-primary">🔓 Se connecter</button>
-        <button id="btnBackToClient" class="btn-secondary" style="margin-top: 10px; width: 100%;">← Retour à l'espace client</button>
+        <button id="btnLogin" class="btn-primary">Se connecter</button>
+        <button id="btnBackToClient" class="btn-secondary" style="margin-top: 10px; width: 100%;">Retour à l'espace client</button>
 
         <div class="login-error" id="loginError"></div>
 
@@ -1571,16 +1688,19 @@
 <!-- CLIENT SCREEN -->
 <div id="clientScreen" style="display: none;">
     <div class="container">
-        <div class="logo">
-            <h1>🚗 ASSIST-GARAGE</h1>
-            <div class="subtitle">RÉPARATION · ENTRETIEN · DÉPANNAGE</div>
-            <span class="badge-free">📱 VERSION PRO 3.3</span>
+        <div class="brand-header">
+            <div class="brand-monogram">AG</div>
+            <div class="brand-text">
+                <h1>ASSIST-GARAGE</h1>
+                <div class="tagline">Solution de gestion pour garages</div>
+                <div class="brand-divider"></div>
+            </div>
         </div>
 
         <div class="ad-banner" onclick="ouvrirSmartlink()">
             <div class="ad-icon">🎯</div>
             <div class="ad-text">
-                <strong>🔒 Offre partenaire</strong>
+                <strong>Offre partenaire</strong>
                 <small>Découvrez nos offres exclusives</small>
             </div>
             <div class="ad-cta">Voir l'offre</div>
@@ -1590,33 +1710,33 @@
             <div id="qrcode" class="qr-code"></div>
             <div id="currentUrl" style="font-size: 11px; color: var(--text-muted); word-break: break-all; margin-top: 10px;"></div>
             <div style="display: flex; gap: 10px; justify-content: center; margin-top: 12px; flex-wrap: wrap;">
-                <button id="btnCopierLien" class="btn-secondary">📋 Copier le lien</button>
-                <button id="btnImprimerQR" class="btn-secondary">🖨️ Imprimer QR</button>
+                <button id="btnCopierLien" class="btn-secondary">Copier le lien</button>
+                <button id="btnImprimerQR" class="btn-secondary">Imprimer QR</button>
             </div>
         </div>
 
         <div style="text-align: center; margin: 4px 0 12px 0;">
             <span class="garage-indicator" id="clientGarageIndicator">
-                📍 Garage : <strong id="clientGarageName">Standard</strong>
+                Garage : <strong id="clientGarageName">Standard</strong>
             </span>
         </div>
 
         <div style="text-align: center; margin: 16px 0;">
             <button id="btnInstaller" style="display:none; background: var(--accent); color: white; border: none; padding: 14px 24px; border-radius: 40px; font-size: 15px; font-weight: 600; cursor: pointer; width: 100%;">
-                📱 Installer l'application
+                Installer l'application
             </button>
             <p style="font-size: 11px; color: var(--text-muted); margin-top: 6px;">Gratuit • Sans inscription • Fonctionne hors-ligne</p>
         </div>
 
         <div class="tabs">
-            <div class="tab active" data-tab="panne">📝 Signalement</div>
-            <div class="tab" data-tab="suivi">🔍 Suivi</div>
-            <div class="tab" data-tab="offres">🎁 Offres</div>
+            <div class="tab active" data-tab="panne">Signalement</div>
+            <div class="tab" data-tab="suivi">Suivi</div>
+            <div class="tab" data-tab="offres">Offres</div>
         </div>
 
         <!-- Tab: Signalement -->
         <div id="tab-panne" class="tab-content active">
-            <div class="section-title">🚘 Informations véhicule</div>
+            <div class="section-title">Informations véhicule</div>
             <div class="row-2cols">
                 <input type="text" id="marque" placeholder="Marque">
                 <input type="text" id="modele" placeholder="Modèle">
@@ -1627,27 +1747,27 @@
             </div>
             <input type="date" id="dateMiseService">
 
-            <div class="section-title">👤 Coordonnées</div>
+            <div class="section-title">Coordonnées</div>
             <input type="text" id="clientNom" placeholder="Nom et prénom *">
             <div class="row-2cols">
                 <input type="email" id="clientEmail" placeholder="Email">
                 <input type="tel" id="clientTel" placeholder="Téléphone">
             </div>
 
-            <div class="section-title">🔧 Description de la panne</div>
+            <div class="section-title">Description de la panne</div>
             <textarea id="description" rows="3" placeholder="Décrivez le problème..."></textarea>
 
-            <div class="section-title">⚠️ Niveau d'urgence</div>
+            <div class="section-title">Niveau d'urgence</div>
             <div class="btn-urgence">
-                <button data-urgence="basse">🟢 Basse</button>
-                <button data-urgence="moyenne">🟡 Moyenne</button>
-                <button data-urgence="haute">🔴 Haute</button>
+                <button data-urgence="basse"><span class="pastille-urgence basse"></span>Basse</button>
+                <button data-urgence="moyenne"><span class="pastille-urgence moyenne"></span>Moyenne</button>
+                <button data-urgence="haute"><span class="pastille-urgence haute"></span>Haute</button>
             </div>
 
-            <div class="section-title">📍 Localisation</div>
+            <div class="section-title">Localisation</div>
             <input type="text" id="lieu" placeholder="Lieu du véhicule">
 
-            <div class="section-title">📅 Prise de rendez-vous (optionnel)</div>
+            <div class="section-title">Prise de rendez-vous <span style="font-size:11px;color:var(--text-muted);font-weight:400;">(optionnel)</span></div>
             <div class="row-2cols">
                 <input type="date" id="dateRdv">
                 <select id="heureRdv">
@@ -1664,59 +1784,44 @@
                 </select>
             </div>
 
-            <div class="section-title">📎 Médias <span style="font-size:11px;color:var(--text-muted);font-weight:400;">(max 5 photos)</span></div>
+            <div class="section-title">Médias joints <span style="font-size:11px;color:var(--text-muted);font-weight:400;">(max 5 photos)</span></div>
             <div class="media-buttons">
-                <button id="btnPhoto" class="btn-media">📷 Appareil photo</button>
-                <button id="btnGalerie" class="btn-media">🖼️ Galerie</button>
-                <button id="btnVideo" class="btn-media">🎥 Vidéo</button>
-                <button id="btnAudio" class="btn-media">🎙️ Audio</button>
+                <button id="btnPhoto" class="btn-media">Appareil photo</button>
+                <button id="btnGalerie" class="btn-media">Galerie</button>
+                <button id="btnVideo" class="btn-media">Vidéo</button>
+                <button id="btnAudio" class="btn-media">Audio</button>
             </div>
             <input type="file" id="fichierMedia" accept="image/*,video/*,audio/*" style="display:none" multiple>
             <div id="previewMedia" class="preview-media"></div>
 
             <div class="ia-diagnostic" id="iaDiagnostic">
-                <strong>🤖 Diagnostic IA :</strong>
+                <strong>Analyse automatique :</strong>
                 <p id="iaResultat"></p>
             </div>
 
-            <button id="btnEnvoyer" class="btn-primary">📤 Soumettre la demande</button>
+            <button id="btnEnvoyer" class="btn-primary">Soumettre la demande</button>
             <div id="message" style="margin-top: 16px; font-size: 13px; text-align: center;"></div>
 
             <div class="ad-footer" onclick="ouvrirSmartlink()">
-                🎁 <span>Découvrez nos offres partenaires</span> — Cliquez ici
+                <span>Découvrez nos offres partenaires</span> — Cliquez ici
             </div>
         </div>
 
-        <!-- Tab: Suivi (NOUVELLE INTERFACE) -->
+        <!-- Tab: Suivi -->
         <div id="tab-suivi" class="tab-content">
-            <div class="section-title">🔍 Suivi de votre véhicule</div>
+            <div class="section-title">Suivi de votre véhicule</div>
             <input type="text" id="trackingCode" placeholder="Entrez votre numéro (ex: AG-2025-001)">
-            <button id="btnTracker" class="btn-primary">🔎 Suivre mon véhicule</button>
+            <button id="btnTracker" class="btn-primary">Rechercher ma demande</button>
             <div id="trackingError" style="color: var(--danger); font-size: 13px; margin-top: 10px; text-align: center;"></div>
 
             <div id="trackingInfo" style="display: none; margin-top: 12px;">
-                <!-- En-tête garage (généré dynamiquement) -->
                 <div id="suiviHeaderGarage"></div>
-
-                <!-- Carte véhicule premium (généré dynamiquement) -->
                 <div id="suiviVehicleCard"></div>
-
-                <!-- Message adaptatif (généré dynamiquement) -->
                 <div id="suiviMessage"></div>
-
-                <!-- Estimation délai (généré dynamiquement) -->
                 <div id="suiviDelai"></div>
-
-                <!-- Timeline verticale -->
                 <div id="trackingSteps" class="timeline-v"></div>
-
-                <!-- Dernière mise à jour -->
                 <div id="trackingLastUpdate" style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 16px;"></div>
-
-                <!-- Boutons contact -->
                 <div id="suiviContact" class="suivi-contact"></div>
-
-                <!-- Champs cachés pour compatibilité -->
                 <div style="display:none;" id="trackingVehicleInfo" class="vehicle-info"></div>
                 <div style="display:none;" class="progress-bar"><div id="trackingProgressFill" class="progress-fill"></div></div>
             </div>
@@ -1724,7 +1829,7 @@
             <div class="ad-banner" style="margin-top: 20px;" onclick="ouvrirSmartlink()">
                 <div class="ad-icon">💡</div>
                 <div class="ad-text">
-                    <strong>💰 Gagnez de l'argent</strong>
+                    <strong>Gagnez de l'argent</strong>
                     <small>Des offres exclusives</small>
                 </div>
                 <div class="ad-cta">En savoir plus</div>
@@ -1733,7 +1838,7 @@
 
         <!-- Tab: Offres -->
         <div id="tab-offres" class="tab-content">
-            <div class="section-title">🎁 Offres partenaires</div>
+            <div class="section-title">Offres partenaires</div>
             <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 16px;">Découvrez des offres exclusives.</p>
             <div class="ad-banner" onclick="ouvrirSmartlink()">
                 <div class="ad-icon">💰</div>
@@ -1752,7 +1857,7 @@
             </div>
         </div>
 
-        <button id="btnAllerDashboard" class="btn-secondary" style="margin-top: 20px; width: 100%;">🔐 Accès réception</button>
+        <button id="btnAllerDashboard" class="btn-secondary" style="margin-top: 20px; width: 100%;">Accès réception</button>
 
         <div class="brand-footer">
             Développé par <a href="https://github.com/romaweb225" target="_blank">NTR</a>
@@ -1763,25 +1868,30 @@
 <!-- DASHBOARD SCREEN -->
 <div id="dashboardScreen" style="display: none;">
     <div class="dashboard-container">
-        <div class="logo">
-            <h1>🚗 ASSIST-GARAGE</h1>
-            <div class="subtitle">ESPACE RÉCEPTION</div>
+        <div class="brand-header">
+            <div class="brand-monogram">AG</div>
+            <div class="brand-text">
+                <h1>ASSIST-GARAGE</h1>
+                <div class="tagline">Espace réception</div>
+                <div class="brand-divider"></div>
+            </div>
+            <span class="badge-reception">RÉCEPTION</span>
         </div>
 
         <div class="user-badge">
-            👤 Connecté : <strong id="userEmail">—</strong>
+            Connecté : <strong id="userEmail">—</strong>
             <button id="btnLogout" class="btn-secondary" style="padding: 4px 12px; font-size: 11px;">Déconnexion</button>
         </div>
 
         <div id="newRequestsBanner" class="new-requests-banner">
-            <span id="newRequestsText">🔔 Nouvelle(s) demande(s) !</span>
+            <span id="newRequestsText">Nouvelle(s) demande(s) !</span>
             <button onclick="marquerToutVu()">Voir</button>
         </div>
 
         <div class="garage-selector">
-            <label for="selectGarage">🔧 Garage :</label>
+            <label for="selectGarage">Garage :</label>
             <select id="selectGarage">
-                <option value="tous">📋 Tous les garages</option>
+                <option value="tous">Tous les garages</option>
                 <option value="Toure">Garage Toure</option>
                 <option value="Momo">Garage Momo</option>
                 <option value="ClimAuto">Clim Auto</option>
@@ -1790,21 +1900,20 @@
                 <option value="Ivoiremotor">Ivoiremotor</option>
                 <option value="SamMotors">Sam Motors</option>
             </select>
-            <button id="btnConfigGarage" class="btn-secondary" style="padding: 6px 12px; font-size: 12px;">⚙️ Infos garage</button>
+            <button id="btnConfigGarage" class="btn-secondary" style="padding: 6px 12px; font-size: 12px;">Infos garage</button>
         </div>
 
         <div class="stats" id="stats">
             <div class="stat-card"><div class="stat-number" id="statTotal">0</div><div class="stat-label">Total</div></div>
-            <div class="stat-card"><div class="stat-number" id="statNonLues">0</div><div class="stat-label">🆕 Nouvelles</div></div>
+            <div class="stat-card"><div class="stat-number" id="statNonLues">0</div><div class="stat-label">Nouvelles</div></div>
             <div class="stat-card"><div class="stat-number" id="statUrgentes">0</div><div class="stat-label">Urgentes</div></div>
             <div class="stat-card"><div class="stat-number" id="statRetard">0</div><div class="stat-label">En retard</div></div>
-            <div class="stat-card"><div class="stat-number" id="statProforma">0</div><div class="stat-label">💰 Devis</div></div>
+            <div class="stat-card"><div class="stat-number" id="statProforma">0</div><div class="stat-label">Devis</div></div>
         </div>
 
-        <!-- COMPTABILITÉ MINI -->
         <div class="compta-container">
             <div class="compta-header">
-                <div class="compta-title">📊 Comptabilité proforma</div>
+                <div class="compta-title">Comptabilité proforma</div>
                 <select id="comptaPeriod" class="compta-period-select" onchange="majComptabilite()">
                     <option value="tout">Tout</option>
                     <option value="annee">Cette année</option>
@@ -1819,7 +1928,7 @@
                     <div class="compta-stat-label">Validés</div>
                 </div>
                 <div class="compta-stat">
-                    <div class="compta-stat-value" id="comptaCA">0 F</div>
+                    <div class="compta-stat-value" id="comptaCA">0 FCFA</div>
                     <div class="compta-stat-label">CA validé</div>
                 </div>
                 <div class="compta-stat">
@@ -1830,27 +1939,27 @@
         </div>
 
         <div class="search-filters">
-            <input type="text" id="searchInput" placeholder="🔍 Rechercher (immat, nom, n°, tel)">
+            <input type="text" id="searchInput" placeholder="Rechercher (immat, nom, n°, tel)">
             <input type="date" id="filterDateStart" placeholder="Du" title="Date de début">
             <input type="date" id="filterDateEnd" placeholder="Au" title="Date de fin">
         </div>
 
         <div class="filtres">
-            <button class="filtre-btn active" data-filtre="toutes">📋 Toutes</button>
-            <button class="filtre-btn" data-filtre="non-lues">🆕 Nouvelles</button>
-            <button class="filtre-btn" data-filtre="urgentes">🔴 Urgentes</button>
-            <button class="filtre-btn" data-filtre="retard">⚠️ En retard</button>
-            <button class="filtre-btn" data-filtre="avec-notes">📝 Avec notes</button>
-            <button class="filtre-btn" data-filtre="proforma-attente">💰 Devis en attente</button>
+            <button class="filtre-btn active" data-filtre="toutes">Toutes</button>
+            <button class="filtre-btn" data-filtre="non-lues">Nouvelles</button>
+            <button class="filtre-btn" data-filtre="urgentes">Urgentes</button>
+            <button class="filtre-btn" data-filtre="retard">En retard</button>
+            <button class="filtre-btn" data-filtre="avec-notes">Avec notes</button>
+            <button class="filtre-btn" data-filtre="proforma-attente">Devis en attente</button>
         </div>
 
         <div style="margin-bottom: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
-            <button id="btnExportExcel" class="btn-secondary" style="flex:1;">📥 Exporter CSV</button>
-            <button id="btnActiverNotifs" class="btn-secondary" style="flex:1;">🔔 Activer notifications</button>
+            <button id="btnExportExcel" class="btn-secondary" style="flex:1;">Exporter CSV</button>
+            <button id="btnActiverNotifs" class="btn-secondary" style="flex:1;">Activer notifications</button>
         </div>
 
         <div style="margin-bottom: 12px; padding: 10px 14px; background: #eff6ff; border-left: 3px solid #3b82f6; border-radius: 8px; font-size: 11px; color: #1e40af;">
-            💡 <strong>Info :</strong> Affichage limité à 50 demandes. <strong>Cliquez sur une carte</strong> pour la marquer comme lue.
+            <strong>Info :</strong> Affichage limité à 50 demandes. <strong>Cliquez sur une carte</strong> pour la marquer comme lue.
         </div>
 
         <div id="listeDemandes" style="max-height: 600px; overflow-y: auto;"></div>
@@ -1858,7 +1967,7 @@
         <div class="pagination" id="paginationContainer"></div>
 
         <div style="margin-top: 20px; text-align: center;">
-            <button id="btnQuitterDashboard" class="btn-secondary">⬅️ Retour à l'accueil</button>
+            <button id="btnQuitterDashboard" class="btn-secondary">Retour à l'accueil</button>
         </div>
     </div>
 </div>
@@ -1866,12 +1975,12 @@
 <!-- Modal Média -->
 <div id="mediaModal" class="modal">
     <div class="modal-content media-modal-content">
-        <h3 style="margin-bottom: 16px; color: var(--text-primary);">📷 Média joint</h3>
+        <h3 style="margin-bottom: 16px; color: var(--text-primary);">Média joint</h3>
         <div id="mediaNav" class="media-nav" style="display:none;"></div>
         <div id="mediaModalContent" class="media-display-container"></div>
-        <div class="zoom-hint" id="zoomHint">💡 Cliquez sur l'image pour zoomer</div>
+        <div class="zoom-hint" id="zoomHint">Cliquez sur l'image pour zoomer</div>
         <div class="media-actions" style="margin-top: 15px;">
-            <button id="btnTelechargerMedia" class="btn-download">⬇️ Télécharger</button>
+            <button id="btnTelechargerMedia" class="btn-download">Télécharger</button>
             <button onclick="fermerMediaModal()" class="btn-secondary">Fermer</button>
         </div>
     </div>
@@ -1880,11 +1989,11 @@
 <!-- Modal PDF Fiche -->
 <div id="pdfModal" class="modal">
     <div class="modal-content pdf-modal-content">
-        <h3 style="margin-bottom: 16px; color: var(--text-primary);">📄 Fiche de réception</h3>
+        <h3 style="margin-bottom: 16px; color: var(--text-primary);">Fiche de réception</h3>
         <div id="pdfContent" style="background: white; border-radius: 8px; padding: 10px; max-height: 60vh; overflow-y: auto;"></div>
         <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center;">
-            <button id="btnGenererPDF" class="btn-primary" style="margin-top: 0; width: auto; padding: 12px 24px;">⬇️ Télécharger PDF</button>
-            <button id="btnImprimerPDF" class="btn-secondary">🖨️ Imprimer</button>
+            <button id="btnGenererPDF" class="btn-primary" style="margin-top: 0; width: auto; padding: 12px 24px;">Télécharger PDF</button>
+            <button id="btnImprimerPDF" class="btn-secondary">Imprimer</button>
             <button onclick="document.getElementById('pdfModal').style.display='none'" class="btn-secondary">Fermer</button>
         </div>
     </div>
@@ -1893,12 +2002,12 @@
 <!-- Modal PDF Proforma -->
 <div id="pdfProformaModal" class="modal">
     <div class="modal-content pdf-modal-content">
-        <h3 style="margin-bottom: 16px; color: var(--text-primary);">💰 Proforma / Devis</h3>
+        <h3 style="margin-bottom: 16px; color: var(--text-primary);">Proforma / Devis</h3>
         <div id="pdfProformaContent" style="background: white; border-radius: 8px; padding: 10px; max-height: 60vh; overflow-y: auto;"></div>
         <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center;">
-            <button id="btnGenererPDFProforma" class="btn-primary" style="margin-top: 0; width: auto; padding: 12px 24px;">⬇️ Télécharger PDF</button>
-            <button id="btnEnvoyerProformaWhatsApp" class="btn-success">💬 Envoyer par WhatsApp</button>
-            <button id="btnImprimerPDFProforma" class="btn-secondary">🖨️ Imprimer</button>
+            <button id="btnGenererPDFProforma" class="btn-primary" style="margin-top: 0; width: auto; padding: 12px 24px;">Télécharger PDF</button>
+            <button id="btnEnvoyerProformaWhatsApp" class="btn-success">Envoyer par WhatsApp</button>
+            <button id="btnImprimerPDFProforma" class="btn-secondary">Imprimer</button>
             <button onclick="document.getElementById('pdfProformaModal').style.display='none'" class="btn-secondary">Fermer</button>
         </div>
     </div>
@@ -1907,7 +2016,7 @@
 <!-- Modal Historique -->
 <div id="historiqueModal" class="modal">
     <div class="modal-content">
-        <h3 style="margin-bottom: 16px; color: var(--text-primary);">📜 Historique de la demande</h3>
+        <h3 style="margin-bottom: 16px; color: var(--text-primary);">Historique de la demande</h3>
         <div id="historiqueContent"></div>
         <div style="display: flex; gap: 10px; margin-top: 20px; justify-content: center;">
             <button onclick="document.getElementById('historiqueModal').style.display='none'" class="btn-secondary">Fermer</button>
@@ -1918,14 +2027,14 @@
 <!-- Modal Note Chef d'Atelier -->
 <div id="noteModal" class="modal">
     <div class="modal-content">
-        <h3 style="margin-bottom: 16px; color: var(--text-primary);">📝 Note du chef d'atelier</h3>
+        <h3 style="margin-bottom: 16px; color: var(--text-primary);">Note du chef d'atelier</h3>
         <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">
             Note interne — Visible uniquement par le garage
         </div>
         <textarea id="noteText" rows="6" placeholder="Ex: Le client doit rappeler avant 15h..." style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 12px; font-family: inherit; font-size: 14px; background: var(--bg-card); color: var(--text-primary); resize: vertical;"></textarea>
         <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center;">
-            <button id="btnSaveNote" class="btn-primary" style="margin-top: 0; width: auto; padding: 12px 24px;">💾 Enregistrer</button>
-            <button id="btnDeleteNote" class="btn-secondary" style="color: var(--danger); border-color: var(--danger);">🗑️ Effacer</button>
+            <button id="btnSaveNote" class="btn-primary" style="margin-top: 0; width: auto; padding: 12px 24px;">Enregistrer</button>
+            <button id="btnDeleteNote" class="btn-secondary" style="color: var(--danger); border-color: var(--danger);">Effacer</button>
             <button onclick="document.getElementById('noteModal').style.display='none'" class="btn-secondary">Fermer</button>
         </div>
         <div id="noteLastUpdate" style="font-size: 11px; color: var(--text-muted); text-align: center; margin-top: 12px;"></div>
@@ -1935,27 +2044,27 @@
 <!-- Modal Proforma -->
 <div id="proformaModal" class="modal">
     <div class="modal-content proforma-modal-content">
-        <h3 style="margin-bottom: 8px; color: var(--text-primary);">💰 Créer / Modifier un proforma</h3>
+        <h3 style="margin-bottom: 8px; color: var(--text-primary);">Créer / Modifier un proforma</h3>
         <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 16px;">
             Demande : <strong id="proformaDemandeNum">—</strong>
         </div>
 
         <div id="proformaStatutBanner" class="proforma-statut-banner en_attente" style="display:none;">
-            <span id="proformaStatutText">📋 En attente de réponse client</span>
+            <span id="proformaStatutText">En attente de réponse client</span>
             <div class="statut-actions">
-                <button class="btn-statut accepte" onclick="changerStatutProforma('accepte')">✅ Bon pour accord</button>
-                <button class="btn-statut refuse" onclick="changerStatutProforma('refuse')">❌ Refusé</button>
-                <button class="btn-statut negociation" onclick="changerStatutProforma('negociation')">💬 Négociation</button>
+                <button class="btn-statut accepte" onclick="changerStatutProforma('accepte')">Bon pour accord</button>
+                <button class="btn-statut refuse" onclick="changerStatutProforma('refuse')">Refusé</button>
+                <button class="btn-statut negociation" onclick="changerStatutProforma('negociation')">Négociation</button>
             </div>
         </div>
 
         <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin: 12px 0 6px 0;">
-            ⚡ Prestations rapides
+            Prestations rapides
         </div>
         <div class="suggestions-grid" id="suggestionsGrid"></div>
 
         <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin: 16px 0 6px 0;">
-            📋 Lignes du devis
+            Lignes du devis
         </div>
         <div style="overflow-x: auto;">
             <table class="proforma-table">
@@ -1978,7 +2087,7 @@
         <div class="tva-switch-container">
             <div class="tva-switch-label">
                 <span>
-                    💼 Appliquer la TVA (18%)
+                    Appliquer la TVA (18%)
                     <small>Désactivé : prix tout compris · Activé : HT + TVA + TTC</small>
                 </span>
             </div>
@@ -2008,14 +2117,14 @@
         </div>
 
         <div style="font-size: 12px; font-weight: 600; color: var(--text-primary); margin: 16px 0 6px 0;">
-            📝 Note / réponse client (optionnel)
+            Note / réponse client (optionnel)
         </div>
         <textarea id="proformaNoteClient" rows="2" placeholder="Ex: Client demande une réduction..." style="width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 12px; font-family: inherit; font-size: 13px; background: var(--bg-card); color: var(--text-primary); resize: vertical;"></textarea>
 
         <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center;">
-            <button id="btnSaveProforma" class="btn-primary" style="margin-top: 0; width: auto; padding: 12px 24px;">💾 Enregistrer</button>
-            <button id="btnPreviewPDFProforma" class="btn-secondary">👁️ Aperçu PDF</button>
-            <button id="btnDeleteProforma" class="btn-secondary" style="color: var(--danger); border-color: var(--danger);">🗑️ Supprimer</button>
+            <button id="btnSaveProforma" class="btn-primary" style="margin-top: 0; width: auto; padding: 12px 24px;">Enregistrer</button>
+            <button id="btnPreviewPDFProforma" class="btn-secondary">Aperçu PDF</button>
+            <button id="btnDeleteProforma" class="btn-secondary" style="color: var(--danger); border-color: var(--danger);">Supprimer</button>
             <button onclick="document.getElementById('proformaModal').style.display='none'" class="btn-secondary">Fermer</button>
         </div>
     </div>
@@ -2024,7 +2133,7 @@
 <!-- Modal Configuration Garage -->
 <div id="garageConfigModal" class="modal">
     <div class="modal-content">
-        <h3 style="margin-bottom: 16px; color: var(--text-primary);">⚙️ Informations du garage</h3>
+        <h3 style="margin-bottom: 16px; color: var(--text-primary);">Informations du garage</h3>
         <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 16px;">
             Ces informations apparaîtront sur les proformas et dans le suivi client.
         </div>
@@ -2034,7 +2143,7 @@
             <div class="garage-config-info">
                 <strong>Logo du garage</strong>
                 <div>Format carré recommandé (PNG, JPG). Max 500 KB.</div>
-                <button class="btn-secondary" style="margin-top: 6px; padding: 4px 12px; font-size: 11px;" onclick="document.getElementById('garageLogoInput').click()">📷 Choisir</button>
+                <button class="btn-secondary" style="margin-top: 6px; padding: 4px 12px; font-size: 11px;" onclick="document.getElementById('garageLogoInput').click()">Choisir</button>
                 <input type="file" id="garageLogoInput" accept="image/*" style="display:none">
             </div>
         </div>
@@ -2051,15 +2160,15 @@
         <div class="section-title">Adresse</div>
         <input type="text" id="garageConfigAdresse" placeholder="Ex: Abidjan, Cocody">
 
-        <div class="section-title">⏱️ Délai estimé (affiché au client)</div>
+        <div class="section-title">Délai estimé (affiché au client)</div>
         <input type="text" id="garageConfigDelai" placeholder="Ex: 2 à 3 jours ouvrables">
 
-        <div class="section-title">💬 Message personnalisé (optionnel)</div>
-        <textarea id="garageConfigMessage" rows="2" placeholder="Ex: Merci de votre confiance. Pour toute question, contactez-nous." style="width:100%;padding:10px;border:1px solid var(--border);border-radius:12px;font-family:inherit;font-size:13px;background:var(--bg-card);color:var(--text-primary);"></textarea>
+        <div class="section-title">Message personnalisé (optionnel)</div>
+        <textarea id="garageConfigMessage" rows="2" placeholder="Ex: Merci de votre confiance." style="width:100%;padding:10px;border:1px solid var(--border);border-radius:12px;font-family:inherit;font-size:13px;background:var(--bg-card);color:var(--text-primary);"></textarea>
 
         <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center;">
-            <button id="btnSaveGarageConfig" class="btn-primary" style="margin-top: 0; width: auto; padding: 12px 24px;">💾 Enregistrer</button>
-            <button id="btnSupprimerLogo" class="btn-secondary" style="color: var(--danger); border-color: var(--danger);">🗑️ Supprimer le logo</button>
+            <button id="btnSaveGarageConfig" class="btn-primary" style="margin-top: 0; width: auto; padding: 12px 24px;">Enregistrer</button>
+            <button id="btnSupprimerLogo" class="btn-secondary" style="color: var(--danger); border-color: var(--danger);">Supprimer le logo</button>
             <button onclick="document.getElementById('garageConfigModal').style.display='none'" class="btn-secondary">Fermer</button>
         </div>
     </div>
@@ -2102,7 +2211,6 @@ const STATUTS = [
     { id: 6, label: 'Clôturée', icon: '🏁', color: '#64748b', description: 'Véhicule récupéré' }
 ];
 
-// Messages adaptatifs selon statut (nouveauté v3.3)
 const MESSAGES_STATUT = {
     0: { icon: '✅', text: "Votre demande est bien enregistrée. Notre équipe va l'examiner dans les plus brefs délais." },
     1: { icon: '🔍', text: "Nos techniciens analysent votre véhicule pour établir un diagnostic précis." },
@@ -2147,15 +2255,15 @@ function genererNumeroDemande() {
 
 function analyserPanne(description) {
     const desc = description.toLowerCase();
-    if (desc.includes("bruit")) return "🔊 Bruit suspect → vérifier courroie";
-    if (desc.includes("fumee") || desc.includes("fumée")) return "💨 Fumée → vérifier huile";
-    if (desc.includes("voyant")) return "💡 Voyant → diagnostic électronique";
-    if (desc.includes("frein")) return "🛑 Frein → contrôle plaquettes";
-    if (desc.includes("batterie")) return "🔋 Batterie → tester charge";
-    if (desc.includes("clim")) return "❄️ Clim → rechargement";
-    if (desc.includes("moteur")) return "🔧 Moteur → diagnostic complet";
-    if (desc.includes("fuite")) return "💧 Fuite → vérifier joints";
-    return "🔍 Diagnostic complet nécessaire";
+    if (desc.includes("bruit")) return "Bruit suspect → vérifier courroie";
+    if (desc.includes("fumee") || desc.includes("fumée")) return "Fumée → vérifier huile";
+    if (desc.includes("voyant")) return "Voyant → diagnostic électronique";
+    if (desc.includes("frein")) return "Frein → contrôle plaquettes";
+    if (desc.includes("batterie")) return "Batterie → tester charge";
+    if (desc.includes("clim")) return "Clim → rechargement";
+    if (desc.includes("moteur")) return "Moteur → diagnostic complet";
+    if (desc.includes("fuite")) return "Fuite → vérifier joints";
+    return "Diagnostic complet nécessaire";
 }
 
 function fermerMediaModal() {
@@ -2187,6 +2295,7 @@ function formatMontantCourt(n) {
     if (val >= 1000000) return (val / 1000000).toFixed(1).replace('.', ',') + ' M FCFA';
     return new Intl.NumberFormat('fr-FR').format(val) + ' FCFA';
 }
+
 function sontLibsDispo() {
     const html2canvas = window.html2canvas;
     const jspdfModule = window.jspdf;
@@ -2194,7 +2303,6 @@ function sontLibsDispo() {
     return !!(html2canvas && jsPDF);
 }
 
-// Helper : obtenir le début d'une période
 function getPeriodeStart(periode) {
     const now = new Date();
     switch(periode) {
@@ -2202,7 +2310,7 @@ function getPeriodeStart(periode) {
             return new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
         case 'semaine': {
             const d = new Date(now);
-            const jour = d.getDay() || 7; // Lundi = 1
+            const jour = d.getDay() || 7;
             d.setDate(d.getDate() - jour + 1);
             d.setHours(0, 0, 0, 0);
             return d.getTime();
@@ -2235,7 +2343,7 @@ function getPeriodeStart(periode) {
         firebase.initializeApp(firebaseConfig);
         db = firebase.firestore();
         auth = firebase.auth();
-        console.log("🔥 Firebase connecté");
+        console.log("Firebase connecté");
     } catch(e) {
         console.log("Firebase déjà initialisé");
         db = firebase.firestore();
@@ -2275,7 +2383,7 @@ function getPeriodeStart(periode) {
     const newRequestsBanner = document.getElementById('newRequestsBanner');
 
     const garageActuel = getGarageFromURL();
-    console.log("🏷️ Garage actuel :", garageActuel);
+    console.log("Garage actuel :", garageActuel);
 
     const clientGarageName = document.getElementById('clientGarageName');
     if (clientGarageName) clientGarageName.textContent = garageActuel;
@@ -2283,15 +2391,14 @@ function getPeriodeStart(periode) {
     document.addEventListener('click', () => {
         if (!sonAutorise) {
             sonAutorise = true;
-            console.log('🔊 Son autorisé');
         }
     }, { once: true });
 
     setTimeout(() => {
         if (sontLibsDispo()) {
-            console.log('✅ Bibliothèques PDF chargées');
+            console.log('Bibliothèques PDF chargées');
         } else {
-            console.warn('⚠️ Bibliothèques PDF NON chargées');
+            console.warn('Bibliothèques PDF NON chargées');
         }
     }, 2000);
 
@@ -2303,7 +2410,6 @@ function getPeriodeStart(periode) {
             const saved = localStorage.getItem('garage_config_' + garageActuel);
             if (saved) {
                 garageConfig = JSON.parse(saved);
-                console.log('✅ Config garage chargée:', garageConfig.nom);
             }
         } catch(e) {
             console.error('Erreur chargement config:', e);
@@ -2352,28 +2458,28 @@ function getPeriodeStart(periode) {
         const password = loginPassword.value;
 
         if (!email || !password) {
-            loginError.textContent = '⚠️ Veuillez remplir les deux champs';
+            loginError.textContent = 'Veuillez remplir les deux champs';
             return;
         }
 
         btnLogin.disabled = true;
-        btnLogin.textContent = '⏳ Connexion...';
+        btnLogin.textContent = 'Connexion...';
         loginError.textContent = '';
 
         try {
             await auth.signInWithEmailAndPassword(email, password);
         } catch(err) {
             console.error("Erreur connexion:", err);
-            let msg = '❌ Erreur de connexion';
-            if (err.code === 'auth/user-not-found') msg = '❌ Aucun compte avec cet email';
-            else if (err.code === 'auth/wrong-password') msg = '❌ Mot de passe incorrect';
-            else if (err.code === 'auth/invalid-email') msg = '❌ Email invalide';
-            else if (err.code === 'auth/too-many-requests') msg = '⏳ Trop de tentatives';
-            else if (err.code === 'auth/invalid-credential') msg = '❌ Identifiants incorrects';
+            let msg = 'Erreur de connexion';
+            if (err.code === 'auth/user-not-found') msg = 'Aucun compte avec cet email';
+            else if (err.code === 'auth/wrong-password') msg = 'Mot de passe incorrect';
+            else if (err.code === 'auth/invalid-email') msg = 'Email invalide';
+            else if (err.code === 'auth/too-many-requests') msg = 'Trop de tentatives';
+            else if (err.code === 'auth/invalid-credential') msg = 'Identifiants incorrects';
             loginError.textContent = msg;
         } finally {
             btnLogin.disabled = false;
-            btnLogin.textContent = '🔓 Se connecter';
+            btnLogin.textContent = 'Se connecter';
         }
     }
 
@@ -2397,14 +2503,14 @@ function getPeriodeStart(periode) {
 
     auth.onAuthStateChanged((user) => {
         if (user) {
-            console.log("✅ Connecté :", user.email);
+            console.log("Connecté :", user.email);
             document.getElementById('userEmail').textContent = user.email;
             afficherEcran('dashboard');
             premiereChargeEffectuee = false;
             nouvellesDemandesIds.clear();
             chargerDemandesRealtime();
         } else {
-            console.log("🚪 Non connecté");
+            console.log("Non connecté");
             afficherEcran('client');
             if (unsubscribeDashboard) { unsubscribeDashboard(); unsubscribeDashboard = null; }
             if (trackingUnsubscribe) { trackingUnsubscribe(); trackingUnsubscribe = null; }
@@ -2442,15 +2548,15 @@ function getPeriodeStart(periode) {
         if ("Notification" in window && Notification.permission === "default") {
             Notification.requestPermission().then(permission => {
                 if (permission === 'granted') {
-                    afficherToast('🔔 Notifications activées');
+                    afficherToast('Notifications activées');
                 } else {
-                    afficherToast('⚠️ Notifications refusées');
+                    afficherToast('Notifications refusées');
                 }
             });
         } else if (Notification.permission === 'granted') {
-            afficherToast('🔔 Notifications déjà activées');
+            afficherToast('Notifications déjà activées');
         } else {
-            afficherToast('⚠️ Notifications bloquées');
+            afficherToast('Notifications bloquées');
         }
     }
 
@@ -2524,9 +2630,9 @@ function getPeriodeStart(periode) {
     document.getElementById('btnCopierLien')?.addEventListener('click', async function() {
         try {
             await navigator.clipboard.writeText(window.location.href);
-            afficherToast('📋 Lien copié !');
+            afficherToast('Lien copié !');
         } catch(e) {
-            afficherToast('❌ Erreur de copie');
+            afficherToast('Erreur de copie');
         }
     });
 
@@ -2547,7 +2653,7 @@ function getPeriodeStart(periode) {
                     .url { font-size: 11px; color: #94a3b8; word-break: break-all; }
                 </style></head><body>
                 <div class="qr-container">
-                    <h1>🚗 ASSIST-GARAGE</h1>
+                    <h1>ASSIST-GARAGE</h1>
                     <div class="qr-code-wrapper">${qrHtml}</div>
                     <div class="url">${currentUrl}</div>
                 </div>
@@ -2568,28 +2674,28 @@ function getPeriodeStart(periode) {
         const btnAudio = document.getElementById('btnAudio');
 
         if (btnPhoto) btnPhoto.addEventListener('click', () => {
-            if (mediaList.length >= MAX_PHOTOS) return afficherToast(`❌ Maximum ${MAX_PHOTOS} médias`);
+            if (mediaList.length >= MAX_PHOTOS) return afficherToast(`Maximum ${MAX_PHOTOS} médias`);
             mediaType = 'image';
             fichierMedia.accept = 'image/*';
             fichierMedia.capture = 'environment';
             fichierMedia.click();
         });
         if (btnGalerie) btnGalerie.addEventListener('click', () => {
-            if (mediaList.length >= MAX_PHOTOS) return afficherToast(`❌ Maximum ${MAX_PHOTOS} médias`);
+            if (mediaList.length >= MAX_PHOTOS) return afficherToast(`Maximum ${MAX_PHOTOS} médias`);
             mediaType = 'image';
             fichierMedia.accept = 'image/*';
             fichierMedia.removeAttribute('capture');
             fichierMedia.click();
         });
         if (btnVideo) btnVideo.addEventListener('click', () => {
-            if (mediaList.length >= MAX_PHOTOS) return afficherToast(`❌ Maximum ${MAX_PHOTOS} médias`);
+            if (mediaList.length >= MAX_PHOTOS) return afficherToast(`Maximum ${MAX_PHOTOS} médias`);
             mediaType = 'video';
             fichierMedia.accept = 'video/*';
             fichierMedia.removeAttribute('capture');
             fichierMedia.click();
         });
         if (btnAudio) btnAudio.addEventListener('click', () => {
-            if (mediaList.length >= MAX_PHOTOS) return afficherToast(`❌ Maximum ${MAX_PHOTOS} médias`);
+            if (mediaList.length >= MAX_PHOTOS) return afficherToast(`Maximum ${MAX_PHOTOS} médias`);
             mediaType = 'audio';
             fichierMedia.accept = 'audio/*';
             fichierMedia.removeAttribute('capture');
@@ -2603,11 +2709,11 @@ function getPeriodeStart(periode) {
 
                 for (const file of files) {
                     if (mediaList.length >= MAX_PHOTOS) {
-                        afficherToast(`⚠️ Maximum ${MAX_PHOTOS} médias atteint`);
+                        afficherToast(`Maximum ${MAX_PHOTOS} médias atteint`);
                         break;
                     }
                     if (file.size > 5 * 1024 * 1024) {
-                        afficherToast(`❌ ${file.name} trop lourd (max 5MB)`);
+                        afficherToast(`${file.name} trop lourd (max 5MB)`);
                         continue;
                     }
                     try {
@@ -2666,14 +2772,14 @@ function getPeriodeStart(periode) {
             return;
         }
         previewMediaDiv.style.display = 'block';
-        let html = `<div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">📎 ${mediaList.length}/${MAX_PHOTOS} média(s)</div><div class="media-thumbnails">`;
+        let html = `<div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">${mediaList.length}/${MAX_PHOTOS} média(s)</div><div class="media-thumbnails">`;
         mediaList.forEach((m, i) => {
             if (m.type === 'image') {
-                html += `<div class="media-thumb"><img src="${m.data}"><span class="thumb-badge">📷</span><button class="thumb-delete" onclick="supprimerMedia(${i})">×</button></div>`;
+                html += `<div class="media-thumb"><img src="${m.data}"><button class="thumb-delete" onclick="supprimerMedia(${i})">×</button></div>`;
             } else if (m.type === 'video') {
-                html += `<div class="media-thumb"><video src="${m.data}"></video><span class="thumb-badge">🎥</span><button class="thumb-delete" onclick="supprimerMedia(${i})">×</button></div>`;
+                html += `<div class="media-thumb"><video src="${m.data}"></video><button class="thumb-delete" onclick="supprimerMedia(${i})">×</button></div>`;
             } else {
-                html += `<div class="media-thumb" style="display:flex;align-items:center;justify-content:center;background:var(--bg-soft);"><span style="font-size:24px;">🎙️</span><button class="thumb-delete" onclick="supprimerMedia(${i})">×</button></div>`;
+                html += `<div class="media-thumb" style="display:flex;align-items:center;justify-content:center;background:var(--bg-soft);font-size:24px;">♪<button class="thumb-delete" onclick="supprimerMedia(${i})">×</button></div>`;
             }
         });
         html += '</div>';
@@ -2700,12 +2806,12 @@ function getPeriodeStart(periode) {
         const nom = document.getElementById('clientNom')?.value.trim() || '';
         const immat = document.getElementById('immatriculation')?.value.trim().toUpperCase() || '';
 
-        if (!nom) return showMessage("❌ Nom client requis", false);
-        if (!immat) return showMessage("❌ Immatriculation requise", false);
+        if (!nom) return showMessage("Nom client requis", false);
+        if (!immat) return showMessage("Immatriculation requise", false);
 
         const btn = this;
         btn.disabled = true;
-        btn.textContent = '⏳ Envoi en cours...';
+        btn.textContent = 'Envoi en cours...';
 
         const garage = getGarageFromURL();
         const numeroDemande = genererNumeroDemande();
@@ -2747,7 +2853,7 @@ function getPeriodeStart(periode) {
 
         try {
             await db.collection('demandes').add(demande);
-            showMessage("✅ Demande envoyée ! Votre numéro : " + numeroDemande, true);
+            showMessage("Demande envoyée ! Votre numéro : " + numeroDemande, true);
 
             ['clientNom', 'immatriculation', 'clientEmail', 'clientTel', 'description',
              'marque', 'modele', 'kilometrage', 'lieu', 'dateRdv', 'heureRdv', 'dateMiseService']
@@ -2756,10 +2862,10 @@ function getPeriodeStart(periode) {
             clearMedia();
             iaDiagnostic.style.display = 'none';
         } catch(error) {
-            showMessage("❌ Erreur: " + error.message, false);
+            showMessage("Erreur: " + error.message, false);
         } finally {
             btn.disabled = false;
-            btn.textContent = '📤 Soumettre la demande';
+            btn.textContent = 'Soumettre la demande';
         }
     });
 
@@ -2776,13 +2882,13 @@ function getPeriodeStart(periode) {
     }
 
     // ============================================================
-    // SUIVI CLIENT - NOUVELLE INTERFACE v3.3
+    // SUIVI CLIENT
     // ============================================================
     document.getElementById('btnTracker')?.addEventListener('click', function() {
         const code = document.getElementById('trackingCode').value.trim();
         const trackingError = document.getElementById('trackingError');
         if (!code) {
-            if (trackingError) trackingError.textContent = '⚠️ Veuillez entrer un numéro';
+            if (trackingError) trackingError.textContent = 'Veuillez entrer un numéro';
             return;
         }
         afficherSuiviClient(code);
@@ -2795,7 +2901,7 @@ function getPeriodeStart(periode) {
         const trackingInfo = document.getElementById('trackingInfo');
         const numeroRecherche = demandeId.trim().toUpperCase();
 
-        if (trackingError) trackingError.textContent = '🔍 Recherche en cours...';
+        if (trackingError) trackingError.textContent = 'Recherche en cours...';
         if (trackingInfo) trackingInfo.style.display = 'none';
 
         const query = db.collection('demandes').where('numeroDemande', '==', numeroRecherche);
@@ -2805,11 +2911,11 @@ function getPeriodeStart(periode) {
                     if (doc.exists) {
                         afficherDetailsSuivi({ id: doc.id, ...doc.data() });
                     } else {
-                        if (trackingError) trackingError.textContent = '❌ Aucune demande trouvée';
+                        if (trackingError) trackingError.textContent = 'Aucune demande trouvée';
                         if (trackingInfo) trackingInfo.style.display = 'none';
                     }
                 }).catch(err => {
-                    if (trackingError) trackingError.textContent = '❌ Erreur: ' + err.message;
+                    if (trackingError) trackingError.textContent = 'Erreur: ' + err.message;
                 });
                 return;
             }
@@ -2818,9 +2924,9 @@ function getPeriodeStart(periode) {
         }, function(error) {
             if (trackingError) {
                 if (error.code === 'permission-denied') {
-                    trackingError.textContent = '❌ Accès refusé';
+                    trackingError.textContent = 'Accès refusé';
                 } else {
-                    trackingError.textContent = '❌ Erreur: ' + error.message;
+                    trackingError.textContent = 'Erreur: ' + error.message;
                 }
             }
         });
@@ -2834,12 +2940,11 @@ function getPeriodeStart(periode) {
         if (trackingError) trackingError.textContent = '';
         if (trackingInfo) trackingInfo.style.display = 'block';
 
-        // === 1. EN-TÊTE GARAGE ===
         const suiviHeader = document.getElementById('suiviHeaderGarage');
         if (suiviHeader) {
             const logoHtml = garageConfig?.logo
                 ? `<img src="${garageConfig.logo}" alt="Logo">`
-                : '🏢';
+                : 'AG';
             const nom = garageConfig?.nom || `Garage ${data.garage || 'Standard'}`;
             const tel = garageConfig?.tel || '';
             const email = garageConfig?.email || '';
@@ -2850,15 +2955,14 @@ function getPeriodeStart(periode) {
                     <div class="suivi-header-info">
                         <h3>${nom}</h3>
                         <div class="contact-info">
-                            ${tel ? `📞 ${tel}<br>` : ''}
-                            ${email ? `✉️ ${email}` : ''}
+                            ${tel ? `${tel}<br>` : ''}
+                            ${email ? `${email}` : ''}
                         </div>
                     </div>
                 </div>
             `;
         }
 
-        // === 2. CARTE VÉHICULE PREMIUM ===
         const vehicleCard = document.getElementById('suiviVehicleCard');
         if (vehicleCard) {
             vehicleCard.innerHTML = `
@@ -2876,7 +2980,7 @@ function getPeriodeStart(periode) {
                     <div class="vehicle-card-bottom">
                         <div class="vehicle-card-marque">
                             <strong>${data.marque || 'Véhicule'} ${data.modele || ''}</strong>
-                            ${data.lieu ? `📍 ${data.lieu}` : ''}
+                            ${data.lieu ? data.lieu : ''}
                         </div>
                         <div class="vehicle-card-km">
                             Kilométrage
@@ -2887,7 +2991,6 @@ function getPeriodeStart(periode) {
             `;
         }
 
-        // === 3. MESSAGE ADAPTATIF ===
         const suiviMessageDiv = document.getElementById('suiviMessage');
         if (suiviMessageDiv) {
             const msg = MESSAGES_STATUT[statut] || MESSAGES_STATUT[0];
@@ -2900,11 +3003,9 @@ function getPeriodeStart(periode) {
             `;
         }
 
-        // === 4. ESTIMATION DÉLAI ===
         const suiviDelaiDiv = document.getElementById('suiviDelai');
         if (suiviDelaiDiv) {
             const delai = garageConfig?.delai || 'Délai communiqué prochainement';
-            // Masquer le délai si statut Prête ou Clôturée
             if (statut >= 5) {
                 suiviDelaiDiv.innerHTML = '';
             } else {
@@ -2920,13 +3021,9 @@ function getPeriodeStart(periode) {
             }
         }
 
-        // === 5. TIMELINE VERTICALE ANIMÉE ===
         const trackingSteps = document.getElementById('trackingSteps');
         if (trackingSteps) {
-            // Calcul de la position du remplissage progressif
             const progressPercent = statut / (STATUTS.length - 1);
-            // On met une barre de progression qui grandit
-            const timelineHeight = STATUTS.length * 70; // Hauteur approx par étape
 
             let stepsHtml = `<div class="timeline-v-progress" style="height: ${progressPercent * 100}%; max-height: calc(100% - 24px);"></div>`;
 
@@ -2935,7 +3032,6 @@ function getPeriodeStart(periode) {
                 if (s.id < statut) cls = 'completed';
                 else if (s.id === statut) cls = 'active';
 
-                // Récupérer la date du changement de statut depuis l'historique
                 let dateChangement = '';
                 if (s.id <= statut && data.historique) {
                     const h = data.historique.find(x => x.statut === s.id);
@@ -2948,7 +3044,7 @@ function getPeriodeStart(periode) {
                         <span class="step-icon">${s.icon}</span>
                         <div class="step-title">${s.label}</div>
                         <div class="step-desc">${s.description}</div>
-                        ${dateChangement ? `<div class="step-time">📅 ${dateChangement}</div>` : ''}
+                        ${dateChangement ? `<div class="step-time">${dateChangement}</div>` : ''}
                     </div>
                 `;
             });
@@ -2956,14 +3052,12 @@ function getPeriodeStart(periode) {
             trackingSteps.innerHTML = stepsHtml;
         }
 
-        // === 6. DERNIÈRE MISE À JOUR ===
         const lastUpdateSpan = document.getElementById('trackingLastUpdate');
         if (lastUpdateSpan) {
             const lastUpdate = data.dateStatut ? formatDate(data.dateStatut) : data.date || '';
-            lastUpdateSpan.textContent = '🕐 Dernière mise à jour : ' + lastUpdate;
+            lastUpdateSpan.textContent = 'Dernière mise à jour : ' + lastUpdate;
         }
 
-        // === 7. BOUTONS CONTACT GARAGE ===
         const suiviContact = document.getElementById('suiviContact');
         if (suiviContact) {
             const tel = garageConfig?.tel || '';
@@ -2971,22 +3065,21 @@ function getPeriodeStart(periode) {
 
             if (telClean) {
                 suiviContact.innerHTML = `
-                    <a href="tel:${telClean}" class="appel">📞 Appeler le garage</a>
-                    <a href="https://wa.me/${telClean.replace(/^\+/, '').replace(/^0/, '2250')}" target="_blank" class="whatsapp">💬 WhatsApp</a>
+                    <a href="tel:${telClean}" class="appel">Appeler le garage</a>
+                    <a href="https://wa.me/${telClean.replace(/^\+/, '').replace(/^0/, '2250')}" target="_blank" class="whatsapp">WhatsApp</a>
                 `;
             } else {
                 suiviContact.innerHTML = '';
             }
         }
 
-        // Compatibilité anciens éléments (cachés)
         const vehicleInfo = document.getElementById('trackingVehicleInfo');
         if (vehicleInfo) {
             vehicleInfo.innerHTML = `
-                <p><strong>🚘 Véhicule :</strong> ${data.immatriculation || '-'}</p>
-                <p><strong>👤 Client :</strong> ${data.nom || '-'}</p>
-                <p><strong>🔧 Panne :</strong> ${data.description || 'Non renseignée'}</p>
-                ${data.numeroDemande ? `<p><strong>📋 N° :</strong> ${data.numeroDemande}</p>` : ''}
+                <p><strong>Véhicule :</strong> ${data.immatriculation || '-'}</p>
+                <p><strong>Client :</strong> ${data.nom || '-'}</p>
+                <p><strong>Panne :</strong> ${data.description || 'Non renseignée'}</p>
+                ${data.numeroDemande ? `<p><strong>N° :</strong> ${data.numeroDemande}</p>` : ''}
             `;
         }
     }
@@ -3016,9 +3109,9 @@ function getPeriodeStart(periode) {
                 dateStatut: new Date(),
                 historique
             });
-            afficherToast(`✅ Statut : ${statutInfo ? statutInfo.label : ''}`);
+            afficherToast(`Statut : ${statutInfo ? statutInfo.label : ''}`);
         } catch(error) {
-            afficherToast('❌ Erreur: ' + error.message);
+            afficherToast('Erreur: ' + error.message);
         }
     }
 
@@ -3026,12 +3119,12 @@ function getPeriodeStart(periode) {
         const doc = await db.collection('demandes').doc(demandeId).get();
         if (!doc.exists) return;
         const data = doc.data();
-        const confirmation = prompt(`⚠️ Tapez le numéro pour supprimer :\n${data.numeroDemande || demandeId}`);
+        const confirmation = prompt(`Tapez le numéro pour supprimer :\n${data.numeroDemande || demandeId}`);
         if (confirmation && confirmation.trim().toUpperCase() === (data.numeroDemande || demandeId).toUpperCase()) {
             await db.collection('demandes').doc(demandeId).delete();
-            afficherToast('🗑️ Demande supprimée');
+            afficherToast('Demande supprimée');
         } else {
-            afficherToast('❌ Suppression annulée');
+            afficherToast('Suppression annulée');
         }
     }
 
@@ -3074,7 +3167,7 @@ function getPeriodeStart(periode) {
     }
 
     // ============================================================
-    // COMPTABILITÉ MINI (NOUVEAU v3.3)
+    // COMPTABILITÉ
     // ============================================================
     window.majComptabilite = function() {
         const periode = document.getElementById('comptaPeriod').value;
@@ -3087,18 +3180,15 @@ function getPeriodeStart(periode) {
         allDemandes.forEach(d => {
             if (!d.proforma || !d.proforma.lignes) return;
 
-            // Récupérer le timestamp du proforma (date de création ou modification)
             let tsProforma = 0;
             if (d.proforma.dateModification) {
                 tsProforma = d.proforma.dateModification.toDate ? d.proforma.dateModification.toDate().getTime() : new Date(d.proforma.dateModification).getTime();
             } else if (d.proforma.dateCreation) {
                 tsProforma = d.proforma.dateCreation.toDate ? d.proforma.dateCreation.toDate().getTime() : new Date(d.proforma.dateCreation).getTime();
             } else {
-                // Fallback : date de la demande
                 tsProforma = d.dateTimestamp?.toDate ? d.dateTimestamp.toDate().getTime() : new Date(d.dateTimestamp).getTime();
             }
 
-            // Filtrer par période
             if (tsProforma < startTs) return;
 
             if (d.proforma.statut === 'accepte') {
@@ -3126,7 +3216,7 @@ function getPeriodeStart(periode) {
 
         noteText.value = demande?.note?.text || '';
         if (demande?.note?.dateStr) {
-            noteLastUpdate.textContent = '🕐 Modifiée le ' + demande.note.dateStr;
+            noteLastUpdate.textContent = 'Modifiée le ' + demande.note.dateStr;
         } else {
             noteLastUpdate.textContent = '';
         }
@@ -3170,10 +3260,10 @@ function getPeriodeStart(periode) {
             }
 
             await docRef.update({ note: note, historique });
-            afficherToast(text ? '💾 Note enregistrée' : '🗑️ Note supprimée');
+            afficherToast(text ? 'Note enregistrée' : 'Note supprimée');
             document.getElementById('noteModal').style.display = 'none';
         } catch(err) {
-            afficherToast('❌ Erreur: ' + err.message);
+            afficherToast('Erreur: ' + err.message);
         }
     });
 
@@ -3195,15 +3285,15 @@ function getPeriodeStart(periode) {
             });
 
             await docRef.update({ note: null, historique });
-            afficherToast('🗑️ Note supprimée');
+            afficherToast('Note supprimée');
             document.getElementById('noteModal').style.display = 'none';
         } catch(err) {
-            afficherToast('❌ Erreur: ' + err.message);
+            afficherToast('Erreur: ' + err.message);
         }
     });
 
     // ============================================================
-    // PROFORMA (reste identique à v3.2)
+    // PROFORMA
     // ============================================================
     window.ouvrirProformaModal = function(demandeId) {
         currentDemandeProformaId = demandeId;
@@ -3258,7 +3348,7 @@ function getPeriodeStart(periode) {
         const text = document.getElementById('proformaStatutText');
         banner.className = 'proforma-statut-banner ' + statut;
         banner.style.display = 'flex';
-        text.textContent = PROFORMA_STATUTS[statut]?.label || '📋 En attente';
+        text.textContent = PROFORMA_STATUTS[statut]?.label || 'En attente';
     }
 
     function genererSuggestions() {
@@ -3389,7 +3479,7 @@ function getPeriodeStart(periode) {
             const data = doc.data();
 
             if (!data.proforma) {
-                afficherToast('❌ Enregistrez d\'abord le proforma');
+                afficherToast('Enregistrez d\'abord le proforma');
                 return;
             }
 
@@ -3405,9 +3495,9 @@ function getPeriodeStart(periode) {
 
             await docRef.update({ proforma, historique });
             afficherProformaStatut(nouveauStatut);
-            afficherToast('✅ Statut du proforma mis à jour');
+            afficherToast('Statut du proforma mis à jour');
         } catch(err) {
-            afficherToast('❌ Erreur: ' + err.message);
+            afficherToast('Erreur: ' + err.message);
         }
     };
 
@@ -3419,7 +3509,7 @@ function getPeriodeStart(periode) {
         );
 
         if (lignesValides.length === 0) {
-            afficherToast('❌ Ajoutez au moins une ligne');
+            afficherToast('Ajoutez au moins une ligne');
             return;
         }
 
@@ -3464,10 +3554,10 @@ function getPeriodeStart(periode) {
             });
 
             await docRef.update({ proforma, historique });
-            afficherToast('💾 Proforma enregistré');
+            afficherToast('Proforma enregistré');
             document.getElementById('proformaModal').style.display = 'none';
         } catch(err) {
-            afficherToast('❌ Erreur: ' + err.message);
+            afficherToast('Erreur: ' + err.message);
         }
     });
 
@@ -3489,10 +3579,10 @@ function getPeriodeStart(periode) {
             });
 
             await docRef.update({ proforma: null, historique });
-            afficherToast('🗑️ Proforma supprimé');
+            afficherToast('Proforma supprimé');
             document.getElementById('proformaModal').style.display = 'none';
         } catch(err) {
-            afficherToast('❌ Erreur: ' + err.message);
+            afficherToast('Erreur: ' + err.message);
         }
     });
 
@@ -3505,7 +3595,7 @@ function getPeriodeStart(periode) {
             (l.produit && l.produit.trim()) || (l.description && l.description.trim())
         );
         if (lignesValides.length === 0) {
-            afficherToast('❌ Ajoutez au moins une ligne');
+            afficherToast('Ajoutez au moins une ligne');
             return;
         }
 
@@ -3701,14 +3791,14 @@ function getPeriodeStart(periode) {
         const btn = document.getElementById('btnGenererPDFProforma');
 
         if (!sontLibsDispo()) {
-            afficherToast('⚠️ Librairies PDF indisponibles → impression manuelle');
+            afficherToast('Impression manuelle');
             imprimerProformaPDF(html, id);
             return;
         }
 
         btn.disabled = true;
-        btn.textContent = '⏳ Génération...';
-        afficherToast('⏳ Création du PDF...');
+        btn.textContent = 'Génération...';
+        afficherToast('Création du PDF...');
 
         try {
             const html2canvas = window.html2canvas;
@@ -3766,13 +3856,13 @@ function getPeriodeStart(periode) {
 
             pdf.save(`Proforma_${id}.pdf`);
             btn.disabled = false;
-            btn.textContent = '⬇️ Télécharger PDF';
-            afficherToast('📄 PDF proforma téléchargé !');
+            btn.textContent = 'Télécharger PDF';
+            afficherToast('PDF proforma téléchargé !');
         } catch(err) {
             console.error('Erreur PDF proforma:', err);
             btn.disabled = false;
-            btn.textContent = '⬇️ Télécharger PDF';
-            afficherToast('⚠️ Erreur → impression manuelle');
+            btn.textContent = 'Télécharger PDF';
+            afficherToast('Erreur → impression manuelle');
             imprimerProformaPDF(html, id);
         }
     }
@@ -3780,7 +3870,7 @@ function getPeriodeStart(periode) {
     function imprimerProformaPDF(html, id) {
         const printWindow = window.open('', '_blank');
         if (!printWindow) {
-            afficherToast('❌ Autorisez les popups');
+            afficherToast('Autorisez les popups');
             return;
         }
         printWindow.document.write(`
@@ -3804,7 +3894,7 @@ function getPeriodeStart(periode) {
 
     function envoyerProformaWhatsApp(demande, proforma, id) {
         if (!demande.telephone) {
-            afficherToast('❌ Pas de téléphone');
+            afficherToast('Pas de téléphone');
             return;
         }
 
@@ -3837,7 +3927,7 @@ ${garageNom}`;
         setTimeout(() => {
             const url = `https://wa.me/${telClean}?text=${encodeURIComponent(message)}`;
             window.open(url, '_blank');
-            afficherToast('📎 Cliquez sur "Joindre" dans WhatsApp pour ajouter le PDF');
+            afficherToast('Cliquez sur "Joindre" dans WhatsApp pour ajouter le PDF');
         }, 1500);
     }
 
@@ -3866,14 +3956,14 @@ ${garageNom}`;
         const file = e.target.files[0];
         if (!file) return;
         if (file.size > 500 * 1024) {
-            afficherToast('❌ Logo trop lourd (max 500 KB)');
+            afficherToast('Logo trop lourd (max 500 KB)');
             return;
         }
 
         const data = await readFileAsDataURL(file);
         document.getElementById('garageLogoPreview').innerHTML = `<img src="${data}" alt="Logo">`;
         document.getElementById('garageLogoPreview').dataset.logo = data;
-        afficherToast('✅ Logo chargé');
+        afficherToast('Logo chargé');
     });
 
     document.getElementById('btnSaveGarageConfig')?.addEventListener('click', function() {
@@ -3890,7 +3980,7 @@ ${garageNom}`;
         };
 
         sauvegarderGarageConfig();
-        afficherToast('💾 Informations garage sauvegardées');
+        afficherToast('Informations garage sauvegardées');
         document.getElementById('garageConfigModal').style.display = 'none';
     });
 
@@ -3902,11 +3992,11 @@ ${garageNom}`;
         }
         document.getElementById('garageLogoPreview').innerHTML = '🏢';
         delete document.getElementById('garageLogoPreview').dataset.logo;
-        afficherToast('🗑️ Logo supprimé');
+        afficherToast('Logo supprimé');
     });
 
     // ============================================================
-    // PDF FICHE RÉCEPTION (reste identique)
+    // PDF FICHE RÉCEPTION
     // ============================================================
     function genererQRCodeBase64(texte, callback) {
         try {
@@ -3958,7 +4048,7 @@ ${garageNom}`;
                     <img src="${qrImageBase64}" style="width: 100%; height: 100%; display: block;" alt="QR Code suivi">
                 </div>
                 <div style="font-size: 11px; color: #475569; line-height: 1.6;">
-                    <strong style="color: #0f172a; font-size: 13px; display: block; margin-bottom: 4px;">📱 Suivi en ligne</strong>
+                    <strong style="color: #0f172a; font-size: 13px; display: block; margin-bottom: 4px;">Suivi en ligne</strong>
                     Scannez ce QR code avec votre téléphone pour suivre<br>
                     l'avancement de votre véhicule en temps réel.<br>
                     <span style="font-size: 10px; color: #94a3b8; margin-top: 4px; display: block;">
@@ -3988,7 +4078,7 @@ ${garageNom}`;
                 </div>
 
                 <div style="font-size: 12px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin: 18px 0 12px 0; padding-bottom: 4px; border-bottom: 1px solid #cbd5e1;">
-                    🚘 Véhicule
+                    Véhicule
                 </div>
                 <div style="font-size: 13px;">
                     <div style="margin-bottom: 6px;"><strong style="display: inline-block; min-width: 150px; color: #475569;">Immatriculation :</strong> <span style="color: #0f172a;">${demande.immatriculation || '-'}</span></div>
@@ -3997,7 +4087,7 @@ ${garageNom}`;
                 </div>
 
                 <div style="font-size: 12px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin: 18px 0 12px 0; padding-bottom: 4px; border-bottom: 1px solid #cbd5e1;">
-                    👤 Client
+                    Client
                 </div>
                 <div style="font-size: 13px;">
                     <div style="margin-bottom: 6px;"><strong style="display: inline-block; min-width: 150px; color: #475569;">Nom :</strong> <span style="color: #0f172a;">${demande.nom || '-'}</span></div>
@@ -4006,14 +4096,14 @@ ${garageNom}`;
                 </div>
 
                 <div style="font-size: 12px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin: 18px 0 12px 0; padding-bottom: 4px; border-bottom: 1px solid #cbd5e1;">
-                    🔧 Description de la panne
+                    Description de la panne
                 </div>
                 <div style="padding: 12px 14px; border: 1px solid #fecaca; border-left: 4px solid ${urgenceColor}; border-radius: 4px; font-size: 13px; line-height: 1.5; background: #fef2f2; margin-bottom: 12px; color: #0f172a;">
                     ${demande.description || '-'}
                 </div>
                 <div style="font-size: 13px;">
-                    <div style="margin-bottom: 6px;"><strong style="display: inline-block; min-width: 150px; color: #475569;">Niveau d'urgence :</strong> <span style="color: ${urgenceColor}; font-weight: 700;">${demande.urgence === 'haute' ? '🔴 Haute' : demande.urgence === 'moyenne' ? '🟡 Moyenne' : '🟢 Basse'}</span></div>
-                    <div style="margin-bottom: 6px;"><strong style="display: inline-block; min-width: 150px; color: #475569;">Statut actuel :</strong> <span style="color: #0f172a;">${statutInfo.icon} ${statutInfo.label}</span></div>
+                    <div style="margin-bottom: 6px;"><strong style="display: inline-block; min-width: 150px; color: #475569;">Niveau d'urgence :</strong> <span style="color: ${urgenceColor}; font-weight: 700;">${demande.urgence === 'haute' ? 'Haute' : demande.urgence === 'moyenne' ? 'Moyenne' : 'Basse'}</span></div>
+                    <div style="margin-bottom: 6px;"><strong style="display: inline-block; min-width: 150px; color: #475569;">Statut actuel :</strong> <span style="color: #0f172a;">${statutInfo.label}</span></div>
                     ${demande.lieu ? `<div style="margin-bottom: 6px;"><strong style="display: inline-block; min-width: 150px; color: #475569;">Lieu :</strong> <span style="color: #0f172a;">${demande.lieu}</span></div>` : ''}
                     ${demande.dateRdv ? `<div style="margin-bottom: 6px;"><strong style="display: inline-block; min-width: 150px; color: #475569;">Rendez-vous :</strong> <span style="color: #0f172a;">${demande.dateRdv} ${demande.heureRdv || ''}</span></div>` : ''}
                     ${demande.garage ? `<div style="margin-bottom: 6px;"><strong style="display: inline-block; min-width: 150px; color: #475569;">Garage :</strong> <span style="color: #0f172a;">${demande.garage}</span></div>` : ''}
@@ -4021,7 +4111,7 @@ ${garageNom}`;
 
                 ${demande.diagnosticIA ? `
                 <div style="font-size: 12px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 2px; margin: 18px 0 12px 0; padding-bottom: 4px; border-bottom: 1px solid #cbd5e1;">
-                    🤖 Diagnostic IA
+                    Analyse automatique
                 </div>
                 <div style="font-size: 13px; font-style: italic; color: #475569; padding: 10px 12px; background: #f8fafc; border-radius: 4px; margin-bottom: 12px;">
                     ${demande.diagnosticIA}
@@ -4053,7 +4143,7 @@ ${garageNom}`;
         const pdfContent = document.getElementById('pdfContent');
         const trackingUrl = `${window.location.origin}${window.location.pathname}?suivi=${id}`;
 
-        afficherToast('⏳ Préparation du PDF...');
+        afficherToast('Préparation du PDF...');
 
         genererQRCodeBase64(trackingUrl, (qrBase64) => {
             pdfContent.innerHTML = buildPdfHtml(demande, id, qrBase64);
@@ -4063,13 +4153,13 @@ ${garageNom}`;
                 const btn = this;
 
                 if (!sontLibsDispo()) {
-                    afficherToast('⚠️ Impression manuelle');
+                    afficherToast('Impression manuelle');
                     imprimerFichePDF(buildPdfHtml(demande, id, qrBase64), id);
                     return;
                 }
 
                 btn.disabled = true;
-                btn.textContent = '⏳ Génération...';
+                btn.textContent = 'Génération...';
 
                 try {
                     const html2canvas = window.html2canvas;
@@ -4127,13 +4217,13 @@ ${garageNom}`;
 
                     pdf.save(`Fiche_${id}.pdf`);
                     btn.disabled = false;
-                    btn.textContent = '⬇️ Télécharger PDF';
-                    afficherToast('📄 PDF téléchargé !');
+                    btn.textContent = 'Télécharger PDF';
+                    afficherToast('PDF téléchargé !');
                 } catch(err) {
                     console.error('Erreur PDF:', err);
                     btn.disabled = false;
-                    btn.textContent = '⬇️ Télécharger PDF';
-                    afficherToast('⚠️ Impression manuelle');
+                    btn.textContent = 'Télécharger PDF';
+                    afficherToast('Impression manuelle');
                     imprimerFichePDF(buildPdfHtml(demande, id, qrBase64), id);
                 }
             };
@@ -4147,7 +4237,7 @@ ${garageNom}`;
     function imprimerFichePDF(html, id) {
         const printWindow = window.open('', '_blank');
         if (!printWindow) {
-            afficherToast('❌ Autorisez les popups');
+            afficherToast('Autorisez les popups');
             return;
         }
         printWindow.document.write(`
@@ -4195,7 +4285,7 @@ ${garageNom}`;
             if (!premiereChargeEffectuee) {
                 snapshot.forEach(doc => { nouvellesDemandesIds.add(doc.id); });
                 premiereChargeEffectuee = true;
-                console.log('✅ Premier chargement :', demandes.length);
+                console.log('Premier chargement :', demandes.length);
             } else {
                 const nouvelles = [];
                 snapshot.docChanges().forEach(change => {
@@ -4245,13 +4335,13 @@ ${garageNom}`;
             allDemandes = demandes;
             currentPage = 1;
             appliquerFiltresEtAfficher();
-            majComptabilite(); // NOUVEAU : calcul des stats financières
+            majComptabilite();
         }, function(error) {
-            console.error("❌ Erreur Firestore:", error);
+            console.error("Erreur Firestore:", error);
             if (error.code === 'permission-denied') {
-                afficherToast("❌ Accès refusé");
+                afficherToast("Accès refusé");
             } else {
-                afficherToast("❌ Erreur: " + error.message);
+                afficherToast("Erreur: " + error.message);
             }
         });
     }
@@ -4341,7 +4431,7 @@ ${garageNom}`;
             const jours = calculerJoursDepuis(d.dateTimestamp);
             const estRetard = statutActuel < 5 && jours >= DELAI_RETARD_JOURS;
             const urgenceClasse = d.urgence || 'basse';
-            const urgenceLabel = d.urgence === 'haute' ? 'URGENT' : d.urgence === 'moyenne' ? 'MOYEN' : 'BAS';
+            const urgenceLabel = d.urgence === 'haute' ? 'Urgent' : d.urgence === 'moyenne' ? 'Moyen' : 'Bas';
             const hasNote = d.note && d.note.text;
             const hasProforma = d.proforma && d.proforma.lignes && d.proforma.lignes.length > 0;
             const proformaStatut = d.proforma?.statut || 'en_attente';
@@ -4350,20 +4440,29 @@ ${garageNom}`;
             const mediasList = d.medias || (d.media ? [{ data: d.media, type: d.mediaType }] : []);
             let mediaHtml = '';
             if (mediasList.length > 0) {
-                const icons = { image: '📷', video: '🎥', audio: '🎙️' };
+                const icons = { image: 'Photo', video: 'Vidéo', audio: 'Audio' };
                 mediaHtml = `<div class="media-preview-mini" data-media='${JSON.stringify(mediasList).replace(/'/g, "&#39;")}' onclick="event.stopPropagation();">
-                    ${icons[mediasList[0].type] || '📎'} ${mediasList.length} média(s)
+                    ${icons[mediasList[0].type] || 'Média'} — ${mediasList.length} fichier(s)
                 </div>`;
             }
 
             let contactHtml = '';
             if (d.telephone) {
                 const telClean = d.telephone.replace(/\s+/g, '');
-                contactHtml += `<a class="btn-contact call" href="tel:${telClean}" onclick="event.stopPropagation();">📞 Appeler</a>`;
-                contactHtml += `<a class="btn-contact whatsapp" href="https://wa.me/${telClean.replace(/^0/, '2250')}" target="_blank" onclick="event.stopPropagation();">💬 WhatsApp</a>`;
+                contactHtml += `<a class="btn-contact call" href="tel:${telClean}" onclick="event.stopPropagation();">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    Appeler
+                </a>`;
+                contactHtml += `<a class="btn-contact whatsapp" href="https://wa.me/${telClean.replace(/^0/, '2250')}" target="_blank" onclick="event.stopPropagation();">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+                    WhatsApp
+                </a>`;
             }
             if (d.email) {
-                contactHtml += `<a class="btn-contact email" href="mailto:${d.email}" onclick="event.stopPropagation();">✉️ Email</a>`;
+                contactHtml += `<a class="btn-contact email" href="mailto:${d.email}" onclick="event.stopPropagation();">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    Email
+                </a>`;
             }
 
             html += `
@@ -4371,7 +4470,7 @@ ${garageNom}`;
                     <div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:6px;">
                         <div>
                             <span class="badge-urgence ${urgenceClasse}">${urgenceLabel}</span>
-                            <span class="statut-badge" style="background: ${statutInfo.color}22; color: ${statutInfo.color};">${statutInfo.icon} ${statutInfo.label}</span>
+                            <span class="statut-badge" style="background: ${statutInfo.color}22; color: ${statutInfo.color};">${statutInfo.label}</span>
                             ${estRetard ? `<span class="badge-retard">${jours}j</span>` : ''}
                             ${hasNote ? `<span class="note-badge">Note</span>` : ''}
                             ${hasProforma ? `<span class="proforma-badge ${proformaStatut}">${PROFORMA_STATUTS[proformaStatut]?.label || 'Proforma'}</span>` : ''}
@@ -4383,7 +4482,7 @@ ${garageNom}`;
                     <div style="font-size:13px;"><strong>Client :</strong> ${d.nom || 'Client'}</div>
                     <div style="margin:8px 0;font-size:13px;color:var(--text-secondary);">${d.description || ''}</div>
                     ${hasNote ? `<div class="note-display" style="display:block;"><strong>Note chef d'atelier :</strong> ${d.note.text}</div>` : ''}
-                    ${hasProforma ? `<div class="proforma-display" style="display:block;"><strong>Proforma :</strong> ${formatMontant(totalProforma)} - ${PROFORMA_STATUTS[proformaStatut]?.label || ''}</div>` : ''}
+                    ${hasProforma ? `<div class="proforma-display" style="display:block;"><strong>Proforma :</strong> ${formatMontant(totalProforma)} — ${PROFORMA_STATUTS[proformaStatut]?.label || ''}</div>` : ''}
                     ${d.lieu ? `<div style="font-size:12px;color:var(--text-muted);">Lieu : ${d.lieu}</div>` : ''}
                     ${d.dateRdv ? `<div style="font-size:12px;">RDV : ${d.dateRdv} ${d.heureRdv || ''}</div>` : ''}
                     ${d.garage ? `<div style="font-size:12px;color:var(--text-muted);">Garage : ${d.garage}</div>` : ''}
@@ -4391,7 +4490,7 @@ ${garageNom}`;
                     ${contactHtml ? `<div class="contact-row">${contactHtml}</div>` : ''}
                     <div class="actions" onclick="event.stopPropagation();">
                         <select class="status-select" data-id="${d.id}">
-                            ${STATUTS.map(s => `<option value="${s.id}" ${statutActuel === s.id ? 'selected' : ''}>${s.icon} ${s.label}</option>`).join('')}
+                            ${STATUTS.map(s => `<option value="${s.id}" ${statutActuel === s.id ? 'selected' : ''}>${s.label}</option>`).join('')}
                         </select>
                         <button class="btn-action btn-proforma" data-id="${d.id}" style="${hasProforma ? 'background: #d1fae5; color: #065f46;' : 'background: #ecfdf5; color: #047857;'}">Proforma</button>
                         <button class="btn-action btn-note" data-id="${d.id}" style="${hasNote ? 'background: #dbeafe; color: #1e40af;' : ''}">Note</button>
@@ -4668,9 +4767,7 @@ ${garageNom}`;
         }, 500);
     }
 
-    console.log('Assist-Garage PRO 3.3');
-    console.log('✅ Mini-comptabilité proforma validés');
-    console.log('✅ Interface suivi client refondue');
+    console.log('Assist-Garage PRO 3.4 — Design v1');
 })();
 </script>
 
@@ -4680,8 +4777,8 @@ ${garageNom}`;
 <script>
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/ntr-garage/sw.js')
-            .then(() => console.log('✅ Service Worker'))
-            .catch(err => console.log('❌ SW:', err));
+            .then(() => console.log('Service Worker'))
+            .catch(err => console.log('SW:', err));
     }
 </script>
 
