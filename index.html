@@ -99,10 +99,7 @@
             }
         }
 
-        .brand-text {
-            flex: 1;
-            min-width: 0;
-        }
+        .brand-text { flex: 1; min-width: 0; }
 
         .brand-text h1 {
             font-size: 20px;
@@ -422,9 +419,6 @@
             color: #065f46;
             text-transform: uppercase;
             letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -507,9 +501,134 @@
             cursor: pointer;
             font-size: 13px;
             color: var(--text-secondary);
+            transition: all 0.2s ease;
         }
+        .filtre-btn:hover { border-color: var(--accent); }
         .filtre-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
 
+        /* ============================================================
+        BANDEAU INFO + COMPTEUR RÉSULTATS (v3.7)
+        ============================================================ */
+        .info-banner {
+            margin-bottom: 12px;
+            padding: 10px 14px;
+            background: #eff6ff;
+            border-left: 3px solid #3b82f6;
+            border-radius: 8px;
+            font-size: 11px;
+            color: #1e40af;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .info-banner {
+                background: #1e3a8a22;
+                color: #93c5fd;
+            }
+        }
+
+        .info-banner .total-badge {
+            background: #1e40af;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .info-banner .total-badge {
+                background: #3b82f6;
+            }
+        }
+
+        .resultats-container {
+            background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+            border: 1px solid #bae6fd;
+            border-radius: 16px;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .resultats-container {
+                background: linear-gradient(135deg, #0c4a6e33, #07598533);
+                border-color: #0c4a6e;
+            }
+        }
+
+        .resultats-count {
+            font-size: 14px;
+            color: #0c4a6e;
+            font-weight: 500;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .resultats-count { color: #7dd3fc; }
+        }
+
+        .resultats-count strong {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0c4a6e;
+            margin-right: 4px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .resultats-count strong { color: #bae6fd; }
+        }
+
+        .resultats-criteres {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .critere-tag {
+            background: white;
+            border: 1px solid #bae6fd;
+            padding: 3px 10px;
+            border-radius: 30px;
+            font-size: 11px;
+            color: #075985;
+            font-weight: 500;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .critere-tag {
+                background: #0c4a6e;
+                color: #bae6fd;
+                border-color: #075985;
+            }
+        }
+
+        .resultats-vide {
+            text-align: center;
+            color: #0c4a6e;
+            font-style: italic;
+            font-size: 12px;
+            padding: 4px 0;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .resultats-vide { color: #7dd3fc; }
+        }
+
+        /* ============================================================
+        CARTE DEMANDE
+        ============================================================ */
         .demande {
             background: var(--bg-card);
             border: 1px solid var(--border);
@@ -529,6 +648,71 @@
             50% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
         }
 
+        .demande-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .demande-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .demande-date {
+            font-size: 11px;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        .demande-numero {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 0.5px;
+        }
+
+        .demande-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 10px;
+            font-size: 13px;
+        }
+
+        .demande-info-ligne {
+            display: flex;
+            align-items: start;
+            gap: 8px;
+        }
+
+        .demande-info-label {
+            color: var(--text-secondary);
+            font-size: 12px;
+            flex-shrink: 0;
+            min-width: 70px;
+        }
+
+        .demande-info-value {
+            color: var(--text-primary);
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .demande-description {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+
         .badge-urgence {
             display: inline-flex;
             align-items: center;
@@ -536,7 +720,6 @@
             border-radius: 30px;
             font-size: 10px;
             font-weight: 600;
-            margin-bottom: 10px;
             gap: 5px;
         }
         .badge-urgence::before {
@@ -558,9 +741,8 @@
             color: white;
             font-size: 10px;
             font-weight: 600;
-            padding: 2px 8px;
+            padding: 3px 10px;
             border-radius: 30px;
-            margin-left: 6px;
             animation: blink 1.5s infinite;
         }
         @keyframes blink {
@@ -575,7 +757,6 @@
             border-radius: 30px;
             font-size: 10px;
             font-weight: 600;
-            margin: 4px 0;
             gap: 5px;
         }
         .statut-badge::before {
@@ -595,7 +776,6 @@
             border-radius: 30px;
             font-size: 10px;
             font-weight: 600;
-            margin-left: 6px;
         }
 
         .proforma-badge {
@@ -604,7 +784,6 @@
             border-radius: 30px;
             font-size: 10px;
             font-weight: 600;
-            margin-left: 6px;
         }
         .proforma-badge.en_attente { background: #fef3c7; color: #92400e; }
         .proforma-badge.accepte { background: #d1fae5; color: #065f46; }
@@ -612,14 +791,16 @@
         .proforma-badge.negociation { background: #e0e7ff; color: #3730a3; }
 
         .passage-badge {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             background: #dbeafe;
             color: #1e40af;
-            padding: 3px 10px;
+            padding: 4px 12px;
             border-radius: 30px;
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 600;
-            margin-left: 6px;
+            margin-top: 8px;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -631,11 +812,48 @@
             .proforma-badge.negociation { background: #312e81; color: #c7d2fe; }
         }
 
-        .status-select { padding: 6px 12px; border-radius: 40px; border: 1px solid var(--border); font-size: 12px; background: var(--bg-card); color: var(--text-primary); cursor: pointer; }
-        .btn-action { background: var(--bg-soft); border: none; padding: 6px 14px; border-radius: 30px; font-size: 12px; cursor: pointer; color: var(--text-secondary); }
+        .status-select {
+            padding: 6px 12px;
+            border-radius: 40px;
+            border: 1px solid var(--border);
+            font-size: 12px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--bg-soft);
+            border: none;
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
         .btn-action:hover { background: var(--border); }
+        .btn-action svg { flex-shrink: 0; }
+
+        .btn-action.btn-proforma { background: #ecfdf5; color: #047857; }
+        .btn-action.btn-proforma:hover { background: #d1fae5; }
+        .btn-action.btn-proforma.active { background: #d1fae5; color: #065f46; }
+
+        .btn-action.btn-note.active { background: #dbeafe; color: #1e40af; }
+
+        @media (prefers-color-scheme: dark) {
+            .btn-action.btn-proforma { background: #064e3b33; color: #6ee7b7; }
+            .btn-action.btn-proforma:hover { background: #064e3b66; }
+            .btn-action.btn-proforma.active { background: #064e3b66; color: #a7f3d0; }
+            .btn-action.btn-note.active { background: #1e3a8a; color: #dbeafe; }
+        }
+
         .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center; }
-        .contact-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+        .contact-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
 
         .note-display {
             background: #fef3c7;
@@ -669,7 +887,7 @@
         }
 
         /* ============================================================
-        INTERFACE SUIVI CLIENT
+        SUIVI CLIENT
         ============================================================ */
         .suivi-header {
             display: flex;
@@ -691,7 +909,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
+            font-size: 20px;
             flex-shrink: 0;
             overflow: hidden;
             font-family: Georgia, serif;
@@ -705,10 +923,7 @@
             object-fit: cover;
         }
 
-        .suivi-header-info {
-            flex: 1;
-            min-width: 0;
-        }
+        .suivi-header-info { flex: 1; min-width: 0; }
 
         .suivi-header-info h3 {
             font-size: 17px;
@@ -888,9 +1103,7 @@
         }
 
         .timeline-v-step.completed,
-        .timeline-v-step.active {
-            opacity: 1;
-        }
+        .timeline-v-step.active { opacity: 1; }
 
         .timeline-v-step::before {
             content: '';
@@ -1038,7 +1251,7 @@
         }
 
         /* ============================================================
-        BLOC RETOUR RÉCUPÉRATION (NOUVEAU v3.5)
+        BLOC RETOUR RÉCUPÉRATION
         ============================================================ */
         .recuperation-block {
             background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
@@ -1065,13 +1278,27 @@
         }
 
         .recuperation-icon {
-            font-size: 32px;
+            width: 44px;
+            height: 44px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             flex-shrink: 0;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
         }
 
-        .recuperation-title {
-            flex: 1;
+        @media (prefers-color-scheme: dark) {
+            .recuperation-icon {
+                background: var(--bg-card);
+                color: #6ee7b7;
+                border-color: #065f46;
+            }
         }
+
+        .recuperation-title { flex: 1; }
 
         .recuperation-title h3 {
             font-size: 16px;
@@ -1160,8 +1387,15 @@
         }
 
         .recuperation-confirmee .check-icon {
-            font-size: 40px;
-            margin-bottom: 8px;
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 10px auto;
+            background: #d1fae5;
+            color: #065f46;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .recuperation-confirmee h4 {
@@ -1210,6 +1444,7 @@
             font-size: 12px;
             color: #78350f;
             font-style: italic;
+            text-align: left;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -1514,7 +1749,17 @@
         }
         .login-box h1 { font-size: 24px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; font-family: Georgia, serif; letter-spacing: 1px; }
         .login-box .sub { font-size: 13px; color: var(--text-secondary); margin-bottom: 30px; }
-        .login-box .icon-lock { font-size: 56px; display: block; margin-bottom: 20px; }
+        .login-box .icon-lock {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 20px auto;
+            background: var(--bg-soft);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+        }
         .login-box input { margin-bottom: 12px; text-align: left; }
         .login-box .btn-primary { margin-top: 8px; }
         .login-error { color: var(--danger); font-size: 13px; margin-top: 12px; min-height: 18px; text-align: center; }
@@ -1781,6 +2026,9 @@
             cursor: pointer;
             border: none;
             transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
         .btn-statut.accepte { background: var(--success); color: white; }
         .btn-statut.refuse { background: var(--danger); color: white; }
@@ -1851,7 +2099,9 @@
 <!-- ÉCRAN DE CONNEXION -->
 <div id="loginScreen">
     <div class="login-box">
-        <span class="icon-lock">🔐</span>
+        <div class="icon-lock">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        </div>
         <h1>Assist-Garage</h1>
         <div class="sub">Espace Réception — Accès réservé</div>
 
@@ -2137,6 +2387,7 @@
             <button class="filtre-btn" data-filtre="retard">En retard</button>
             <button class="filtre-btn" data-filtre="avec-notes">Avec notes</button>
             <button class="filtre-btn" data-filtre="proforma-attente">Devis en attente</button>
+            <button class="filtre-btn" data-filtre="proforma-valides">Proforma validés</button>
             <button class="filtre-btn" data-filtre="passage-aujourdhui">Passages aujourd'hui</button>
         </div>
 
@@ -2145,8 +2396,18 @@
             <button id="btnActiverNotifs" class="btn-secondary" style="flex:1;">Activer notifications</button>
         </div>
 
-        <div style="margin-bottom: 12px; padding: 10px 14px; background: #eff6ff; border-left: 3px solid #3b82f6; border-radius: 8px; font-size: 11px; color: #1e40af;">
-            <strong>Info :</strong> Affichage limité à 50 demandes. <strong>Cliquez sur une carte</strong> pour la marquer comme lue.
+        <!-- Bandeau info avec total -->
+        <div class="info-banner" id="infoBanner">
+            <span>Affichage des <strong id="nbChargees">0</strong> plus récentes. Cliquez sur une carte pour la marquer comme lue.</span>
+            <span class="total-badge" id="totalBadge">Total : 0</span>
+        </div>
+
+        <!-- Compteur de résultats filtrés -->
+        <div class="resultats-container" id="resultatsContainer">
+            <div class="resultats-count" id="resultatsCount">
+                <strong>0</strong> résultat(s)
+            </div>
+            <div class="resultats-criteres" id="resultatsCriteres"></div>
         </div>
 
         <div id="listeDemandes" style="max-height: 600px; overflow-y: auto;"></div>
@@ -2326,7 +2587,9 @@
         </div>
 
         <div class="garage-config-header">
-            <div class="garage-logo-preview" id="garageLogoPreview">🏢</div>
+            <div class="garage-logo-preview" id="garageLogoPreview">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>
+            </div>
             <div class="garage-config-info">
                 <strong>Logo du garage</strong>
                 <div>Format carré recommandé (PNG, JPG). Max 500 KB.</div>
@@ -2379,8 +2642,7 @@ const MAX_DEMANDES_CHARGEES = 50;
 const DEVISE = 'FCFA';
 const TAUX_TVA = 18;
 
-// Statuts à partir desquels le client peut signaler sa venue
-const STATUTS_AVEC_RECUPERATION = [2, 3, 4, 5, 6]; // Devis envoyé, Pièces, Réparation, Prête, Clôturée
+const STATUTS_AVEC_RECUPERATION = [2, 3, 4, 5, 6];
 
 const CRENEAUX = [
     { id: '08-10', label: '08h-10h' },
@@ -2419,10 +2681,22 @@ const MESSAGES_STATUT = {
 };
 
 const PROFORMA_STATUTS = {
-    'en_attente': { label: '📋 En attente', class: 'en_attente' },
-    'accepte': { label: '✅ Accepté', class: 'accepte' },
-    'refuse': { label: '❌ Refusé', class: 'refuse' },
-    'negociation': { label: '💬 Négociation', class: 'negociation' }
+    'en_attente': { label: 'En attente', class: 'en_attente' },
+    'accepte': { label: 'Accepté', class: 'accepte' },
+    'refuse': { label: 'Refusé', class: 'refuse' },
+    'negociation': { label: 'Négociation', class: 'negociation' }
+};
+
+// Libellés des filtres pour affichage des critères actifs
+const FILTRES_LABELS = {
+    'toutes': 'Toutes',
+    'non-lues': 'Nouvelles',
+    'urgentes': 'Urgentes',
+    'retard': 'En retard',
+    'avec-notes': 'Avec notes',
+    'proforma-attente': 'Devis en attente',
+    'proforma-valides': 'Proforma validés',
+    'passage-aujourdhui': 'Passages aujourd\'hui'
 };
 
 // ============================================================
@@ -2530,6 +2804,19 @@ function getPeriodeStart(periode) {
     }
 }
 
+const SVG_ICONS = {
+    phone: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+    whatsapp: '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>',
+    email: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
+    note: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',
+    proforma: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+    history: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/></svg>',
+    pdf: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
+    trash: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>',
+    calendar: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+    checkCircle: '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>'
+};
+
 // ============================================================
 // SCRIPT PRINCIPAL
 // ============================================================
@@ -2575,8 +2862,9 @@ function getPeriodeStart(periode) {
     let proformaLignes = [];
     let garageConfig = null;
     let demandesMarqueesLues = new Set();
-    let currentTrackingDemande = null; // Pour stocker la demande en cours de suivi
+    let currentTrackingDemande = null;
     let currentCreneauSelectionne = null;
+    let totalGlobalDemandes = 0; // NOUVEAU v3.7
 
     const loginScreen = document.getElementById('loginScreen');
     const clientScreen = document.getElementById('clientScreen');
@@ -2716,6 +3004,7 @@ function getPeriodeStart(periode) {
             premiereChargeEffectuee = false;
             nouvellesDemandesIds.clear();
             chargerDemandesRealtime();
+            chargerTotalGlobal(); // NOUVEAU v3.7
         } else {
             console.log("Non connecté");
             afficherEcran('client');
@@ -3262,7 +3551,6 @@ function getPeriodeStart(periode) {
             trackingSteps.innerHTML = stepsHtml;
         }
 
-        // NOUVEAU : bloc de récupération
         afficherBlocRecuperation(data, statut);
 
         const lastUpdateSpan = document.getElementById('trackingLastUpdate');
@@ -3298,13 +3586,12 @@ function getPeriodeStart(periode) {
     }
 
     // ============================================================
-    // BLOC DE RÉCUPÉRATION (NOUVEAU v3.5)
+    // BLOC DE RÉCUPÉRATION
     // ============================================================
     function afficherBlocRecuperation(data, statut) {
         const container = document.getElementById('suiviRecuperation');
         if (!container) return;
 
-        // Afficher le bloc seulement à partir du statut "Devis envoyé"
         if (!STATUTS_AVEC_RECUPERATION.includes(statut)) {
             container.innerHTML = '';
             return;
@@ -3312,7 +3599,6 @@ function getPeriodeStart(periode) {
 
         const recup = data.recuperation;
 
-        // Cas 1 : le client a déjà confirmé un créneau
         if (recup && recup.dateConfirmation) {
             const jourAffiche = recup.jourLibre ? recup.jourLibre : formatDateCourte(recup.jour);
             const creneauAffiche = recup.creneauLabel || (recup.heureLibre ? recup.heureLibre : '');
@@ -3321,14 +3607,14 @@ function getPeriodeStart(periode) {
             container.innerHTML = `
                 <div class="recuperation-block">
                     <div class="recuperation-header">
-                        <div class="recuperation-icon">📅</div>
+                        <div class="recuperation-icon">${SVG_ICONS.calendar}</div>
                         <div class="recuperation-title">
                             <h3>Passage enregistré</h3>
                             <p>Votre venue a bien été transmise au garage</p>
                         </div>
                     </div>
                     <div class="recuperation-confirmee">
-                        <div class="check-icon">✅</div>
+                        <div class="check-icon">${SVG_ICONS.checkCircle}</div>
                         <h4>Nous vous attendons</h4>
                         <div class="details">
                             ${jourAffiche ? `<strong>${jourAffiche}</strong>` : ''}<br>
@@ -3342,7 +3628,6 @@ function getPeriodeStart(periode) {
             return;
         }
 
-        // Cas 2 : formulaire de sélection
         const dateAujourdhui = new Date().toISOString().split('T')[0];
         const dateMax = new Date();
         dateMax.setDate(dateMax.getDate() + 60);
@@ -3356,7 +3641,7 @@ function getPeriodeStart(periode) {
         container.innerHTML = `
             <div class="recuperation-block">
                 <div class="recuperation-header">
-                    <div class="recuperation-icon">📅</div>
+                    <div class="recuperation-icon">${SVG_ICONS.calendar}</div>
                     <div class="recuperation-title">
                         <h3>Quand passerez-vous ?</h3>
                         <p>Indiquez votre créneau pour que nous préparions votre véhicule.</p>
@@ -3391,10 +3676,8 @@ function getPeriodeStart(periode) {
             </div>
         `;
 
-        // Reset de la sélection
         currentCreneauSelectionne = null;
 
-        // Bind du bouton
         setTimeout(() => {
             document.getElementById('btnConfirmerRecup')?.addEventListener('click', confirmerRecuperation);
         }, 50);
@@ -3480,7 +3763,6 @@ function getPeriodeStart(periode) {
                 dateConfirmationStr: new Date().toLocaleString('fr-FR')
             };
 
-            // Construire un texte d'historique propre
             let texteHisto = 'Passage confirmé par le client';
             if (jour && currentCreneauSelectionne) {
                 texteHisto += ` — ${formatDateCourte(jour)} à ${currentCreneauSelectionne.label}`;
@@ -4372,7 +4654,7 @@ ${garageNom}`;
         if (garageConfig?.logo) {
             preview.innerHTML = `<img src="${garageConfig.logo}" alt="Logo">`;
         } else {
-            preview.innerHTML = '🏢';
+            preview.innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>';
         }
 
         document.getElementById('garageConfigModal').style.display = 'flex';
@@ -4416,7 +4698,7 @@ ${garageNom}`;
             garageConfig.logo = '';
             sauvegarderGarageConfig();
         }
-        document.getElementById('garageLogoPreview').innerHTML = '🏢';
+        document.getElementById('garageLogoPreview').innerHTML = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>';
         delete document.getElementById('garageLogoPreview').dataset.logo;
         afficherToast('Logo supprimé');
     });
@@ -4686,6 +4968,31 @@ ${garageNom}`;
     }
 
     // ============================================================
+    // CHARGEMENT TOTAL GLOBAL (NOUVEAU v3.7)
+    // ============================================================
+    async function chargerTotalGlobal() {
+        try {
+            const garageFiltre = document.getElementById('selectGarage')?.value || 'tous';
+
+            let query = db.collection('demandes');
+            if (garageFiltre !== 'tous') {
+                query = query.where('garage', '==', garageFiltre);
+            }
+
+            const snapshot = await query.count().get();
+            totalGlobalDemandes = snapshot.data().count;
+
+            document.getElementById('totalBadge').textContent = `Total : ${totalGlobalDemandes}`;
+            console.log('Total global :', totalGlobalDemandes);
+        } catch(err) {
+            console.error('Erreur total global:', err);
+            // Fallback : afficher le nombre chargé
+            totalGlobalDemandes = allDemandes.length;
+            document.getElementById('totalBadge').textContent = `Total : ${totalGlobalDemandes}`;
+        }
+    }
+
+    // ============================================================
     // CHARGEMENT DASHBOARD
     // ============================================================
     function chargerDemandesRealtime() {
@@ -4758,6 +5065,9 @@ ${garageNom}`;
             document.getElementById('statRetard').textContent = retards;
             document.getElementById('statProforma').textContent = proformas;
 
+            // Mise à jour du bandeau info
+            document.getElementById('nbChargees').textContent = demandes.length;
+
             allDemandes = demandes;
             currentPage = 1;
             appliquerFiltresEtAfficher();
@@ -4784,20 +5094,14 @@ ${garageNom}`;
         document.getElementById('listeDemandes')?.scrollIntoView({ behavior: 'smooth' });
     };
 
-    // Vérifie si un passage est prévu aujourd'hui
     function estPassageAujourdhui(recup) {
         if (!recup || !recup.dateConfirmation) return false;
-
-        // Si le client a saisi une heure libre et pas de jour précis, on l'affiche
         if (recup.jourLibre && !recup.jour) return true;
-
         if (!recup.jour) return false;
-
         const aujourdhui = new Date().toISOString().split('T')[0];
         return recup.jour === aujourdhui;
     }
 
-    // Formate l'affichage du passage pour le badge
     function formatPassageBadge(recup) {
         if (!recup) return '';
 
@@ -4832,6 +5136,7 @@ ${garageNom}`;
         });
         if (currentFiltre === 'avec-notes') filtered = filtered.filter(d => d.note && d.note.text);
         if (currentFiltre === 'proforma-attente') filtered = filtered.filter(d => d.proforma && d.proforma.statut === 'en_attente');
+        if (currentFiltre === 'proforma-valides') filtered = filtered.filter(d => d.proforma && d.proforma.statut === 'accepte');
         if (currentFiltre === 'passage-aujourdhui') filtered = filtered.filter(d => estPassageAujourdhui(d.recuperation));
 
         const search = document.getElementById('searchInput')?.value.toLowerCase() || '';
@@ -4864,6 +5169,43 @@ ${garageNom}`;
         filteredDemandes = filtered;
         afficherPage(currentPage);
         afficherPagination();
+        afficherCompteurResultats(filtered.length, search, dateStart, dateEnd);
+    }
+
+    // NOUVEAU v3.7 : Compteur de résultats
+    function afficherCompteurResultats(nb, search, dateStart, dateEnd) {
+        const count = document.getElementById('resultatsCount');
+        const criteres = document.getElementById('resultatsCriteres');
+
+        count.innerHTML = `<strong>${nb}</strong> résultat${nb > 1 ? 's' : ''}`;
+
+        let tagsHtml = '';
+
+        // Tag filtre actif
+        if (currentFiltre !== 'toutes') {
+            tagsHtml += `<span class="critere-tag">${FILTRES_LABELS[currentFiltre] || currentFiltre}</span>`;
+        }
+
+        // Tag recherche
+        if (search) {
+            tagsHtml += `<span class="critere-tag">Recherche : "${search}"</span>`;
+        }
+
+        // Tag dates
+        if (dateStart || dateEnd) {
+            const dateStr = dateStart && dateEnd
+                ? `${dateStart} → ${dateEnd}`
+                : dateStart
+                    ? `À partir du ${dateStart}`
+                    : `Jusqu'au ${dateEnd}`;
+            tagsHtml += `<span class="critere-tag">${dateStr}</span>`;
+        }
+
+        if (tagsHtml === '') {
+            criteres.innerHTML = '<span style="font-size: 11px; color: var(--text-secondary); font-style: italic;">Aucun filtre actif</span>';
+        } else {
+            criteres.innerHTML = tagsHtml;
+        }
     }
 
     function afficherPage(page) {
@@ -4892,7 +5234,7 @@ ${garageNom}`;
             const jours = calculerJoursDepuis(d.dateTimestamp);
             const estRetard = statutActuel < 5 && jours >= DELAI_RETARD_JOURS;
             const urgenceClasse = d.urgence || 'basse';
-            const urgenceLabel = d.urgence === 'haute' ? 'Urgent' : d.urgence === 'moyenne' ? 'Moyen' : 'Bas';
+            const urgenceLabel = d.urgence === 'haute' ? 'Urgent' : d.urgence === 'moyenne' ? 'Moyen' : 'Normal';
             const hasNote = d.note && d.note.text;
             const hasProforma = d.proforma && d.proforma.lignes && d.proforma.lignes.length > 0;
             const proformaStatut = d.proforma?.statut || 'en_attente';
@@ -4912,55 +5254,53 @@ ${garageNom}`;
             let contactHtml = '';
             if (d.telephone) {
                 const telClean = d.telephone.replace(/\s+/g, '');
-                contactHtml += `<a class="btn-contact call" href="tel:${telClean}" onclick="event.stopPropagation();">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                    Appeler
-                </a>`;
-                contactHtml += `<a class="btn-contact whatsapp" href="https://wa.me/${telClean.replace(/^0/, '2250')}" target="_blank" onclick="event.stopPropagation();">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle;"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-                    WhatsApp
-                </a>`;
+                contactHtml += `<a class="btn-contact call" href="tel:${telClean}" onclick="event.stopPropagation();">${SVG_ICONS.phone} Appeler</a>`;
+                contactHtml += `<a class="btn-contact whatsapp" href="https://wa.me/${telClean.replace(/^0/, '2250')}" target="_blank" onclick="event.stopPropagation();">${SVG_ICONS.whatsapp} WhatsApp</a>`;
             }
             if (d.email) {
-                contactHtml += `<a class="btn-contact email" href="mailto:${d.email}" onclick="event.stopPropagation();">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                    Email
-                </a>`;
+                contactHtml += `<a class="btn-contact email" href="mailto:${d.email}" onclick="event.stopPropagation();">${SVG_ICONS.email} Email</a>`;
             }
+
+            const proformaBadgeHtml = hasProforma
+                ? `<span class="proforma-badge ${proformaStatut}">${PROFORMA_STATUTS[proformaStatut]?.label || 'Proforma'}</span>`
+                : '';
+
+            let infoLignesHtml = '';
+            infoLignesHtml += `<div class="demande-info-ligne"><span class="demande-info-label">Véhicule</span><span class="demande-info-value">${d.immatriculation || '-'} ${d.marque ? '- ' + d.marque : ''} ${d.modele || ''}</span></div>`;
+            infoLignesHtml += `<div class="demande-info-ligne"><span class="demande-info-label">Client</span><span class="demande-info-value">${d.nom || 'Client'}${d.telephone ? ' — ' + d.telephone : ''}</span></div>`;
 
             html += `
                 <div class="demande ${urgenceClasse} ${estRetard ? 'retard' : ''}" data-id="${d.id}">
-                    <div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:6px;">
-                        <div>
+                    <div class="demande-header">
+                        <div class="demande-badges">
                             <span class="badge-urgence ${urgenceClasse}">${urgenceLabel}</span>
                             <span class="statut-badge" style="background: ${statutInfo.color}22; color: ${statutInfo.color};">${statutInfo.label}</span>
                             ${estRetard ? `<span class="badge-retard">${jours}j</span>` : ''}
                             ${hasNote ? `<span class="note-badge">Note</span>` : ''}
-                            ${hasProforma ? `<span class="proforma-badge ${proformaStatut}">${PROFORMA_STATUTS[proformaStatut]?.label || 'Proforma'}</span>` : ''}
+                            ${proformaBadgeHtml}
                         </div>
-                        <span style="font-size:11px;color:var(--text-muted);">${d.date || ''}</span>
+                        <span class="demande-date">${d.date || ''}</span>
                     </div>
-                    <div style="margin-top:8px;"><strong>N° ${num}</strong></div>
-                    <div style="font-size:13px;"><strong>Véhicule :</strong> ${d.immatriculation || '-'} - ${d.marque || ''} ${d.modele || ''}</div>
-                    <div style="font-size:13px;"><strong>Client :</strong> ${d.nom || 'Client'}</div>
-                    <div style="margin:8px 0;font-size:13px;color:var(--text-secondary);">${d.description || ''}</div>
+                    <div class="demande-numero">N° ${num}</div>
+                    <div class="demande-info">${infoLignesHtml}</div>
+                    ${d.description ? `<div class="demande-description">${d.description}</div>` : ''}
                     ${hasNote ? `<div class="note-display" style="display:block;"><strong>Note chef d'atelier :</strong> ${d.note.text}</div>` : ''}
                     ${hasProforma ? `<div class="proforma-display" style="display:block;"><strong>Proforma :</strong> ${formatMontant(totalProforma)} — ${PROFORMA_STATUTS[proformaStatut]?.label || ''}</div>` : ''}
-                    ${hasPassage ? `<div class="passage-badge" style="${passageAujourdhui ? 'background: var(--danger); color: white; animation: blink 1.5s infinite;' : ''}">${formatPassageBadge(d.recuperation)}</div>` : ''}
+                    ${hasPassage ? `<div class="passage-badge" style="${passageAujourdhui ? 'background: var(--danger); color: white; animation: blink 1.5s infinite;' : ''}">${SVG_ICONS.calendar} ${formatPassageBadge(d.recuperation)}</div>` : ''}
                     ${d.lieu ? `<div style="font-size:12px;color:var(--text-muted);margin-top:6px;">Lieu : ${d.lieu}</div>` : ''}
-                    ${d.dateRdv ? `<div style="font-size:12px;">RDV : ${d.dateRdv} ${d.heureRdv || ''}</div>` : ''}
-                    ${d.garage ? `<div style="font-size:12px;color:var(--text-muted);">Garage : ${d.garage}</div>` : ''}
+                    ${d.dateRdv ? `<div style="font-size:12px;margin-top:4px;">RDV : ${d.dateRdv} ${d.heureRdv || ''}</div>` : ''}
+                    ${d.garage ? `<div style="font-size:12px;color:var(--text-muted);margin-top:4px;">Garage : ${d.garage}</div>` : ''}
                     ${mediaHtml}
                     ${contactHtml ? `<div class="contact-row">${contactHtml}</div>` : ''}
                     <div class="actions" onclick="event.stopPropagation();">
                         <select class="status-select" data-id="${d.id}">
                             ${STATUTS.map(s => `<option value="${s.id}" ${statutActuel === s.id ? 'selected' : ''}>${s.label}</option>`).join('')}
                         </select>
-                        <button class="btn-action btn-proforma" data-id="${d.id}" style="${hasProforma ? 'background: #d1fae5; color: #065f46;' : 'background: #ecfdf5; color: #047857;'}">Proforma</button>
-                        <button class="btn-action btn-note" data-id="${d.id}" style="${hasNote ? 'background: #dbeafe; color: #1e40af;' : ''}">Note</button>
-                        <button class="btn-action btn-historique" data-id="${d.id}">Histo.</button>
-                        <button class="btn-action btn-pdf" data-id="${d.id}">PDF</button>
-                        <button class="btn-action btn-supprimer" data-id="${d.id}">Suppr.</button>
+                        <button class="btn-action btn-proforma ${hasProforma ? 'active' : ''}" data-id="${d.id}">${SVG_ICONS.proforma} Proforma</button>
+                        <button class="btn-action btn-note ${hasNote ? 'active' : ''}" data-id="${d.id}">${SVG_ICONS.note} Note</button>
+                        <button class="btn-action btn-historique" data-id="${d.id}">${SVG_ICONS.history} Histo.</button>
+                        <button class="btn-action btn-pdf" data-id="${d.id}">${SVG_ICONS.pdf} PDF</button>
+                        <button class="btn-action btn-supprimer" data-id="${d.id}">${SVG_ICONS.trash}</button>
                     </div>
                 </div>
             `;
@@ -5043,7 +5383,7 @@ ${garageNom}`;
             html += `<button class="page-btn" onclick="changerPage(${totalPages})">${totalPages}</button>`;
         }
         html += `<button class="page-btn" ${currentPage >= totalPages ? 'disabled' : ''} onclick="changerPage(${currentPage + 1})">Suivant</button>`;
-        html += `<div class="page-info" style="width: 100%; text-align: center; margin-top: 8px;">Page ${currentPage} / ${totalPages} • ${filteredDemandes.length} demande(s)</div>`;
+        html += `<div class="page-info" style="width: 100%; text-align: center; margin-top: 8px;">Page ${currentPage} / ${totalPages}</div>`;
 
         container.innerHTML = html;
     }
@@ -5171,6 +5511,7 @@ ${garageNom}`;
             afficherEcran('dashboard');
             premiereChargeEffectuee = false;
             chargerDemandesRealtime();
+            chargerTotalGlobal();
         } else {
             afficherEcran('login');
             setTimeout(() => loginEmail?.focus(), 300);
@@ -5207,6 +5548,7 @@ ${garageNom}`;
     document.getElementById('selectGarage')?.addEventListener('change', () => {
         premiereChargeEffectuee = false;
         chargerDemandesRealtime();
+        chargerTotalGlobal();
     });
 
     // ============================================================
@@ -5235,7 +5577,7 @@ ${garageNom}`;
         }, 500);
     }
 
-    console.log('Assist-Garage PRO 3.5 — Module récupération');
+    console.log('Assist-Garage PRO 3.7 — Filtres améliorés');
 })();
 </script>
 
