@@ -4970,7 +4970,7 @@ ${garageNom}`;
     // ============================================================
     // CHARGEMENT TOTAL GLOBAL (NOUVEAU v3.7)
     // ============================================================
-        async function chargerTotalGlobal() {
+          async function chargerTotalGlobal() {
         const totalBadge = document.getElementById('totalBadge');
         if (!totalBadge) return;
 
@@ -4985,33 +4985,18 @@ ${garageNom}`;
                 query = query.where('garage', '==', garageFiltre);
             }
 
-            // Tentative avec count()
-            const snapshot = await query.count().get();
-            totalGlobalDemandes = snapshot.data().count;
+            // Méthode universelle : charger uniquement les IDs (rapide et économe)
+            // On limite à 10000 pour éviter une requête trop lourde
+            const snapshot = await query.limit(10000).get();
+            totalGlobalDemandes = snapshot.size;
 
-            totalBadge.textContent = `Total : ${totalGlobalDemandes}`;
+            // Si on a atteint 10000, c'est qu'il y en a plus
+            const suffixe = snapshot.size >= 10000 ? '+' : '';
+            totalBadge.textContent = `Total : ${totalGlobalDemandes}${suffixe}`;
             console.log('✅ Total global :', totalGlobalDemandes);
         } catch(err) {
-            console.error('❌ Erreur count(), tentative fallback :', err);
-
-            // Fallback : essayer de compter en chargeant juste les IDs
-            try {
-                const garageFiltre = document.getElementById('selectGarage')?.value || 'tous';
-                let query2 = db.collection('demandes');
-                if (garageFiltre !== 'tous') {
-                    query2 = query2.where('garage', '==', garageFiltre);
-                }
-
-                const snapshot2 = await query2.select().get();
-                totalGlobalDemandes = snapshot2.size;
-                totalBadge.textContent = `Total : ${totalGlobalDemandes}`;
-                console.log('✅ Total (fallback) :', totalGlobalDemandes);
-            } catch(err2) {
-                console.error('❌ Erreur fallback :', err2);
-                // En dernier recours : afficher le nombre chargé
-                totalGlobalDemandes = allDemandes.length;
-                totalBadge.textContent = `Total : ${totalGlobalDemandes}`;
-            }
+            console.error('❌ Erreur total global :', err);
+            totalBadge.textContent = `Total : ${allDemandes.length}`;
         }
     }
 
